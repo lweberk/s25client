@@ -96,7 +96,7 @@ dskLobby::dskLobby() : Desktop(LOADER.GetImageN("setup013", 0)), serverinfo(NULL
     GAMECLIENT.SetInterface(this);
 }
 
-void dskLobby::Msg_Timer(const unsigned int ctrl_id)
+void dskLobby::Msg_Timer(const uint32_t ctrl_id)
 {
     LOBBYCLIENT.SendServerListRequest();
 }
@@ -108,14 +108,14 @@ void dskLobby::Msg_PaintBefore()
     GetCtrl<ctrlEdit>(21)->SetFocus();
 }
 
-void dskLobby::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr)
+void dskLobby::Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr)
 {
     // Verbindung verloren
     if(msgbox_id == 0)
         WINDOWMANAGER.Switch(new dskMultiPlayer);
 }
 
-void dskLobby::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskLobby::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -130,11 +130,11 @@ void dskLobby::Msg_ButtonClick(const unsigned int ctrl_id)
             {
                 ctrlTable* table = GetCtrl<ctrlTable>(10);
 
-                unsigned int selection = table->GetSelection();
+                uint32_t selection = table->GetSelection();
                 if(selection < serverlist->getCount())
                 {
                     selection = atoi(table->GetItemText(selection, 0).c_str());
-                    for(unsigned int i = 0; i < serverlist->getCount(); ++i)
+                    for(uint32_t i = 0; i < serverlist->getCount(); ++i)
                     {
                         if(serverlist->getElement(i)->getId() == selection)
                         {
@@ -167,7 +167,7 @@ void dskLobby::Msg_ButtonClick(const unsigned int ctrl_id)
     }
 }
 
-void dskLobby::Msg_EditEnter(const unsigned int ctrl_id)
+void dskLobby::Msg_EditEnter(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -180,7 +180,7 @@ void dskLobby::Msg_EditEnter(const unsigned int ctrl_id)
     }
 }
 
-void dskLobby::Msg_TableRightButton(const unsigned int ctrl_id, const unsigned short selection)
+void dskLobby::Msg_TableRightButton(const uint32_t ctrl_id, const uint16_t selection)
 {
     ctrlTable* table = GetCtrl<ctrlTable>(ctrl_id);
     switch(ctrl_id)
@@ -193,7 +193,7 @@ void dskLobby::Msg_TableRightButton(const unsigned int ctrl_id, const unsigned s
             {
                 if(serverinfo)
                 {
-                    if(serverinfo->GetNr() == (unsigned int)atoi(item.c_str()))
+                    if(serverinfo->GetNr() == (uint32_t)atoi(item.c_str()))
                         break; // raus
 
                     WINDOWMANAGER.Close(serverinfo);
@@ -232,15 +232,15 @@ void dskLobby::UpdatePlayerList(bool first)
 
         if(playerlist->getCount() > 0)
         {
-            unsigned int selection = playertable->GetSelection();
+            uint32_t selection = playertable->GetSelection();
             if(selection == 0xFFFF)
                 selection = 0;
-            unsigned short column = playertable->GetSortColumn();
+            uint16_t column = playertable->GetSortColumn();
             if(column == 0xFFFF)
                 column = 0;
             bool direction = !playertable->GetSortDirection();
 
-            for(unsigned int i = 0; i < playerlist->getCount(); ++i)
+            for(uint32_t i = 0; i < playerlist->getCount(); ++i)
             {
                 if(playerlist->getElement(i)->getId() != 0xFFFFFFFF)
                 {
@@ -274,15 +274,15 @@ void dskLobby::UpdateServerList(bool first)
 
         if(serverlist->getCount() > 0)
         {
-            unsigned int selection = servertable->GetSelection();
+            uint32_t selection = servertable->GetSelection();
             if(selection == 0xFFFF)
                 selection = 0;
-            unsigned short column = servertable->GetSortColumn();
+            uint16_t column = servertable->GetSortColumn();
             if(column == 0xFFFF)
                 column = 0;
             bool direction = !servertable->GetSortDirection();
 
-            for(unsigned int i = 0; i < serverlist->getCount(); ++i)
+            for(uint32_t i = 0; i < serverlist->getCount(); ++i)
             {
                 if(!serverlist->getElement(i)->getName().empty() && (serverlist->getElement(i)->getVersion() == std::string(GetWindowVersion())))
                 {
@@ -359,8 +359,8 @@ void dskLobby::LC_Connected(void)
  */
 void dskLobby::LC_Chat(const std::string& player, const std::string& text)
 {
-    unsigned int checksum = CalcChecksumOfBuffer(player.c_str(), unsigned(player.length())) * player.length();
-    unsigned int color = checksum | (checksum << 12) | 0xff000000;
+    uint32_t checksum = CalcChecksumOfBuffer(player.c_str(), unsigned(player.length())) * player.length();
+    uint32_t color = checksum | (checksum << 12) | 0xff000000;
 
     // Zeit holen
     char time_string[64];

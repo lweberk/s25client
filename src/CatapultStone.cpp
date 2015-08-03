@@ -43,7 +43,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 CatapultStone::CatapultStone(const MapPoint dest_building, const MapPoint dest_map,
-                             const int start_x, const int start_y, const int dest_x, const int dest_y, const unsigned fly_duration) :
+                             const int32_t start_x, const int32_t start_y, const int32_t dest_x, const int32_t dest_y, const uint32_t fly_duration) :
     dest_building(dest_building), dest_map(dest_map), start_x(start_x),
     start_y(start_y), dest_x(dest_x), dest_y(dest_y), explode(false)
 {
@@ -52,7 +52,7 @@ CatapultStone::CatapultStone(const MapPoint dest_building, const MapPoint dest_m
 
 
 
-CatapultStone::CatapultStone(SerializedGameData* sgd, const unsigned obj_id) : GameObject(sgd, obj_id),
+CatapultStone::CatapultStone(SerializedGameData* sgd, const uint32_t obj_id) : GameObject(sgd, obj_id),
     dest_building(sgd->PopMapPoint()),
     dest_map(sgd->PopMapPoint()),
     start_x(sgd->PopSignedInt()),
@@ -82,15 +82,15 @@ void CatapultStone::Destroy()
 {
 }
 
-void CatapultStone::Draw(const GameWorldView& gwv, const int xoffset, const int yoffset)
+void CatapultStone::Draw(const GameWorldView& gwv, const int32_t xoffset, const int32_t yoffset)
 {
     // Stein überhaupt zeichnen (wenn Quelle und Ziel nicht sichtbar sind, dann nicht!)
     if(gwv.GetGameWorldViewer()->GetVisibility(dest_building) != VIS_VISIBLE &&
             gwv.GetGameWorldViewer()->GetVisibility(dest_map) != VIS_VISIBLE)
         return;
 
-    int world_width = gwg->GetWidth() * TR_W;
-    int world_height = gwg->GetHeight() * TR_H;
+    int32_t world_width = gwg->GetWidth() * TR_W;
+    int32_t world_height = gwg->GetHeight() * TR_H;
 
     if(explode)
     {
@@ -101,11 +101,11 @@ void CatapultStone::Draw(const GameWorldView& gwv, const int xoffset, const int 
     else
     {
         // Linear interpolieren zwischen Ausgangs- und Zielpunkt
-        int x = GAMECLIENT.Interpolate(start_x, dest_x, event);
-        int y = GAMECLIENT.Interpolate(start_y, dest_y, event);
+        int32_t x = GAMECLIENT.Interpolate(start_x, dest_x, event);
+        int32_t y = GAMECLIENT.Interpolate(start_y, dest_y, event);
 
-        int whole = int(std::sqrt(double((dest_x - start_x) * (dest_x - start_x) + (dest_y - start_y) * (dest_y - start_y))));
-        int s = GAMECLIENT.Interpolate(whole , event);
+        int32_t whole = int(std::sqrt(double((dest_x - start_x) * (dest_x - start_x) + (dest_y - start_y) * (dest_y - start_y))));
+        int32_t s = GAMECLIENT.Interpolate(whole , event);
 
 
         double dx = double(s) / double(whole)  - 0.5;
@@ -114,7 +114,7 @@ void CatapultStone::Draw(const GameWorldView& gwv, const int xoffset, const int 
         double y_diff = 0.5 * 0.5;
 
         // Verschiebung ausrechnen von Y
-        int diff = int((dx * dx - y_diff) * 200);
+        int32_t diff = int((dx * dx - y_diff) * 200);
 
         // Schatten auf linearer Linie zeichnen
         LOADER.GetMapImageN(3101)->Draw((x - xoffset + world_width) % world_width, (y - yoffset + world_height) % world_height, 0, 0, 0, 0, 0, 0, COLOR_SHADOW);
@@ -123,7 +123,7 @@ void CatapultStone::Draw(const GameWorldView& gwv, const int xoffset, const int 
     }
 }
 
-void CatapultStone::HandleEvent(const unsigned int id)
+void CatapultStone::HandleEvent(const uint32_t id)
 {
     if(explode)
     {

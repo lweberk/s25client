@@ -27,17 +27,17 @@
 class ctrlComboBox : public Window
 {
     public:
-        ctrlComboBox(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font, unsigned short max_list_height, bool readonly);
+        ctrlComboBox(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font, uint16_t max_list_height, bool readonly);
 
-        void Resize_(unsigned short width, unsigned short height);
+        void Resize_(uint16_t width, uint16_t height);
 
         void AddString(const std::string& text);
         void DeleteAllItems();
 
-        void SetSelection(unsigned short selection);
-        unsigned short GetSelection() const { return selection; };
-        unsigned short GetCount() const { return GetCtrl<ctrlList>(0)->GetLineCount(); }
-        const std::string& GetText(unsigned short item) const { return GetCtrl<ctrlList>(0)->GetItemText(item); }
+        void SetSelection(uint16_t selection);
+        uint16_t GetSelection() const { return selection; };
+        uint16_t GetCount() const { return GetCtrl<ctrlList>(0)->GetLineCount(); }
+        const std::string& GetText(uint16_t item) const { return GetCtrl<ctrlList>(0)->GetItemText(item); }
 
         virtual void Msg_PaintAfter();
         virtual bool Msg_MouseMove(const MouseCoords& mc);
@@ -46,7 +46,7 @@ class ctrlComboBox : public Window
         virtual bool Msg_RightDown(const MouseCoords& mc);
         virtual bool Msg_WheelUp(const MouseCoords& mc);
         virtual bool Msg_WheelDown(const MouseCoords& mc);
-        virtual void Msg_ListSelectItem(const unsigned int ctrl_id, const unsigned short selection);
+        virtual void Msg_ListSelectItem(const uint32_t ctrl_id, const uint16_t selection);
 
     protected:
         virtual bool Draw_(void);
@@ -56,9 +56,9 @@ class ctrlComboBox : public Window
     private:
         TextureColor tc;
         glArchivItem_Font* font;
-        unsigned short max_list_height;
+        uint16_t max_list_height;
         bool readonly;
-        unsigned short selection;
+        uint16_t selection;
         bool last_show;
 };
 

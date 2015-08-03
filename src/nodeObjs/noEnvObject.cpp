@@ -42,7 +42,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author FloSoft
  */
-noEnvObject::noEnvObject(const MapPoint pos, unsigned short id, unsigned short file)
+noEnvObject::noEnvObject(const MapPoint pos, uint16_t id, uint16_t file)
     : noStaticObject(pos, id, file, 0, NOP_ENVIRONMENT)
 {
 }
@@ -54,6 +54,6 @@ void noEnvObject::Serialize_noEnvObject(SerializedGameData* sgd) const
 
 }
 
-noEnvObject::noEnvObject(SerializedGameData* sgd, const unsigned obj_id) : noStaticObject(sgd, obj_id)
+noEnvObject::noEnvObject(SerializedGameData* sgd, const uint32_t obj_id) : noStaticObject(sgd, obj_id)
 {
 }

@@ -39,15 +39,15 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlMinimap::ctrlMinimap( Window* parent,
-                          const unsigned int id,
-                          const unsigned short x,
-                          const unsigned short y,
-                          const unsigned short width,
-                          const unsigned short height,
-                          const unsigned short padding_x,
-                          const unsigned short padding_y,
-                          const unsigned short map_width,
-                          const unsigned short map_height)
+                          const uint32_t id,
+                          const uint16_t x,
+                          const uint16_t y,
+                          const uint16_t width,
+                          const uint16_t height,
+                          const uint16_t padding_x,
+                          const uint16_t padding_y,
+                          const uint16_t map_width,
+                          const uint16_t map_height)
     : Window(x, y, id, parent, width, height), padding_x(padding_x), padding_y(padding_y), map_width(map_width), map_height(map_height)
 {
     SetDisplaySize(width, height, map_width, map_height);
@@ -59,7 +59,7 @@ ctrlMinimap::ctrlMinimap( Window* parent,
  *
  *  @author Divan
  */
-void ctrlMinimap::Resize_(unsigned short width, unsigned short height)
+void ctrlMinimap::Resize_(uint16_t width, uint16_t height)
 {
     SetDisplaySize(width, height, map_width, map_height);
 }
@@ -70,7 +70,7 @@ void ctrlMinimap::Resize_(unsigned short width, unsigned short height)
  *
  *  @author OLiver
  */
-void ctrlMinimap::SetDisplaySize(const unsigned short width, const unsigned short height, const unsigned short map_width, const unsigned short map_height)
+void ctrlMinimap::SetDisplaySize(const uint16_t width, const uint16_t height, const uint16_t map_width, const uint16_t map_height)
 {
     this->width = width;
     this->height = height;
@@ -78,7 +78,7 @@ void ctrlMinimap::SetDisplaySize(const unsigned short width, const unsigned shor
     this->map_width = map_width;
     this->map_height = map_height;
 
-    unsigned short scaled_map_width = static_cast<unsigned short>(map_width * MINIMAP_SCALE_X);
+    uint16_t scaled_map_width = static_cast<uint16_t>(map_width * MINIMAP_SCALE_X);
     double x_scale = double(scaled_map_width) / double(width - padding_x * 2);
     double y_scale = double(map_height) / double(height - padding_y * 2);
 
@@ -95,7 +95,7 @@ void ctrlMinimap::SetDisplaySize(const unsigned short width, const unsigned shor
     if(scale_width)
     {
         height_show = height - padding_y * 2;
-        width_show  = (scaled_map_width * height_show / map_height) & 0xFFFF; // to mask unsigned to unsigned short (VS debugger crying)
+        width_show  = (scaled_map_width * height_show / map_height) & 0xFFFF; // to mask uint32_t to uint16_t (VS debugger crying)
     }
     else
     {
@@ -122,8 +122,8 @@ void ctrlMinimap::DrawMap(Minimap& map)
  *
  *  @author OLiver
  */
-void ctrlMinimap::RemoveBoundingBox(const unsigned short width_min, const unsigned short height_min)
+void ctrlMinimap::RemoveBoundingBox(const uint16_t width_min, const uint16_t height_min)
 {
-    width  = max<unsigned short>( width_show + padding_x * 2,  width_min);
-    height = max<unsigned short>(height_show + padding_y * 2, height_min);
+    width  = max<uint16_t>( width_show + padding_x * 2,  width_min);
+    height = max<uint16_t>(height_show + padding_y * 2, height_min);
 }

@@ -37,20 +37,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofCarpenter::nofCarpenter(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofCarpenter::nofCarpenter(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_CARPENTER, pos, player, workplace)
 {
 }
 
-nofCarpenter::nofCarpenter(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id)
+nofCarpenter::nofCarpenter(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id)
 {
 }
 
-void nofCarpenter::DrawWorking(int x, int y)
+void nofCarpenter::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[NAT_COUNT][2] = { {30, 3}, {38, 3}, {30, 8}, {17, -2}, {38, 3} };
+    int8_t offsets[NAT_COUNT][2] = { {30, 3}, {38, 3}, {30, 8}, {17, -2}, {38, 3} };
 
-    unsigned now_id;
+    uint32_t now_id;
 
     LOADER.GetImageN("rom_bobs", 32 + ((now_id = GAMECLIENT.Interpolate(136, current_ev)) % 8))
     ->Draw(x + offsets[workplace->GetNation()][0], y + offsets[workplace->GetNation()][1], 0, 0, 0, 0, 0, 0, COLOR_WHITE, COLORS[gwg->GetPlayer(workplace->GetPlayer())->color]);

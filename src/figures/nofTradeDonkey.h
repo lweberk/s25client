@@ -36,36 +36,36 @@ class nofTradeDonkey : public noFigure
         /// Ware this donkey carries (GD_NOTHING if this is a normal figure)
         GoodType gt;
         /// Last dir this donkey used
-        std::deque<unsigned char> next_dirs;
+        std::deque<uint8_t> next_dirs;
 
     private:
 
         void GoalReached();
         void Walked();
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
         void AbrogateWorkplace();
 
         /// Returns next direction
-        unsigned char GetNextDir() { unsigned char dir = next_dirs.front(); next_dirs.pop_front(); return dir; }
+        uint8_t GetNextDir() { uint8_t dir = next_dirs.front(); next_dirs.pop_front(); return dir; }
 
     public:
 
-        nofTradeDonkey(const MapPoint pt, const unsigned char player,
+        nofTradeDonkey(const MapPoint pt, const uint8_t player,
                        nofTradeLeader* const leader, const GoodType gt, const Job job);
-        nofTradeDonkey(SerializedGameData* sgd, const unsigned obj_id);
+        nofTradeDonkey(SerializedGameData* sgd, const uint32_t obj_id);
 
         void Serialize(SerializedGameData* sgd) const;
 
         GO_Type GetGOT() const { return GOT_NOF_TRADEDONKEY; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Wird aufgerufen, wenn die Flagge abgerissen wurde
         void LostWork();
 
 
         /// Adds the next direction, this is usually done by the predecessor
-        void AddNextDir(const unsigned char dir) { next_dirs.push_back(dir); }
+        void AddNextDir(const uint8_t dir) { next_dirs.push_back(dir); }
 
         /// Gets the type of ware this donkey is carrying
         GoodType GetCarriedWare() const { return gt; }

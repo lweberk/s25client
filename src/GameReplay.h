@@ -58,54 +58,54 @@ class Replay : public SavedFile
         bool LoadHeader(const std::string& filename, const bool load_extended_header);
 
         /// Fügt ein Chat-Kommando hinzu (schreibt)
-        void AddChatCommand(const unsigned gf, const unsigned char player, const unsigned char dest, const std::string& str);
+        void AddChatCommand(const uint32_t gf, const uint8_t player, const uint8_t dest, const std::string& str);
         /// Fügt ein Spiel-Kommando hinzu (schreibt)
-        void AddGameCommand(const unsigned gf, const unsigned short length, const unsigned char* const data);
+        void AddGameCommand(const uint32_t gf, const uint16_t length, const uint8_t* const data);
         /// Fügt Pathfinding-Result hinzu
-        void AddPathfindingResult(const unsigned char data, const unsigned* const length, const MapPoint * const next_harbor);
+        void AddPathfindingResult(const uint8_t data, const uint32_t* const length, const MapPoint * const next_harbor);
 
         /// Liest RC-Type aus, liefert false, wenn das Replay zu Ende ist
-        bool ReadGF(unsigned* gf);
+        bool ReadGF(uint32_t* gf);
         /// RC-Type aus, liefert false
         ReplayCommand ReadRCType();
         /// Liest ein Chat-Command aus
-        void ReadChatCommand(unsigned char* player, unsigned char*   dest, std::string& str);
-        void ReadGameCommand(unsigned short* length, unsigned char** data);
-        bool ReadPathfindingResult(unsigned char* data, unsigned* length, MapPoint * next_harbor);
+        void ReadChatCommand(uint8_t* player, uint8_t*   dest, std::string& str);
+        void ReadGameCommand(uint16_t* length, uint8_t** data);
+        bool ReadPathfindingResult(uint8_t* data, uint32_t* length, MapPoint * next_harbor);
 
         /// Aktualisiert den End-GF, schreibt ihn in die Replaydatei (nur beim Spielen bzw. Schreiben verwenden!)
-        void UpdateLastGF(const unsigned last_gf);
+        void UpdateLastGF(const uint32_t last_gf);
 
         const std::string& GetFileName() const { return filename; }
         BinaryFile* GetFile() { return &file; }
 
     public:
         /// NWF-Länge
-        unsigned short nwf_length;
+        uint16_t nwf_length;
         /// Zufallsgeneratorinitialisierung
-        unsigned random_init;
+        uint32_t random_init;
         /// Bestimmt, ob Pathfinding-Ergebnisse in diesem Replay gespeichert sind
         bool pathfinding_results;
 
         /// Gespeichertes Spiel, Zufallskarte, normale Karte...?
         MapType map_type;
         /// Gepackte Map - Daten (für alte Karte)
-        unsigned map_length, map_zip_length;
-        unsigned char* map_data;
+        uint32_t map_length, map_zip_length;
+        uint8_t* map_data;
         /// Savegame (für gespeichertes Spiel)
         Savegame* savegame;
 
         /// End-GF
-        unsigned last_gf;
+        uint32_t last_gf;
         /// Position des End-GF in der Datei
-        unsigned last_gf_file_pos;
+        uint32_t last_gf_file_pos;
         /// Position des GFs fürs nächste Command -> muss gleich hinter
         /// bestehendes beschrieben werden
-        unsigned gf_file_pos;
+        uint32_t gf_file_pos;
 
     private:
         /// Replayformat-Version und Signaturen
-        static const unsigned short REPLAY_VERSION;
+        static const uint16_t REPLAY_VERSION;
         static const char REPLAY_SIGNATURE[6];
 
         /// Dateihandle

@@ -46,8 +46,8 @@ nofPassiveSoldier::nofPassiveSoldier(const nofSoldier& soldier) : nofSoldier(sol
     current_ev = 0;
 }
 
-nofPassiveSoldier::nofPassiveSoldier(const MapPoint pos, const unsigned char player,
-                                     nobBaseMilitary* const goal, nobBaseMilitary* const home, const unsigned char rank)
+nofPassiveSoldier::nofPassiveSoldier(const MapPoint pos, const uint8_t player,
+                                     nobBaseMilitary* const goal, nobBaseMilitary* const home, const uint8_t rank)
     : nofSoldier(pos, player, goal, home, rank), healing_event(0)
 {
 }
@@ -70,18 +70,18 @@ void nofPassiveSoldier::Serialize_nofPassiveSoldier(SerializedGameData* sgd) con
     sgd->PushObject(healing_event, true);
 }
 
-nofPassiveSoldier::nofPassiveSoldier(SerializedGameData* sgd, const unsigned obj_id) : nofSoldier(sgd, obj_id),
+nofPassiveSoldier::nofPassiveSoldier(SerializedGameData* sgd, const uint32_t obj_id) : nofSoldier(sgd, obj_id),
     healing_event(sgd->PopObject<EventManager::Event>(GOT_EVENT))
 {
 }
 
-void nofPassiveSoldier::Draw(int x, int y)
+void nofPassiveSoldier::Draw(int32_t x, int32_t y)
 {
     // Soldat normal laufend zeichnen
     DrawSoldierWalking(x, y);
 }
 
-void nofPassiveSoldier::HandleDerivedEvent(const unsigned int id)
+void nofPassiveSoldier::HandleDerivedEvent(const uint32_t id)
 {
     switch(id)
     {

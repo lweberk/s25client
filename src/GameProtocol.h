@@ -36,7 +36,7 @@ enum
     NMS_SERVER_NAME,            // x servername
     NMS_SERVER_START,           //
     NMS_SERVER_CHAT,            // 1 destination, x text | 1 source, x text
-    NMS_SERVER_ASYNC,           // playercount*4 int (Checksummen)
+    NMS_SERVER_ASYNC,           // playercount*4 int32_t (Checksummen)
     NMS_SERVER_COUNTDOWN,       // 4 countdown
     NMS_SERVER_CANCELCOUNTDOWN, // 0
 
@@ -144,9 +144,9 @@ kick                    --> bc(NMS_PLAYER_KICK), NMS_DEAD_MSG
 // Strukturen fr einzelne Messages
 struct NS_PlayerKicked
 {
-    unsigned char playerid;
-    unsigned char cause;
-    unsigned short param;
+    uint8_t playerid;
+    uint8_t cause;
+    uint16_t param;
 };
 
 //////////////////////////////////////////
@@ -174,7 +174,7 @@ enum
 };
 
 // Wie lange maximal warten, bis Rausschmiss des Spielers (in milliseconds)
-const unsigned PING_TIMEOUT     = 2 * 60 * 1000; // 2min
+const uint32_t PING_TIMEOUT     = 2 * 60 * 1000; // 2min
 
 // Ziele fürs Chatten (Ingame)
 enum ChatDestination
@@ -196,6 +196,6 @@ enum MapType
 
 /// Größe eines Map-Paketes
 /// ACHTUNG: IPV4 garantiert nur maximal 576!!
-const unsigned MAP_PART_SIZE = 512;
+const uint32_t MAP_PART_SIZE = 512;
 
 #endif // !GAMEPROTOCOL_H_INCLUDED

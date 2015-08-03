@@ -94,7 +94,7 @@ iwPostWindow::iwPostWindow(GameWorldViewer& gwv)
     lastSize = GAMECLIENT.GetPostMessages().size();
 }
 
-void iwPostWindow::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwPostWindow::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -174,7 +174,7 @@ void iwPostWindow::Msg_ButtonClick(const unsigned int ctrl_id)
 void iwPostWindow::Msg_PaintBefore()
 {
     // Immer wenn sich die Anzahl der Nachrichten geändert hat neu prüfen was so angezeigt werden muss
-    unsigned currentSize = GAMECLIENT.GetPostMessages().size();
+    uint32_t currentSize = GAMECLIENT.GetPostMessages().size();
     if (currentSize != lastSize)
     {
         // Neue Nachrichten dazugekommen, während das Fenster offen ist:
@@ -237,10 +237,10 @@ bool iwPostWindow::Msg_KeyDown(const KeyEvent& ke)
 }
 
 // Holt Nachricht Nummer pos
-PostMsg* iwPostWindow::GetPostMsg(unsigned pos) const
+PostMsg* iwPostWindow::GetPostMsg(uint32_t pos) const
 {
     PostMsg* pm = 0;
-    unsigned counter = 0;
+    uint32_t counter = 0;
     for(std::list<PostMsg*>::const_iterator it = GAMECLIENT.GetPostMessages().begin(); it != GAMECLIENT.GetPostMessages().end(); ++it)
     {
         if (counter == pos)
@@ -257,17 +257,17 @@ PostMsg* iwPostWindow::GetPostMsg(unsigned pos) const
 // Zeigt Nachricht an, passt Steuerelemente an
 void iwPostWindow::DisplayPostMessage()
 {
-    const unsigned xImgBottomCenter = 127;
-    const unsigned yImgBottomCenter = 210;
+    const uint32_t xImgBottomCenter = 127;
+    const uint32_t yImgBottomCenter = 210;
 
     // todo: koordinaten abschmecken
-    const unsigned xTextTopCenter = 127;
-    const unsigned yTextTopCenter = 110;
+    const uint32_t xTextTopCenter = 127;
+    const uint32_t yTextTopCenter = 110;
 
-    const unsigned xTextCenter = 126;
-    const unsigned yTextCenter = 151;
+    const uint32_t xTextCenter = 126;
+    const uint32_t yTextCenter = 151;
 
-    unsigned size = GAMECLIENT.GetPostMessages().size();
+    uint32_t size = GAMECLIENT.GetPostMessages().size();
 
     // Keine Nachrichten, alles ausblenden, bis auf zentrierten Text
     if (size == 0)
@@ -384,7 +384,7 @@ void iwPostWindow::SetMessageText(const std::string& message)
     NormalFont->GetWrapInfo(message, 190, 190, wi);
     std::string* lines = new std::string[wi.positions.size()];
     wi.CreateSingleStrings(message, lines);
-    for(unsigned i = 0; i < 3; ++i)
+    for(uint32_t i = 0; i < 3; ++i)
     {
         if (i < wi.positions.size())
             text->SetLine(i, lines[i], COLOR_WINDOWBROWN);

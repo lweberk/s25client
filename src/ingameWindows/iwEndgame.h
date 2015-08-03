@@ -31,7 +31,7 @@ class iwEndgame : public IngameWindow
 
     private:
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 #endif // !iwENDGAME_H_INCLUDED

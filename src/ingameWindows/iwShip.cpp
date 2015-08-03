@@ -45,8 +45,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /// IDs in der IO_DAT von Boot und Schiffs-Bild für den Umschaltebutton beim Schiffsbauer
-const unsigned IODAT_BOAT_ID = 219;
-const unsigned IODAT_SHIP_ID = 218;
+const uint32_t IODAT_BOAT_ID = 219;
+const uint32_t IODAT_SHIP_ID = 218;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -57,7 +57,7 @@ const unsigned IODAT_SHIP_ID = 218;
  *  @author OLiver
  */
 iwShip::iwShip(GameWorldViewer* const gwv, dskGameInterface* const gi, noShip* const ship)
-    : IngameWindow(CGI_SHIP, (unsigned short) - 2, (unsigned short) - 2, 252, 238, _("Ship register"), LOADER.GetImageN("resource", 41)),
+    : IngameWindow(CGI_SHIP, (uint16_t) - 2, (uint16_t) - 2, 252, 238, _("Ship register"), LOADER.GetImageN("resource", 41)),
       gwv(gwv), gi(gi), ship_id(ship ? GAMECLIENT.GetPlayer(ship->GetPlayer())->GetShipID(ship) : 0), player(ship ? ship->GetPlayer() : GAMECLIENT.GetPlayerID())
 {
     AddImage(  0, 126, 101, LOADER.GetImageN("io", 228));
@@ -71,7 +71,7 @@ iwShip::iwShip(GameWorldViewer* const gwv, dskGameInterface* const gi, noShip* c
     // Die Expeditionsweiterfahrbuttons
     AddImageButton(10, 60, 81, 18, 18, TC_GREY, LOADER.GetImageN("io", 187), _("Found colony"))->SetVisible(false);
 
-    const int BUTTON_POS[6][2] =
+    const int32_t BUTTON_POS[6][2] =
     {
         {60, 61}, {80, 70}, {80, 90}, {60, 101}, {40, 90}, {40, 70}
     };
@@ -80,7 +80,7 @@ iwShip::iwShip(GameWorldViewer* const gwv, dskGameInterface* const gi, noShip* c
     AddImageButton(11, 200, 143, 18, 18, TC_RED1, LOADER.GetImageN("io", 40), _("Return to harbor"))->SetVisible(false);
 
     // Die 6 Richtungen
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
         AddImageButton(12 + i, BUTTON_POS[i][0], BUTTON_POS[i][1], 18, 18, TC_GREY, LOADER.GetImageN("io", 181 + (i + 4) % 6))->SetVisible(false);
 
 }
@@ -127,7 +127,7 @@ void iwShip::Msg_PaintAfter()
         GetCtrl<Window>(10)->SetVisible(ship->IsAbleToFoundColony());
         GetCtrl<Window>(11)->SetVisible(true);
 
-        for(unsigned char i = 0; i < 6; ++i)
+        for(uint8_t i = 0; i < 6; ++i)
             GetCtrl<Window>(12 + i)->SetVisible(gwv->GetNextFreeHarborPoint(ship->GetPos(),
                                                 ship->GetCurrentHarbor(), i, ship->GetPlayer()) > 0);
 
@@ -135,7 +135,7 @@ void iwShip::Msg_PaintAfter()
     else
     {
         // Alle Buttons inklusive Anker in der Mitte ausblenden
-        for(unsigned i = 0; i < 8; ++i)
+        for(uint32_t i = 0; i < 8; ++i)
             GetCtrl<Window>(10 + i)->SetVisible(false);
     }
 
@@ -143,7 +143,7 @@ void iwShip::Msg_PaintAfter()
 }
 
 
-void iwShip::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwShip::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     noShip* ship = GAMECLIENT.GetPlayer(player)->GetShipByID(ship_id);
 
@@ -202,8 +202,8 @@ void iwShip::DrawCargo()
 {
     noShip* ship = GAMECLIENT.GetPlayer(player)->GetShipByID(ship_id);
 
-    std::vector<unsigned short> orderedWares = std::vector<unsigned short>(WARE_TYPES_COUNT);
-    std::vector<unsigned short> orderedFigures = std::vector<unsigned short>(JOB_TYPES_COUNT);
+    std::vector<uint16_t> orderedWares = std::vector<uint16_t>(WARE_TYPES_COUNT);
+    std::vector<uint16_t> orderedFigures = std::vector<uint16_t>(JOB_TYPES_COUNT);
 
     // Alle Figuren in Gruppen zählen
     const std::list<noFigure*> figures = ship->GetFigures();
@@ -232,25 +232,25 @@ void iwShip::DrawCargo()
     }
 
     // Start Offset zum malen
-    const int xStart = 40 + this->x;
-    const int yStart = 130 + this->y;
+    const int32_t xStart = 40 + this->x;
+    const int32_t yStart = 130 + this->y;
 
     // Step pro Ware/Figur
-    const int xStep = 10;
+    const int32_t xStep = 10;
 
     // Step pro Zeile
-    const int yStep = 15;
+    const int32_t yStep = 15;
 
     // Elemente pro Zeile
-    const unsigned elementsPerLine = 17;
+    const uint32_t elementsPerLine = 17;
 
-    int x = xStart;
-    int y = yStart;
+    int32_t x = xStart;
+    int32_t y = yStart;
 
-    unsigned lineCounter = 0;
+    uint32_t lineCounter = 0;
 
     // Leute zeichnen
-    for (unsigned i = 0; i < orderedFigures.size(); ++i)
+    for (uint32_t i = 0; i < orderedFigures.size(); ++i)
     {
         while (orderedFigures[i] > 0)
         {
@@ -262,7 +262,7 @@ void iwShip::DrawCargo()
             }
             orderedFigures[i]--;
 
-            unsigned job_bobs_id = JOB_CONSTS[i].jobs_bob_id;
+            uint32_t job_bobs_id = JOB_CONSTS[i].jobs_bob_id;
             if(i >= JOB_PRIVATE && i <= JOB_GENERAL)
                 job_bobs_id = 30 + NATION_RTTR_TO_S2[GAMECLIENT.GetPlayer(player)->nation] * 6 + i - JOB_PRIVATE;
             else if(i == JOB_SCOUT)
@@ -281,7 +281,7 @@ void iwShip::DrawCargo()
     }
 
     // Waren zeichnen
-    for (unsigned i = 0; i < orderedWares.size(); ++i)
+    for (uint32_t i = 0; i < orderedWares.size(); ++i)
     {
         while (orderedWares[i] > 0)
         {
@@ -293,7 +293,7 @@ void iwShip::DrawCargo()
             }
             orderedWares[i]--;
 
-            unsigned draw_id = i;
+            uint32_t draw_id = i;
 
             // Schilder? Dann das  Schild der jeweiligen Nationalität nehmen
             if(draw_id == GD_SHIELDROMANS)

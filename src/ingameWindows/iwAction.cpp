@@ -65,7 +65,7 @@ enum TabID
  *
  *  @author OLiver
  */
-iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const Tabs& tabs, MapPoint selectedPt, int mouse_x, int mouse_y, unsigned int params, bool military_buildings)
+iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const Tabs& tabs, MapPoint selectedPt, int32_t mouse_x, int32_t mouse_y, uint32_t params, bool military_buildings)
     : IngameWindow(CGI_ACTION, mouse_x, mouse_y, 200, 254, _("Activity window"), LOADER.GetImageN("io", 1)),
       gi(gi), gwv(gwv), selectedPt(selectedPt), last_x(mouse_x), last_y(mouse_y)
 {
@@ -117,8 +117,8 @@ iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const
         }
 
         // add building icons to TabCtrl
-        const unsigned char building_count_max = 14;
-        const unsigned building_count[4] = { 9, 13, 6, 4 };
+        const uint8_t building_count_max = 14;
+        const uint32_t building_count[4] = { 9, 13, 6, 4 };
         const BuildingType building_icons[4][building_count_max] =
         {
             { /* 0 */
@@ -163,15 +163,15 @@ iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const
             }
         };
 
-        const unsigned TABS_COUNT[5] = {1, 2, 3, 1, 3};
+        const uint32_t TABS_COUNT[5] = {1, 2, 3, 1, 3};
 
         /// Flexible what-buildings-are-available handling
         bool building_available[4][building_count_max] ;
 
         // First enable all buildings
-        for (unsigned char i = 0; i < 4; ++i)
+        for (uint8_t i = 0; i < 4; ++i)
         {
-            for(unsigned char j = 0; j < building_count_max; ++j)
+            for(uint8_t j = 0; j < building_count_max; ++j)
             {
                 if (j < building_count[i])
                 {
@@ -214,12 +214,12 @@ iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const
         if(!GAMECLIENT.GetGGS().isEnabled(ADDON_CHARBURNER))
             building_available[2][3] = false;
 
-        for(unsigned char i = 0; i < TABS_COUNT[tabs.build_tabs]; ++i)
+        for(uint8_t i = 0; i < TABS_COUNT[tabs.build_tabs]; ++i)
         {
-            unsigned char k = 0;
+            uint8_t k = 0;
             Tabs::BuildTab bt = (tabs.build_tabs == Tabs::BT_MINE) ? Tabs::BT_MINE : Tabs::BuildTab(i);
 
-            for(unsigned char j = 0; j < building_count_max; ++j)
+            for(uint8_t j = 0; j < building_count_max; ++j)
             {
                 if (!building_available[bt][j])
                     continue;
@@ -230,12 +230,12 @@ iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const
 
                 tooltip << _("\nCosts: ");
                 if(BUILDING_COSTS[GAMECLIENT.GetLocalPlayer()->nation][building_icons[bt][j]].boards > 0)
-                    tooltip << (int)BUILDING_COSTS[GAMECLIENT.GetLocalPlayer()->nation][building_icons[bt][j]].boards << _(" boards");
+                    tooltip << (int32_t)BUILDING_COSTS[GAMECLIENT.GetLocalPlayer()->nation][building_icons[bt][j]].boards << _(" boards");
                 if(BUILDING_COSTS[GAMECLIENT.GetLocalPlayer()->nation][building_icons[bt][j]].stones > 0)
                 {
                     if(BUILDING_COSTS[GAMECLIENT.GetLocalPlayer()->nation][building_icons[bt][j]].boards > 0)
                         tooltip << ", ";
-                    tooltip << (int)BUILDING_COSTS[GAMECLIENT.GetLocalPlayer()->nation][building_icons[bt][j]].stones << _(" stones");
+                    tooltip << (int32_t)BUILDING_COSTS[GAMECLIENT.GetLocalPlayer()->nation][building_icons[bt][j]].stones << _(" stones");
                 }
 
                 build_tab->GetGroup(bt)->AddBuildingIcon(j, (k % 5) * 36, (k / 5) * 36 + 45, building_icons[bt][j], GAMECLIENT.GetLocalPlayer()->nation, 36, tooltip.str());
@@ -288,12 +288,12 @@ iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const
     {
         ctrlGroup* group = main_tab->AddTab(LOADER.GetImageN("io", 45), _("Erect flag"), TAB_SETFLAG);
 
-        unsigned int nr = 70;
+        uint32_t nr = 70;
         if(params == AWFT_WATERFLAG)
             nr = 94;
 
         // Straße aufwerten ggf anzeigen
-        unsigned int width = 180, x = 90;
+        uint32_t width = 180, x = 90;
         AddUpgradeRoad(group, x, width);
 
         group->AddImageButton(1, 0, 45, width, 36, TC_GREY, LOADER.GetImageN("io", nr), _("Erect flag"));
@@ -305,7 +305,7 @@ iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const
         ctrlGroup* group = main_tab->AddTab(LOADER.GetImageN("io", 19), _("Dig up road"), TAB_CUTROAD);
 
         // Straße aufwerten ggf anzeigen
-        unsigned int width = 180, x = 0;
+        uint32_t width = 180, x = 0;
         if(!tabs.setflag)
             AddUpgradeRoad(group, x, width);
 
@@ -351,13 +351,13 @@ iwAction::iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const
     VIDEODRIVER.SetMousePos(GetX() + 20, GetY() + 75);
 }
 
-void iwAction::AddUpgradeRoad(ctrlGroup* group, unsigned int& x, unsigned int& width)
+void iwAction::AddUpgradeRoad(ctrlGroup* group, uint32_t& x, uint32_t& width)
 {
     assert(group);
 
     if(GAMECLIENT.GetGGS().isEnabled(ADDON_MANUAL_ROAD_ENLARGEMENT))
     {
-        unsigned char flag_dir = 0;
+        uint8_t flag_dir = 0;
         noFlag* flag = gwv->GetRoadFlag(selectedPt, flag_dir);
         if(flag && flag->routes[flag_dir]->GetRoadType() == RoadSegment::RT_NORMAL)
         {
@@ -369,14 +369,14 @@ void iwAction::AddUpgradeRoad(ctrlGroup* group, unsigned int& x, unsigned int& w
 
 void iwAction::DoUpgradeRoad()
 {
-    unsigned char flag_dir = 0;
+    uint8_t flag_dir = 0;
     noFlag* flag = gwv->GetRoadFlag(selectedPt, flag_dir);
     if(flag)
         GAMECLIENT.AddGC(new gc::UpgradeRoad(flag->GetPos(), flag_dir));
 }
 
 /// Fügt Angriffs-Steuerelemente für bestimmte Gruppe hinzu
-void iwAction::AddAttackControls(ctrlGroup* group, const unsigned attackers_count)
+void iwAction::AddAttackControls(ctrlGroup* group, const uint32_t attackers_count)
 {
     // Verfügbare Soldatenzahl steht in params, wenns keine gibt, einfach Meldung anzeigen: "Angriff nicht möglich!"
     if(attackers_count == 0)
@@ -400,10 +400,10 @@ void iwAction::AddAttackControls(ctrlGroup* group, const unsigned attackers_coun
         ogroup->SetSelection(1);
 
         // Schnellauswahl-Buttons
-        unsigned int buttons_count = (attackers_count > 3) ? 4 : attackers_count;
-        unsigned short button_width = 112 / buttons_count;
+        uint32_t buttons_count = (attackers_count > 3) ? 4 : attackers_count;
+        uint16_t button_width = 112 / buttons_count;
 
-        for(unsigned i = 0; i < buttons_count; ++i)
+        for(uint32_t i = 0; i < buttons_count; ++i)
             group->AddImageButton(10 + i, 3 + i * button_width, 83, button_width, 32, TC_GREY, LOADER.GetImageN("io", 204 + i), _("Number of attackers"));
 
         // Angriffsbutton
@@ -418,7 +418,7 @@ iwAction::~iwAction()
     gi->ActionWindowClosed();
 }
 
-void iwAction::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id)
+void iwAction::Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id)
 {
     switch(GetCtrl<ctrlTab>(0)->GetCurrentTab())
     {
@@ -463,13 +463,13 @@ void iwAction::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned
 }
 
 
-void iwAction::Msg_TabChange(const unsigned int ctrl_id, const unsigned short tab_id)
+void iwAction::Msg_TabChange(const uint32_t ctrl_id, const uint16_t tab_id)
 {
     switch(ctrl_id)
     {
         case 0: // Haupttabs
         {
-            unsigned short height = 0;
+            uint16_t height = 0;
             switch(tab_id)
             {
                 case TAB_FLAG:    height = 138; break;
@@ -510,7 +510,7 @@ void iwAction::Msg_TabChange(const unsigned int ctrl_id, const unsigned short ta
 
 }
 
-void iwAction::Msg_Group_TabChange(const unsigned group_id, const unsigned int ctrl_id, const unsigned short tab_id)
+void iwAction::Msg_Group_TabChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t tab_id)
 {
     switch(ctrl_id)
     {
@@ -545,7 +545,7 @@ void iwAction::Msg_PaintAfter()
 
 
 
-void iwAction::Msg_ButtonClick_TabAttack(const unsigned int ctrl_id)
+void iwAction::Msg_ButtonClick_TabAttack(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -581,7 +581,7 @@ void iwAction::Msg_ButtonClick_TabAttack(const unsigned int ctrl_id)
 }
 
 
-void iwAction::Msg_ButtonClick_TabSeaAttack(const unsigned int ctrl_id)
+void iwAction::Msg_ButtonClick_TabSeaAttack(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -617,7 +617,7 @@ void iwAction::Msg_ButtonClick_TabSeaAttack(const unsigned int ctrl_id)
 }
 
 
-void iwAction::Msg_ButtonClick_TabFlag(const unsigned int ctrl_id)
+void iwAction::Msg_ButtonClick_TabFlag(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -675,7 +675,7 @@ void iwAction::Msg_ButtonClick_TabFlag(const unsigned int ctrl_id)
     }
 }
 
-void iwAction::Msg_ButtonClick_TabBuild(const unsigned int ctrl_id)
+void iwAction::Msg_ButtonClick_TabBuild(const uint32_t ctrl_id)
 {
     // Klick auf Gebäudebauicon
     GAMECLIENT.AddGC(new gc::SetBuildingSite(selectedPt,
@@ -686,7 +686,7 @@ void iwAction::Msg_ButtonClick_TabBuild(const unsigned int ctrl_id)
     Close();
 }
 
-void iwAction::Msg_ButtonClick_TabSetFlag(const unsigned int ctrl_id)
+void iwAction::Msg_ButtonClick_TabSetFlag(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -703,13 +703,13 @@ void iwAction::Msg_ButtonClick_TabSetFlag(const unsigned int ctrl_id)
     Close();
 }
 
-void iwAction::Msg_ButtonClick_TabCutRoad(const unsigned int ctrl_id)
+void iwAction::Msg_ButtonClick_TabCutRoad(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
         case 1: // Straße abreißen
         {
-            unsigned char flag_dir = 0;
+            uint8_t flag_dir = 0;
             noFlag* flag = gwv->GetRoadFlag(selectedPt, flag_dir);
             if(flag)
                 GAMECLIENT.AddGC(new gc::DestroyRoad(flag->GetPos(), flag_dir));
@@ -723,7 +723,7 @@ void iwAction::Msg_ButtonClick_TabCutRoad(const unsigned int ctrl_id)
     Close();
 }
 
-void iwAction::Msg_ButtonClick_TabWatch(const unsigned int ctrl_id)
+void iwAction::Msg_ButtonClick_TabWatch(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

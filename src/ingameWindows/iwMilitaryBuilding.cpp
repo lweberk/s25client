@@ -52,7 +52,7 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 iwMilitaryBuilding::iwMilitaryBuilding(GameWorldViewer* const gwv, dskGameInterface* const gi, nobMilitary* const building)
-    : IngameWindow(building->CreateGUIID(), (unsigned short) - 2, (unsigned short) - 2, 226, 194, _(BUILDING_NAMES[building->GetBuildingType()]), LOADER.GetImageN("resource", 41)),
+    : IngameWindow(building->CreateGUIID(), (uint16_t) - 2, (uint16_t) - 2, 226, 194, _(BUILDING_NAMES[building->GetBuildingType()]), LOADER.GetImageN("resource", 41)),
       building(building),gi(gi), gwv(gwv)
 {
     // Schwert
@@ -89,14 +89,14 @@ void iwMilitaryBuilding::Msg_PaintAfter()
     // Schwarzer Untergrund für Goldanzeige
     DrawRectangle(GetX() + width / 2 - 22 * GOLD_COUNT[building->nation][building->size] / 2, GetY() + 60, 22 * GOLD_COUNT[building->nation][building->size], 24, 0x96000000);
     // Gold
-    for(unsigned short i = 0; i < GOLD_COUNT[building->nation][building->size]; ++i)
+    for(uint16_t i = 0; i < GOLD_COUNT[building->nation][building->size]; ++i)
         LOADER.GetMapImageN(2278)->Draw(GetX() + width / 2 - 22 * GOLD_COUNT[building->nation][building->size] / 2 + 12 + i * 22, GetY() + 72, 0, 0, 0, 0, 0, 0, ( i >= building->coins ? 0xFFA0A0A0 : 0xFFFFFFFF) );
 
     // Schwarzer Untergrund für Soldatenanzeige
     DrawRectangle(GetX() + width / 2 - 22 * TROOPS_COUNT[building->nation][building->size] / 2, GetY() + 98 , 22 * TROOPS_COUNT[building->nation][building->size], 24, 0x96000000);
 
     // Sammeln aus der Rausgeh-Liste und denen, die wirklich noch drinne sind
-    std::multiset<unsigned> soldiers;
+    std::multiset<uint32_t> soldiers;
     for(nobMilitary::SortedTroopsContainer::iterator it = building->troops.begin(); it != building->troops.end(); ++it)
         soldiers.insert((*it)->GetRank());
 
@@ -112,13 +112,13 @@ void iwMilitaryBuilding::Msg_PaintAfter()
     }
 
     // Soldaten zeichnen
-    unsigned short i = 0;
-    for(std::multiset<unsigned>::iterator it = soldiers.begin(); it != soldiers.end(); ++it, ++i)
+    uint16_t i = 0;
+    for(std::multiset<uint32_t>::iterator it = soldiers.begin(); it != soldiers.end(); ++it, ++i)
         LOADER.GetMapImageN(2321 + *it)->Draw(GetX() + width / 2 - 22 * TROOPS_COUNT[building->nation][building->size] / 2 + 12 + i * 22, GetY() + 110, 0, 0, 0, 0, 0, 0);
 }
 
 
-void iwMilitaryBuilding::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwMilitaryBuilding::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

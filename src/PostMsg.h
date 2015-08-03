@@ -39,14 +39,14 @@ class PostMsg
         const std::string& GetText() const { return text; }
         PostMessageType GetType() const { return type; }
         PostMessageCategory GetCategory() const { return cat; }
-        unsigned GetSendFrame() const { return sendFrame; }
+        uint32_t GetSendFrame() const { return sendFrame; }
         virtual void Serialize(SerializedGameData* sgd);
 
     protected:
         std::string text;
         PostMessageType type;
         PostMessageCategory cat;
-        unsigned sendFrame;
+        uint32_t sendFrame;
 };
 
 /// Post-Nachricht mit Text und einem Goto-Knopf der zu einem bestimmten Kartenpunkt führt
@@ -96,12 +96,12 @@ class DiplomacyPostQuestion : public PostMsg
         };
 
         /// Vertrag akzeptieren
-        DiplomacyPostQuestion(const unsigned id, const unsigned char player, const PactType pt, const unsigned duration);
+        DiplomacyPostQuestion(const uint32_t id, const uint8_t player, const PactType pt, const uint32_t duration);
         /// Vertrag auflösen
-        DiplomacyPostQuestion(const unsigned id, const unsigned char player, const PactType pt);
+        DiplomacyPostQuestion(const uint32_t id, const uint8_t player, const PactType pt);
         DiplomacyPostQuestion(SerializedGameData* sgd);
 
-        unsigned GetPlayerID() const { return player; }
+        uint32_t GetPlayerID() const { return player; }
         virtual void Serialize(SerializedGameData* sgd);
 
     private:
@@ -109,9 +109,9 @@ class DiplomacyPostQuestion : public PostMsg
         Type dp_type;
 
         /// ID des Vertrages (= normalerweise die GF-Nummer, zu der es vorgeschlagen wurde)
-        unsigned id;
+        uint32_t id;
         /// Spieler, den das Bündnis betrifft
-        unsigned char player;
+        uint8_t player;
         /// Vertragsart
         PactType pt;
 };
@@ -127,7 +127,7 @@ class DiplomacyPostInfo : public PostMsg
             CANCEL /// Nachricht, die den Spieler fragt, ob ein bestehender Vertrag aufgelöst werden soll
         };
 
-        DiplomacyPostInfo(const unsigned char other_player, const Type dp_type, const PactType pt);
+        DiplomacyPostInfo(const uint8_t other_player, const Type dp_type, const PactType pt);
         DiplomacyPostInfo(SerializedGameData* sgd);
 
         virtual void Serialize(SerializedGameData* sgd);

@@ -168,24 +168,24 @@ bool GameManager::Run()
     GAMECLIENT.Run();
     GAMESERVER.Run();
 
-    unsigned int current_time = VIDEODRIVER.GetTickCount();
+    uint32_t current_time = VIDEODRIVER.GetTickCount();
 
-    unsigned long vsync_wanted = ((GAMECLIENT.GetState() != GameClient::CS_GAME) || GAMECLIENT.IsPaused()) ? 30 : SETTINGS.video.vsync;
+    uint64_t vsync_wanted = ((GAMECLIENT.GetState() != GameClient::CS_GAME) || GAMECLIENT.IsPaused()) ? 30 : SETTINGS.video.vsync;
 
     // SW-VSync (mit 4% Toleranz)
     if(vsync_wanted > 1)
     {
-    	static unsigned long vsync = vsync_wanted;
+    	static uint64_t vsync = vsync_wanted;
     	
         // immer 10% dazu/weg bis man über der Framerate liegt
-        if(vsync < 200 && 1000 * framerate < (unsigned int)(960 * vsync) )
+        if(vsync < 200 && 1000 * framerate < (uint32_t)(960 * vsync) )
             vsync = (1100 * vsync) / 1000;
         else if(vsync > vsync_wanted)
             vsync = (900 * vsync) / 1000;
         else
             vsync = vsync_wanted;
 
-        unsigned long goal_ticks = 960 * 1000 * 1000 / vsync;
+        uint64_t goal_ticks = 960 * 1000 * 1000 / vsync;
 #ifdef _WIN32
         if(goal_ticks < 13 * 1000 * 1000) // timer resolutions < 13ms do not work for windows correctly
             goal_ticks = 0;

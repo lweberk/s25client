@@ -44,8 +44,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofAggressiveDefender::nofAggressiveDefender(const MapPoint pos, const unsigned char player,
-        nobBaseMilitary* const home, const unsigned char rank, nofAttacker* const attacker)
+nofAggressiveDefender::nofAggressiveDefender(const MapPoint pos, const uint8_t player,
+        nobBaseMilitary* const home, const uint8_t rank, nofAttacker* const attacker)
     : nofActiveSoldier(pos, player, home, rank, STATE_AGGRESSIVEDEFENDING_WALKINGTOAGGRESSOR), attacker(attacker),
       attacked_goal(attacker->GetAttackedGoal())
 {
@@ -85,7 +85,7 @@ void nofAggressiveDefender::Serialize_nofAggressiveDefender(SerializedGameData* 
     }
 }
 
-nofAggressiveDefender::nofAggressiveDefender(SerializedGameData* sgd, const unsigned obj_id) : nofActiveSoldier(sgd, obj_id)
+nofAggressiveDefender::nofAggressiveDefender(SerializedGameData* sgd, const uint32_t obj_id) : nofActiveSoldier(sgd, obj_id)
 {
     if(state != STATE_WALKINGHOME && state != STATE_FIGUREWORK)
     {

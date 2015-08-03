@@ -24,11 +24,11 @@
 struct Rect;
 
 // Punkt in einem Rechteck
-bool Coll(const int x, const int y, const Rect& rect);
+bool Coll(const int32_t x, const int32_t y, const Rect& rect);
 // Punkt in einem Rechteck
-bool Coll(const int x, const int y, const int rx, const int ry, const int rwidth, const int rheight);
+bool Coll(const int32_t x, const int32_t y, const int32_t rx, const int32_t ry, const int32_t rwidth, const int32_t rheight);
 // 1D (2 Linien)
-bool Coll(const int left1, const int right1, const int left2, const int right2);
+bool Coll(const int32_t left1, const int32_t right1, const int32_t left2, const int32_t right2);
 // 2D (2 Rechtecke)
 bool CollEdges(const Rect& rect1, const Rect& rect2);
 // 2D (2 Rechtecke)

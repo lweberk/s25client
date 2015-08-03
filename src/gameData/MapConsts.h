@@ -22,20 +22,20 @@
 #pragma once
 
 /// Wie hoch und breit ist ein Dreieck?
-static const int TR_W = 53;
-static const int TR_H = 29;
+static const int32_t TR_W = 53;
+static const int32_t TR_H = 29;
 
 /// Faktor fr die Höhen
-const int HEIGHT_FACTOR = 5;
+const int32_t HEIGHT_FACTOR = 5;
 
 /// Terrainzuordnung
-const unsigned char TERRAIN_INDIZES [20] =
+const uint8_t TERRAIN_INDIZES [20] =
 {
     8, 4, 0, 2, 1, 14, 0, 1, 9, 10, 11, 5, 6, 7, 12, 3, 15, 0, 13, 14
 };
 
 /// Ränder-Zuordnung
-const unsigned char BORDER_TABLES[3][16][16][2] =
+const uint8_t BORDER_TABLES[3][16][16][2] =
 {
     // Grünland
     {

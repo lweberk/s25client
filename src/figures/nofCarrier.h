@@ -70,22 +70,22 @@ class nofCarrier : public noFigure
         /// Rechne-Produktivität-aus-Event
         EventManager::EventPointer productivity_ev;
         // Letzte errechnete Produktivität
-        unsigned productivity;
+        uint32_t productivity;
         /// Wieviel GF von einer bestimmten Anzahl in diesem Event-Zeitraum gearbeitet wurde
-        unsigned worked_gf;
+        uint32_t worked_gf;
         /// Zu welchem GF das letzte Mal das Arbeiten angefangen wurde
-        unsigned since_working_gf;
+        uint32_t since_working_gf;
         /// Bestimmt GF der nächsten Trägeranimation
-        unsigned next_animation;
+        uint32_t next_animation;
         /// For boat carriers: path to the shore
-        std::vector<unsigned char> * shore_path;
+        std::vector<uint8_t> * shore_path;
 
     private:
 
         void GoalReached();
         void Walked();
         void AbrogateWorkplace();
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
         /// Nach dem Tragen der Ware, guckt der Träger an beiden Flagge, obs Waren gibt, holt/trägt diese ggf oder geht ansonsten wieder in die Mitte
         void LookForWares();
@@ -108,8 +108,8 @@ class nofCarrier : public noFigure
 
     public:
 
-        nofCarrier(const CarrierType ct, const MapPoint pt, const unsigned char player, RoadSegment* workplace, noRoadNode* const goal);
-        nofCarrier(SerializedGameData* sgd, const unsigned obj_id);
+        nofCarrier(const CarrierType ct, const MapPoint pt, const uint8_t player, RoadSegment* workplace, noRoadNode* const goal);
+        nofCarrier(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~nofCarrier();
 
@@ -128,9 +128,9 @@ class nofCarrier : public noFigure
         /// Was macht der Träger gerade?
         CarrierState GetCarrierState() const { return state; }
         /// Gibt Träger-Produktivität in % zurück
-        unsigned GetProductivity() const { return productivity; }
+        uint32_t GetProductivity() const { return productivity; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Wird aufgerufen, wenn der Weg des Trägers abgerissen wurde
         void LostWork();

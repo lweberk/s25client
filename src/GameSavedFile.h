@@ -37,9 +37,9 @@ class SavedFile
 
     protected:
         /// Schreibt Signatur und Version der Datei
-        void WriteVersion(BinaryFile& file, unsigned int signature_length, const char* signature, unsigned short version);
+        void WriteVersion(BinaryFile& file, uint32_t signature_length, const char* signature, uint16_t version);
         /// Überprüft Signatur und Version der Datei
-        bool ValidateFile(BinaryFile& file, unsigned int signature_length, const char* signature, unsigned short version);
+        bool ValidateFile(BinaryFile& file, uint32_t signature_length, const char* signature, uint16_t version);
 
         /// Schreibt Spielerdaten
         void WritePlayerData(BinaryFile& file);
@@ -58,18 +58,18 @@ class SavedFile
         /// Mapname
         std::string map_name;
         /// Anzahl Spieler
-        unsigned char player_count;
+        uint8_t player_count;
 
         /// Spieler
         struct Player
         {
             /// PlayerState
-            unsigned ps;
+            uint32_t ps;
             /// (Damaliger) Name des Spielers
             std::string name;
             /// Volk, Farbe, Team
             Nation nation;
-            unsigned char color, team;
+            uint8_t color, team;
         }* players;
 
         /// GGS

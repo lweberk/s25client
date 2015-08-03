@@ -49,17 +49,17 @@ iwStatistics::iwStatistics()
 
     // Spieler zählen
     numPlayingPlayers = 0;
-    for (unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for (uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         if (GAMECLIENT.GetPlayer(i)->ps == PS_KI || GAMECLIENT.GetPlayer(i)->ps == PS_OCCUPIED)
             numPlayingPlayers++;
     }
 
     // Bilder für die spielenden Spieler malen (nur vier in Gebrauch, da kein einzelner Anführer auswählbar)
-    unsigned short startX = 126 - (numPlayingPlayers - 1) * 17;
-    unsigned pos = 0;
+    uint16_t startX = 126 - (numPlayingPlayers - 1) * 17;
+    uint32_t pos = 0;
 
-    for (unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for (uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         // nicht belegte Spielplätze rauswerfen
         if (!(GAMECLIENT.GetPlayer(i)->ps == PS_KI || GAMECLIENT.GetPlayer(i)->ps == PS_OCCUPIED))
@@ -149,7 +149,7 @@ iwStatistics::iwStatistics()
 
     // Zeit-Werte an der x-Achse
     timeAnnotations = std::vector<ctrlText*>(7); // TODO nach oben
-    for (unsigned i = 0; i < 7; ++i)
+    for (uint32_t i = 0; i < 7; ++i)
     {
         timeAnnotations[i] = AddText(32 + i, 211 + i, 125 + i, "", MakeColor(255, 136, 96, 52),
                                      glArchivItem_Font::DF_CENTER | glArchivItem_Font::DF_TOP, LOADER.GetFontN("resource", 0));
@@ -182,7 +182,7 @@ iwStatistics::~iwStatistics()
  *
  *  @author jh
  */
-void iwStatistics::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwStatistics::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch (ctrl_id)
     {
@@ -202,7 +202,7 @@ void iwStatistics::Msg_ButtonClick(const unsigned int ctrl_id)
  *
  *  @author jh
  */
-void iwStatistics::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void iwStatistics::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -272,9 +272,9 @@ void iwStatistics::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsig
 void iwStatistics::Msg_PaintAfter()
 {
     // Die farbigen Boxen unter den Spielerportraits malen
-    unsigned short startX = 126 - numPlayingPlayers * 17;
-    unsigned pos = 0;
-    for (unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    uint16_t startX = 126 - numPlayingPlayers * 17;
+    uint32_t pos = 0;
+    for (uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         if (!(GAMECLIENT.GetPlayer(i)->ps == PS_KI || GAMECLIENT.GetPlayer(i)->ps == PS_OCCUPIED))
         {
@@ -303,25 +303,25 @@ void iwStatistics::Msg_PaintAfter()
 void iwStatistics::DrawStatistic(StatisticType type)
 {
     // Ein paar benötigte Werte...
-    const int sizeX = 180;
-    const int sizeY = 80;
-    const int topLeftX = this->x + 34;
-    const int topLeftY = this->y + 124;
-    const int stepX = sizeX / STAT_STEP_COUNT; // 6
+    const int32_t sizeX = 180;
+    const int32_t sizeY = 80;
+    const int32_t topLeftX = this->x + 34;
+    const int32_t topLeftY = this->y + 124;
+    const int32_t stepX = sizeX / STAT_STEP_COUNT; // 6
 
-    unsigned short currentIndex;
-    unsigned int max = 1;
-    unsigned int min = 65000;
+    uint16_t currentIndex;
+    uint32_t max = 1;
+    uint32_t min = 65000;
 
     // Maximal- und Minimalwert suchen
-    for (unsigned int p = 0; p < GAMECLIENT.GetPlayerCount(); ++p)
+    for (uint32_t p = 0; p < GAMECLIENT.GetPlayerCount(); ++p)
     {
         if (!activePlayers[p])
             continue;
         const GameClientPlayer::Statistic& stat = GAMECLIENT.GetPlayer(p)->GetStatistic(currentTime);
 
         currentIndex = stat.currentIndex;
-        for (unsigned int i = 0; i < STAT_STEP_COUNT; ++i)
+        for (uint32_t i = 0; i < STAT_STEP_COUNT; ++i)
         {
             if (max < stat.data[type][(currentIndex >= i) ? (currentIndex - i) : (STAT_STEP_COUNT - i + currentIndex)])
             {
@@ -354,15 +354,15 @@ void iwStatistics::DrawStatistic(StatisticType type)
     }
 
     // Statistiklinien zeichnen
-    unsigned short previousX = 0, previousY = 0;
-    for (unsigned p = 0; p < GAMECLIENT.GetPlayerCount(); ++p)
+    uint16_t previousX = 0, previousY = 0;
+    for (uint32_t p = 0; p < GAMECLIENT.GetPlayerCount(); ++p)
     {
         if (!activePlayers[p])
             continue;
         const GameClientPlayer::Statistic& stat = GAMECLIENT.GetPlayer(p)->GetStatistic(currentTime);
 
         currentIndex = stat.currentIndex;
-        for (unsigned int i = 0; i < STAT_STEP_COUNT; ++i)
+        for (uint32_t i = 0; i < STAT_STEP_COUNT; ++i)
         {
             if (i != 0)
             {
@@ -401,12 +401,12 @@ void iwStatistics::DrawStatistic(StatisticType type)
 void iwStatistics::DrawAxis()
 {
     // Ein paar benötigte Werte...
-    const int sizeX = 180;
-    const int sizeY = 80;
-    const int topLeftX = this->x + 34;
-    const int topLeftY = this->y + 124;
-    const int topLeftXrel = 37;
-    const int topLeftYrel = 124;
+    const int32_t sizeX = 180;
+    const int32_t sizeY = 80;
+    const int32_t topLeftX = this->x + 34;
+    const int32_t topLeftY = this->y + 124;
+    const int32_t topLeftXrel = 37;
+    const int32_t topLeftYrel = 124;
 
     // X-Achse, horizontal, war irgendwie zu lang links :S
     DrawLine(topLeftX + 6, topLeftY + sizeY + 2, // bisschen tiefer, damit man nulllinien noch sieht

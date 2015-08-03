@@ -27,17 +27,17 @@ class GameMessage : public Message
 {
     public:
         /// Spieler-ID, von dem diese Nachricht stammt
-        unsigned char player;
+        uint8_t player;
     public:
-        GameMessage(const unsigned short id) : Message(id) {}
+        GameMessage(const uint16_t id) : Message(id) {}
         /// Konstruktor von @p GameMessage.
-        GameMessage(const unsigned short id, const unsigned char player)
+        GameMessage(const uint16_t id, const uint8_t player)
             : Message(id), player(player)
         {
             PushUnsignedChar(player);
         }
         /// Konstruktor, um Message aus vorhandenem Datenblock heraus zu erstellen
-        GameMessage(const unsigned id, const unsigned char* const data, const unsigned length)
+        GameMessage(const uint32_t id, const uint8_t* const data, const uint32_t length)
             : Message(id, data, length), player(PopUnsignedChar())
         {
         }
@@ -47,19 +47,19 @@ class GameMessage : public Message
         /// Run Methode für GameMessages, wobei PlayerID ggf. schon in der Message festgemacht wurde
         virtual void Run(MessageInterface* callback) = 0;
 
-        virtual void run(MessageInterface* callback, unsigned int id)
+        virtual void run(MessageInterface* callback, uint32_t id)
         {
             player = PopUnsignedChar();
             if(id != 0xFFFFFFFF)
-                player = static_cast<unsigned char>(id);
+                player = static_cast<uint8_t>(id);
             Run(callback);
         }
 
         /// Gibt Netto-Länge der Message zurück ohne zusätzliche Daten (Player usw)
-        unsigned GetNetLength() const { return GetLength() - 1; }
+        uint32_t GetNetLength() const { return GetLength() - 1; }
 
-        static Message* create_game(unsigned short id);
-        virtual Message* create(unsigned short id) const { return create_game(id); }
+        static Message* create_game(uint16_t id);
+        virtual Message* create(uint16_t id) const { return create_game(id); }
 };
 
 #endif // GAMEMESSAGE_H_INCLUDED

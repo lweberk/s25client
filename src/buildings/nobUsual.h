@@ -34,13 +34,13 @@ class nobUsual : public noBuilding
         /// Der Typ, der hier arbeitet
         nofBuildingWorker* worker;
         /// Produktivität
-        unsigned short productivity;
+        uint16_t productivity;
         /// Produktion eingestellt? (letzteres nur visuell, um Netzwerk-Latenzen zu verstecken)
         bool disable_production, disable_production_virtual;
         /// Warentyp, den er zuletzt bestellt hatte (bei >1 Waren)
-        unsigned char last_ordered_ware;
+        uint8_t last_ordered_ware;
         /// Rohstoffe, die zur Produktion benötigt werden
-        unsigned char wares[3];
+        uint8_t wares[3];
         /// Bestellte Waren
         std::vector< std::list<Ware*> > ordered_wares;
         /// Bestell-Ware-Event
@@ -48,14 +48,14 @@ class nobUsual : public noBuilding
         /// Rechne-Produktivität-aus-Event
         EventManager::EventPointer productivity_ev;
         /// Letzte Produktivitäten (Durschnitt = Gesamtproduktivität), vorne das neuste !
-        static const unsigned LAST_PRODUCTIVITIES_COUNT = 6;
-        unsigned short last_productivities[LAST_PRODUCTIVITIES_COUNT];
+        static const uint32_t LAST_PRODUCTIVITIES_COUNT = 6;
+        uint16_t last_productivities[LAST_PRODUCTIVITIES_COUNT];
 
 protected:
         friend class SerializedGameData;
         friend class BuildingFactory;
-        nobUsual(const BuildingType type, const MapPoint pt, const unsigned char player, const Nation nation);
-        nobUsual(SerializedGameData* sgd, const unsigned obj_id);
+        nobUsual(const BuildingType type, const MapPoint pt, const uint8_t player, const Nation nation);
+        nobUsual(SerializedGameData* sgd, const uint32_t obj_id);
     public:
 
         /// Wird gerade gearbeitet oder nicht?
@@ -73,12 +73,12 @@ protected:
 
         virtual GO_Type GetGOT() const { return GOT_NOB_USUAL; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         bool HasWorker() const;
 
         /// Event-Handler
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
         /// Legt eine Ware am Objekt ab (an allen Straßenknoten (Gebäude, Baustellen und Flaggen) kann man Waren ablegen
         void AddWare(Ware* ware);
         /// Wird aufgerufen, wenn von der Fahne vor dem Gebäude ein Rohstoff aufgenommen wurde
@@ -93,14 +93,14 @@ protected:
         void WorkerLost();
 
         /// Gibt den Warenbestand (eingehende Waren - Rohstoffe) zurück
-        unsigned char GetWares(const unsigned int id) const { return wares[id]; }
+        uint8_t GetWares(const uint32_t id) const { return wares[id]; }
         /// Prüft, ob Waren für einen Arbeitsschritt vorhanden sind
         bool WaresAvailable();
         /// Verbraucht Waren
         void ConsumeWares();
 
         /// Berechnet Punktewertung für Ware type, start ist der Produzent, von dem die Ware kommt
-        unsigned CalcDistributionPoints(noRoadNode* start, const GoodType type);
+        uint32_t CalcDistributionPoints(noRoadNode* start, const GoodType type);
 
         /// Wird aufgerufen, wenn eine neue Ware zum dem Gebäude geliefert wird (nicht wenn sie bestellt wurde vom Gebäude!)
         void TakeWare(Ware* ware);
@@ -114,7 +114,7 @@ protected:
         }
 
         /// Gibt Pointer auf Produktivität zurück
-        const unsigned short* GetProduktivityPointer() const { return &productivity; }
+        const uint16_t* GetProduktivityPointer() const { return &productivity; }
 
         /// Ermittelt, ob es sich bei diesem Gebäude um ein Bergwerk handelt
         bool IsMine() const { return type >= BLD_GRANITEMINE && type <= BLD_GOLDMINE; }

@@ -25,16 +25,16 @@
 class BurnedWarehouse : public noCoordBase
 {
         /// Spieler des ehemaligen Lagerhauses
-        const unsigned char player;
+        const uint8_t player;
         /// Aktuelle Rausgeh-Phase
-        unsigned go_out_phase;
+        uint32_t go_out_phase;
         // Leute, die noch rauskommen müssen
-        unsigned people[30];
+        uint32_t people[30];
 
     public:
 
-        BurnedWarehouse(const MapPoint pt, const unsigned char player, const unsigned* people);
-        BurnedWarehouse(SerializedGameData* sgd, const unsigned obj_id);
+        BurnedWarehouse(const MapPoint pt, const uint8_t player, const uint32_t* people);
+        BurnedWarehouse(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~BurnedWarehouse();
 
@@ -48,9 +48,9 @@ class BurnedWarehouse : public noCoordBase
         GO_Type GetGOT() const { return GOT_BURNEDWAREHOUSE; }
 
         /// Benachrichtigen, wenn neuer GF erreicht wurde.
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
-        void Draw(int x, int y) {}
+        void Draw(int32_t x, int32_t y) {}
 };
 
 #endif

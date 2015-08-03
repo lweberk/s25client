@@ -29,31 +29,31 @@ class ctrlList : public Window
 {
     public:
         /// Konstruktor von @p ctrlList.
-        ctrlList(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font);
+        ctrlList(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font);
         /// Destruktor von @p ctrlList.
         virtual ~ctrlList(void);
 
         /// Größe verändern
-        void Resize_(unsigned short width, unsigned short height);
+        void Resize_(uint16_t width, uint16_t height);
 
         /// Neuen String zur Listbox hinzufügen.
         void AddString(const std::string& text);
         /// Verändert einen String
-        void SetString(const std::string& text, const unsigned id);
+        void SetString(const std::string& text, const uint32_t id);
         /// Listbox leeren.
         void DeleteAllItems(void);
         /// liefert den Wert einer Zeile.
-        const std::string& GetItemText(unsigned short line) const;
+        const std::string& GetItemText(uint16_t line) const;
         /// liefert den Wert der aktuell gewählten Zeile.
         const std::string& GetSelItemText(void) const { return GetItemText(selection); };
         /// Vertauscht zwei Zeilen.
-        void Swap(unsigned short first, unsigned short second);
+        void Swap(uint16_t first, uint16_t second);
         /// Löscht ein Element
-        void Remove(const unsigned short index);
+        void Remove(const uint16_t index);
 
-        unsigned short GetLineCount(void) const { return static_cast<unsigned short>(lines.size()); }
-        unsigned short GetSelection(void) const { return static_cast<unsigned short>(selection); };
-        void SetSelection(unsigned short selection)
+        uint16_t GetLineCount(void) const { return static_cast<uint16_t>(lines.size()); }
+        uint16_t GetSelection(void) const { return static_cast<uint16_t>(selection); };
+        void SetSelection(uint16_t selection)
         {
             if(selection != this->selection && selection < lines.size())
             {
@@ -79,9 +79,9 @@ class ctrlList : public Window
 
         std::vector<std::string> lines;
 
-        unsigned short selection;
-        unsigned short mouseover;
-        unsigned int pagesize;
+        uint16_t selection;
+        uint16_t mouseover;
+        uint32_t pagesize;
 
 };
 

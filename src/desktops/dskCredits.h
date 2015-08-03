@@ -36,7 +36,7 @@ class dskCredits : public Desktop
     private:
         bool Msg_KeyDown(const KeyEvent& ke);
         void Msg_PaintAfter();
-        void Msg_ButtonClick(const unsigned ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 
         bool Close(void);
 
@@ -44,12 +44,12 @@ class dskCredits : public Desktop
         {
             std::string title;
             std::string lastLine;
-            int picId;
+            int32_t picId;
             struct Line
             {
-                Line(std::string l, unsigned int c = 0) : line(l), column(c) { }
+                Line(std::string l, uint32_t c = 0) : line(l), column(c) { }
                 std::string line;
-                unsigned int column;
+                uint32_t column;
             };
             std::list<Line> lines;
         };
@@ -59,22 +59,22 @@ class dskCredits : public Desktop
 
         struct Bob
         {
-            unsigned int id;
+            uint32_t id;
             bool hasWare;
             bool isFat;
-            unsigned int direction;
-            unsigned char speed;
-            unsigned int animationStep;
-            short x;
-            short y;
-            unsigned int color;
+            uint32_t direction;
+            uint8_t speed;
+            uint32_t animationStep;
+            int16_t x;
+            int16_t y;
+            uint32_t color;
         };
 
         std::list<Bob> bobs;
 
-        unsigned int startTime;
-        unsigned int bobTime;
-        unsigned int bobSpawnTime;
+        uint32_t startTime;
+        uint32_t bobTime;
+        uint32_t bobSpawnTime;
 };
 
 #endif // !dskCREDITS_H_INCLUDED

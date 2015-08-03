@@ -26,7 +26,7 @@
 class ctrlImage : public Window
 {
     public:
-        ctrlImage(Window* parent, unsigned int id, unsigned short x, unsigned short y, glArchivItem_Bitmap* image, const std::string& tooltip);
+        ctrlImage(Window* parent, uint32_t id, uint16_t x, uint16_t y, glArchivItem_Bitmap* image, const std::string& tooltip);
         virtual ~ctrlImage();
 
         void SetImage(glArchivItem_Bitmap* image) { this->image = image; }

@@ -42,13 +42,13 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 iwBuildOrder::iwBuildOrder(void)
-    : IngameWindow(CGI_BUILDORDER, (unsigned short) - 1, (unsigned short) - 1, 320, 300, _("Building sequence"), LOADER.GetImageN("io", 5)),
+    : IngameWindow(CGI_BUILDORDER, (uint16_t) - 1, (uint16_t) - 1, 320, 300, _("Building sequence"), LOADER.GetImageN("io", 5)),
       settings_changed(false)
 {
     ctrlList* list = AddList(0, 15, 60, 150, 220, TC_GREY, NormalFont);
 
     // Liste füllen
-    for(unsigned char i = 0; i < 31; ++i)
+    for(uint8_t i = 0; i < 31; ++i)
         list->AddString(_(BUILDING_NAMES[GAMECLIENT.visual_settings.build_order[i]]));
 
     // Nach ganz oben
@@ -81,7 +81,7 @@ iwBuildOrder::iwBuildOrder(void)
 
 iwBuildOrder::~iwBuildOrder()
 {
-    unsigned char selection = (unsigned char)GetCtrl<ctrlComboBox>(6)->GetSelection();
+    uint8_t selection = (uint8_t)GetCtrl<ctrlComboBox>(6)->GetSelection();
     GAMECLIENT.visual_settings.order_type = selection;
 
     TransmitSettings();
@@ -93,12 +93,12 @@ void iwBuildOrder::TransmitSettings()
     if(settings_changed)
     {
         // Einstellungen speichern
-        GAMECLIENT.AddGC(new gc::ChangeBuildOrder((unsigned char)GetCtrl<ctrlComboBox>(6)->GetSelection(), GAMECLIENT.visual_settings.build_order));
+        GAMECLIENT.AddGC(new gc::ChangeBuildOrder((uint8_t)GetCtrl<ctrlComboBox>(6)->GetSelection(), GAMECLIENT.visual_settings.build_order));
         settings_changed = false;
     }
 }
 
-void iwBuildOrder::Msg_Timer(const unsigned int ctrl_id)
+void iwBuildOrder::Msg_Timer(const uint32_t ctrl_id)
 {
     if(GAMECLIENT.IsReplayModeOn())
         // Im Replay aktualisieren wir die Werte
@@ -109,7 +109,7 @@ void iwBuildOrder::Msg_Timer(const unsigned int ctrl_id)
 }
 
 
-void iwBuildOrder::Msg_ListSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void iwBuildOrder::Msg_ListSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -125,11 +125,11 @@ void iwBuildOrder::Msg_ListSelectItem(const unsigned int ctrl_id, const unsigned
     }
 }
 
-void iwBuildOrder::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwBuildOrder::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     ctrlList* list = GetCtrl<ctrlList>(0);
-    unsigned short auswahl = list->GetSelection();
-    unsigned short anzahl = list->GetLineCount();
+    uint16_t auswahl = list->GetSelection();
+    uint16_t anzahl = list->GetLineCount();
 
     // Auswahl gültig?
     if(auswahl >= anzahl)
@@ -189,7 +189,7 @@ void iwBuildOrder::Msg_ButtonClick(const unsigned int ctrl_id)
             list->DeleteAllItems();
 
             // Liste füllen
-            for(unsigned char i = 0; i < 31; ++i)
+            for(uint8_t i = 0; i < 31; ++i)
                 list->AddString(_(BUILDING_NAMES[GAMECLIENT.default_settings.build_order[i]]));
             list->SetSelection(0);
 
@@ -203,6 +203,6 @@ void iwBuildOrder::Msg_ButtonClick(const unsigned int ctrl_id)
 void iwBuildOrder::UpdateSettings()
 {
     // Liste füllen
-    for(unsigned char i = 0; i < 31; ++i)
+    for(uint8_t i = 0; i < 31; ++i)
         GetCtrl<ctrlList>(0)->SetString(_(BUILDING_NAMES[GAMECLIENT.visual_settings.build_order[i]]), i);
 }

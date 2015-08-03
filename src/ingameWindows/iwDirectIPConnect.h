@@ -27,20 +27,20 @@
 class iwDirectIPConnect : public IngameWindow, public ClientInterface
 {
     private:
-        unsigned int server_type;
+        uint32_t server_type;
 
     public:
-        iwDirectIPConnect(unsigned int server_type);
+        iwDirectIPConnect(uint32_t server_type);
         void SetHost(const char* text);
-        void SetPort(unsigned short port);
+        void SetPort(uint16_t port);
 
     private:
-        void SetText(const std::string& text, unsigned int color, bool button);
+        void SetText(const std::string& text, uint32_t color, bool button);
 
-        void Msg_EditChange(const unsigned int ctrl_id);
-        void Msg_EditEnter(const unsigned int ctrl_id);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
+        void Msg_EditChange(const uint32_t ctrl_id);
+        void Msg_EditEnter(const uint32_t ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
 
         void CI_Error(const ClientError ce);
         void CI_NextConnectState(const ConnectState cs);

@@ -28,12 +28,12 @@ class noExtension : public noBase
 {
     public:
         noExtension(noBase* const base) : noBase(NOP_EXTENSION), base(base) {}
-        noExtension(SerializedGameData* sgd, const unsigned obj_id);
+        noExtension(SerializedGameData* sgd, const uint32_t obj_id);
         ~noExtension();
 
         void Destroy() { Destroy_noExtension(); }
         noBase* GetBaseObject() const { return base; }
-        void Draw(int x, int y) {}
+        void Draw(int32_t x, int32_t y) {}
 
         /// Serialisierungsfunktionen
     protected:  void Serialize_noExtension(SerializedGameData* sgd) const;

@@ -27,7 +27,7 @@
 
 
 /// Anzahl der angezeigten Gebäude
-const unsigned BUILDINGS_COUNT = 24;
+const uint32_t BUILDINGS_COUNT = 24;
 
 /// Reihenfolge der Gebäude
 const BuildingType bts[BUILDINGS_COUNT] =
@@ -61,21 +61,21 @@ const BuildingType bts[BUILDINGS_COUNT] =
 
 
 /// Abstand vom linken, oberen Fensterrand
-const unsigned short left_x = 50;
-const unsigned short top_y = 30;
+const uint16_t left_x = 50;
+const uint16_t top_y = 30;
 /// Abstand vom rechten Fensterrand
-const unsigned short right_x = 40;
+const uint16_t right_x = 40;
 /// Horizontaler Abstand zwischen Bild und Prozentbar
-const unsigned short image_percent_x = 35;
+const uint16_t image_percent_x = 35;
 /// Horizontaler Abstand zwischen Prozentbar und nächstem Bild
-const unsigned short percent_image_x = 40;
+const uint16_t percent_image_x = 40;
 /// Vertikaler Abstand zwischen 2 nacheinanderfolgenden "Zeilen"
-const unsigned short distance_y = 35;
+const uint16_t distance_y = 35;
 
 /// Breite der Prozentbalken
-const unsigned short percent_width = 100;
+const uint16_t percent_width = 100;
 /// Höhe der Scrollbars
-const unsigned short percent_height = 18;
+const uint16_t percent_height = 18;
 
 
 
@@ -86,9 +86,9 @@ iwBuildingProductivities::iwBuildingProductivities()
                    top_y + (BUILDINGS_COUNT / 2 + 1) * (distance_y + 1), _("Productivity"), LOADER.GetImageN("resource", 41)),
     percents(40, 0)
 {
-    for(unsigned y = 0; y < BUILDINGS_COUNT / 2 + BUILDINGS_COUNT % 2; ++y)
+    for(uint32_t y = 0; y < BUILDINGS_COUNT / 2 + BUILDINGS_COUNT % 2; ++y)
     {
-        for(unsigned x = 0; x < 2; ++x)
+        for(uint32_t x = 0; x < 2; ++x)
         {
             if(y * 2 + x < BUILDINGS_COUNT)
             {

@@ -331,13 +331,13 @@ void WindowManager::Msg_LeftDown(MouseCoords mc)
     LOADER.GetSoundN("sound", 112)->Play(255, false);
 
     // Ggf. Doppelklick untersuche
-    unsigned time_now = VIDEODRIVER.GetTickCount();
+    uint32_t time_now = VIDEODRIVER.GetTickCount();
     if((time_now - last_left_click_time) * 1000 / CLOCKS_PER_SEC < DOUBLE_CLICK_INTERVAL
-            && Point<int>(mc.x, mc.y) == last_left_click_point)
+            && Point<int32_t>(mc.x, mc.y) == last_left_click_point)
         mc.dbl_click = true;
 
     // Werte wieder erneut speichern
-    last_left_click_point = Point<int>(mc.x, mc.y);
+    last_left_click_point = Point<int32_t>(mc.x, mc.y);
     last_left_click_time = time_now;
 
     // haben wir überhaupt fenster?
@@ -741,10 +741,10 @@ void WindowManager::Msg_KeyDown(const KeyEvent& ke)
  *
  *  @author Divan
  */
-void WindowManager::ScreenResized(unsigned short width, unsigned short height)
+void WindowManager::ScreenResized(uint16_t width, uint16_t height)
 {
-    unsigned short newWidth  = width;
-    unsigned short newHeight = height;
+    uint16_t newWidth  = width;
+    uint16_t newHeight = height;
 
 //  bool mustResize = false;
     // Minimale Ausdehnung erfällt?
@@ -802,7 +802,7 @@ void WindowManager::ScreenResized(unsigned short width, unsigned short height)
  *
  *  @author Divan
  */
-void WindowManager::Msg_ScreenResize(unsigned short width, unsigned short height)
+void WindowManager::Msg_ScreenResize(uint16_t width, uint16_t height)
 {
     // Falls sich nichts ändert, brauchen wir auch nicht reagieren
     // (Evtl hat sich ja nur der Modus Fenster/Vollbild geändert)
@@ -833,8 +833,8 @@ void WindowManager::Msg_ScreenResize(unsigned short width, unsigned short height
     // IngameWindow verschieben falls nötig, so dass sie komplett sichtbar sind
     for(IgwListIterator it = windows.begin(); it != windows.end(); ++it)
     {
-        const short dx = (*it)->GetX() + (*it)->GetWidth()  - sr.newWidth;
-        const short dy = (*it)->GetY() + (*it)->GetHeight() - sr.newHeight;
+        const int16_t dx = (*it)->GetX() + (*it)->GetWidth()  - sr.newWidth;
+        const int16_t dy = (*it)->GetY() + (*it)->GetHeight() - sr.newHeight;
         if(dx > 0 || dy > 0)
             (*it)->Move((dx > 0 ? -dx : 0), (dy > 0 ? -dy : 0) , /*absolute=*/false);
     }
@@ -895,7 +895,7 @@ void WindowManager::Close(IngameWindow* window)
  *
  *  @author OLiver
  */
-void WindowManager::Close(unsigned int id)
+void WindowManager::Close(uint32_t id)
 {
     for(IgwListIterator it = windows.begin(); it != windows.end(); ++it)
     {
@@ -968,15 +968,15 @@ void WindowManager::DrawToolTip()
     // Tooltip zeichnen
     if(tooltip.length() && mc)
     {
-        unsigned text_width = NormalFont->getWidth(tooltip);
-        unsigned right_edge = mc->x + 30 + text_width + 2;
-        unsigned x = mc->x + 30;
+        uint32_t text_width = NormalFont->getWidth(tooltip);
+        uint32_t right_edge = mc->x + 30 + text_width + 2;
+        uint32_t x = mc->x + 30;
 
         // links neben der Maus, wenn es über den Rand gehen würde
         if(right_edge > VIDEODRIVER.GetScreenWidth() )
             x = mc->x - 30 - text_width;
 
-        unsigned int count = 0;
+        uint32_t count = 0;
         size_t pos = 0;
         do
         {

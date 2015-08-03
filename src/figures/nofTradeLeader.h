@@ -37,10 +37,10 @@ class nofTradeLeader : public noFigure
 
     private:
 
-        unsigned char fails;
+        uint8_t fails;
         void GoalReached();
         void Walked();
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
         void AbrogateWorkplace();
 
         /// Tries to go to the home ware house, otherwise start wandering
@@ -50,14 +50,14 @@ class nofTradeLeader : public noFigure
 
     public:
 
-        nofTradeLeader(const MapPoint pt, const unsigned char player, const TradeRoute& tr, const MapPoint  start, const MapPoint goal);
-        nofTradeLeader(SerializedGameData* sgd, const unsigned obj_id);
+        nofTradeLeader(const MapPoint pt, const uint8_t player, const TradeRoute& tr, const MapPoint  start, const MapPoint goal);
+        nofTradeLeader(SerializedGameData* sgd, const uint32_t obj_id);
 
         void Serialize(SerializedGameData* sgd) const;
 
         GO_Type GetGOT() const { return GOT_NOF_TRADELEADER; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Wird aufgerufen, wenn die Flagge abgerissen wurde
         void LostWork();

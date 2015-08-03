@@ -42,14 +42,14 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlTable::ctrlTable(Window* parent,
-                     unsigned int id,
-                     unsigned short x,
-                     unsigned short y,
-                     unsigned short width,
-                     unsigned short height,
+                     uint32_t id,
+                     uint16_t x,
+                     uint16_t y,
+                     uint16_t width,
+                     uint16_t height,
                      TextureColor tc,
                      glArchivItem_Font* font,
-                     unsigned short column_count,
+                     uint16_t column_count,
                      va_list liste)
     : Window(x, y, id, parent, width, height),
       tc(tc), font(font),
@@ -64,7 +64,7 @@ ctrlTable::ctrlTable(Window* parent,
 
     if(column_count > 0)
     {
-        for(unsigned short i = 0; i < column_count; ++i)
+        for(uint16_t i = 0; i < column_count; ++i)
         {
             COLUMN c;
 
@@ -72,8 +72,8 @@ ctrlTable::ctrlTable(Window* parent,
             if(title)
                 c.title = title;
 
-            c.width = (unsigned short)va_arg(liste, int);
-            c.sortType = (SortType)va_arg(liste, int);
+            c.width = (uint16_t)va_arg(liste, int32_t);
+            c.sortType = (SortType)va_arg(liste, int32_t);
 
             // Button für die Spalte hinzufügen
             AddTextButton(i + 1, 0, 0, 0, header_height, tc, c.title, font);
@@ -103,7 +103,7 @@ ctrlTable::~ctrlTable(void)
  *
  *  @author Divan
  */
-void ctrlTable::Resize_(unsigned short width, unsigned short height)
+void ctrlTable::Resize_(uint16_t width, uint16_t height)
 {
     ctrlScrollBar* scrollbar = GetCtrl<ctrlScrollBar>(0);
 
@@ -158,7 +158,7 @@ void ctrlTable::DeleteAllItems(void)
  *  @author FloSoft
  *  @author OLiver
  */
-void ctrlTable::SetSelection(unsigned short selection, bool left)
+void ctrlTable::SetSelection(uint16_t selection, bool left)
 {
     if(selection >= rows.size())
         return;
@@ -181,13 +181,13 @@ void ctrlTable::SetSelection(unsigned short selection, bool left)
  *
  *  @author OLiver
  */
-void ctrlTable::AddRow(unsigned alwaysnull, ...)
+void ctrlTable::AddRow(uint32_t alwaysnull, ...)
 {
     va_list liste;
     va_start(liste, alwaysnull);
 
     ROW r;
-    for(unsigned short i = 0; i < columns.size(); ++i)
+    for(uint16_t i = 0; i < columns.size(); ++i)
     {
         const char* text = va_arg(liste, const char*);
 
@@ -199,7 +199,7 @@ void ctrlTable::AddRow(unsigned alwaysnull, ...)
     va_end(liste);
 
     rows.push_back(r);
-    GetCtrl<ctrlScrollBar>(0)->SetRange(static_cast<unsigned short>(rows.size()));
+    GetCtrl<ctrlScrollBar>(0)->SetRange(static_cast<uint16_t>(rows.size()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,7 +213,7 @@ void ctrlTable::AddRow(unsigned alwaysnull, ...)
  *
  *  @author OLiver
  */
-const std::string& ctrlTable::GetItemText(unsigned short row, unsigned short column) const
+const std::string& ctrlTable::GetItemText(uint16_t row, uint16_t column) const
 {
     static std::string empty;
     if(row >= rows.size() || column >= columns.size())
@@ -234,7 +234,7 @@ const std::string& ctrlTable::GetItemText(unsigned short row, unsigned short col
  *
  *  @author OLiver
  */
-void ctrlTable::SortRows(unsigned short column, bool* direction)
+void ctrlTable::SortRows(uint16_t column, bool* direction)
 {
     if(direction)
         sort_direction = *direction;
@@ -243,9 +243,9 @@ void ctrlTable::SortRows(unsigned short column, bool* direction)
     if(column >= columns.size())
         return;
 
-    for(unsigned short i = 0; i < rows.size(); ++i)
+    for(uint16_t i = 0; i < rows.size(); ++i)
     {
-        for(unsigned short r = 0; r < rows.size() - 1; ++r)
+        for(uint16_t r = 0; r < rows.size() - 1; ++r)
         {
             std::string a = rows.at(r).columns.at(column);
             std::string b = rows.at(r + 1).columns.at(column);
@@ -290,10 +290,10 @@ bool ctrlTable::Draw_(void)
 
     DrawControls();
 
-    unsigned short lines = static_cast<unsigned short>((line_count > rows.size() ? rows.size() : line_count));
+    uint16_t lines = static_cast<uint16_t>((line_count > rows.size() ? rows.size() : line_count));
     ctrlScrollBar* scroll = GetCtrl<ctrlScrollBar>(0);
 
-    for(unsigned short i = 0; i < lines; ++i)
+    for(uint16_t i = 0; i < lines; ++i)
     {
         if(row_l_selection == i + scroll->GetPos())
         {
@@ -301,8 +301,8 @@ bool ctrlTable::Draw_(void)
             DrawRectangle(GetX() + 2, GetY() + 2 + header_height + i * font->getHeight(), width - 4 - (scroll->GetVisible() ? 24 : 0), font->getHeight(), 0x80000000);
         }
 
-        unsigned short pos = 0;
-        for(unsigned short c = 0; c < columns.size(); ++c)
+        uint16_t pos = 0;
+        for(uint16_t c = 0; c < columns.size(); ++c)
         {
             if(columns.at(c).width == 0)
                 continue;
@@ -321,7 +321,7 @@ bool ctrlTable::Draw_(void)
  *
  *  @author OLiver
  */
-void ctrlTable::Msg_ButtonClick(const unsigned int ctrl_id)
+void ctrlTable::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     SortRows(ctrl_id - 1);
 }
@@ -436,18 +436,18 @@ bool ctrlTable::Msg_MouseMove(const MouseCoords& mc)
  *
  *  @author OLiver
  */
-void ctrlTable::Msg_ScrollShow(const unsigned int ctrl_id, const bool visible)
+void ctrlTable::Msg_ScrollShow(const uint32_t ctrl_id, const bool visible)
 {
     if(visible)
     {
         /// Scrollbar wird angezeigt
         // Breite der letzten Spalte entsprechend anpassen, wenn plötzlich ne Scrolleiste sich hier noch reindrängelt
         // Aufteilen dieser Breite auf die einzelnen Spalten
-        unsigned width_col_minus = unsigned(20 / columns.size());
+        uint32_t width_col_minus = unsigned(20 / columns.size());
         // Rest, der nicht aufgeteilt wurde
-        unsigned rest = unsigned(20 % columns.size());
+        uint32_t rest = unsigned(20 % columns.size());
 
-        for(unsigned i = 0; i < columns.size(); ++i)
+        for(uint32_t i = 0; i < columns.size(); ++i)
         {
             if(GetCtrl<ctrlButton>(i + 1)->GetWidth() > width_col_minus)
 
@@ -459,7 +459,7 @@ void ctrlTable::Msg_ScrollShow(const unsigned int ctrl_id, const bool visible)
 
 
         // Rest einfach von letzter passender Spalte abziehen
-        for(unsigned i = 0; i < columns.size(); ++i)
+        for(uint32_t i = 0; i < columns.size(); ++i)
         {
             ctrlButton* bt = GetCtrl<ctrlButton>(unsigned(columns.size()) - i - 1 + 1);
             if(bt->GetWidth() > rest)
@@ -470,8 +470,8 @@ void ctrlTable::Msg_ScrollShow(const unsigned int ctrl_id, const bool visible)
         }
 
         // X-Position der Buttons neu berechnen
-        unsigned short x_pos = 0;
-        for(unsigned i = 0; i < columns.size(); ++i)
+        uint16_t x_pos = 0;
+        for(uint32_t i = 0; i < columns.size(); ++i)
         {
             GetCtrl<ctrlButton>(i + 1)->Move(x_pos, 0);
             x_pos += GetCtrl<ctrlButton>(i + 1)->GetWidth();
@@ -489,8 +489,8 @@ void ctrlTable::Msg_ScrollShow(const unsigned int ctrl_id, const bool visible)
 void ctrlTable::ResetButtonWidths()
 {
     // Scrollbar wird nicht mehr angezeigt --> Breite und Position wieder zurücksetzen
-    unsigned short x_pos = 0;
-    for(unsigned i = 0; i < columns.size(); ++i)
+    uint16_t x_pos = 0;
+    for(uint32_t i = 0; i < columns.size(); ++i)
     {
         GetCtrl<ctrlButton>(i + 1)->SetWidth(columns[i].width * width / 1000);
         GetCtrl<ctrlButton>(i + 1)->Move(x_pos, 0);
@@ -498,7 +498,7 @@ void ctrlTable::ResetButtonWidths()
     }
 
     // Rest auf dem letzten aufschlagen
-    for(unsigned i = 0; i < columns.size(); ++i)
+    for(uint32_t i = 0; i < columns.size(); ++i)
     {
         if(columns.at(columns.size() - i - 1).width)
         {
@@ -511,7 +511,7 @@ void ctrlTable::ResetButtonWidths()
 }
 
 /// Verschiedene Sortiermöglichkeiten
-int ctrlTable::Compare(const std::string& a, const std::string& b, SortType sortType)
+int32_t ctrlTable::Compare(const std::string& a, const std::string& b, SortType sortType)
 {
     switch (sortType)
     {
@@ -525,7 +525,7 @@ int ctrlTable::Compare(const std::string& a, const std::string& b, SortType sort
             std::stringstream ss_a(a);
             std::stringstream ss_b(b);
             char x;
-            int x_a, y_a, x_b, y_b;
+            int32_t x_a, y_a, x_b, y_b;
             ss_a >> x_a >> x >> y_a;
             ss_b >> x_b >> x >> y_b;
             if (x_a* y_a == x_b * y_b)
@@ -539,7 +539,7 @@ int ctrlTable::Compare(const std::string& a, const std::string& b, SortType sort
         {
             std::stringstream ss_a(a);
             std::stringstream ss_b(b);
-            int num_a, num_b;
+            int32_t num_a, num_b;
             ss_a >> num_a;
             ss_b >> num_b;
             if (num_a == num_b)
@@ -553,7 +553,7 @@ int ctrlTable::Compare(const std::string& a, const std::string& b, SortType sort
         {
             std::stringstream ss_a(a);
             std::stringstream ss_b(b);
-            int d_a, d_b, m_a, m_b, y_a, y_b;
+            int32_t d_a, d_b, m_a, m_b, y_a, y_b;
             char c;
 
             // "dd.mm.yyyy"
@@ -573,7 +573,7 @@ int ctrlTable::Compare(const std::string& a, const std::string& b, SortType sort
             ss_a >> c;
             ss_b >> c;
 
-            int h_a, h_b, min_a, min_b;
+            int32_t h_a, h_b, min_a, min_b;
 
             // "hh:mm"
             ss_a >> h_a >> c >> min_a;

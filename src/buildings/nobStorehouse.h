@@ -26,8 +26,8 @@ class nobStorehouse : public nobBaseWarehouse
 {
     friend class SerializedGameData;
     friend class BuildingFactory;
-    nobStorehouse(const MapPoint pt, const unsigned char player, const Nation nation);
-    nobStorehouse(SerializedGameData* sgd, const unsigned obj_id);
+    nobStorehouse(const MapPoint pt, const uint8_t player, const Nation nation);
+    nobStorehouse(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_nobStorehouse();
@@ -39,9 +39,9 @@ class nobStorehouse : public nobBaseWarehouse
 
         GO_Type GetGOT() const { return GOT_NOB_STOREHOUSE; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 };
 
 

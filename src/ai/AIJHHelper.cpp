@@ -99,7 +99,7 @@ void AIJH::BuildJob::ExecuteJob()
     {
         status = AIJH::JOB_FAILED;
 #ifdef DEBUG_AI
-        std::cout << "Player " << (unsigned)aijh->GetPlayerID() << ", Job failed: Military building too near for " << BUILDING_NAMES[type] << " at " << target.x << "/" << target.y << "." << std::endl;
+        std::cout << "Player " << (uint32_t)aijh->GetPlayerID() << ", Job failed: Military building too near for " << BUILDING_NAMES[type] << " at " << target.x << "/" << target.y << "." << std::endl;
 #endif
         return;
     }
@@ -150,7 +150,7 @@ void AIJH::BuildJob::TryToBuild()
         {
             case BLD_WOODCUTTER:
             {
-                unsigned numWoodcutter = aijh->GetConstruction()->GetBuildingCount(BLD_WOODCUTTER);
+                uint32_t numWoodcutter = aijh->GetConstruction()->GetBuildingCount(BLD_WOODCUTTER);
                 foundPos = aijh->FindBestPosition(bPos, AIJH::WOOD, BQ_HUT, (numWoodcutter > 2) ? 20 : 1 + aijh->GetConstruction()->GetBuildingCount(BLD_WOODCUTTER) * 10, 11);
                 if(foundPos && !aijh->ValidTreeinRange(bPos))
                     foundPos = false;
@@ -169,7 +169,7 @@ void AIJH::BuildJob::TryToBuild()
             }
             case BLD_QUARRY:
             {
-                unsigned numQuarries = aijh->GetConstruction()->GetBuildingCount(BLD_QUARRY);
+                uint32_t numQuarries = aijh->GetConstruction()->GetBuildingCount(BLD_QUARRY);
                 foundPos = aijh->FindBestPosition(bPos, AIJH::STONES, BQ_HUT, (numQuarries > 4) ? 40 : 1 + aijh->GetConstruction()->GetBuildingCount(BLD_QUARRY) * 10, 11);
                 if(foundPos && !aijh->ValidStoneinRange(bPos))
                 {
@@ -253,14 +253,14 @@ void AIJH::BuildJob::TryToBuild()
     {
         status = JOB_FAILED;
 #ifdef DEBUG_AI
-        std::cout << "Player " << (unsigned)aijh->GetPlayerID() << ", Job failed: No Position found for " << BUILDING_NAMES[type] << " around " << bPos.x << "/" << bPos.y << "." << std::endl;
+        std::cout << "Player " << (uint32_t)aijh->GetPlayerID() << ", Job failed: No Position found for " << BUILDING_NAMES[type] << " around " << bPos.x << "/" << bPos.y << "." << std::endl;
 #endif
         return;
     }
 
 #ifdef DEBUG_AI
     if (type == BLD_FARM)
-        std::cout << " Player " << (unsigned)aijh->GetPlayerID() << " built farm at " << bPos.x << "/" << bPos.y << " on value of " << aijh->resourceMaps[AIJH::PLANTSPACE][aii->GetIdx(bPos)] << std::endl;
+        std::cout << " Player " << (uint32_t)aijh->GetPlayerID() << " built farm at " << bPos.x << "/" << bPos.y << " on value of " << aijh->resourceMaps[AIJH::PLANTSPACE][aii->GetIdx(bPos)] << std::endl;
 #endif
 
     aii->SetBuildingSite(bPos, type);
@@ -283,7 +283,7 @@ void AIJH::BuildJob::BuildMainRoad()
         {
             status = AIJH::JOB_FAILED;
 #ifdef DEBUG_AI
-            std::cout << "Player " << (unsigned)aijh->GetPlayerID() << ", Job failed: BQ changed for " << BUILDING_NAMES[type] << " at " << target.x << "/" << target.y << ". Retrying..." << std::endl;
+            std::cout << "Player " << (uint32_t)aijh->GetPlayerID() << ", Job failed: BQ changed for " << BUILDING_NAMES[type] << " at " << target.x << "/" << target.y << ". Retrying..." << std::endl;
 #endif
             aijh->nodes[aii->GetIdx(target)].bq = bq;
             aijh->AddBuildJob(new AIJH::BuildJob(aijh, type, around));
@@ -295,7 +295,7 @@ void AIJH::BuildJob::BuildMainRoad()
     if (bld->GetBuildingType() != type)
     {
 #ifdef DEBUG_AI
-        std::cout << "Player " << (unsigned)aijh->GetPlayerID() << ", Job failed: Wrong Builingsite found for " << BUILDING_NAMES[type] << " at " << target.x << "/" << target.y << "." << std::endl;
+        std::cout << "Player " << (uint32_t)aijh->GetPlayerID() << ", Job failed: Wrong Builingsite found for " << BUILDING_NAMES[type] << " at " << target.x << "/" << target.y << "." << std::endl;
 #endif
         status = AIJH::JOB_FAILED;
         return;
@@ -309,7 +309,7 @@ void AIJH::BuildJob::BuildMainRoad()
         {
             status = AIJH::JOB_FAILED;
 #ifdef DEBUG_AI
-            std::cout << "Player " << (unsigned)aijh->GetPlayerID() << ", Job failed: Cannot connect " << BUILDING_NAMES[type] << " at " << target_x << "/" << target_y << ". Retrying..." << std::endl;
+            std::cout << "Player " << (uint32_t)aijh->GetPlayerID() << ", Job failed: Cannot connect " << BUILDING_NAMES[type] << " at " << target_x << "/" << target_y << ". Retrying..." << std::endl;
 #endif
             aijh->nodes[aii->GetIdx(target)].reachable = false;
             aii->DestroyBuilding(target);
@@ -404,7 +404,7 @@ void AIJH::BuildJob::TryToBuildSecondaryRoad()
         // Baustelle wurde wohl zerstört, oh schreck!
         status = AIJH::JOB_FAILED;
 #ifdef DEBUG_AI
-        std::cout << "Player " << (unsigned)aijh->GetPlayerID() << ", Job failed: House flag is gone, " << BUILDING_NAMES[type] << " at " << target_x << "/" << target_y << ". Retrying..." << std::endl;
+        std::cout << "Player " << (uint32_t)aijh->GetPlayerID() << ", Job failed: House flag is gone, " << BUILDING_NAMES[type] << " at " << target_x << "/" << target_y << ". Retrying..." << std::endl;
 #endif
         aijh->AddBuildJob(new AIJH::BuildJob(aijh, type, around));
         return;
@@ -536,7 +536,7 @@ void AIJH::EventJob::ExecuteJob()//for now it is assumed that all these will be 
 void AIJH::ConnectJob::ExecuteJob()
 {
 #ifdef DEBUG_AI
-    std::cout << "Player " << (unsigned)aijh->GetPlayerID() << ", ConnectJob executed..." << std::endl;
+    std::cout << "Player " << (uint32_t)aijh->GetPlayerID() << ", ConnectJob executed..." << std::endl;
 #endif
 	
 	//can the ai still construct here? else return and try again later
@@ -557,7 +557,7 @@ void AIJH::ConnectJob::ExecuteJob()
 	//is flag of a military building and has some road connection alraedy (not necessarily to a warehouse so this is required to avoid multiple connections on mil buildings)
 	if(aii->IsMilitaryBuildingOnNode(aii->GetNeighbour(flag->GetPos(),1)))
 	{
-		for(unsigned i=2;i<7;i++)
+		for(uint32_t i=2;i<7;i++)
 		{
 			if(flag->routes[i%6])
 			{

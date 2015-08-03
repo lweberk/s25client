@@ -26,9 +26,9 @@ class noDisappearingEnvObject : public noCoordBase
 {
     public:
         /// Konstruktor von @p noDisappearingEnvObject.
-        noDisappearingEnvObject(const MapPoint pt, const unsigned living_time,
-                                const unsigned add_var_living_time);
-        noDisappearingEnvObject(SerializedGameData* sgd, const unsigned obj_id);
+        noDisappearingEnvObject(const MapPoint pt, const uint32_t living_time,
+                                const uint32_t add_var_living_time);
+        noDisappearingEnvObject(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_noDisappearingEnvObject();
@@ -38,14 +38,14 @@ class noDisappearingEnvObject : public noCoordBase
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_noDisappearingEnvObject(sgd); }
 
         /// Benachrichtigen, wenn neuer GF erreicht wurde.
-        void HandleEvent_noDisappearingEnvObject(const unsigned int id);
+        void HandleEvent_noDisappearingEnvObject(const uint32_t id);
 
     protected:
 
         /// Gibt Farbe zurück, mit der das Objekt gezeichnet werden soll
-        unsigned GetDrawColor() const;
+        uint32_t GetDrawColor() const;
         /// Gibt Farbe zurück, mit der der Schatten des Objekts gezeichnet werden soll
-        unsigned GetDrawShadowColor() const;
+        uint32_t GetDrawShadowColor() const;
 
     private:
 

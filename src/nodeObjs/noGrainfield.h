@@ -28,7 +28,7 @@ class noGrainfield : public noCoordBase
     private:
 
         /// Typ des Getreidefelds (2 verschiedene Typen)
-        unsigned char type;
+        uint8_t type;
 
         /// Status
         enum State
@@ -40,7 +40,7 @@ class noGrainfield : public noCoordBase
         } state;
 
         /// Größe des Feldes (0-3), 3 ist ausgewachsen
-        unsigned char size;
+        uint8_t size;
 
         /// Wachs-Event
         EventManager::EventPointer event;
@@ -48,7 +48,7 @@ class noGrainfield : public noCoordBase
     public:
 
         noGrainfield(const MapPoint pt);
-        noGrainfield(SerializedGameData* sgd, const unsigned obj_id);
+        noGrainfield(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~noGrainfield();
 
@@ -62,8 +62,8 @@ class noGrainfield : public noCoordBase
 
         GO_Type GetGOT() const { return GOT_GRAINFIELD; }
 
-        void Draw(int x, int y);
-        void HandleEvent(const unsigned int id);
+        void Draw(int32_t x, int32_t y);
+        void HandleEvent(const uint32_t id);
 
         BlockingManner GetBM() const { return BM_GRANITE; }
 
@@ -71,7 +71,7 @@ class noGrainfield : public noCoordBase
         bool IsHarvestable() const { return size == 3 && state == STATE_NORMAL;}
 
         /// Gibt die ID des abgeernteten Getreidefelds in der map_last zurück
-        unsigned GetHarvestMapLstID() const { return 532 + type * 5 + 4; }
+        uint32_t GetHarvestMapLstID() const { return 532 + type * 5 + 4; }
 
         /// Bauer beginnt dieses Feld abzuernten
         void BeginHarvesting();

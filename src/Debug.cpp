@@ -74,13 +74,13 @@ DebugInfo::~DebugInfo()
     Close();
 }
 
-bool DebugInfo::Send(const void* buffer, int length)
+bool DebugInfo::Send(const void* buffer, int32_t length)
 {
     char* ptr = (char*) buffer;
 
     while (length > 0)
     {
-        int res = Socket::Send(ptr, length);
+        int32_t res = Socket::Send(ptr, length);
 
         if (res >= 0)
         {
@@ -98,17 +98,17 @@ bool DebugInfo::Send(const void* buffer, int length)
 }
 
 
-bool DebugInfo::SendUnsigned(unsigned i)
+bool DebugInfo::SendUnsigned(uint32_t i)
 {
     return(Send(&i, 4));
 }
 
-bool DebugInfo::SendSigned(signed i)
+bool DebugInfo::SendSigned(int32_t i)
 {
     return(Send(&i, 4));
 }
 
-bool DebugInfo::SendString(const char* str, unsigned len)
+bool DebugInfo::SendString(const char* str, uint32_t len)
 {
     if (len == 0)
     {
@@ -136,7 +136,7 @@ bool DebugInfo::SendStackTrace(LPCONTEXT ctx)
 bool DebugInfo::SendStackTrace()
 #endif
 {
-    const unsigned int maxTrace = 256;
+    const uint32_t maxTrace = 256;
     void* stacktrace[maxTrace];
 
 #ifdef _WIN32
@@ -202,7 +202,7 @@ bool DebugInfo::SendStackTrace()
     HANDLE process = GetCurrentProcess();
     HANDLE thread = GetCurrentThread();
 
-    unsigned num_frames = 0;
+    uint32_t num_frames = 0;
     while (StackWalk64(
 #ifdef _WIN64
                 IMAGE_FILE_MACHINE_AMD64,
@@ -225,11 +225,11 @@ bool DebugInfo::SendStackTrace()
         return(false);
     }
 
-    unsigned num_frames = CaptureStackBackTrace(0, maxTrace, stacktrace, NULL);
+    uint32_t num_frames = CaptureStackBackTrace(0, maxTrace, stacktrace, NULL);
     LOG.lprintf("Read Frames %d\n", num_frames);
     */
 #else
-    unsigned num_frames = backtrace(stacktrace, maxTrace);
+    uint32_t num_frames = backtrace(stacktrace, maxTrace);
 #endif
 
     LOG.lprintf("Will now send %d stack frames\n", num_frames);
@@ -261,7 +261,7 @@ bool DebugInfo::SendReplay()
 
         f->Flush();
 
-        unsigned replay_len = f->Tell();
+        uint32_t replay_len = f->Tell();
 
         LOG.lprintf("- Replay length: %u\n", replay_len);
 
@@ -271,7 +271,7 @@ bool DebugInfo::SendReplay()
 
         f->ReadRawData(replay, replay_len);
 
-        unsigned int compressed_len = replay_len * 2 + 600;
+        uint32_t compressed_len = replay_len * 2 + 600;
         char* compressed = new char[compressed_len];
 
         // send size of replay via socket
@@ -281,7 +281,7 @@ bool DebugInfo::SendReplay()
         }
 
         LOG.lprintf("- Compressing...\n");
-        if (BZ2_bzBuffToBuffCompress(compressed, (unsigned int*) &compressed_len, replay, replay_len, 9, 0, 250) == BZ_OK)
+        if (BZ2_bzBuffToBuffCompress(compressed, (uint32_t*) &compressed_len, replay, replay_len, 9, 0, 250) == BZ_OK)
         {
             LOG.lprintf("- Sending...\n");
 
@@ -318,7 +318,7 @@ bool DebugInfo::SendReplay()
 }
 
 bool DebugInfo::SendAsyncLog(std::list<RandomEntry>::iterator first_a, std::list<RandomEntry>::iterator first_b,
-                             std::list<RandomEntry> &a, std::list<RandomEntry> &b, unsigned identical)
+                             std::list<RandomEntry> &a, std::list<RandomEntry> &b, uint32_t identical)
 {
     if (!SendString("AsyncLog"))
     {
@@ -326,8 +326,8 @@ bool DebugInfo::SendAsyncLog(std::list<RandomEntry>::iterator first_a, std::list
     }
 
     // calculate size
-    unsigned len =  4;
-    unsigned cnt = 0;
+    uint32_t len =  4;
+    uint32_t cnt = 0;
 
     std::list<RandomEntry>::iterator it_a = first_a;
     std::list<RandomEntry>::iterator it_b = first_b;

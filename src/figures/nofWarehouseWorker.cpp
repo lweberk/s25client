@@ -42,7 +42,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofWarehouseWorker::nofWarehouseWorker(const MapPoint pos, const unsigned char player, Ware* ware, const bool task)
+nofWarehouseWorker::nofWarehouseWorker(const MapPoint pos, const uint8_t player, Ware* ware, const bool task)
     : noFigure(JOB_HELPER, pos, player, gwg->GetSpecObj<noRoadNode>(gwg->GetNeighbour(pos, 4))),
       carried_ware(ware), task(task), fat((RANDOM.Rand(__FILE__, __LINE__, obj_id, 2)) ? true : false)
 {
@@ -83,7 +83,7 @@ void nofWarehouseWorker::Serialize_nofWarehouseWorker(SerializedGameData* sgd) c
     sgd->PushBool(fat);
 }
 
-nofWarehouseWorker::nofWarehouseWorker(SerializedGameData* sgd, const unsigned obj_id) : noFigure(sgd, obj_id),
+nofWarehouseWorker::nofWarehouseWorker(SerializedGameData* sgd, const uint32_t obj_id) : noFigure(sgd, obj_id),
     carried_ware(sgd->PopObject<Ware>(GOT_WARE)),
     task(sgd->PopBool()),
     fat(sgd->PopBool())
@@ -91,7 +91,7 @@ nofWarehouseWorker::nofWarehouseWorker(SerializedGameData* sgd, const unsigned o
 }
 
 
-void nofWarehouseWorker::Draw(int x, int y)
+void nofWarehouseWorker::Draw(int32_t x, int32_t y)
 {
     // Trage ich ne Ware oder nicht?
     if(carried_ware)
@@ -203,7 +203,7 @@ void nofWarehouseWorker::AbrogateWorkplace()
     StartWandering();
 }
 
-void nofWarehouseWorker::HandleDerivedEvent(const unsigned int id)
+void nofWarehouseWorker::HandleDerivedEvent(const uint32_t id)
 {
 }
 

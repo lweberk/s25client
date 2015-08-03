@@ -27,7 +27,7 @@
 class ctrlVarText : public ctrlText
 {
     public:
-        ctrlVarText(Window* parent, unsigned int id, unsigned short x, unsigned short y, const std::string& formatstr, unsigned int color, unsigned int format, glArchivItem_Font* font, unsigned int count, va_list liste);
+        ctrlVarText(Window* parent, uint32_t id, uint16_t x, uint16_t y, const std::string& formatstr, uint32_t color, uint32_t format, glArchivItem_Font* font, uint32_t count, va_list liste);
         virtual ~ctrlVarText(void);
 
     protected:

@@ -38,7 +38,7 @@ class nofAttacker;
 class noShip : public noMovable
 {
         /// Spieler des Schiffes
-        unsigned char player;
+        uint8_t player;
 
         /// Was macht das Schiff gerade?
         enum State
@@ -65,16 +65,16 @@ class noShip : public noMovable
         } state;
 
         /// Das Meer, auf dem dieses Schiff fährt
-        unsigned short sea_id;
+        uint16_t sea_id;
         /// Zielpunkt des Schiffes
-        unsigned goal_harbor_id;
+        uint32_t goal_harbor_id;
         /// Anlegepunkt am Zielhafen, d.h. die Richtung relativ zum Zielpunkt
-        unsigned char goal_dir;
+        uint8_t goal_dir;
         /// Namen des Schiffs
         std::string name;
         /// Schiffsroute und Position
-        unsigned curRouteIdx;
-        std::vector<unsigned char> route;
+        uint32_t curRouteIdx;
+        std::vector<uint8_t> route;
         /// Ladung des Schiffes
         std::list<noFigure*> figures;
         std::list<Ware*> wares;
@@ -84,18 +84,18 @@ class noShip : public noMovable
         /// Bei Schiffen im STATE_SEAATTACK_WAITING:
         /// Anzahl der Soldaten, die noch kommen müssten
         /// For ships in STATE_TRANSPORT_x a 1 indicates that the ship is carrying returning soldiers from a sea attack
-        unsigned remaining_sea_attackers;
+        uint32_t remaining_sea_attackers;
         /// Heimathafen der Schiffs-Angreifer
-        unsigned home_harbor;
+        uint32_t home_harbor;
         /// Anzahl an Strecke, die das Schiff schon seit Expeditionsstart zurückgelegt hat
-        unsigned covered_distance;
+        uint32_t covered_distance;
 
     private:
 
         /// entscheidet, was nach einem gefahrenen Abschnitt weiter zu tun ist
         void Driven();
         /// Fängt an zu fahren
-        void StartDriving(const unsigned char dir);
+        void StartDriving(const uint8_t dir);
 
         void HandleState_GoToHarbor();
         void HandleState_ExpeditionDriving();
@@ -119,11 +119,11 @@ class noShip : public noMovable
         Result DriveToHarbourPlace();
 
         /// Zeichnet das Schiff stehend mit oder ohne Waren
-        void DrawFixed(const int x, const int y, const bool draw_wares);
+        void DrawFixed(const int32_t x, const int32_t y, const bool draw_wares);
         /// Zeichnet normales Fahren auf dem Meer ohne irgendwelche Güter
-        void DrawDriving(int& x, int& y);
+        void DrawDriving(int32_t& x, int32_t& y);
         /// Zeichnet normales Fahren auf dem Meer mit Gütern
-        void DrawDrivingWithWares(int& x, int& y);
+        void DrawDrivingWithWares(int32_t& x, int32_t& y);
 
         /// Startet die eigentliche Transportaktion, nachdem das Schiff beladen wurde
         void StartTransport();
@@ -140,8 +140,8 @@ class noShip : public noMovable
     public:
 
         /// Konstruktor
-        noShip(const MapPoint pt, const unsigned char player);
-        noShip(SerializedGameData* sgd, const unsigned obj_id);
+        noShip(const MapPoint pt, const uint8_t player);
+        noShip(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~noShip() {}
 
@@ -151,16 +151,16 @@ class noShip : public noMovable
         GO_Type GetGOT() const { return GOT_SHIP; }
 
         // An x,y zeichnen
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
         // Benachrichtigen, wenn neuer gf erreicht wurde
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
         /// Gibt den Besitzer zurück
-        unsigned char GetPlayer() const { return player; }
+        uint8_t GetPlayer() const { return player; }
         /// Hat das Schiff gerade nichts zu tun
         bool IsIdling() const { return (state == STATE_IDLE); }
         /// Gibt die ID des Meeres zurück, auf dem es sich befindet
-        unsigned short GetSeaID() const { return sea_id; }
+        uint16_t GetSeaID() const { return sea_id; }
         /// Gibt den Schiffsnamen zurück
         const std::string& GetName() const { return name; }
         /// Führt das Schiff gerade eine Expedition durch und wartet auf weitere Befehle?
@@ -183,23 +183,23 @@ class noShip : public noMovable
         /// Gibt Liste der Menschen an Bord zurück
         const std::list<noFigure*> &GetFigures() const { return figures; }
         /// Gibt Sichtradius dieses Schiffes zurück
-        unsigned GetVisualRange() const;
+        uint32_t GetVisualRange() const;
 
         /// Beim Warten bei der Expedition: Gibt die Hafenpunkt-ID zurück, wo es sich gerade befindet
-        unsigned GetCurrentHarbor() const;
+        uint32_t GetCurrentHarbor() const;
 
         /// Sagt dem Schiff, an welchem Hafenpunkt es gerade ankert, wenn es das selber noch nicht weiß
-        void AssignHarborId(const unsigned harbor_id)
+        void AssignHarborId(const uint32_t harbor_id)
         { this->goal_harbor_id = harbor_id; }
 
         /// Fährt zum Hafen, um dort eine Mission (Expedition) zu erledigen
-        void GoToHarbor(nobHarborBuilding* hb, const std::vector<unsigned char>& route);
+        void GoToHarbor(nobHarborBuilding* hb, const std::vector<uint8_t>& route);
         /// Startet eine Expedition
         void StartExpedition();
         /// Startet eine Erkundungs-Expedition
         void StartExplorationExpedition();
         /// Weist das Schiff an, in einer bestimmten Richtung die Expedition fortzusetzen
-        void ContinueExpedition(const unsigned char dir);
+        void ContinueExpedition(const uint8_t dir);
         /// Weist das Schiff an, eine Expedition abzubrechen (nur wenn es steht) und zum
         /// Hafen zurückzukehren
         void CancelExpedition();

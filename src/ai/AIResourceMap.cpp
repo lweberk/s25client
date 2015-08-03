@@ -33,8 +33,8 @@ AIResourceMap::~AIResourceMap(void)
 
 void AIResourceMap::Init()
 {
-    unsigned short width = gwb->GetWidth();
-    unsigned short height = gwb->GetHeight();
+    uint16_t width = gwb->GetWidth();
+    uint16_t height = gwb->GetHeight();
 
     map.resize(AIJH::RES_TYPE_COUNT);
 
@@ -43,7 +43,7 @@ void AIResourceMap::Init()
     {
         for (pt.x = 0; pt.x < width; ++pt.x)
         {
-            unsigned i = gwb->GetIdx(pt);
+            uint32_t i = gwb->GetIdx(pt);
             //resourceMaps[res][i] = 0;
             if (nodes[i].res == (AIJH::Resource)res && (AIJH::Resource)res != AIJH::BORDERLAND)
             {
@@ -60,18 +60,18 @@ void AIResourceMap::Init()
 }
 
 
-void AIResourceMap::ChangeResourceMap(const MapPoint pt, unsigned radius, int value)
+void AIResourceMap::ChangeResourceMap(const MapPoint pt, uint32_t radius, int32_t value)
 {
     map[gwb->GetIdx(pt)] += value * radius;
 
     for(MapCoord tx = gwb->GetXA(pt, 0), r = 1; r <= radius; tx = gwb->GetXA(tx, pt.y, 0), ++r)
     {
         MapPoint t2(tx, pt.y);
-        for(unsigned i = 2; i < 8; ++i)
+        for(uint32_t i = 2; i < 8; ++i)
         {
             for(MapCoord r2 = 0; r2 < r; t2 = gwb->GetNeighbour(t2, i % 6), ++r2)
             {
-                unsigned i = gwb->GetIdx(t2);
+                uint32_t i = gwb->GetIdx(t2);
                 map[i] += value * (radius - r);
             }
         }
@@ -79,7 +79,7 @@ void AIResourceMap::ChangeResourceMap(const MapPoint pt, unsigned radius, int va
 }
 
 
-bool AIResourceMap::FindGoodPosition(MapPoint& pt, int threshold, BuildingQuality size, int radius, bool inTerritory)
+bool AIResourceMap::FindGoodPosition(MapPoint& pt, int32_t threshold, BuildingQuality size, int32_t radius, bool inTerritory)
 {
     assert(pt.x < gwb->GetWidth() && pt.y < gwb->GetHeight());
 
@@ -90,11 +90,11 @@ bool AIResourceMap::FindGoodPosition(MapPoint& pt, int threshold, BuildingQualit
     for(MapCoord tx = gwb->GetXA(pt, 0), r = 1; r <= radius; tx = gwb->GetXA(tx, pt.y, 0), ++r)
     {
         MapPoint t2(tx, pt.y);
-        for(unsigned i = 2; i < 8; ++i)
+        for(uint32_t i = 2; i < 8; ++i)
         {
             for(MapCoord r2 = 0; r2 < r; t2 = gwb->GetNeighbour(t2, i % 6), ++r2)
             {
-                unsigned i = gwb->GetIdx(t2);
+                uint32_t i = gwb->GetIdx(t2);
                 if (map[i] >= threshold)
                 {
                     if ((inTerritory && !nodes[i].owned) || nodes[i].farmed)
@@ -113,7 +113,7 @@ bool AIResourceMap::FindGoodPosition(MapPoint& pt, int threshold, BuildingQualit
 }
 
 
-bool AIResourceMap::FindBestPosition(MapPoint& pt, BuildingQuality size, int minimum, int radius, bool inTerritory)
+bool AIResourceMap::FindBestPosition(MapPoint& pt, BuildingQuality size, int32_t minimum, int32_t radius, bool inTerritory)
 {
     assert(pt.x < gwb->GetWidth() && pt.y < gwb->GetHeight());
 
@@ -122,16 +122,16 @@ bool AIResourceMap::FindBestPosition(MapPoint& pt, BuildingQuality size, int min
         radius = 30;
 
     MapPoint best(0, 0);
-    int best_value = -1;
+    int32_t best_value = -1;
 
     for(MapCoord tx = gwb->GetXA(pt, 0), r = 1; r <= radius; tx = gwb->GetXA(tx, pt.y, 0), ++r)
     {
         MapPoint t2(tx, pt.y);
-        for(unsigned i = 2; i < 8; ++i)
+        for(uint32_t i = 2; i < 8; ++i)
         {
             for(MapCoord r2 = 0; r2 < r; t2 = gwb->GetNeighbour(t2, i % 6), ++r2)
             {
-                unsigned i = gwb->GetIdx(t2);
+                uint32_t i = gwb->GetIdx(t2);
                 if (map[i] > best_value)
                 {
                     if (!nodes[i].reachable || (inTerritory && !nodes[i].owned) || nodes[i].farmed)

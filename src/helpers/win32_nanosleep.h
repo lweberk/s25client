@@ -22,22 +22,22 @@
 #pragma once
 
 #ifdef _WIN32
-typedef unsigned int useconds_t;
+typedef uint32_t useconds_t;
 
 #ifndef _TIMESPEC_DEFINED
 #define _TIMESPEC_DEFINED
 typedef struct timespec
 {
-    unsigned int tv_sec;    // Seconds.
-    long int tv_nsec;       // Nanoseconds.
+    uint32_t tv_sec;    // Seconds.
+    int64_t int32_t tv_nsec;       // Nanoseconds.
 } timespec_t;
 #endif
 
 /// Sleep at least some number of microseconds.
-int usleep (useconds_t microseconds);
+int32_t usleep (useconds_t microseconds);
 
 /// nanosleep replacement for windows.
-int nanosleep(const timespec_t* requested_delay, timespec_t* remaining_delay);
+int32_t nanosleep(const timespec_t* requested_delay, timespec_t* remaining_delay);
 
 #endif // _WIN32
 

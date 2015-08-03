@@ -38,7 +38,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofArmorer::nofArmorer(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofArmorer::nofArmorer(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_ARMORER, pos, player, workplace), sword_shield(false)
 {
 }
@@ -50,19 +50,19 @@ void nofArmorer::Serialize_nofArmorer(SerializedGameData* sgd) const
     sgd->PushBool(sword_shield);
 }
 
-nofArmorer::nofArmorer(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id),
+nofArmorer::nofArmorer(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id),
     sword_shield(sgd->PopBool())
 {
 }
 
-void nofArmorer::DrawWorking(int x, int y)
+void nofArmorer::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[NAT_COUNT][2] = { { -10, 15}, { -11, 9}, { -14, 16}, { -19, 1}, { -11, 9} };
+    int8_t offsets[NAT_COUNT][2] = { { -10, 15}, { -11, 9}, { -14, 16}, { -19, 1}, { -11, 9} };
 
-    unsigned int max_id = 280;
-    unsigned now_id = GAMECLIENT.Interpolate(max_id, current_ev);
-    unsigned char wpNation = workplace->GetNation();
-    unsigned int plColor = GAMECLIENT.GetPlayer(player)->color;
+    uint32_t max_id = 280;
+    uint32_t now_id = GAMECLIENT.Interpolate(max_id, current_ev);
+    uint8_t wpNation = workplace->GetNation();
+    uint32_t plColor = GAMECLIENT.GetPlayer(player)->color;
 
     if(now_id < 200)
     {
@@ -77,7 +77,7 @@ void nofArmorer::DrawWorking(int x, int y)
     }
 }
 
-unsigned short nofArmorer::GetCarryID() const
+uint16_t nofArmorer::GetCarryID() const
 {
     if(sword_shield)
         return 56;
@@ -96,7 +96,7 @@ unsigned short nofArmorer::GetCarryID() const
     }
 }
 
-void nofArmorer::HandleDerivedEvent(const unsigned int id)
+void nofArmorer::HandleDerivedEvent(const uint32_t id)
 {	
     switch(state)
     {

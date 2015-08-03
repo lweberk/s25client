@@ -35,26 +35,26 @@ class ctrlPreviewMinimap : public ctrlMinimap
         {
             Player();
             /// Map-Koordinaten der Startposition
-            unsigned short x, y;
+            uint16_t x, y;
             /// Farbe
-            unsigned color;
+            uint32_t color;
         } players[MAX_PLAYERS];
 
     public:
 
         ctrlPreviewMinimap( Window* parent,
-                            const unsigned int id,
-                            const unsigned short x,
-                            const unsigned short y,
-                            const unsigned short width,
-                            const unsigned short height,
+                            const uint32_t id,
+                            const uint16_t x,
+                            const uint16_t y,
+                            const uint16_t width,
+                            const uint16_t height,
                             glArchivItem_Map* s2map);
 
         /// Zeichnet die MapPreview
         bool Draw_();
 
         /// Setzt die (Start-)Farbe eines Spielers bzw. löscht diesen (color = 0)
-        void SetPlayerColor(const unsigned id, const unsigned color)
+        void SetPlayerColor(const uint32_t id, const uint32_t color)
         {
             players[id].color = color;
 

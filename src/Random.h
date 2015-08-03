@@ -21,9 +21,11 @@
 
 #pragma once
 
-#include "Singleton.h"
-#include <list>
 #include <cstddef>
+#include <cstdint>
+#include <list>
+
+#include "Singleton.h"
 
 #ifdef max
     #undef max
@@ -31,20 +33,20 @@
 
 struct RandomEntry
 {
-    unsigned counter;
-    int max;
-    int value;
+    uint32_t counter;
+    int32_t max;
+    int32_t value;
     const char* src_name;
-    unsigned src_line;
-    unsigned obj_id;
+    uint32_t src_line;
+    uint32_t obj_id;
 
-    RandomEntry(unsigned counter, int max, int value, const char* src_name, unsigned int src_line, unsigned obj_id) : counter(counter), max(max), value(value), src_name(src_name), src_line(src_line), obj_id(obj_id) {};
+    RandomEntry(uint32_t counter, int32_t max, int32_t value, const char* src_name, uint32_t src_line, uint32_t obj_id) : counter(counter), max(max), value(value), src_name(src_name), src_line(src_line), obj_id(obj_id) {};
     RandomEntry() : counter(0), max(0), value(0), src_name(NULL), src_line(0), obj_id(0) {};
 };
 
 class Random : public Singleton<Random>
 {
-        unsigned counter;
+        uint32_t counter;
 //  std::list<RandomEntry> async_log;
         RandomEntry async_log[1024];
 
@@ -53,18 +55,18 @@ class Random : public Singleton<Random>
         /// Konstruktor von @p Random.
         Random();
         /// Initialisiert den Zufallszahlengenerator.
-        void Init(const unsigned int init);
+        void Init(const uint32_t init);
         /// Erzeugt eine Zufallszahl.
-        int Rand(const char* const src_name, const unsigned src_line, const unsigned obj_id, const int max);
+        int32_t Rand(const char* const src_name, const uint32_t src_line, const uint32_t obj_id, const int32_t max);
 
         template <typename T>
-        void Shuffle(T* const elements, unsigned int length, unsigned int repeat = 3)
+        void Shuffle(T* const elements, uint32_t length, uint32_t repeat = 3)
         {
-            for(unsigned int i = 0; i < repeat; ++i)
+            for(uint32_t i = 0; i < repeat; ++i)
             {
-                for(unsigned int j = 0; j < length; j++)
+                for(uint32_t j = 0; j < length; j++)
                 {
-                    unsigned int to = Rand(__FILE__, __LINE__, 0, length);
+                    uint32_t to = Rand(__FILE__, __LINE__, 0, length);
 
                     T temp = elements[i];
                     elements[i] = elements[to];
@@ -74,8 +76,8 @@ class Random : public Singleton<Random>
         }
 
         /// Gibt aktuelle Zufallszahl zurück
-        int GetCurrentRandomValue() const { return zahl; }
-        void ReplaySet(const unsigned int checksum) { zahl = checksum; }
+        int32_t GetCurrentRandomValue() const { return zahl; }
+        void ReplaySet(const uint32_t checksum) { zahl = checksum; }
 
         std::list<RandomEntry>* GetAsyncLog();
 
@@ -83,7 +85,7 @@ class Random : public Singleton<Random>
         void SaveLog(const char* const filename);
 
     private:
-        int zahl; ///< Die aktuelle Zufallszahl.
+        int32_t zahl; ///< Die aktuelle Zufallszahl.
 };
 
 ///////////////////////////////////////////////////////////////////////////////

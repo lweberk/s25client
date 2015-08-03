@@ -42,19 +42,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofWoodcutter::nofWoodcutter(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofWoodcutter::nofWoodcutter(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofFarmhand(JOB_WOODCUTTER, pos, player, workplace)
 {
 }
 
-nofWoodcutter::nofWoodcutter(SerializedGameData* sgd, const unsigned obj_id) : nofFarmhand(sgd, obj_id)
+nofWoodcutter::nofWoodcutter(SerializedGameData* sgd, const uint32_t obj_id) : nofFarmhand(sgd, obj_id)
 {
 }
 
 /// Malt den Arbeiter beim Arbeiten
-void nofWoodcutter::DrawWorking(int x, int y)
+void nofWoodcutter::DrawWorking(int32_t x, int32_t y)
 {
-    unsigned short i = GAMECLIENT.Interpolate(118, current_ev);
+    uint16_t i = GAMECLIENT.Interpolate(118, current_ev);
 
 
     if(i < 10)
@@ -63,7 +63,7 @@ void nofWoodcutter::DrawWorking(int x, int y)
         Loader::bob_jobs_cache[gwg->GetPlayer(player)->nation][JOB_WOODCUTTER][0][i % 8].draw(x - i, y, COLOR_WHITE, COLORS[gwg->GetPlayer(player)->color]);
 
 //      LOADER.GetBobN("jobs")->Draw(5,0,false,i%8,x-i,y,COLORS[gwg->GetPlayer(player)->color]);
-//      DrawShadow(x-i,y,static_cast<unsigned char>(i%8),dir);
+//      DrawShadow(x-i,y,static_cast<uint8_t>(i%8),dir);
     }
     else if(i < 82)
     {
@@ -94,7 +94,7 @@ void nofWoodcutter::DrawWorking(int x, int y)
         Loader::bob_jobs_cache[gwg->GetPlayer(player)->nation][JOB_WOODCUTTER][3][(i - 105) % 8].draw(x - (9 - (i - 105)), y, COLOR_WHITE, COLORS[gwg->GetPlayer(player)->color]);
 
 //      LOADER.GetBobN("jobs")->Draw(5,3,false,(i-105)%8,x-(9-(i-105)),y,COLORS[gwg->GetPlayer(player)->color]);
-//      DrawShadow(x-(9-(i-95)),y,static_cast<unsigned char>((i-105)%8),dir);
+//      DrawShadow(x-(9-(i-95)),y,static_cast<uint8_t>((i-105)%8),dir);
     }
     else
     {
@@ -109,7 +109,7 @@ void nofWoodcutter::DrawWorking(int x, int y)
 }
 
 /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-unsigned short nofWoodcutter::GetCarryID() const
+uint16_t nofWoodcutter::GetCarryID() const
 {
     return 61;
 }

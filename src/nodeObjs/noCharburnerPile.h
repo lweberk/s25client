@@ -42,9 +42,9 @@ class noCharburnerPile : public noCoordBase
         State state;
 
         /// Current (graphical) step
-        unsigned short step;
+        uint16_t step;
         /// Current step of the step (same graphics during the different sub steps)
-        unsigned short sub_step;
+        uint16_t sub_step;
 
         /// Event for glowing
         EventManager::EventPointer event;
@@ -52,7 +52,7 @@ class noCharburnerPile : public noCoordBase
     public:
 
         noCharburnerPile(const MapPoint pt);
-        noCharburnerPile(SerializedGameData* sgd, const unsigned obj_id);
+        noCharburnerPile(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~noCharburnerPile();
 
@@ -66,8 +66,8 @@ class noCharburnerPile : public noCoordBase
 
         GO_Type GetGOT() const { return GOT_CHARBURNERPILE; }
 
-        void Draw(int x, int y);
-        void HandleEvent(const unsigned int id);
+        void Draw(int32_t x, int32_t y);
+        void HandleEvent(const uint32_t id);
 
         BlockingManner GetBM() const { return BM_CHARBURNERPILE; }
 

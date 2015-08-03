@@ -20,7 +20,7 @@
 #define MINIMAP_CONSTS_H_
 
 // Farben für die einzelnen Terrains (ARGB)
-const unsigned TERRAIN_COLORS[3][16] =
+const uint32_t TERRAIN_COLORS[3][16] =
 {
     // Grünland
     {
@@ -85,17 +85,17 @@ const unsigned TERRAIN_COLORS[3][16] =
 };
 
 /// Farbe für Bäume
-const unsigned TREE_COLOR = 0xFF003c14;
+const uint32_t TREE_COLOR = 0xFF003c14;
 /// Variierung der Helligkeit der Bäume
-const int VARY_TREE_COLOR = 20;
+const int32_t VARY_TREE_COLOR = 20;
 /// Farbe für Granit
-const unsigned GRANITE_COLOR = 0xFFA2A2A2;
+const uint32_t GRANITE_COLOR = 0xFFA2A2A2;
 /// Variierung der Helligkeit der Granitblöcke
-const int VARY_GRANITE_COLOR = 20;
+const int32_t VARY_GRANITE_COLOR = 20;
 /// Farbe für Gebäude
-const unsigned BUILDING_COLOR = 0xFFFFFFFF;
+const uint32_t BUILDING_COLOR = 0xFFFFFFFF;
 /// Färbe für Straßen
-const unsigned ROAD_COLOR = 0xFFAAAAAA;
+const uint32_t ROAD_COLOR = 0xFFAAAAAA;
 
 /// Skalierung in x-Richtung bei der Anzeige der Map
 const double MINIMAP_SCALE_X = 1.5;

@@ -39,15 +39,15 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlPercent::ctrlPercent(Window* parent,
-                         unsigned int id,
-                         unsigned short x,
-                         unsigned short y,
-                         unsigned short width,
-                         unsigned short height,
+                         uint32_t id,
+                         uint16_t x,
+                         uint16_t y,
+                         uint16_t width,
+                         uint16_t height,
                          TextureColor tc,
-                         unsigned int text_color,
+                         uint32_t text_color,
                          glArchivItem_Font* font,
-                         const unsigned short* percentage)
+                         const uint16_t* percentage)
     : Window(x, y, id, parent, width, height),
       tc(tc), text_color(text_color), font(font), percentage(percentage)
 {
@@ -64,10 +64,10 @@ ctrlPercent::ctrlPercent(Window* parent,
 bool ctrlPercent::Draw_(void)
 {
     // Wenn der Prozentsatzpointer = 0, dann wird 0 angezeigt und es soll nich abstürzen!
-    unsigned short percentage = (this->percentage ?  *this->percentage : 0);
+    uint16_t percentage = (this->percentage ?  *this->percentage : 0);
 
     // Farbe herausfinden
-    unsigned int color = 0xFFFF0000;
+    uint32_t color = 0xFFFF0000;
 
     if(percentage > 100)
         percentage = 100;

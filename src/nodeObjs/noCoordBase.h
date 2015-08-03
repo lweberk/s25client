@@ -32,7 +32,7 @@ class noCoordBase : public noBase
 
         /// Konstruktor von @p noCoordBase.
         noCoordBase(const NodalObjectType nop, const MapPoint pt) : noBase(nop), pos(pt) {}
-        noCoordBase(SerializedGameData* sgd, const unsigned obj_id);
+        noCoordBase(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_noCoordBase(void) { Destroy_noBase(); }
@@ -51,7 +51,7 @@ class noCoordBase : public noBase
         MapPoint GetPos() const { return pos; }
 
         /// Liefert GUI-ID zurück für die Fenster
-        unsigned CreateGUIID() const;
+        uint32_t CreateGUIID() const;
 
     protected:
         MapPoint pos;

@@ -80,8 +80,8 @@ iwTextfile::iwTextfile(const std::string& filename, const std::string& title)
     }
 
     std::string line; // buffer for one line
-    unsigned short max_line_width = 0; // use this to find max length of lines, to set window width
-    unsigned short current_line_width;
+    uint16_t max_line_width = 0; // use this to find max length of lines, to set window width
+    uint16_t current_line_width;
 
     while(!file.eof())
     {

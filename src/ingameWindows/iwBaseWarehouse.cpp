@@ -54,7 +54,7 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 iwBaseWarehouse::iwBaseWarehouse(GameWorldViewer* const gwv, dskGameInterface* const gi, const char* const title,
-                                 unsigned char page_count,
+                                 uint8_t page_count,
                                  nobBaseWarehouse* wh)
     : iwWares(wh->CreateGUIID(), 0xFFFE, 0xFFFE, 167, 416, title, page_count, true, NormalFont, wh->GetInventory()), gwv(gwv), gi(gi), wh(wh)
 {
@@ -82,10 +82,10 @@ iwBaseWarehouse::iwBaseWarehouse(GameWorldViewer* const gwv, dskGameInterface* c
     // Ein/Auslager Overlays entsprechend setzen
     // bei Replays die reellen Einstellungen nehmen, weils die visuellen da logischweise nich gibt!
     ctrlImage* image;
-    for(unsigned char category = 0; category < 2; ++category)
+    for(uint8_t category = 0; category < 2; ++category)
     {
-        unsigned count = (category == 0) ? 35 : 32;
-        for(unsigned i = 0; i < count; ++i)
+        uint32_t count = (category == 0) ? 35 : 32;
+        for(uint32_t i = 0; i < count; ++i)
         {
             // Einlagern verbieten-Bild (de)aktivieren
             image = GetCtrl<ctrlGroup>(100 + category)->GetCtrl<ctrlImage>(400 + i);
@@ -121,7 +121,7 @@ iwBaseWarehouse::iwBaseWarehouse(GameWorldViewer* const gwv, dskGameInterface* c
 }
 
 
-void iwBaseWarehouse::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id)
+void iwBaseWarehouse::Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id)
 {
     switch(group_id)
     {
@@ -134,7 +134,7 @@ void iwBaseWarehouse::Msg_Group_ButtonClick(const unsigned int group_id, const u
         {
             ctrlOptionGroup* optiongroup = GetCtrl<ctrlOptionGroup>(10);
 
-            unsigned int data = 0;
+            uint32_t data = 0;
             switch(optiongroup->GetSelection())
             {
                 case 0: data = 8; break;
@@ -152,7 +152,7 @@ void iwBaseWarehouse::Msg_Group_ButtonClick(const unsigned int group_id, const u
     }
 }
 
-void iwBaseWarehouse::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwBaseWarehouse::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -167,7 +167,7 @@ void iwBaseWarehouse::Msg_ButtonClick(const unsigned int ctrl_id)
             if(this->page < 2)
             {
                 ctrlOptionGroup* optiongroup = GetCtrl<ctrlOptionGroup>(10);
-                unsigned int data = 0;
+                uint32_t data = 0;
                 switch(optiongroup->GetSelection())
                 {
                     case 0: data = 8; break;
@@ -180,8 +180,8 @@ void iwBaseWarehouse::Msg_ButtonClick(const unsigned int ctrl_id)
                     if(GAMECLIENT.AddGC(new gc::ChangeAllInventorySettings(wh->GetPos(), page, data)))
                     {
                         // optisch setzen
-                        unsigned short count = ((page == 0) ? WARE_TYPES_COUNT : JOB_TYPES_COUNT);
-                        for(unsigned char i = 0; i < count; ++i)
+                        uint16_t count = ((page == 0) ? WARE_TYPES_COUNT : JOB_TYPES_COUNT);
+                        for(uint8_t i = 0; i < count; ++i)
                             ChangeOverlay(i, data);
                     }
                 }
@@ -253,7 +253,7 @@ void iwBaseWarehouse::Msg_ButtonClick(const unsigned int ctrl_id)
  *
  *  @author FloSoft
  */
-void iwBaseWarehouse::ChangeOverlay(unsigned int i, unsigned int what)
+void iwBaseWarehouse::ChangeOverlay(uint32_t i, uint32_t what)
 {
     ctrlImage* image;
 

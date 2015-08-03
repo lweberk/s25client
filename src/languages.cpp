@@ -46,12 +46,12 @@ static char THIS_FILE[] = __FILE__;
  */
 void Languages::loadLanguages()
 {
-    unsigned int count = LOADER.GetInfoN("lang")->getCount();
+    uint32_t count = LOADER.GetInfoN("lang")->getCount();
 
     // abrunden
     count -= (count % 2);
 
-    for(unsigned int i = 0; i < count; i += 2)
+    for(uint32_t i = 0; i < count; i += 2)
     {
         libsiedler2::ArchivItem_Text* n = dynamic_cast<libsiedler2::ArchivItem_Text*>(LOADER.GetInfoN("lang")->get(i));
         libsiedler2::ArchivItem_Text* c = dynamic_cast<libsiedler2::ArchivItem_Text*>(LOADER.GetInfoN("lang")->get(i + 1));
@@ -83,7 +83,7 @@ void Languages::loadLanguages()
  *
  *  @author FloSoft
  */
-const Languages::Language& Languages::getLanguage(unsigned int i)
+const Languages::Language& Languages::getLanguage(uint32_t i)
 {
     if(!loaded)
         loadLanguages();
@@ -100,7 +100,7 @@ const Languages::Language& Languages::getLanguage(unsigned int i)
  *
  *  @author FloSoft
  */
-unsigned int Languages::getCount(void)
+uint32_t Languages::getCount(void)
 {
     if(!loaded)
         loadLanguages();
@@ -135,7 +135,7 @@ void Languages::setLanguage(const std::string& lang_code)
  *
  *  @author FloSoft
  */
-const std::string Languages::setLanguage(unsigned int i)
+const std::string Languages::setLanguage(uint32_t i)
 {
     const Language l = getLanguage(i);
 

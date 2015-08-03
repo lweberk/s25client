@@ -28,8 +28,8 @@ class nobHQ : public nobBaseWarehouse
     public:
 
 
-        nobHQ(const MapPoint pt, const unsigned char player, const Nation nation);
-        nobHQ(SerializedGameData* sgd, const unsigned obj_id);
+        nobHQ(const MapPoint pt, const uint8_t player, const Nation nation);
+        nobHQ(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_nobHQ();
@@ -42,11 +42,11 @@ class nobHQ : public nobBaseWarehouse
         GO_Type GetGOT() const { return GOT_NOB_HQ; }
 
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         MapCoord GetMilitaryRadius() const { return MILITARY_RADIUS[4]; }
 
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
 };
 

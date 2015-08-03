@@ -64,9 +64,9 @@ class nofBuildingWorker : public noFigure
         GoodType ware;
 
         /// Wieviel er von den letzen 100gf NICHT gearbeitet hat (fürs Ausrechnen der Produktivität)
-        unsigned short not_working;
+        uint16_t not_working;
         /// Seit welchem Zeitpunkt (in gf) er ggf. NICHT mehr arbeitet (0xFFFFFFFF = er arbeitet gerade)
-        unsigned int since_not_working;
+        uint32_t since_not_working;
 
         /// Hat der Bauarbeiter bei seiner Arbeit Sounds von sich gebeben (zu Optimeriungszwecken)
         bool was_sounding;
@@ -92,9 +92,9 @@ class nofBuildingWorker : public noFigure
         void GoalReached(); // wenn das Ziel erreicht wurde
 
         /// Malt den Arbeiter beim Arbeiten
-        virtual void DrawWorking(int x, int y) = 0;
+        virtual void DrawWorking(int32_t x, int32_t y) = 0;
         /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-        virtual unsigned short GetCarryID() const = 0;
+        virtual uint16_t GetCarryID() const = 0;
         /// Laufen an abgeleitete Klassen weiterleiten
         virtual void WalkedDerived() = 0;
         /// Arbeit musste wegen Arbeitsplatzverlust abgebrochen werden
@@ -103,23 +103,23 @@ class nofBuildingWorker : public noFigure
         virtual void WorkplaceReached();
 
         /// Draws the figure while returning home / entering the building (often carrying wares)
-        virtual void DrawReturnStates(const int x, const int y);
+        virtual void DrawReturnStates(const int32_t x, const int32_t y);
         /// Zeichnen der Figur in sonstigen Arbeitslagen
-        virtual void DrawOtherStates(const int x, const int y);
+        virtual void DrawOtherStates(const int32_t x, const int32_t y);
 
         /// nur für Bergarbeiter!
         /// Sucht die Nähe nach einer bestimmten Ressource ab und gibt true zurück, wenn er fündig wird und baut ggf eins
         /// ab, wenn dig = true ist
-        bool GetResources(unsigned char type);
+        bool GetResources(uint8_t type);
         /// Macht das gleiche wie GetResources nur direkt für einen Punkt
-        bool GetResourcesOfNode(const MapPoint pt, const unsigned char type);
+        bool GetResourcesOfNode(const MapPoint pt, const uint8_t type);
 
 
     public:
         State GetState() { return state; }
 
-        nofBuildingWorker(const Job job, const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofBuildingWorker(SerializedGameData* sgd, const unsigned obj_id);
+        nofBuildingWorker(const Job job, const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofBuildingWorker(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_nofBuildingWorker() { Destroy_noFigure(); }
@@ -130,7 +130,7 @@ class nofBuildingWorker : public noFigure
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_nofBuildingWorker(sgd); }
 
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Wenn eine neue Ware kommt oder die Produktion wieder erlaubt wurde, wird das aufgerufen
         void GotWareOrProductionAllowed();
@@ -139,7 +139,7 @@ class nofBuildingWorker : public noFigure
         /// Wenn das Haus des Arbeiters abbrennt
         void LostWork();
         /// Rechnet die Produktivität aus (und setzt den Zähler zurück, setzt vorraus, dass das in 100 gf - Abständen aufgerufen wird !!!)
-        unsigned short CalcProductivity();
+        uint16_t CalcProductivity();
         /// Wird aufgerufen, nachdem die Produktion in dem Gebäude, wo er arbeitet, verboten wurde
         void ProductionStopped();
 

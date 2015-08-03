@@ -58,7 +58,7 @@ enum Job
 };
 
 // Anzahl an unterschiedlichen Berufstypen
-const unsigned JOB_TYPES_COUNT = JOB_NOTHING;
+const uint32_t JOB_TYPES_COUNT = JOB_NOTHING;
 
 const std::string JOB_NAMES[JOB_TYPES_COUNT] =
 {

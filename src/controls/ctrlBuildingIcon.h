@@ -28,8 +28,8 @@ class ctrlBuildingIcon : public ctrlButton
 {
     public:
         /// Konstruktor von @p ctrlBuildingIcon.
-        ctrlBuildingIcon(Window* const parent, const unsigned int id, const unsigned short x, const unsigned short y,
-                         const BuildingType type, const Nation nation, const unsigned short size = 36,  const std::string& tooltip = "");
+        ctrlBuildingIcon(Window* const parent, const uint32_t id, const uint16_t x, const uint16_t y,
+                         const BuildingType type, const Nation nation, const uint16_t size = 36,  const std::string& tooltip = "");
         /// liefert den GebäudeTyp des Icons.
         BuildingType GetType() const { return type; }
 
@@ -41,7 +41,7 @@ class ctrlBuildingIcon : public ctrlButton
     protected:
         const BuildingType type;       ///< der GebäudeType des Icons.
         const Nation nation;       ///< Volk
-        const unsigned short size; ///< die Größe des Icons
+        const uint16_t size; ///< die Größe des Icons
 
 };
 

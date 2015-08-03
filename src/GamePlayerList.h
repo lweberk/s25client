@@ -22,7 +22,7 @@
 #include "GameClientPlayer.h"
 #include "GameServerPlayer.h"
 
-class GamePlayerList : public SerializableArray<unsigned>
+class GamePlayerList : public SerializableArray<uint32_t>
 {
 };
 

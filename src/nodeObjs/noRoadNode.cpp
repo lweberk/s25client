@@ -37,11 +37,11 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-noRoadNode::noRoadNode(const NodalObjectType nop, const MapPoint pos, const unsigned char player)
+noRoadNode::noRoadNode(const NodalObjectType nop, const MapPoint pos, const uint8_t player)
     : noCoordBase(nop, pos),
       player(player)
 {
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
         routes[i] = 0;
     coord_id = gwg->MakeCoordID(pos);
     last_visit = 0;
@@ -70,24 +70,24 @@ void noRoadNode::Serialize_noRoadNode(SerializedGameData* sgd) const
         // this is a trick:
         // -> initialize routes for flag with NULL
         // -> RoadSegment will set these later
-        for (unsigned i = 0; i < 6; ++i)
+        for (uint32_t i = 0; i < 6; ++i)
         {
             sgd->PushObject(NULL, true);
         }
     }
     else
     {
-        for (unsigned i = 0; i < 6; ++i)
+        for (uint32_t i = 0; i < 6; ++i)
         {
             sgd->PushObject(routes[i], true);
         }
     }
 }
 
-noRoadNode::noRoadNode(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noRoadNode::noRoadNode(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     player(sgd->PopUnsignedChar())
 {
-    for (unsigned i = 0; i < 6; ++i)
+    for (uint32_t i = 0; i < 6; ++i)
     {
         routes[i] = sgd->PopObject<RoadSegment>(GOT_ROADSEGMENT);
     }
@@ -96,18 +96,18 @@ noRoadNode::noRoadNode(SerializedGameData* sgd, const unsigned obj_id) : noCoord
     last_visit = 0;
 }
 
-void noRoadNode::UpgradeRoad(const unsigned char dir)
+void noRoadNode::UpgradeRoad(const uint8_t dir)
 {
     if(routes[dir])
         routes[dir]->UpgradeDonkeyRoad();
 }
 
-void noRoadNode::DestroyRoad(const unsigned char dir)
+void noRoadNode::DestroyRoad(const uint8_t dir)
 {
     if(routes[dir])
     {
         MapPoint t = routes[dir]->GetF1()->GetPos();
-        for(unsigned z = 0; z < routes[dir]->GetLength(); ++z)
+        for(uint32_t z = 0; z < routes[dir]->GetLength(); ++z)
         {
             gwg->SetPointRoad(t, routes[dir]->GetRoute(z), 0);
             gwg->CalcRoad(t, player);
@@ -124,7 +124,7 @@ void noRoadNode::DestroyRoad(const unsigned char dir)
 #ifndef NDEBUG
         bool found = false;
 #endif
-        for(unsigned z = 0; z < 6; ++z)
+        for(uint32_t z = 0; z < 6; ++z)
         {
             if(oflag->routes[z] == routes[dir])
             {
@@ -155,6 +155,6 @@ void noRoadNode::DestroyRoad(const unsigned char dir)
 void noRoadNode::DestroyAllRoads()
 {
     // Alle Straßen um mich herum zerstören
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
         DestroyRoad(i);
 }

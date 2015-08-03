@@ -36,7 +36,7 @@ class glArchivItem_Music : public virtual libsiedler2::baseArchivItem_Sound
         virtual ~glArchivItem_Music(void);
 
         /// Spielt die Musik ab.
-        virtual void Play(const unsigned repeats) = 0;
+        virtual void Play(const uint32_t repeats) = 0;
 
     protected:
         Sound* sound; ///< Der Sound.

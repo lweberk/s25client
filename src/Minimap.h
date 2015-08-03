@@ -33,12 +33,12 @@ class glArchivItem_Map;
 class Minimap
 {
         ///// Breite und Höhe (Pixel) der Bounding Box, in die die Map zentriert wird
-        //unsigned short width,height;
+        //uint16_t width,height;
         ///// Breite und Höhe (Pixel) der angezeigten Map
-        //unsigned short width_show, height_show;
+        //uint16_t width_show, height_show;
     protected:
         /// Breite und Höhe der Map (in Knoten)
-        unsigned short map_width, map_height;
+        uint16_t map_width, map_height;
 
         /// Textur für die Map
         glArchivItem_Bitmap_Direct map;
@@ -46,7 +46,7 @@ class Minimap
         //struct PlayerColor
         //{
         //  PlayerColor() { color = 0; }
-        //  unsigned color;
+        //  uint32_t color;
         //} players_color[MAX_PLAYERS];
 
     protected:
@@ -54,23 +54,23 @@ class Minimap
         /// Zusätzliche Dinge, die die einzelnen Maps vor dem Zeichenvorgang zu tun haben
         virtual void BeforeDrawing();
         /// Variiert die übergebene Farbe zufällig in der Helligkeit
-        unsigned VaryBrightness(const unsigned color, const int range) const;
+        uint32_t VaryBrightness(const uint32_t color, const int32_t range) const;
 
     public:
 
         Minimap() { };
-        Minimap(const unsigned short map_width, const unsigned short map_height);
+        Minimap(const uint16_t map_width, const uint16_t map_height);
         virtual ~Minimap() {}
 
         void SetMap(glArchivItem_Map* s2map);
 
         /// Zeichnet die Minimap zentriert in die entsprechende Bounding-Box
         /// (x und y bezieht sich auf obere linke Ecke der Bounding Box)
-        void Draw(const unsigned short x, const unsigned short y, const unsigned short width, const unsigned short height);
+        void Draw(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height);
 
         /// Gibt Größe der Map zurück
-        unsigned short GetMapWidth() const { return map_width; }
-        unsigned short GetMapHeight() const { return map_height; }
+        uint16_t GetMapWidth() const { return map_width; }
+        uint16_t GetMapHeight() const { return map_height; }
 
     protected:
 
@@ -80,7 +80,7 @@ class Minimap
         /// Berechnet einen bestimmten Punkt neu
         void RecalcNode(const void* param, const MapPoint pt);
         /// Berechnet die Farbe eines Pixels
-        virtual unsigned CalcPixelColor(const void* param, const MapPoint pt, const unsigned t) = 0;
+        virtual uint32_t CalcPixelColor(const void* param, const MapPoint pt, const uint32_t t) = 0;
 };
 
 class PreviewMinimap : public Minimap
@@ -91,7 +91,7 @@ class PreviewMinimap : public Minimap
     protected:
 
         /// Berechnet die Farbe für einen bestimmten Pixel der Minimap (t = Terrain1 oder 2)
-        unsigned CalcPixelColor(const void* param, const MapPoint pt, const unsigned t);
+        uint32_t CalcPixelColor(const void* param, const MapPoint pt, const uint32_t t);
 };
 
 class IngameMinimap : public Minimap
@@ -132,8 +132,8 @@ class IngameMinimap : public Minimap
 
         /// Updatet die gesamte Minimap
         void UpdateAll();
-        unsigned GetMMIdx(const MapPoint pt)
-        { return static_cast<unsigned>(pt.y) * static_cast<unsigned>(map_width) + static_cast<unsigned>(pt.x); }
+        uint32_t GetMMIdx(const MapPoint pt)
+        { return static_cast<uint32_t>(pt.y) * static_cast<uint32_t>(map_width) + static_cast<uint32_t>(pt.x); }
 
 
         /// Die einzelnen Dinge umschalten
@@ -144,13 +144,13 @@ class IngameMinimap : public Minimap
     protected:
 
         /// Berechnet die Farbe für einen bestimmten Pixel der Minimap (t = Terrain1 oder 2)
-        unsigned CalcPixelColor(const void* param, const MapPoint pt, const unsigned t);
+        uint32_t CalcPixelColor(const void* param, const MapPoint pt, const uint32_t t);
         /// Berechnet für einen bestimmten Punkt und ein Dreieck die normale Terrainfarbe
-        unsigned CalcTerrainColor(const MapPoint pt, const unsigned t);
+        uint32_t CalcTerrainColor(const MapPoint pt, const uint32_t t);
         /// Prüft ob an einer Stelle eine Straße gezeichnet werden muss
         bool IsRoad(const MapPoint pt, const Visibility visibility);
         /// Berechnet Spielerfarbe mit in eine gegebene Farbe mit ein (player muss mit +1 gegeben sein!)
-        unsigned CombineWithPlayerColor(const unsigned color, const unsigned char player) const;
+        uint32_t CombineWithPlayerColor(const uint32_t color, const uint8_t player) const;
         /// Zusätzliche Dinge, die die einzelnen Maps vor dem Zeichenvorgang zu tun haben
         /// in dem Falle: Karte aktualisieren
         void BeforeDrawing();

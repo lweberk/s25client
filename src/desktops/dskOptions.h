@@ -33,14 +33,14 @@ class dskOptions: public Desktop
         ~dskOptions();
 
     private:
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_MsgBoxResult(const unsigned int msgbox_id, const MsgboxResult mbr);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr);
 
-        void Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id);
-        void Msg_Group_ProgressChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short position);
-        void Msg_Group_ComboSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_Group_OptionGroupChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
+        void Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id);
+        void Msg_Group_ProgressChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t position);
+        void Msg_Group_ComboSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_Group_OptionGroupChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
 
     private:
         GlobalGameSettings ggs;

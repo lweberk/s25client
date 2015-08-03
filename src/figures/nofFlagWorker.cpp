@@ -36,7 +36,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofFlagWorker::nofFlagWorker(const Job job, const MapPoint pos, const unsigned char player, noRoadNode* goal)
+nofFlagWorker::nofFlagWorker(const Job job, const MapPoint pos, const uint8_t player, noRoadNode* goal)
     : noFigure(job, pos, player, goal), flag(0), state(STATE_FIGUREWORK)
 {
     // Flagge als Ziel, dann arbeiten wir auch, ansonsten kanns aber auch nur ein Lagerhaus oder Null sein, wenn ein
@@ -55,7 +55,7 @@ nofFlagWorker::nofFlagWorker(const Job job, const MapPoint pos, const unsigned c
         this->flag = 0;
 }
 
-nofFlagWorker::nofFlagWorker(SerializedGameData* sgd, const unsigned obj_id)
+nofFlagWorker::nofFlagWorker(SerializedGameData* sgd, const uint32_t obj_id)
     : noFigure(sgd, obj_id), flag(sgd->PopObject<noFlag>(GOT_FLAG)), state(State(sgd->PopUnsignedChar()))
 {
 }
@@ -65,7 +65,7 @@ void nofFlagWorker::Serialize_nofFlagWorker(SerializedGameData* sgd) const
     Serialize_noFigure(sgd);
 
     sgd->PushObject(flag, true);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
 }
 
 void nofFlagWorker::Destroy_nofFlagWorker()

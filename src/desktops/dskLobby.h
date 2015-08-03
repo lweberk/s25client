@@ -57,12 +57,12 @@ class dskLobby :
         void LC_Chat(const std::string& player, const std::string& text);
 
     protected:
-        void Msg_Timer(const unsigned int ctrl_id);
+        void Msg_Timer(const uint32_t ctrl_id);
         void Msg_PaintBefore();
-        void Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_EditEnter(const unsigned int ctrl_id);
-        void Msg_TableRightButton(const unsigned int ctrl_id, const unsigned short selection);
+        void Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_EditEnter(const uint32_t ctrl_id);
+        void Msg_TableRightButton(const uint32_t ctrl_id, const uint16_t selection);
 };
 
 #endif // dskLOBBY_H_INCLUDED

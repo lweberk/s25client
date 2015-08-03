@@ -28,8 +28,8 @@ class noDisappearingMapEnvObject : public noDisappearingEnvObject
 {
     public:
         /// Konstruktor von @p noSign.
-        noDisappearingMapEnvObject(const MapPoint pt, const unsigned short map_id);
-        noDisappearingMapEnvObject(SerializedGameData* sgd, const unsigned obj_id);
+        noDisappearingMapEnvObject(const MapPoint pt, const uint16_t map_id);
+        noDisappearingMapEnvObject(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_noDisappearingMapEnvObject();
@@ -41,14 +41,14 @@ class noDisappearingMapEnvObject : public noDisappearingEnvObject
         GO_Type GetGOT() const { return GOT_DISAPPEARINGMAPENVOBJECT; }
 
         /// An x,y zeichnen.
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
     private:
 
         /// ID in der mapsx.lst
-        const unsigned short map_id;
+        const uint16_t map_id;
 };
 
 

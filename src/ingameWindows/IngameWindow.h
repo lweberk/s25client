@@ -32,17 +32,17 @@ class IngameWindow : public Window
 {
 
         /// For each id we save the last posistion of the window
-        static std::vector< Point<unsigned short> > last_pos;
+        static std::vector< Point<uint16_t> > last_pos;
     public:
         /// Konstruktor von @p IngameWindow.
-        IngameWindow(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, const std::string& title, glArchivItem_Bitmap* background, bool modal = false, bool close_on_right_click = true);
+        IngameWindow(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, const std::string& title, glArchivItem_Bitmap* background, bool modal = false, bool close_on_right_click = true);
         /// Destruktor von @p IngameWindow.
         ~IngameWindow(void);
 
         /// setzt die Fenster-ID.
-        void SetID(unsigned int id) { this->id = id; }
+        void SetID(uint32_t id) { this->id = id; }
         /// liefert die Fenster-ID.
-        unsigned int GetID(void) { return id; }
+        uint32_t GetID(void) { return id; }
 
         /// setzt den Hintergrund.
         void SetBackground(glArchivItem_Bitmap* background) { this->background = background; }
@@ -55,9 +55,9 @@ class IngameWindow : public Window
         const std::string& GetTitle(void) { return title; }
 
         /// setzt die ausgeklappte Höhe des Fensters.
-        void SetIwHeight(unsigned short height) { this->iwHeight = height; if(!minimized) this->height = height; }
+        void SetIwHeight(uint16_t height) { this->iwHeight = height; if(!minimized) this->height = height; }
         /// liefert die ausgeklappte Höhe des Fensters.
-        unsigned short GetIwHeight(void) const { return iwHeight; }
+        uint16_t GetIwHeight(void) const { return iwHeight; }
 
         /// merkt das Fenster zum Schließen vor.
         void Close(bool closeme = true) { this->closeme = closeme; }
@@ -94,17 +94,17 @@ class IngameWindow : public Window
         bool IsMessageRelayAllowed() const;
 
     protected:
-        unsigned short iwHeight;
+        uint16_t iwHeight;
         std::string title;
         glArchivItem_Bitmap* background;
-        unsigned short last_x;
-        unsigned short last_y;
+        uint16_t last_x;
+        uint16_t last_y;
         bool last_down;
         bool last_down2;
         ButtonState button_state[2];
 
         Rect GetLeftButtonRect()  const { return Rect(x, y, 16, 16); }
-        Rect GetRightButtonRect() const { return Rect(static_cast<unsigned short>(x + width - 16), y, 16, 16); }
+        Rect GetRightButtonRect() const { return Rect(static_cast<uint16_t>(x + width - 16), y, 16, 16); }
 
     private:
         bool modal;

@@ -61,10 +61,10 @@ BOOL WINAPI HandlerRoutine(DWORD dwCtrlType)
 }
 #else
 bool killme = false;
-void HandlerRoutine(int sig)
+void HandlerRoutine(int32_t sig)
 {
 
-    int c;
+    int32_t c;
     if(sig != SIGINT)
         return;
     else

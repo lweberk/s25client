@@ -35,18 +35,18 @@ class iwObservate : public IngameWindow
         GameWorldView* view;
 
         const MapPoint selectedPt;
-        short last_x, last_y;
+        int16_t last_x, last_y;
 
         // Scrolling
         bool scroll;
-        int sx, sy;
+        int32_t sx, sy;
 
     public:
         iwObservate(GameWorldViewer* const gwv, const MapPoint selectedPt);
 
     private:
         bool Draw_();
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
         bool Msg_MouseMove(const MouseCoords& mc);
         bool Msg_RightDown(const MouseCoords& mc);
         bool Msg_RightUp(const MouseCoords& mc);

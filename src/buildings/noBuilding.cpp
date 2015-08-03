@@ -45,7 +45,7 @@ static char THIS_FILE[] = __FILE__;
  */
 noBuilding::noBuilding(const BuildingType type,
                        const MapPoint pos,
-                       const unsigned char player,
+                       const uint8_t player,
                        const Nation nation)
     : noBaseBuilding(NOP_BUILDING, type, pos, player),
       opendoor(0)
@@ -86,7 +86,7 @@ void noBuilding::Serialize_noBuilding(SerializedGameData* sgd) const
  *
  *  @author OLiver
  */
-noBuilding::noBuilding(SerializedGameData* sgd, const unsigned obj_id) : noBaseBuilding(sgd, obj_id),
+noBuilding::noBuilding(SerializedGameData* sgd, const uint32_t obj_id) : noBaseBuilding(sgd, obj_id),
     opendoor(sgd->PopUnsignedChar())
 {
 }
@@ -97,7 +97,7 @@ noBuilding::noBuilding(SerializedGameData* sgd, const unsigned obj_id) : noBaseB
  *
  *  @author OLiver
  */
-void noBuilding::DrawBaseBuilding(int x, int y)
+void noBuilding::DrawBaseBuilding(int32_t x, int32_t y)
 {
     Loader::building_cache[nation][type][0].draw(x, y);
 

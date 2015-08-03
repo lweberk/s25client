@@ -106,7 +106,7 @@ iwMainMenu::iwMainMenu(GameWorldViewer* const gwv, dskGameInterface* const gi)
  *
  *  @author OLiver
 */
-void iwMainMenu::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwMainMenu::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

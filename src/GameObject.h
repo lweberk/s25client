@@ -109,7 +109,7 @@ class GameObject
         /// Konstruktor von @p GameObject.
         GameObject(void);
         /// Deserialisierungskonstruktor
-        GameObject(SerializedGameData* sgd, const unsigned obj_id);
+        GameObject(SerializedGameData* sgd, const uint32_t obj_id);
         /// Copy-Konstruktor
         GameObject(const GameObject& go);
         /// Destruktor von @p GameObject.
@@ -119,10 +119,10 @@ class GameObject
         virtual void Destroy(void) = 0;
 
         /// Benachrichtigen, wenn neuer GF erreicht wurde.
-        virtual void HandleEvent(const unsigned int id) {}
+        virtual void HandleEvent(const uint32_t id) {}
 
         /// Gibt Objekt-ID zurück.
-        unsigned GetObjId() const { return obj_id; }
+        uint32_t GetObjId() const { return obj_id; }
 
         /// Serialisierungsfunktion.
         virtual void Serialize(SerializedGameData* sgd) const = 0;
@@ -135,14 +135,14 @@ class GameObject
         /// setzt den Objekt und Objekt-ID-Counter zurück
         static void ResetCounter(void) { obj_id_counter = 1; obj_counter = 0; };
         /// Gibt Anzahl Objekte zurück.
-        static unsigned GetObjCount() { return obj_counter; }
+        static uint32_t GetObjCount() { return obj_counter; }
         /// Setzt Anzahl der Objekte (NUR FÜR DAS LADEN!)
-        static void SetObjCount(const unsigned obj_count)
+        static void SetObjCount(const uint32_t obj_count)
         { obj_counter = obj_count; }
         /// Gibt Obj-ID-Counter zurück (NUR FÜR DAS SPEICHERN!)
-        static unsigned GetObjIDCounter() { return obj_id_counter; }
+        static uint32_t GetObjIDCounter() { return obj_id_counter; }
         /// Setzt Counter (NUR FÜR DAS LADEN!)
-        static void SetObjIDCounter(const unsigned obj_id_counter)
+        static void SetObjIDCounter(const uint32_t obj_id_counter)
         { GameObject::obj_id_counter = obj_id_counter; }
 
         virtual std::string ToString() const {std::stringstream s; s << "GameObject(" << obj_id << ")"; return s.str();}
@@ -152,7 +152,7 @@ class GameObject
         void Serialize_GameObject(SerializedGameData* sgd) const {}
 
     protected:
-        const unsigned int obj_id; ///< eindeutige Objekt-ID
+        const uint32_t obj_id; ///< eindeutige Objekt-ID
 
         /// Zugriff auf übrige Spielwelt
         static GameWorldGame* gwg;
@@ -161,8 +161,8 @@ class GameObject
 
     private:
 
-        static unsigned obj_id_counter; ///< Objekt-ID-Counter
-        static unsigned obj_counter;    ///< Objekt-Counter
+        static uint32_t obj_id_counter; ///< Objekt-ID-Counter
+        static uint32_t obj_counter;    ///< Objekt-Counter
 };
 
 #endif /// GAMEOBJECT_H_INCLUDED

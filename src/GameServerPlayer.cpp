@@ -37,7 +37,7 @@ static char THIS_FILE[] = __FILE__;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Konstruktor
-GameServerPlayer::GameServerPlayer(const unsigned playerid)
+GameServerPlayer::GameServerPlayer(const uint32_t playerid)
     : GamePlayerInfo(playerid),
       connecttime(0),
       last_command_timeout(0),
@@ -50,7 +50,7 @@ GameServerPlayer::GameServerPlayer(const unsigned playerid)
 {
 }
 
-GameServerPlayer::GameServerPlayer(const unsigned playerid, Serializer* ser)
+GameServerPlayer::GameServerPlayer(const uint32_t playerid, Serializer* ser)
     : GamePlayerInfo(playerid, ser),
       connecttime(0),
       last_command_timeout(0),
@@ -106,7 +106,7 @@ void GameServerPlayer::doTimeout()
 // setzt den Player auf "reserviert"
 // @param sock Socket
 // @param id Spieler-ID                                                        */
-void GameServerPlayer::reserve(Socket* sock, unsigned char id)
+void GameServerPlayer::reserve(Socket* sock, uint8_t id)
 {
     clear();
 
@@ -134,10 +134,10 @@ void GameServerPlayer::clear()
     so.Close();
 }
 
-unsigned GameServerPlayer::GetTimeOut() const
+uint32_t GameServerPlayer::GetTimeOut() const
 {
     // Nach 34 Sekunden kicken (34 damit ab 30 erst die Meldung kommt, sonst kommt sie andauernd)
-    const int timeout = 34 - int(TIME.CurrentTime() - last_command_timeout) / 1000;
+    const int32_t timeout = 34 - int(TIME.CurrentTime() - last_command_timeout) / 1000;
     return (timeout >= 0 ? timeout : 0);
 }
 

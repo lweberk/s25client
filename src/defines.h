@@ -49,7 +49,7 @@
 #        include <crtdbg.h>
 #    endif // _WIN32 && _DEBUG
 
-     typedef int socklen_t;
+     typedef int32_t socklen_t;
 #    define BREAKPOINT ;
 #else
 #    define BREAKPOINT raise(SIGTRAP)

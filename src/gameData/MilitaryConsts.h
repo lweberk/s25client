@@ -21,29 +21,29 @@
 #define MILITARY_CONSTS_H_
 
 /// Größe der Militärquadrate (in Knotenpunkten), in die die Welt eingeteilt wurde für Militärgebäude
-const unsigned short MILITARY_SQUARE_SIZE = 20;
+const uint16_t MILITARY_SQUARE_SIZE = 20;
 
 /// Maximale Entfernungen für "nahe Militärgebäudedistanz" und "mittlere Militärgebäudedistanz"
-const unsigned MAX_MILITARY_DISTANCE_NEAR = 18;
-const unsigned MAX_MILITARY_DISTANCE_MIDDLE = 26;
+const uint32_t MAX_MILITARY_DISTANCE_NEAR = 18;
+const uint32_t MAX_MILITARY_DISTANCE_MIDDLE = 26;
 
 /// highest military rank - currently ranks 0-4 available
-const unsigned MAX_MILITARY_RANK = 4;
+const uint32_t MAX_MILITARY_RANK = 4;
 
 /// Basisangriffsreichweite (Angriff mit allen Soldaten möglich)
-const unsigned BASE_ATTACKING_DISTANCE = 21;
+const uint32_t BASE_ATTACKING_DISTANCE = 21;
 
 /// Erweiterte Reichweite, für die jeweils ein Soldat von der Angriffsarmee abgezogen wird
-const unsigned EXTENDED_ATTACKING_DISTANCE = 1;
+const uint32_t EXTENDED_ATTACKING_DISTANCE = 1;
 
 /// Maximale Länge für den Laufweg beim Angriff
-const unsigned MAX_ATTACKING_RUN_DISTANCE = 40;
+const uint32_t MAX_ATTACKING_RUN_DISTANCE = 40;
 
 /// Distanz zwischen zwei Gegnern, sodass diese aufeinander zugehen
-const unsigned MEET_FOR_FIGHT_DISTANCE = 5;
+const uint32_t MEET_FOR_FIGHT_DISTANCE = 5;
 
 /// Besatzung in den einzelnen Militärgebäuden und nach Nation
-const int TROOPS_COUNT[NAT_COUNT][4] =
+const int32_t TROOPS_COUNT[NAT_COUNT][4] =
 {
     {2, 3, 6, 9},
     {2, 3, 6, 9},
@@ -53,7 +53,7 @@ const int TROOPS_COUNT[NAT_COUNT][4] =
 };
 
 /// Gold in den einzelnen Militärgebäuden und nach Nation
-const unsigned short GOLD_COUNT[NAT_COUNT][4] =
+const uint16_t GOLD_COUNT[NAT_COUNT][4] =
 {
     {1, 2, 4, 6},
     {1, 2, 4, 6},
@@ -63,16 +63,16 @@ const unsigned short GOLD_COUNT[NAT_COUNT][4] =
 };
 
 /// Radien der Militärgebäude ( die letzten beiden sind HQ und Hafen!)
-const unsigned MILITARY_RADIUS[6] =
+const uint32_t MILITARY_RADIUS[6] =
 { 8, 9, 10, 11, 9, 4 };
 
 // Radius für einzelne Hafen(baustellen)
-const unsigned HARBOR_ALONE_RADIUS = 8;
+const uint32_t HARBOR_ALONE_RADIUS = 8;
 
 /// Fahnenpositionen bei den Militärgebäuden
 
 // Besatzungsflaggen (4 Völker x 4 Größen x 2 X+Y) - ab 3162
-const signed char TROOPS_FLAGS[NAT_COUNT][4][2] =
+const int8_t TROOPS_FLAGS[NAT_COUNT][4][2] =
 {
     {{24, -41}, {19, -41}, {31, -88}, {35, -67}},
     {{ -9, -49}, {14, -59}, {16, -63}, {0, -44}},
@@ -82,10 +82,10 @@ const signed char TROOPS_FLAGS[NAT_COUNT][4][2] =
 };
 
 /// Anzahl an Militäreinstellungen
-const unsigned MILITARY_SETTINGS_COUNT = 8;
+const uint32_t MILITARY_SETTINGS_COUNT = 8;
 
 /// Skalierung der einzelnen Militäreinstellungen (maximale Werte)
-const unsigned MILITARY_SETTINGS_SCALE[MILITARY_SETTINGS_COUNT] =
+const uint32_t MILITARY_SETTINGS_SCALE[MILITARY_SETTINGS_COUNT] =
 {
     10,
     5,
@@ -98,13 +98,13 @@ const unsigned MILITARY_SETTINGS_SCALE[MILITARY_SETTINGS_COUNT] =
 };
 
 // Besatzungsflaggen für die HQs
-const signed char TROOPS_FLAGS_HQ[NAT_COUNT][2] =
+const int8_t TROOPS_FLAGS_HQ[NAT_COUNT][2] =
 {
     { -12, -102}, { -19, -94}, { -18, -112}, {20, -54}, { -33, -81}
 };
 
 /// Grenzflaggen (4 Völker x 4 Größen x 2 X+Y) - ab 3162
-const signed char BORDER_FLAGS[NAT_COUNT][4][2] =
+const int8_t BORDER_FLAGS[NAT_COUNT][4][2] =
 {
     {{ -6, -36}, {7, -48}, { -18, -28}, { -47, -64}},
     {{17, -45}, { -3, -49}, { -30, -25}, {22, -53}},
@@ -115,7 +115,7 @@ const signed char BORDER_FLAGS[NAT_COUNT][4][2] =
 
 
 /// maximale Hitpoints der Soldaten von jedem Volk
-const unsigned char HITPOINTS[NAT_COUNT][5] =
+const uint8_t HITPOINTS[NAT_COUNT][5] =
 {
     {3, 4, 5, 6, 7},
     {3, 4, 5, 6, 7},
@@ -125,39 +125,39 @@ const unsigned char HITPOINTS[NAT_COUNT][5] =
 };
 
 /// Max distance for an attacker to reach a building and join in capturing
-const unsigned MAX_FAR_AWAY_CAPTURING_DISTANCE = 15;
+const uint32_t MAX_FAR_AWAY_CAPTURING_DISTANCE = 15;
 
 /// Sichtweite der Militärgebäude (relativ); wird auf die normale Grenzweite draufaddiert
-const unsigned VISUALRANGE_MILITARY = 3;
+const uint32_t VISUALRANGE_MILITARY = 3;
 /// Sichtweite von Spähtürmen (absolut)
-const unsigned VISUALRANGE_LOOKOUTTOWER = 20;
+const uint32_t VISUALRANGE_LOOKOUTTOWER = 20;
 /// Sichtweite von Spähern
-const unsigned VISUALRANGE_SCOUT = 3;
+const uint32_t VISUALRANGE_SCOUT = 3;
 /// Sichtweite von Soldaten
-const unsigned VISUALRANGE_SOLDIER = 2;
+const uint32_t VISUALRANGE_SOLDIER = 2;
 /// Sichtweite von Schiffen
-const unsigned VISUALRANGE_SHIP = 2;
+const uint32_t VISUALRANGE_SHIP = 2;
 /// Sichtweite von Erkundungs-Schiffen
-const unsigned VISUALRANGE_EXPLORATION_SHIP = 12;
+const uint32_t VISUALRANGE_EXPLORATION_SHIP = 12;
 
 /// Beförderungszeit von Soldaten ( =UPGRADE_TIME + rand(UPGRADE_TIME_RANDOM) )
-const unsigned UPGRADE_TIME = 100;
-const unsigned UPGRADE_TIME_RANDOM = 300;
+const uint32_t UPGRADE_TIME = 100;
+const uint32_t UPGRADE_TIME_RANDOM = 300;
 /// Genesungszeit von Soldaten in Häusern, Zeit, die gebraucht wird um sich um einen Hitpoint zu erholen
 // ( =CONVALESCE_TIME + rand(CONVALESCE_TIME_RANDOM) )
-const unsigned CONVALESCE_TIME = 500;
-const unsigned CONVALESCE_TIME_RANDOM = 500;
+const uint32_t CONVALESCE_TIME = 500;
+const uint32_t CONVALESCE_TIME_RANDOM = 500;
 
 /// Maximale Entfernung des Militärgebäudes von dem Hafen bei Seeangriffen
-const unsigned SEAATTACK_DISTANCE = 15;
+const uint32_t SEAATTACK_DISTANCE = 15;
 
 /// Kampfanimationskonstanten für einen Soldatenrang (Gespeichert werden jeweils die IDs in der ROM_BOBS.LST!)
 struct FightAnimation
 {
     // Angreifen (8 Frames)
-    unsigned short attacking[8];
+    uint16_t attacking[8];
     // 3xVerteidigen mit jeweils 8 Frames
-    unsigned short defending[3][8];
+    uint16_t defending[3][8];
 
 };
 
@@ -466,7 +466,7 @@ const FightAnimation FIGHT_ANIMATIONS[NAT_COUNT][5][2] =
 };
 
 /// IDs für die getroffenen (aufleuchtenden) Soldaten für jedes Volk
-const unsigned short HIT_SOLDIERS[NAT_COUNT][5] =
+const uint16_t HIT_SOLDIERS[NAT_COUNT][5] =
 {
     {1556, 1558, 1560, 1562, 1564},
     {1143, 1145, 1147, 1149, 1147},
@@ -476,7 +476,7 @@ const unsigned short HIT_SOLDIERS[NAT_COUNT][5] =
 };
 
 /// Bestimmt den Aufblinkframe vom den Opfern der folgenden Angreifer (nach Rängen)
-const unsigned short HIT_MOMENT[5] = {4, 4, 4, 4, 6};
+const uint16_t HIT_MOMENT[5] = {4, 4, 4, 4, 6};
 
 
 

@@ -31,9 +31,9 @@ class dskMainMenu : public Desktop
         /// Konstruktor von @p dskMainMenu.
         dskMainMenu(void);
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_Timer(const unsigned int ctrl_id);
-        void Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_Timer(const uint32_t ctrl_id);
+        void Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr);
 };
 
 #endif // !dskMAINMENU_H_INCLUDED

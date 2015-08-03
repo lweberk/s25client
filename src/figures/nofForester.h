@@ -27,9 +27,9 @@ class nofForester : public nofFarmhand
     private:
 
         /// Malt den Arbeiter beim Arbeiten
-        void DrawWorking(int x, int y);
+        void DrawWorking(int32_t x, int32_t y);
         /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-        unsigned short GetCarryID() const;
+        uint16_t GetCarryID() const;
 
         /// Abgeleitete Klasse informieren, wenn sie anfängt zu arbeiten (Vorbereitungen)
         void WorkStarted();
@@ -41,8 +41,8 @@ class nofForester : public nofFarmhand
 
     public:
 
-        nofForester(const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofForester(SerializedGameData* sgd, const unsigned obj_id);
+        nofForester(const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofForester(SerializedGameData* sgd, const uint32_t obj_id);
 
         GO_Type GetGOT() const { return GOT_NOF_FORESTER; }
 

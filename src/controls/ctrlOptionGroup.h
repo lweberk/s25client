@@ -37,16 +37,16 @@ class ctrlOptionGroup : public ctrlGroup
 
     public:
         /// Konstruktor von @p ctrlOptionGroup.
-        ctrlOptionGroup(Window* parent, unsigned int id, int select_type, bool scale = false);
+        ctrlOptionGroup(Window* parent, uint32_t id, int32_t select_type, bool scale = false);
 
         /// Selektiert einen neuen Button
-        void SetSelection(unsigned short selection, bool notify = false);
+        void SetSelection(uint16_t selection, bool notify = false);
         /// Gibt den aktuell selektierten Button zurück
-        unsigned short GetSelection() const { return selection; }
+        uint16_t GetSelection() const { return selection; }
         // Gibt einen Button aus der Gruppe zurück zum direkten Bearbeiten
-        ctrlButton* GetButton(unsigned int id) { return GetCtrl<ctrlButton>(id); }
+        ctrlButton* GetButton(uint32_t id) { return GetCtrl<ctrlButton>(id); }
 
-        virtual void Msg_ButtonClick(const unsigned int ctrl_id);
+        virtual void Msg_ButtonClick(const uint32_t ctrl_id);
         virtual bool Msg_LeftDown(const MouseCoords& mc);
         virtual bool Msg_LeftUp(const MouseCoords& mc);
         virtual bool Msg_WheelUp(const MouseCoords& mc);
@@ -58,8 +58,8 @@ class ctrlOptionGroup : public ctrlGroup
         virtual bool Draw_(void);
 
     private:
-        unsigned short selection; ///< aktuell ausgewählter Button ( @p 0xFFFF = nicht selektiert )
-        int select_type;         ///< Typ der Selektierung
+        uint16_t selection; ///< aktuell ausgewählter Button ( @p 0xFFFF = nicht selektiert )
+        int32_t select_type;         ///< Typ der Selektierung
 };
 
 #endif // !CTRLOPTIONGROUP_H_INCLUDED

@@ -27,21 +27,21 @@
 class noFire : public noCoordBase
 {
         /// Größe des Feuers: klein (0) oder groß (1)
-        unsigned char size;
+        uint8_t size;
         /// "Todesevent" (also bis es abgebrannt ist) speichern, damit dann interpoliert wird
         EventManager::EventPointer dead_event;
         /// Wurden Feuersounds abgespielt
         bool was_sounding;
         /// Letzter Feuersound-Zeitpunkt
-        unsigned last_sound;
+        uint32_t last_sound;
         /// Intervall zum nächsten Feuersound
-        unsigned next_interval;
+        uint32_t next_interval;
 
 
     public:
 
-        noFire(const MapPoint pt, const unsigned char size);
-        noFire(SerializedGameData* sgd, const unsigned obj_id);
+        noFire(const MapPoint pt, const uint8_t size);
+        noFire(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~noFire();
         /// Aufräummethoden
@@ -57,9 +57,9 @@ class noFire : public noCoordBase
         BlockingManner GetBM() const { return BM_GRANITE; }
 
         /// Zeichnen
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
         /// Benachrichtigen, wenn neuer gf erreicht wurde
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
 };
 

@@ -51,7 +51,7 @@ static char THIS_FILE[] = __FILE__;
 RoadSegment::RoadSegment(const RoadType rt,
                          noRoadNode* const f1,
                          noRoadNode* const f2,
-                         const std::vector<unsigned char>& route)
+                         const std::vector<uint8_t>& route)
     : rt(rt), f1(f1), f2(f2), route(route)
 {
     carrier[0] = carrier[1] = NULL;
@@ -63,7 +63,7 @@ RoadSegment::RoadSegment(const RoadType rt,
  *
  *  @author OLiver
  */
-RoadSegment::RoadSegment(SerializedGameData* sgd, const unsigned int obj_id)
+RoadSegment::RoadSegment(SerializedGameData* sgd, const uint32_t obj_id)
     : GameObject(sgd, obj_id),
       rt(static_cast<RoadType>(sgd->PopUnsignedChar())),
       f1(sgd->PopObject<noRoadNode>(GOT_UNKNOWN)),
@@ -73,7 +73,7 @@ RoadSegment::RoadSegment(SerializedGameData* sgd, const unsigned int obj_id)
     carrier[0] = sgd->PopObject<nofCarrier>(GOT_NOF_CARRIER);
     carrier[1] = sgd->PopObject<nofCarrier>(GOT_NOF_CARRIER);
 
-    for(unsigned short i = 0; i < route.size(); ++i)
+    for(uint16_t i = 0; i < route.size(); ++i)
         route[i] = sgd->PopUnsignedChar();
 
     // tell the noRoadNodes about our existance
@@ -104,7 +104,7 @@ void RoadSegment::Destroy_RoadSegment()
         // Straße durchgehen und alle Figuren sagen, dass sie die Arbeit verloren haben
         MapPoint pt = f1->GetPos();
 
-        for(unsigned short i = 0; i < route.size() + 1; ++i)
+        for(uint16_t i = 0; i < route.size() + 1; ++i)
         {
             // Figuren sammeln, Achtung, einige können (... ? was?)
             std::vector<noBase*> objects = gwg->GetDynamicObjectsFrom(pt);
@@ -142,14 +142,14 @@ void RoadSegment::Serialize_RoadSegment(SerializedGameData* sgd) const
 {
     Serialize_GameObject(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(rt));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(rt));
     sgd->PushObject(f1, false);
     sgd->PushObject(f2, false);
     sgd->PushUnsignedShort(route.size());
     sgd->PushObject(carrier[0], true);
     sgd->PushObject(carrier[1], true);
 
-    for(unsigned short i = 0; i < route.size(); ++i)
+    for(uint16_t i = 0; i < route.size(); ++i)
         sgd->PushUnsignedChar(route[i]);
 }
 
@@ -165,10 +165,10 @@ void RoadSegment::SplitRoad(noFlag* splitflag)
     //         |       unterbrochener Weg       |
 
     // Alten Straßenverlauf merken, damit wir später allen Leuten darau Bescheid sagen können
-    std::vector<unsigned char> old_route(route);
+    std::vector<uint8_t> old_route(route);
 
     // Stelle herausfinden, an der der Weg zerschnitten wird ( = Länge des ersten Teilstücks )
-    unsigned int length1, length2;
+    uint32_t length1, length2;
     MapPoint t = f1->GetPos();
     for(length1 = 0; length1 < route.size(); ++length1)
     {
@@ -180,8 +180,8 @@ void RoadSegment::SplitRoad(noFlag* splitflag)
 
     length2 = this->route.size() - length1;
 
-    std::vector<unsigned char> second_route(length2);
-    for(unsigned int i = 0; i < length2; ++i)
+    std::vector<uint8_t> second_route(length2);
+    for(uint32_t i = 0; i < length2; ++i)
         second_route[i] = this->route[length1 + i];
 
     RoadSegment* second = new RoadSegment(rt, splitflag, f2, second_route);
@@ -207,7 +207,7 @@ void RoadSegment::SplitRoad(noFlag* splitflag)
     // Straße durchgehen und allen Figuren Bescheid sagen
     t = f1->GetPos();
 
-    for(unsigned short i = 0; i < old_route.size() + 1; ++i)
+    for(uint16_t i = 0; i < old_route.size() + 1; ++i)
     {
         const std::list<noBase*>& figures = gwg->GetFigures(t);
         for(std::list<noBase*>::const_iterator it = figures.begin(); it != figures.end(); ++it)
@@ -227,7 +227,7 @@ void RoadSegment::SplitRoad(noFlag* splitflag)
 
     gwg->GetPlayer(f1->GetPlayer())->AddRoad(second);
 
-    for(unsigned char i = 0; i < 2; ++i)
+    for(uint8_t i = 0; i < 2; ++i)
     {
         if(carrier[i])
             carrier[i]->RoadSplitted(this, second);
@@ -245,9 +245,9 @@ void RoadSegment::SplitRoad(noFlag* splitflag)
  *
  *  @author OLiver
  */
-bool RoadSegment::AreWareJobs(const bool flag, unsigned ct, const bool take_ware_immediately) const
+bool RoadSegment::AreWareJobs(const bool flag, uint32_t ct, const bool take_ware_immediately) const
 {
-    unsigned int jobs_count;
+    uint32_t jobs_count;
 
     // Anzahl der Waren, die getragen werden wollen, ermitteln
     if(flag)
@@ -315,8 +315,8 @@ void RoadSegment::AddWareJob(const noRoadNode* rn)
     }
 
     // Zufällig Esel oder Träger zuerst fragen, ob er Zeit hat
-    unsigned char first = RANDOM.Rand(__FILE__, __LINE__, this->obj_id, 2);
-    for(unsigned char i = 0; i < 2; ++i)
+    uint8_t first = RANDOM.Rand(__FILE__, __LINE__, this->obj_id, 2);
+    for(uint8_t i = 0; i < 2; ++i)
     {
         if(carrier[(i + first) % 2])
         {
@@ -336,7 +336,7 @@ void RoadSegment::AddWareJob(const noRoadNode* rn)
 void RoadSegment::WareJobRemoved(const noFigure* const exception)
 {
     // Allen Trägern Bescheid sagen
-    for(unsigned char i = 0; i < 2; ++i)
+    for(uint8_t i = 0; i < 2; ++i)
     {
         if(carrier[i] && carrier[i] != exception)
             carrier[i]->RemoveWareJob();
@@ -359,7 +359,7 @@ void RoadSegment::UpgradeDonkeyRoad()
 
     // Eselstraßen setzen
     MapPoint pt = f1->GetPos();
-    for(unsigned short i = 0; i < route.size(); ++i)
+    for(uint16_t i = 0; i < route.size(); ++i)
     {
         gwg->SetPointRoad(pt, route[i], RT_DONKEY + 1);
         pt = gwg->GetNeighbour(pt, route[i]);
@@ -434,7 +434,7 @@ noFlag* RoadSegment::GetOtherFlag(const noFlag* flag)
  *
  * @author PoC
  */
-unsigned char RoadSegment::GetOtherFlagDir(const noFlag* flag)
+uint8_t RoadSegment::GetOtherFlagDir(const noFlag* flag)
 {
     //is it a valid flag?
     assert((flag->GetX() == f1->GetX() && flag->GetY() == f1->GetY()) || (flag->GetX() == f2->GetX() && flag->GetY() == f2->GetY()));

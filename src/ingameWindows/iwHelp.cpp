@@ -39,10 +39,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /// Breite des Fensters
-const unsigned short HELP_WINDOW_WIDTH = 240;
+const uint16_t HELP_WINDOW_WIDTH = 240;
 
 /// Maximale Anzahl von Zeilen, bis Scrollbar eingesetzt wird
-const unsigned MAX_LINES = 15;
+const uint32_t MAX_LINES = 15;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -63,9 +63,9 @@ iwHelp::iwHelp(const GUI_ID gui_id, const std::string& title, const std::string&
         NormalFont->GetWrapInfo(content, HELP_WINDOW_WIDTH - 28 - ctrlMultiline::SCROLLBAR_WIDTH,
                                 HELP_WINDOW_WIDTH - 24 - ctrlMultiline::SCROLLBAR_WIDTH, wi);
 
-    unsigned int show_lines = std::min( (unsigned int)wi.positions.size(), MAX_LINES);
+    uint32_t show_lines = std::min( (uint32_t)wi.positions.size(), MAX_LINES);
 
-    unsigned short text_height = show_lines * NormalFont->getHeight();
+    uint16_t text_height = show_lines * NormalFont->getHeight();
 
     // Höhe setzen
     SetIwHeight(text_height + 40);
@@ -78,7 +78,7 @@ iwHelp::iwHelp(const GUI_ID gui_id, const std::string& title, const std::string&
 
     std::string* lines = new std::string[wi.positions.size()];
     wi.CreateSingleStrings(content, lines);
-    for(unsigned i = 0; i < wi.positions.size(); ++i)
+    for(uint32_t i = 0; i < wi.positions.size(); ++i)
         text->AddString(lines[i], COLOR_YELLOW, false);
 
 

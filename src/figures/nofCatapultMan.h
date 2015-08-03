@@ -27,7 +27,7 @@ class nofCatapultMan : public nofBuildingWorker
 {
         /// Drehschritte für den Katapult auf dem Dach, bis er die Angriffsrichtung erreicht hat
         /// negativ - andere Richtung!
-        int wheel_steps;
+        int32_t wheel_steps;
 
         /// Ein mögliches Ziel für den Katapult
         class PossibleTarget
@@ -37,10 +37,10 @@ class nofCatapultMan : public nofBuildingWorker
                 /// Gebäude
                 MapPoint pos;
                 /// Entfernung
-                unsigned distance;
+                uint32_t distance;
 
                 PossibleTarget() : pos(0, 0), distance(0) {}
-                PossibleTarget(const MapPoint pt, const unsigned distance) : pos(pt), distance(distance) {}
+                PossibleTarget(const MapPoint pt, const uint32_t distance) : pos(pt), distance(distance) {}
                 PossibleTarget(SerializedGameData* sgd) : pos(sgd->PopMapPoint()), distance(sgd->PopUnsignedInt()) {}
 
                 void Serialize_PossibleTarget(SerializedGameData* sgd) const
@@ -56,9 +56,9 @@ class nofCatapultMan : public nofBuildingWorker
         /// Funktionen, die nur von der Basisklasse (noFigure) aufgerufen werden, wenn man gelaufen ist
         void WalkedDerived();
         /// Malt den Arbeiter beim Arbeiten
-        void DrawWorking(int x, int y);
+        void DrawWorking(int32_t x, int32_t y);
         /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-        unsigned short GetCarryID() const { return 0; }
+        uint16_t GetCarryID() const { return 0; }
 
         /// Wenn jeweils gelaufen wurde oder ein Event abgelaufen ist, je nach aktuellem Status folgende Funktionen ausführen
         void HandleStateTargetBuilding();
@@ -66,8 +66,8 @@ class nofCatapultMan : public nofBuildingWorker
 
     public:
 
-        nofCatapultMan(const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofCatapultMan(SerializedGameData* sgd, const unsigned obj_id);
+        nofCatapultMan(const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofCatapultMan(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Serialisierungsfunktionen
     protected:  void Serialize_nofCatapultMan(SerializedGameData* sgd) const;
@@ -75,7 +75,7 @@ class nofCatapultMan : public nofBuildingWorker
 
         GO_Type GetGOT() const { return GOT_NOF_CATAPULTMAN; }
 
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
         /// wird aufgerufen, wenn die Arbeit abgebrochen wird (von nofBuildingWorker aufgerufen)
         void WorkArborted();

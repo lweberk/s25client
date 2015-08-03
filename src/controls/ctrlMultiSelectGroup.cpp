@@ -37,11 +37,11 @@ static char THIS_FILE[] = __FILE__;
  *  @author jh
  */
 ctrlMultiSelectGroup::ctrlMultiSelectGroup(Window* parent,
-        unsigned int id,
-        int select_type,
+        uint32_t id,
+        int32_t select_type,
         bool scale)
     : ctrlGroup(parent, id, scale),
-      selection(std::set<unsigned short>()), select_type(select_type)
+      selection(std::set<uint16_t>()), select_type(select_type)
 {
 }
 
@@ -64,7 +64,7 @@ bool ctrlMultiSelectGroup::Draw_(void)
  *
  *  @author jh
  */
-void ctrlMultiSelectGroup::AddSelection(unsigned short selection, bool notify)
+void ctrlMultiSelectGroup::AddSelection(uint16_t selection, bool notify)
 {
     // Neuen Button auswählen
     ctrlButton* button = GetCtrl<ctrlButton>(selection);
@@ -88,7 +88,7 @@ void ctrlMultiSelectGroup::AddSelection(unsigned short selection, bool notify)
  *
  *  @author jh
  */
-void ctrlMultiSelectGroup::RemoveSelection(unsigned short selection, bool notify)
+void ctrlMultiSelectGroup::RemoveSelection(uint16_t selection, bool notify)
 {
     // Neuen Button auswählen
     ctrlButton* button = GetCtrl<ctrlButton>(selection);
@@ -113,7 +113,7 @@ void ctrlMultiSelectGroup::RemoveSelection(unsigned short selection, bool notify
  *
  *  @author jh
  */
-void ctrlMultiSelectGroup::ToggleSelection(unsigned short selection, bool notify)
+void ctrlMultiSelectGroup::ToggleSelection(uint16_t selection, bool notify)
 {
     if (IsSelected(selection))
         RemoveSelection(selection, notify);
@@ -121,7 +121,7 @@ void ctrlMultiSelectGroup::ToggleSelection(unsigned short selection, bool notify
         AddSelection(selection, notify);
 }
 
-bool ctrlMultiSelectGroup::IsSelected(unsigned short selection) const
+bool ctrlMultiSelectGroup::IsSelected(uint16_t selection) const
 {
     return (this->selection.count(selection) == 1);
 }
@@ -132,7 +132,7 @@ bool ctrlMultiSelectGroup::IsSelected(unsigned short selection) const
  *
  *  @author jh
  */
-void ctrlMultiSelectGroup::Msg_ButtonClick(const unsigned int ctrl_id)
+void ctrlMultiSelectGroup::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     ToggleSelection(ctrl_id, true);
 }

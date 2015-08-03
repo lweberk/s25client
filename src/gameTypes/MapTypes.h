@@ -21,7 +21,7 @@
 #include "Point.h"
 
 /// Datentyp für Map-Koordinaten
-typedef unsigned short MapCoord;
+typedef uint16_t MapCoord;
 typedef Point<MapCoord> MapPoint;
 
 /// Terrainarten

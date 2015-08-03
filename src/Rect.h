@@ -22,10 +22,10 @@
 
 typedef struct Rect
 {
-    unsigned short left, top, right, bottom;
+    uint16_t left, top, right, bottom;
     Rect(){}
-    Rect(unsigned short left, unsigned short top, unsigned short width, unsigned short height): left(left), top(top), right(left + width), bottom(top + height){}
-    Rect(Point<unsigned short> lt, Point<unsigned short> size): left(lt.x), top(lt.y), right(left + size.x), bottom(top + size.y){}
+    Rect(uint16_t left, uint16_t top, uint16_t width, uint16_t height): left(left), top(top), right(left + width), bottom(top + height){}
+    Rect(Point<uint16_t> lt, Point<uint16_t> size): left(lt.x), top(lt.y), right(left + size.x), bottom(top + size.y){}
 } Rect;
 
 #endif // Rect_h__

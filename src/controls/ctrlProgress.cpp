@@ -44,22 +44,22 @@ static char THIS_FILE[] = __FILE__;
  *  @author FloSoft
  */
 ctrlProgress::ctrlProgress(Window* parent,
-                           const unsigned int id,
-                           const unsigned short x,
-                           const unsigned short y,
-                           const unsigned short width,
-                           const unsigned short height,
+                           const uint32_t id,
+                           const uint16_t x,
+                           const uint16_t y,
+                           const uint16_t width,
+                           const uint16_t height,
                            const TextureColor tc,
-                           unsigned short button_minus,
-                           unsigned short button_plus,
-                           const unsigned short maximum,
-                           const unsigned short x_padding,
-                           const unsigned short y_padding,
-                           const unsigned int force_color,
+                           uint16_t button_minus,
+                           uint16_t button_plus,
+                           const uint16_t maximum,
+                           const uint16_t x_padding,
+                           const uint16_t y_padding,
+                           const uint32_t force_color,
                            const std::string& tooltip,
                            const std::string& button_minus_tooltip,
                            const std::string& button_plus_tooltip,
-                           unsigned short* const write_val)
+                           uint16_t* const write_val)
     : Window(x, y, id, parent, width, height, tooltip),
       tc(tc), position(0), maximum(maximum), x_padding(x_padding), y_padding(y_padding), force_color(force_color)
 {
@@ -86,7 +86,7 @@ ctrlProgress::ctrlProgress(Window* parent,
  *  @author Devil
  *  @author FloSoft
  */
-void ctrlProgress::SetPosition(unsigned short position)
+void ctrlProgress::SetPosition(uint16_t position)
 {
     this->position = (position > maximum ? maximum : position);
 }
@@ -106,11 +106,11 @@ bool ctrlProgress::Draw_(void)
     // Buttons
     DrawControls();
 
-    unsigned int percentage = position * 100 / maximum;
-    unsigned int progress = (width - height * 2 - 4 - 2 * x_padding) * position / maximum;
+    uint32_t percentage = position * 100 / maximum;
+    uint32_t progress = (width - height * 2 - 4 - 2 * x_padding) * position / maximum;
 
     // Farbe herausfinden
-    unsigned int color = 0xFFFF0000;
+    uint32_t color = 0xFFFF0000;
 
     // Feste Farbe?
     if(force_color)
@@ -143,7 +143,7 @@ bool ctrlProgress::Draw_(void)
  *
  *  @author OLiver
  */
-void ctrlProgress::Msg_ButtonClick(const unsigned int ctrl_id)
+void ctrlProgress::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

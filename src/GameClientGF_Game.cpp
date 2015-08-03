@@ -29,11 +29,11 @@ void GameClient::ExecuteGameFrame_Game()
     // Geschickte Network Commands der Spieler ausführen und ggf. im Replay aufzeichnen
 
     // Bei evtl. Spielerwechsel die IDs speichern, die "gewechselt" werden sollen
-    unsigned char player_switch_old_id = 255, player_switch_new_id = 255;
+    uint8_t player_switch_old_id = 255, player_switch_new_id = 255;
 
-    int checksum = RANDOM.GetCurrentRandomValue();
+    int32_t checksum = RANDOM.GetCurrentRandomValue();
 
-    for(unsigned char i = 0; i < players.getCount(); ++i)
+    for(uint8_t i = 0; i < players.getCount(); ++i)
     {
         if(players[i].ps == PS_OCCUPIED || players[i].ps == PS_KI)
         {

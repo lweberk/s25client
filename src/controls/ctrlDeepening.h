@@ -27,7 +27,7 @@
 class ctrlDeepening : public ctrlText
 {
     public:
-        ctrlDeepening(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, const std::string& text, glArchivItem_Font* font, unsigned int color);
+        ctrlDeepening(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, const std::string& text, glArchivItem_Font* font, uint32_t color);
 
     protected:
         virtual bool Draw_(void);
@@ -42,17 +42,17 @@ class ctrlDeepening : public ctrlText
 class ctrlColorDeepening : public ctrlDeepening, public ColorControlInterface
 {
     public:
-        ctrlColorDeepening(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, unsigned int fillColor);
+        ctrlColorDeepening(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, uint32_t fillColor);
 
         /// Setzt die Farbe des Controls
-        virtual void SetColor(const unsigned int fill_color);
+        virtual void SetColor(const uint32_t fill_color);
 
     protected:
         void DrawContent() const;
 
     protected:
-        unsigned short width, height;
-        unsigned int fillColor;
+        uint16_t width, height;
+        uint32_t fillColor;
 };
 
 #endif // !CTRLDEEPENING_H_INCLUDED

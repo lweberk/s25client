@@ -29,16 +29,16 @@ class iwRoadWindow : public IngameWindow
 {
     private:
         dskGameInterface* const GameInterface;
-        unsigned short last_x;
-        unsigned short last_y;
+        uint16_t last_x;
+        uint16_t last_y;
 
     public:
-        iwRoadWindow(dskGameInterface* const gi, bool flagpossible, int mouse_x, int mouse_y);
+        iwRoadWindow(dskGameInterface* const gi, bool flagpossible, int32_t mouse_x, int32_t mouse_y);
         ~iwRoadWindow();
 
     private:
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 #endif // !iwROADWINDOW_H_INCLUDED

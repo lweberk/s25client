@@ -46,9 +46,9 @@ class SerializedGameData : public Serializer
             GameObject** objects_read;
         };
         /// Voraussichtliche Gesamtanzahl an Objekten (nur beim Laden)
-        unsigned total_objects_count;
+        uint32_t total_objects_count;
         /// Aktuelle Anzahl an Objekten
-        unsigned objects_count;
+        uint32_t objects_count;
 
         EventManager* em;
 
@@ -69,7 +69,7 @@ class SerializedGameData : public Serializer
         void PrepareDeserialization(EventManager* const em) { this->em = em; }
 
         /// Erzeugt GameObject
-        GameObject* Create_GameObject(const GO_Type got, const unsigned obj_id);
+        GameObject* Create_GameObject(const GO_Type got, const uint32_t obj_id);
         /// Erzeugt FOWObject
         FOWObject* Create_FOWObject(const FOW_Type fowtype);
 
@@ -107,7 +107,7 @@ class SerializedGameData : public Serializer
             // Anzahl
             PushUnsignedInt(gos.size());
             // einzelne Objekte
-            for(unsigned i = 0; i < gos.size(); ++i)
+            for(uint32_t i = 0; i < gos.size(); ++i)
                 PushObject(gos[i], known);
         }
 
@@ -148,9 +148,9 @@ class SerializedGameData : public Serializer
         void PopObjectList(std::list<T*>& gos, GO_Type got)
         {
             // Anzahl
-            unsigned size = PopUnsignedInt();
+            uint32_t size = PopUnsignedInt();
             // einzelne Objekte
-            for(unsigned i = 0; i < size; ++i)
+            for(uint32_t i = 0; i < size; ++i)
                 gos.push_back(PopObject<T>(got));
         }
 
@@ -159,10 +159,10 @@ class SerializedGameData : public Serializer
         void PopObjectVector(std::vector<T*>& gos, GO_Type got)
         {
             // Anzahl
-            unsigned size = PopUnsignedInt();
+            uint32_t size = PopUnsignedInt();
             gos.resize(size);
             // einzelne Objekte
-            for(unsigned i = 0; i < size; ++i)
+            for(uint32_t i = 0; i < size; ++i)
                 gos[i] = PopObject<T>(got);
         }
 
@@ -171,9 +171,9 @@ class SerializedGameData : public Serializer
         void PopObjectSet(std::set<T*, U>& gos, GO_Type got)
         {
             // Anzahl
-            unsigned size = PopUnsignedInt();
+            uint32_t size = PopUnsignedInt();
             // einzelne Objekte
-            for(unsigned i = 0; i < size; ++i)
+            for(uint32_t i = 0; i < size; ++i)
                 gos.insert(PopObject<T>(got));
         }
 
@@ -183,8 +183,8 @@ class SerializedGameData : public Serializer
 
 
         /// Sucht ein Objekt, falls vorhanden
-        const GameObject* GetConstGameObject(const unsigned obj_id) const;
-        GameObject* GetGameObject(const unsigned obj_id) const;
+        const GameObject* GetConstGameObject(const uint32_t obj_id) const;
+        GameObject* GetGameObject(const uint32_t obj_id) const;
 };
 
 

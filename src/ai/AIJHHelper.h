@@ -58,8 +58,8 @@ namespace AIJH
         NOTHING = 255
     };
 
-    const unsigned RES_TYPE_COUNT = 9;
-    const unsigned RES_RADIUS[RES_TYPE_COUNT] =
+    const uint32_t RES_TYPE_COUNT = 9;
+    const uint32_t RES_RADIUS[RES_TYPE_COUNT] =
     {
         8, // Wood
         8, // Stones
@@ -144,7 +144,7 @@ namespace AIJH
             BuildingType type;
             MapPoint around;
             SearchMode searchMode;
-            std::vector<unsigned char> route;
+            std::vector<uint8_t> route;
 
             void TryToBuild();
             void BuildMainRoad();
@@ -160,7 +160,7 @@ namespace AIJH
             void ExecuteJob();
         private:
             BuildingType type;
-            std::vector<unsigned char> route;
+            std::vector<uint8_t> route;
     };
 
 
@@ -175,7 +175,7 @@ namespace AIJH
 			MapPoint getFlag() const {return flagPos;}
         private:
             MapPoint flagPos;
-            std::vector<unsigned char> route;
+            std::vector<uint8_t> route;
     };
 
     class EventJob : public Job

@@ -42,7 +42,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author OLiver
  */
-iwHQ::iwHQ(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBaseWarehouse* wh, const char* const title, const unsigned pages_count)
+iwHQ::iwHQ(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBaseWarehouse* wh, const char* const title, const uint32_t pages_count)
     : iwBaseWarehouse(gwv, gi, title, pages_count, wh)
 {
     // Soldaten Reservierungsseite
@@ -52,9 +52,9 @@ iwHQ::iwHQ(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBaseWareho
     reserve->AddText(0, 83, 70, _("Reserve"), 0xFFFFFF00, glArchivItem_Font::DF_CENTER, NormalFont);
 
     // Y-Abstand zwischen den Zeilen
-    const unsigned Y_DISTANCE = 30;
+    const uint32_t Y_DISTANCE = 30;
 
-    for(unsigned i = 0; i < 5; ++i)
+    for(uint32_t i = 0; i < 5; ++i)
     {
         // Bildhintergrund
         reserve->AddImage(1 + i, 34, 107 + Y_DISTANCE * i, LOADER.GetMapImageN(2298));
@@ -72,7 +72,7 @@ iwHQ::iwHQ(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBaseWareho
     reserve->SetVisible(false);
 }
 
-void iwHQ::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id)
+void iwHQ::Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id)
 {
     if(group_id == 102)
     {

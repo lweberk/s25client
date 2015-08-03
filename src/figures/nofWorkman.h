@@ -46,14 +46,14 @@ class nofWorkman : public nofBuildingWorker
 
     public:
 
-        nofWorkman(const Job job, const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofWorkman(SerializedGameData* sgd, const unsigned obj_id);
+        nofWorkman(const Job job, const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofWorkman(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Serialisierungsfunktionen
     protected:  void Serialize_nofWorkman(SerializedGameData* sgd) const;
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_nofWorkman(sgd); }
 
-        virtual void HandleDerivedEvent(const unsigned int id);
+        virtual void HandleDerivedEvent(const uint32_t id);
 
 
 };

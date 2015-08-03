@@ -50,13 +50,13 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author FloSoft
  */
-noStaticObject::noStaticObject(const MapPoint pos, unsigned short id, unsigned short file, unsigned char size, NodalObjectType type)
+noStaticObject::noStaticObject(const MapPoint pos, uint16_t id, uint16_t file, uint8_t size, NodalObjectType type)
     : noCoordBase(type, pos), id(id), file(file), size(size)
 {
     // sind wir ein "Schloss" Objekt?
     if(GetSize() == 2)
     {
-        for(unsigned i = 0; i < 3; ++i)
+        for(uint32_t i = 0; i < 3; ++i)
         {
             MapPoint nb = gwg->GetNeighbour(pos, i);
 
@@ -80,7 +80,7 @@ void noStaticObject::Serialize_noStaticObject(SerializedGameData* sgd) const
     sgd->PushUnsignedChar(size);
 }
 
-noStaticObject::noStaticObject(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noStaticObject::noStaticObject(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     id(sgd->PopUnsignedShort()),
     file(sgd->PopUnsignedShort()),
     size(sgd->PopUnsignedChar())
@@ -97,7 +97,7 @@ noStaticObject::noStaticObject(SerializedGameData* sgd, const unsigned obj_id) :
  *
  *  @author FloSoft
  */
-void noStaticObject::Draw(int x, int y)
+void noStaticObject::Draw(int32_t x, int32_t y)
 {
     glArchivItem_Bitmap* bitmap = NULL, *shadow = NULL;
 
@@ -145,7 +145,7 @@ void noStaticObject::Destroy_noStaticObject(void)
     if(GetSize() == 2)
     {
 
-        for(unsigned i = 0; i < 3; ++i)
+        for(uint32_t i = 0; i < 3; ++i)
         {
             MapPoint nb = gwg->GetNeighbour(pos, i);
 

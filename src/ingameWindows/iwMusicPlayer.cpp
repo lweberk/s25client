@@ -40,8 +40,8 @@
 #	include <unistd.h>
 #endif // _WIN32
 
-iwMusicPlayer::InputWindow::InputWindow(iwMusicPlayer* parent, const unsigned win_id, const std::string& title)
-    : IngameWindow(CGI_INPUTWINDOW, (unsigned short) - 2, (unsigned short) - 2,
+iwMusicPlayer::InputWindow::InputWindow(iwMusicPlayer* parent, const uint32_t win_id, const std::string& title)
+    : IngameWindow(CGI_INPUTWINDOW, (uint16_t) - 2, (uint16_t) - 2,
                    300, 100, title, LOADER.GetImageN("resource", 41), true), parent(parent), win_id(win_id)
 {
     AddEdit(0, 20, 30, GetWidth() - 40, 22, TC_GREEN2, NormalFont);
@@ -50,7 +50,7 @@ iwMusicPlayer::InputWindow::InputWindow(iwMusicPlayer* parent, const unsigned wi
 }
 
 
-void iwMusicPlayer::InputWindow::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwMusicPlayer::InputWindow::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     if(ctrl_id == 1)
         parent->Msg_Input(win_id, GetCtrl<ctrlEdit>(0)->GetText());
@@ -58,7 +58,7 @@ void iwMusicPlayer::InputWindow::Msg_ButtonClick(const unsigned int ctrl_id)
     Close();
 }
 
-void iwMusicPlayer::InputWindow::Msg_EditEnter(const unsigned int ctrl_id)
+void iwMusicPlayer::InputWindow::Msg_EditEnter(const uint32_t ctrl_id)
 {
     static_cast<iwMusicPlayer*>(parent)->Msg_Input(win_id, GetCtrl<ctrlEdit>(0)->GetText());
     Close();
@@ -66,7 +66,7 @@ void iwMusicPlayer::InputWindow::Msg_EditEnter(const unsigned int ctrl_id)
 
 
 iwMusicPlayer::iwMusicPlayer()
-    : IngameWindow(CGI_MUSICPLAYER, (unsigned short) - 1, (unsigned short) - 1, 430, 330, _("Music player"),
+    : IngameWindow(CGI_MUSICPLAYER, (uint16_t) - 1, (uint16_t) - 1, 430, 330, _("Music player"),
                    LOADER.GetImageN("resource", 41)), changed(false)
 {
 
@@ -75,8 +75,8 @@ iwMusicPlayer::iwMusicPlayer()
     AddComboBox(2, 20, 260, 330, 22, TC_GREEN1, NormalFont, 200);
 
     // Playlistbuttons
-    const unsigned short button_distance = 10;
-    const unsigned short button_width = (330 - button_distance) / 2;
+    const uint16_t button_distance = 10;
+    const uint16_t button_width = (330 - button_distance) / 2;
     ctrlButton* b1 = AddTextButton(3, 20, 290, button_width, 22, TC_GREEN2, _("Add"), NormalFont);
     AddTextButton(4, b1->GetX(false) + button_width + button_distance, 290, button_width, 22, TC_GREEN2, _("Remove"), NormalFont);
     //AddTextButton(5,b1->GetX(false),320,button_width,22,TC_GREEN2,_("Save"),NormalFont);
@@ -101,7 +101,7 @@ iwMusicPlayer::iwMusicPlayer()
 iwMusicPlayer::~iwMusicPlayer()
 {
     // Playlist ggf. speichern, die ausgewählt ist, falls eine ausgewählt ist
-    unsigned short selection = GetCtrl<ctrlComboBox>(2)->GetSelection();
+    uint16_t selection = GetCtrl<ctrlComboBox>(2)->GetSelection();
 
 
     // Entsprechende Datei speichern
@@ -134,7 +134,7 @@ iwMusicPlayer::~iwMusicPlayer()
     }
 }
 
-void iwMusicPlayer::Msg_ComboSelectItem(const unsigned ctrl_id, const unsigned short selection)
+void iwMusicPlayer::Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     // Entsprechende Datei geladen
     if(selection != 0xFFFF)
@@ -153,7 +153,7 @@ void iwMusicPlayer::Msg_ComboSelectItem(const unsigned ctrl_id, const unsigned s
 
 }
 
-void iwMusicPlayer::Msg_ListChooseItem(const unsigned int ctrl_id, const unsigned short selection)
+void iwMusicPlayer::Msg_ListChooseItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     // Werte in Musikplayer bringen
     MUSICPLAYER.GetPlaylist().ReadMusicPlayer(this);
@@ -169,7 +169,7 @@ std::string iwMusicPlayer::GetFullPlaylistPath(const std::string& combo_str)
     return (GetFilePath(FILE_PATHS[90]) + combo_str + ".pll");
 }
 
-void iwMusicPlayer::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwMusicPlayer::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -181,7 +181,7 @@ void iwMusicPlayer::Msg_ButtonClick(const unsigned int ctrl_id)
         // Remove Playlist
         case 4:
         {
-            unsigned short selection = GetCtrl<ctrlComboBox>(2)->GetSelection();
+            uint16_t selection = GetCtrl<ctrlComboBox>(2)->GetSelection();
 
             // Entsprechende Datei löschen
             if(selection != 0xFFFF)
@@ -229,7 +229,7 @@ void iwMusicPlayer::Msg_ButtonClick(const unsigned int ctrl_id)
         // Remove Track
         case 9:
         {
-            unsigned short selection = GetCtrl<ctrlList>(0)->GetSelection();
+            uint16_t selection = GetCtrl<ctrlList>(0)->GetSelection();
 
             if(selection != 0xFFFF)
             {
@@ -242,7 +242,7 @@ void iwMusicPlayer::Msg_ButtonClick(const unsigned int ctrl_id)
         // Upwards
         case 10:
         {
-            unsigned short selection = GetCtrl<ctrlList>(0)->GetSelection();
+            uint16_t selection = GetCtrl<ctrlList>(0)->GetSelection();
 
             if(selection > 0 && selection != 0xFFFF)
                 GetCtrl<ctrlList>(0)->Swap(selection - 1, selection);
@@ -251,7 +251,7 @@ void iwMusicPlayer::Msg_ButtonClick(const unsigned int ctrl_id)
         // Downwards
         case 11:
         {
-            unsigned short selection = GetCtrl<ctrlList>(0)->GetSelection();
+            uint16_t selection = GetCtrl<ctrlList>(0)->GetSelection();
 
             if(selection < GetCtrl<ctrlList>(0)->GetLineCount() - 1 && selection != 0xFFFF)
                 GetCtrl<ctrlList>(0)->Swap(selection + 1, selection);
@@ -260,7 +260,7 @@ void iwMusicPlayer::Msg_ButtonClick(const unsigned int ctrl_id)
         // Less Repeats
         case 13:
         {
-            unsigned repeats = atoi(GetCtrl<ctrlDeepening>(12)->GetText().c_str());
+            uint32_t repeats = atoi(GetCtrl<ctrlDeepening>(12)->GetText().c_str());
 
             if(repeats)
             {
@@ -275,7 +275,7 @@ void iwMusicPlayer::Msg_ButtonClick(const unsigned int ctrl_id)
         // More Repeats
         case 14:
         {
-            unsigned repeats = atoi(GetCtrl<ctrlDeepening>(12)->GetText().c_str());
+            uint32_t repeats = atoi(GetCtrl<ctrlDeepening>(12)->GetText().c_str());
             ++repeats;
             char str[32];
             sprintf(str, "%u", repeats);
@@ -310,7 +310,7 @@ bool ValidateFile(const std::string& filename)
 }
 
 
-void iwMusicPlayer::Msg_Input(const unsigned int win_id, const std::string& msg)
+void iwMusicPlayer::Msg_Input(const uint32_t win_id, const std::string& msg)
 {
     switch(win_id)
     {
@@ -388,10 +388,10 @@ void iwMusicPlayer::SetSegments(const std::vector<std::string>& segments)
 {
     GetCtrl<ctrlList>(0)->DeleteAllItems();
 
-    for(unsigned i = 0; i < segments.size(); ++i)
+    for(uint32_t i = 0; i < segments.size(); ++i)
         GetCtrl<ctrlList>(0)->AddString(segments[i]);
 }
-void iwMusicPlayer::SetRepeats(const unsigned repeats)
+void iwMusicPlayer::SetRepeats(const uint32_t repeats)
 {
     char repeats_str[32];
     sprintf(repeats_str, "%u", repeats);
@@ -407,11 +407,11 @@ void iwMusicPlayer::SetRandomPlayback(const bool random_playback)
 void iwMusicPlayer::GetSegments(std::vector<std::string>& segments) const
 {
     segments.clear();
-    for(unsigned i = 0; i < GetCtrl<ctrlList>(0)->GetLineCount(); ++i)
+    for(uint32_t i = 0; i < GetCtrl<ctrlList>(0)->GetLineCount(); ++i)
         segments.push_back(GetCtrl<ctrlList>(0)->GetItemText(i));
 }
 
-unsigned iwMusicPlayer::GetRepeats() const
+uint32_t iwMusicPlayer::GetRepeats() const
 {
     return atoi(GetCtrl<ctrlDeepening>(12)->GetText().c_str());
 }
@@ -431,7 +431,7 @@ void iwMusicPlayer::UpdatePlaylistCombo(const std::string& highlight_entry)
     std::list<std::string> segments;
     ListDir(std::string(FILE_PATHS[90]) + "*.pll", false, NULL, NULL, &segments);
 
-    unsigned i = 0;
+    uint32_t i = 0;
     for(std::list<std::string>::iterator it = segments.begin(); it != segments.end(); ++it, ++i)
     {
         std::string entry = it->substr(it->find_last_of("/") + 1);

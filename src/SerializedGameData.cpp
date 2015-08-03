@@ -104,7 +104,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-GameObject* SerializedGameData::Create_GameObject(const GO_Type got, const unsigned obj_id)
+GameObject* SerializedGameData::Create_GameObject(const GO_Type got, const uint32_t obj_id)
 {
     switch(got)
     {
@@ -212,7 +212,7 @@ void SerializedGameData::MakeSnapshot(GameWorld* const gw, EventManager* const e
     // EventManager serialisieren
     em->Serialize(this);
     // Spieler serialisieren
-    for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
         GAMECLIENT.GetPlayer(i)->Serialize(this);
 
     delete [] objects_write;
@@ -286,7 +286,7 @@ void SerializedGameData::PushFOWObject(const FOWObject* fowobj)
     }
 
     // Objekt-Typ
-    PushUnsignedChar(static_cast<unsigned char>(fowobj->GetType()));
+    PushUnsignedChar(static_cast<uint8_t>(fowobj->GetType()));
 
     // Objekt serialisieren
     fowobj->Serialize(this);
@@ -308,7 +308,7 @@ FOWObject* SerializedGameData::PopFOWObject()
 GameObject* SerializedGameData::PopObject_(GO_Type got)
 {
     // Obj-ID holen
-    unsigned obj_id = PopUnsignedInt();
+    uint32_t obj_id = PopUnsignedInt();
 
     // Obj-ID = 0 ? Dann Null-Pointer zurueckgeben
     if(!obj_id)
@@ -329,7 +329,7 @@ GameObject* SerializedGameData::PopObject_(GO_Type got)
     go = Create_GameObject(got, obj_id);
 
     // Sicherheitscode auslesen
-    unsigned short safety_code = PopUnsignedShort();
+    uint16_t safety_code = PopUnsignedShort();
 
     if(safety_code != 0xFFFF)
     {
@@ -347,10 +347,10 @@ void SerializedGameData::AddObject(GameObject* go)
     objects_read[objects_count++] = go;
 }
 
-const GameObject* SerializedGameData::GetConstGameObject(const unsigned obj_id) const
+const GameObject* SerializedGameData::GetConstGameObject(const uint32_t obj_id) const
 {
     // Objekt suchen
-    for(unsigned i = 0; i < objects_count; ++i)
+    for(uint32_t i = 0; i < objects_count; ++i)
     {
         if(objects_write[i]->GetObjId() == obj_id)
             return objects_write[i];
@@ -359,10 +359,10 @@ const GameObject* SerializedGameData::GetConstGameObject(const unsigned obj_id) 
     return 0;
 }
 
-GameObject* SerializedGameData::GetGameObject(const unsigned obj_id) const
+GameObject* SerializedGameData::GetGameObject(const uint32_t obj_id) const
 {
     // Objekt suchen
-    for(unsigned i = 0; i < objects_count; ++i)
+    for(uint32_t i = 0; i < objects_count; ++i)
     {
         if(objects_read[i]->GetObjId() == obj_id)
             return objects_read[i];

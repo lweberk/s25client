@@ -43,8 +43,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofActiveSoldier::nofActiveSoldier(const MapPoint pos, const unsigned char player,
-                                   nobBaseMilitary* const home, const unsigned char rank, const SoldierState init_state)
+nofActiveSoldier::nofActiveSoldier(const MapPoint pos, const uint8_t player,
+                                   nobBaseMilitary* const home, const uint8_t rank, const SoldierState init_state)
     : nofSoldier(pos, player, home, rank), state(init_state), enemy(NULL)
 
 {
@@ -58,13 +58,13 @@ void nofActiveSoldier::Serialize_nofActiveSoldier(SerializedGameData* sgd) const
 {
     Serialize_nofSoldier(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushObject(enemy, false);
     sgd->PushMapPoint(fight_spot);
 }
 
 
-nofActiveSoldier::nofActiveSoldier(SerializedGameData* sgd, const unsigned obj_id) : nofSoldier(sgd, obj_id),
+nofActiveSoldier::nofActiveSoldier(SerializedGameData* sgd, const uint32_t obj_id) : nofSoldier(sgd, obj_id),
     state(SoldierState(sgd->PopUnsignedChar())),
     enemy(sgd->PopObject<nofActiveSoldier>(GOT_UNKNOWN))
 {
@@ -155,7 +155,7 @@ void nofActiveSoldier::WalkingHome()
 }
 
 
-void nofActiveSoldier::Draw(int x, int y)
+void nofActiveSoldier::Draw(int32_t x, int32_t y)
 {
     switch(state)
     {
@@ -189,14 +189,14 @@ void nofActiveSoldier::Draw(int x, int y)
     }
 }
 
-void nofActiveSoldier::HandleDerivedEvent(const unsigned int id)
+void nofActiveSoldier::HandleDerivedEvent(const uint32_t id)
 {
     // That's not supposed to happen!
     assert(false);
 }
 
 /// Gets the visual range radius of this soldier
-unsigned nofActiveSoldier::GetVisualRange() const
+uint32_t nofActiveSoldier::GetVisualRange() const
 {
     return VISUALRANGE_SOLDIER;
 }
@@ -216,7 +216,7 @@ void nofActiveSoldier::ExpelEnemies()
     }
 
     // And around this point
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         const std::list<noBase*>& fieldFigures = gwg->GetFigures(gwg->GetNeighbour(pos, i));
         for(std::list<noBase*>::const_iterator it = fieldFigures.begin(); it != fieldFigures.end(); ++it)
@@ -237,7 +237,7 @@ void nofActiveSoldier::ExpelEnemies()
 
     // Let's see which things are netted and sort the wrong things out
     // ( Don't annoy Erika Steinbach! )
-    for(unsigned i = 0; i < figures.size(); ++i)
+    for(uint32_t i = 0; i < figures.size(); ++i)
     {
         noFigure* fig = figures[i];
         // Enemy of us and no soldier?
@@ -274,13 +274,13 @@ void nofActiveSoldier::Walked()
 
 /// Looks for enemies nearby which want to fight with this soldier
 /// Returns true if it found one
-bool nofActiveSoldier::FindEnemiesNearby(unsigned char excludedOwner)
+bool nofActiveSoldier::FindEnemiesNearby(uint8_t excludedOwner)
 {
     // Vector with potential victims
     std::vector<nofActiveSoldier*> soldiersNearby;
 
     // Look in radius 1
-    for(unsigned dir = 0; dir < 6; ++dir)
+    for(uint32_t dir = 0; dir < 6; ++dir)
     {
         MapPoint t = gwg->GetNeighbour(pos, dir);
         std::vector<noBase*> objects = gwg->GetDynamicObjectsFrom(t);
@@ -290,7 +290,7 @@ bool nofActiveSoldier::FindEnemiesNearby(unsigned char excludedOwner)
     }
 
     // ... and radius 2
-    for(unsigned dir = 0; dir < 12; ++dir)
+    for(uint32_t dir = 0; dir < 12; ++dir)
     {
         MapPoint t = gwg->GetNeighbour2(pos, dir);
         std::vector<noBase*> objects = gwg->GetDynamicObjectsFrom(t);
@@ -303,7 +303,7 @@ bool nofActiveSoldier::FindEnemiesNearby(unsigned char excludedOwner)
     enemy = NULL;
 
     // Check if the victims have nothing better to do
-    for(unsigned i = 0; i < soldiersNearby.size(); ++i)
+    for(uint32_t i = 0; i < soldiersNearby.size(); ++i)
     {
         // Ready for fight and good enemy = Good victim
         if (soldiersNearby[i]->IsReadyForFight() && !GAMECLIENT.GetPlayer(soldiersNearby[i]->GetPlayer())->IsAlly(this->player))
@@ -509,7 +509,7 @@ bool nofActiveSoldier::GetFightSpotNear(nofActiveSoldier* other, MapPoint * figh
         // bool found_in_radius = false;
 
         MapPoint t2(tx, middle.y);
-        for(unsigned i = 2; i < 8; ++i)
+        for(uint32_t i = 2; i < 8; ++i)
         {
             for(MapCoord r2 = 0; r2 < r; t2 = gwg->GetNeighbour(t2, i % 6), ++r2)
             {

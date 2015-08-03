@@ -60,7 +60,7 @@ class Loader : public Singleton<Loader>
         /// Lädt alle allgemeinen Dateien.
         bool LoadFilesAtStart(void);
         /// Lädt die Spieldateien.
-        bool LoadFilesAtGame(unsigned char gfxset, bool* nations);
+        bool LoadFilesAtGame(uint8_t gfxset, bool* nations);
         /// Lädt Dateien von Addons.
         bool LoadFilesFromAddon(const AddonId id);
         void fillCaches();
@@ -81,27 +81,27 @@ class Loader : public Singleton<Loader>
         bool LoadFile(const std::string& pfad, const libsiedler2::ArchivItem_Palette* palette, libsiedler2::ArchivInfo* archiv);
         bool LoadArchiv(const std::string& pfad, const libsiedler2::ArchivItem_Palette* palette, libsiedler2::ArchivInfo* archiv);
         void ExtractTexture(libsiedler2::ArchivInfo* destination, Rect& rect);
-        void ExtractAnimatedTexture(libsiedler2::ArchivInfo* destination, Rect& rect, unsigned char color_count, unsigned char start_index);
+        void ExtractAnimatedTexture(libsiedler2::ArchivInfo* destination, Rect& rect, uint8_t color_count, uint8_t start_index);
 
-        bool LoadFilesFromArray(const unsigned int files_count, const unsigned int* files, bool load_always = true);
-        bool LoadLsts(unsigned int dir);
-        bool LoadFileOrDir(const std::string& file, const unsigned int file_id, bool load_always);
+        bool LoadFilesFromArray(const uint32_t files_count, const uint32_t* files, bool load_always = true);
+        bool LoadLsts(uint32_t dir);
+        bool LoadFileOrDir(const std::string& file, const uint32_t file_id, bool load_always);
 
         static bool SortFilesHelper(const std::string& lhs, const std::string& rhs);
-        static std::vector<std::string> ExplodeString(std::string const& line, const char delim, const unsigned int max = 0xFFFFFFFF);
+        static std::vector<std::string> ExplodeString(std::string const& line, const char delim, const uint32_t max = 0xFFFFFFFF);
 
     public:
-        inline glArchivItem_Bitmap* GetImageN(std::string file, unsigned int nr) { return dynamic_cast<glArchivItem_Bitmap*>( files[file].get(nr) ); }
-        inline glArchivItem_Font* GetFontN(std::string file, unsigned int nr) { return dynamic_cast<glArchivItem_Font*>( files[file].get(nr) ); }
-        inline libsiedler2::ArchivItem_Palette* GetPaletteN(std::string file, unsigned int nr = 0) { return dynamic_cast<libsiedler2::ArchivItem_Palette*>( files[file].get(nr) ); }
-        inline glArchivItem_Sound* GetSoundN(std::string file, unsigned int nr) { return dynamic_cast<glArchivItem_Sound*>( files[file].get(nr) ); }
-        inline const char* GetTextN(std::string file, unsigned int nr) { return dynamic_cast<libsiedler2::ArchivItem_Text*>( files[file].get(nr) ) ? dynamic_cast<libsiedler2::ArchivItem_Text*>( files[file].get(nr) )->getText() : "text missing"; }
+        inline glArchivItem_Bitmap* GetImageN(std::string file, uint32_t nr) { return dynamic_cast<glArchivItem_Bitmap*>( files[file].get(nr) ); }
+        inline glArchivItem_Font* GetFontN(std::string file, uint32_t nr) { return dynamic_cast<glArchivItem_Font*>( files[file].get(nr) ); }
+        inline libsiedler2::ArchivItem_Palette* GetPaletteN(std::string file, uint32_t nr = 0) { return dynamic_cast<libsiedler2::ArchivItem_Palette*>( files[file].get(nr) ); }
+        inline glArchivItem_Sound* GetSoundN(std::string file, uint32_t nr) { return dynamic_cast<glArchivItem_Sound*>( files[file].get(nr) ); }
+        inline const char* GetTextN(std::string file, uint32_t nr) { return dynamic_cast<libsiedler2::ArchivItem_Text*>( files[file].get(nr) ) ? dynamic_cast<libsiedler2::ArchivItem_Text*>( files[file].get(nr) )->getText() : "text missing"; }
         inline libsiedler2::ArchivInfo* GetInfoN(std::string file) { return dynamic_cast<libsiedler2::ArchivInfo*>( &files[file] ); }
         inline glArchivItem_Bob* GetBobN(std::string file) { return dynamic_cast<glArchivItem_Bob*>( files[file].get(0) ); };
-        inline glArchivItem_Bitmap* GetNationImageN(unsigned int nation, unsigned int nr) { return dynamic_cast<glArchivItem_Bitmap*>(nation_gfx[nation]->get(nr)); }
-        inline glArchivItem_Bitmap* GetMapImageN(unsigned int nr) { return dynamic_cast<glArchivItem_Bitmap*>(map_gfx->get(nr)); }
-        inline glArchivItem_Bitmap* GetTexImageN(unsigned int nr) { return dynamic_cast<glArchivItem_Bitmap*>(tex_gfx->get(nr)); }
-        inline libsiedler2::ArchivItem_Palette* GetTexPaletteN(unsigned int nr) { return dynamic_cast<libsiedler2::ArchivItem_Palette*>(tex_gfx->get(nr)); }
+        inline glArchivItem_Bitmap* GetNationImageN(uint32_t nation, uint32_t nr) { return dynamic_cast<glArchivItem_Bitmap*>(nation_gfx[nation]->get(nr)); }
+        inline glArchivItem_Bitmap* GetMapImageN(uint32_t nr) { return dynamic_cast<glArchivItem_Bitmap*>(map_gfx->get(nr)); }
+        inline glArchivItem_Bitmap* GetTexImageN(uint32_t nr) { return dynamic_cast<glArchivItem_Bitmap*>(tex_gfx->get(nr)); }
+        inline libsiedler2::ArchivItem_Palette* GetTexPaletteN(uint32_t nr) { return dynamic_cast<libsiedler2::ArchivItem_Palette*>(tex_gfx->get(nr)); }
         inline libsiedler2::ArchivItem_Ini* GetSettingsIniN(std::string name) { return static_cast<libsiedler2::ArchivItem_Ini*>( GetInfoN(CONFIG_NAME)->find(name.c_str()) ); }
 
         // should not use this!
@@ -109,7 +109,7 @@ class Loader : public Singleton<Loader>
 
     private:
         std::map<std::string, libsiedler2::ArchivInfo> files;
-        unsigned char lastgfx;
+        uint8_t lastgfx;
         libsiedler2::ArchivInfo* nation_gfx[NAT_COUNT];
         libsiedler2::ArchivInfo* map_gfx;
         libsiedler2::ArchivInfo* tex_gfx;

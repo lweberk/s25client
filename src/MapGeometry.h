@@ -19,14 +19,16 @@
 #ifndef MAP_GEOMETRY_H_
 #define MAP_GEOMETRY_H_
 
+#include <cstdint>
+
 #include "gameTypes/MapTypes.h"
 #include "Point.h"
 
 /// Ermittelt Abstand zwischen 2 Punkten auf der Map
-unsigned CalcRawDistance(const int x1, const int y1,
-                         const int x2, const int y2);
+uint32_t CalcRawDistance(const int32_t x1, const int32_t y1,
+                         const int32_t x2, const int32_t y2);
 
 
-Point<int> GetPointAround(Point<int> p, unsigned dir);
+Point<int32_t> GetPointAround(Point<int32_t> p, uint32_t dir);
 
 #endif //!MAP_GEOMETRY_H_

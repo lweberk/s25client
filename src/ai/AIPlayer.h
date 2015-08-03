@@ -27,13 +27,13 @@
 class AIPlayer : public AIBase
 {
     public:
-        AIPlayer(const unsigned char playerid, const GameWorldBase* const gwb, const GameClientPlayer* const player,
+        AIPlayer(const uint8_t playerid, const GameWorldBase* const gwb, const GameClientPlayer* const player,
                  const GameClientPlayerList* const players, const GlobalGameSettings* const ggs,
                  const AI::Level level);
 
         /// Wird jeden GF aufgerufen und die KI kann hier entsprechende Handlungen vollziehen
         /// gf ist die GF-Zahl vom Spiel
-        void RunGF(const unsigned gf, bool gfisnwf);
+        void RunGF(const uint32_t gf, bool gfisnwf);
 };
 
 #endif //!AIPLAYER_H_INCLUDED

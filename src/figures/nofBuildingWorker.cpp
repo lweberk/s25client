@@ -48,7 +48,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofBuildingWorker::nofBuildingWorker(const Job job, const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofBuildingWorker::nofBuildingWorker(const Job job, const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : noFigure(job, pos, player, workplace), state(STATE_FIGUREWORK), workplace(workplace), ware(GD_NOTHING), not_working(0), since_not_working(0xFFFFFFFF), was_sounding(false), OutOfRessourcesMsgSent(false)
 {
 }
@@ -57,12 +57,12 @@ void nofBuildingWorker::Serialize_nofBuildingWorker(SerializedGameData* sgd) con
 {
     Serialize_noFigure(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
 
     if(fs != FS_GOHOME && fs != FS_WANDER)
     {
         sgd->PushObject(workplace, false);
-        sgd->PushUnsignedChar(static_cast<unsigned char>(ware));
+        sgd->PushUnsignedChar(static_cast<uint8_t>(ware));
         sgd->PushUnsignedShort(not_working);
         sgd->PushUnsignedInt(since_not_working);
         sgd->PushBool(was_sounding);
@@ -70,7 +70,7 @@ void nofBuildingWorker::Serialize_nofBuildingWorker(SerializedGameData* sgd) con
     sgd->PushBool(OutOfRessourcesMsgSent);
 }
 
-nofBuildingWorker::nofBuildingWorker(SerializedGameData* sgd, const unsigned obj_id) : noFigure(sgd, obj_id),
+nofBuildingWorker::nofBuildingWorker(SerializedGameData* sgd, const uint32_t obj_id) : noFigure(sgd, obj_id),
     state(State(sgd->PopUnsignedChar()))
 {
     if(fs != FS_GOHOME && fs != FS_WANDER)
@@ -100,7 +100,7 @@ void nofBuildingWorker::AbrogateWorkplace()
     workplace = 0;
 }
 
-void nofBuildingWorker::Draw(int x, int y)
+void nofBuildingWorker::Draw(int32_t x, int32_t y)
 {
     switch(state)
     {
@@ -120,7 +120,7 @@ void nofBuildingWorker::Draw(int x, int y)
             DrawWorking(x, y); break;
         case STATE_CARRYOUTWARE:
         {
-            unsigned short id = GetCarryID();
+            uint16_t id = GetCarryID();
 
             // Über 100 bedeutet aus der carrier.bob nehmen, ansonsten aus der jobs.bob!
             if(id >= 100)
@@ -363,7 +363,7 @@ void nofBuildingWorker::LostWork()
  *
  *  @author OLiver
  */
-bool nofBuildingWorker::GetResources(unsigned char type)
+bool nofBuildingWorker::GetResources(uint8_t type)
 {
     //this makes granite mines work everywhere
     if (type == 0 && GAMECLIENT.GetGGS().isEnabled(ADDON_INEXHAUSTIBLE_GRANITEMINES))
@@ -384,7 +384,7 @@ bool nofBuildingWorker::GetResources(unsigned char type)
     for(MapCoord tx = gwg->GetXA(pos, 0), r = 1; !found && r <= MINER_RADIUS; tx = gwg->GetXA(tx, pos.y, 0), ++r)
     {
         MapPoint t2(tx, pos.y);
-        for(unsigned int i = 2; !found && i < 8; ++i)
+        for(uint32_t i = 2; !found && i < 8; ++i)
         {
             for(MapCoord r2 = 0; !found && r2 < r; t2 = gwg->GetNeighbour(t2,  i % 6), ++r2)
             {
@@ -433,13 +433,13 @@ bool nofBuildingWorker::GetResources(unsigned char type)
     return false;
 }
 
-bool nofBuildingWorker::GetResourcesOfNode(const MapPoint pt, const unsigned char type)
+bool nofBuildingWorker::GetResourcesOfNode(const MapPoint pt, const uint8_t type)
 {
     // Evtl über die Grenzen gelesen?
     if(pt.x >= gwg->GetWidth() || pt.y >= gwg->GetHeight())
         return false;
 
-    unsigned char resources = gwg->GetNode(pt).resources;
+    uint8_t resources = gwg->GetNode(pt).resources;
 
     // wasser?
     if(type == 4)
@@ -461,12 +461,12 @@ void nofBuildingWorker::StopNotWorking()
     // Falls wir vorher nicht gearbeitet haben, diese Zeit merken für die Produktivität
     if(since_not_working != 0xFFFFFFFF)
     {
-        not_working += static_cast<unsigned short>(GAMECLIENT.GetGFNumber() - since_not_working);
+        not_working += static_cast<uint16_t>(GAMECLIENT.GetGFNumber() - since_not_working);
         since_not_working = 0xFFFFFFFF;
     }
 }
 
-unsigned short nofBuildingWorker::CalcProductivity()
+uint16_t nofBuildingWorker::CalcProductivity()
 {
     if (OutOfRessourcesMsgSent)
         return 0;
@@ -474,13 +474,13 @@ unsigned short nofBuildingWorker::CalcProductivity()
     if(since_not_working != 0xFFFFFFFF)
     {
         // Es wurde bis jetzt nicht mehr gearbeitet, das also noch dazuzählen
-        not_working += static_cast<unsigned short>(GAMECLIENT.GetGFNumber() - since_not_working);
+        not_working += static_cast<uint16_t>(GAMECLIENT.GetGFNumber() - since_not_working);
         // Zähler zurücksetzen
         since_not_working = GAMECLIENT.GetGFNumber();
     }
 
     // Produktivität ausrechnen
-    unsigned short productivity = (400 - not_working) / 4;
+    uint16_t productivity = (400 - not_working) / 4;
 
     // Zähler zurücksetzen
     not_working = 0;
@@ -509,13 +509,13 @@ void nofBuildingWorker::WorkplaceReached()
 }
 
 /// Zeichnen der Figur in sonstigen Arbeitslagen
-void nofBuildingWorker::DrawOtherStates(const int x, const int y)
+void nofBuildingWorker::DrawOtherStates(const int32_t x, const int32_t y)
 {
 }
 
 
 /// Zeichnet Figur beim Hereinlaufen/nach Hause laufen mit evtl. getragenen Waren
-void nofBuildingWorker::DrawReturnStates(const int x, const int y)
+void nofBuildingWorker::DrawReturnStates(const int32_t x, const int32_t y)
 {
     // Beim Nachhausegehen (Landarbeiter) und beim Reingehen kann entweder eine Ware getragen werden oder nicht
     if(ware != GD_NOTHING)

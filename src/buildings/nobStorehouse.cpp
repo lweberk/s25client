@@ -38,7 +38,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nobStorehouse::nobStorehouse(const MapPoint pos, const unsigned char player, const Nation nation)
+nobStorehouse::nobStorehouse(const MapPoint pos, const uint8_t player, const Nation nation)
     : nobBaseWarehouse(BLD_STOREHOUSE, pos, player, nation)
 {
     // Alle Waren 0, außer 100 Träger
@@ -72,19 +72,19 @@ void nobStorehouse::Serialize_nobStorehouse(SerializedGameData* sgd) const
     Serialize_nobBaseWarehouse(sgd);
 }
 
-nobStorehouse::nobStorehouse(SerializedGameData* sgd, const unsigned obj_id) : nobBaseWarehouse(sgd, obj_id)
+nobStorehouse::nobStorehouse(SerializedGameData* sgd, const uint32_t obj_id) : nobBaseWarehouse(sgd, obj_id)
 {
 }
 
 
-void nobStorehouse::Draw(int x, int y)
+void nobStorehouse::Draw(int32_t x, int32_t y)
 {
     // Gebäude an sich zeichnen
     DrawBaseBuilding(x, y);
 }
 
 
-void nobStorehouse::HandleEvent(const unsigned int id)
+void nobStorehouse::HandleEvent(const uint32_t id)
 {
     HandleBaseEvent(id);
 }

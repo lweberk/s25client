@@ -173,7 +173,7 @@ void GlobalGameSettings::LoadSettings()
 {
     reset();
 
-    for( std::map<unsigned int, unsigned int>::iterator it = SETTINGS.addons.configuration.begin(); it != SETTINGS.addons.configuration.end(); ++it)
+    for( std::map<uint32_t, uint32_t>::iterator it = SETTINGS.addons.configuration.begin(); it != SETTINGS.addons.configuration.end(); ++it)
         setSelection((AddonId)it->first, it->second);
 }
 
@@ -201,11 +201,11 @@ void GlobalGameSettings::Serialize(Serializer* ser) const
     LOG.write(">>> Addon Status:\n");
 
 
-    ser->PushUnsignedChar(static_cast<unsigned char>(game_speed));
-    ser->PushUnsignedChar(static_cast<unsigned char>(game_objective));
-    ser->PushUnsignedChar(static_cast<unsigned char>(start_wares));
+    ser->PushUnsignedChar(static_cast<uint8_t>(game_speed));
+    ser->PushUnsignedChar(static_cast<uint8_t>(game_objective));
+    ser->PushUnsignedChar(static_cast<uint8_t>(start_wares));
     ser->PushBool(lock_teams);
-    ser->PushUnsignedChar(static_cast<unsigned char>(exploration));
+    ser->PushUnsignedChar(static_cast<uint8_t>(exploration));
     ser->PushBool(team_view);
     ser->PushBool(random_location);
 
@@ -235,16 +235,16 @@ void GlobalGameSettings::Deserialize(Serializer* ser)
     team_view = ser->PopBool();
     random_location = ser->PopBool();
 
-    unsigned int count = ser->PopUnsignedInt();
+    uint32_t count = ser->PopUnsignedInt();
 
     reset();
 
     LOG.write("<<< Addon Status:\n");
 
-    for(unsigned int i = 0; i < count; ++i)
+    for(uint32_t i = 0; i < count; ++i)
     {
         AddonId addon = AddonId(ser->PopUnsignedInt());
-        unsigned int status = ser->PopUnsignedInt();
+        uint32_t status = ser->PopUnsignedInt();
         setSelection(addon, status);
 
         LOG.write("\t0x%08X=%d\n", addon, status);
@@ -252,7 +252,7 @@ void GlobalGameSettings::Deserialize(Serializer* ser)
 }
 
 
-void GlobalGameSettings::setSelection(AddonId id, unsigned int selection)
+void GlobalGameSettings::setSelection(AddonId id, uint32_t selection)
 {
     std::vector<item>::iterator it = std::find(addons.begin(), addons.end(), id);
     if(it == addons.end())

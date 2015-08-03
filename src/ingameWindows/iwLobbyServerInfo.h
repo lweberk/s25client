@@ -29,18 +29,18 @@ class iwLobbyServerInfo : public IngameWindow
 {
     private:
         const LobbyServerInfo* serverinfo;
-        unsigned int server;
+        uint32_t server;
 
     public:
         iwLobbyServerInfo();
 
-        void Set(const LobbyServerInfo* serverinfo, unsigned int server);
-        unsigned int GetNr(void) { return server; }
+        void Set(const LobbyServerInfo* serverinfo, uint32_t server);
+        uint32_t GetNr(void) { return server; }
 
     protected:
         void UpdateServerInfo();
 
-        void Msg_Timer(const unsigned int ctrl_id);
+        void Msg_Timer(const uint32_t ctrl_id);
 
 
 };

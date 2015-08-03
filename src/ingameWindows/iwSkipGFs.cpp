@@ -56,16 +56,16 @@ iwSkipGFs::iwSkipGFs(void)
 
 void iwSkipGFs::SkipGFs()
 {
-    int gf = atoi(GetCtrl<ctrlEdit>(1)->GetText().c_str());
+    int32_t gf = atoi(GetCtrl<ctrlEdit>(1)->GetText().c_str());
     GAMECLIENT.SkipGF(gf);
 }
 
-void iwSkipGFs::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwSkipGFs::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     SkipGFs();
 }
 
-void iwSkipGFs::Msg_EditEnter(const unsigned int ctrl_id)
+void iwSkipGFs::Msg_EditEnter(const uint32_t ctrl_id)
 {
     SkipGFs();
 }

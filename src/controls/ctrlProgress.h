@@ -27,27 +27,27 @@ class ctrlProgress : public Window
 {
     public:
         ctrlProgress(Window* parent,
-                     const unsigned int id,
-                     const unsigned short x,
-                     const unsigned short y,
-                     const unsigned short width,
-                     const unsigned short height,
+                     const uint32_t id,
+                     const uint16_t x,
+                     const uint16_t y,
+                     const uint16_t width,
+                     const uint16_t height,
                      const TextureColor tc,
-                     unsigned short button_minus,
-                     unsigned short button_plus,
-                     const unsigned short maximum,
-                     const unsigned short x_padding,
-                     const unsigned short y_padding,
-                     const unsigned int force_color,
+                     uint16_t button_minus,
+                     uint16_t button_plus,
+                     const uint16_t maximum,
+                     const uint16_t x_padding,
+                     const uint16_t y_padding,
+                     const uint32_t force_color,
                      const std::string& tooltip,
                      const std::string& button_minus_tooltip = NULL,
                      const std::string& button_plus_tooltip = NULL,
-                     unsigned short* const write_val = NULL);
+                     uint16_t* const write_val = NULL);
 
-        void SetPosition(unsigned short position);
-        const unsigned short& GetPosition(void) const { return position; }
+        void SetPosition(uint16_t position);
+        const uint16_t& GetPosition(void) const { return position; }
 
-        virtual void Msg_ButtonClick(const unsigned int ctrl_id);
+        virtual void Msg_ButtonClick(const uint32_t ctrl_id);
         virtual bool Msg_LeftDown(const MouseCoords& mc);
         virtual bool Msg_LeftUp(const MouseCoords& mc);
         virtual bool Msg_WheelUp(const MouseCoords& mc);
@@ -60,15 +60,15 @@ class ctrlProgress : public Window
     private:
         TextureColor tc;
 
-        unsigned short position;
-        unsigned short minimum;
-        unsigned short maximum;
+        uint16_t position;
+        uint16_t minimum;
+        uint16_t maximum;
 
         // Abstand vom Button zur Leiste (Leiste wird entsprechend verkleinert!)
-        unsigned short x_padding, y_padding;
+        uint16_t x_padding, y_padding;
 
         /// Falls der Balken immer eine bestimmte Farben haben soll, ansonsten 0 setzen!
-        unsigned int force_color;
+        uint32_t force_color;
 
         /// Optionaler Pointer auf eine Variable,
 };

@@ -114,7 +114,7 @@ iwOptionsWindow::iwOptionsWindow(dskGameInterface* gameDesktop)
 }
 
 
-void iwOptionsWindow::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwOptionsWindow::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -172,18 +172,18 @@ void iwOptionsWindow::Msg_ButtonClick(const unsigned int ctrl_id)
     }
 }
 
-void iwOptionsWindow::Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position)
+void iwOptionsWindow::Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position)
 {
     switch(ctrl_id)
     {
         case 14:
         {
-            SETTINGS.sound.effekte_volume = (unsigned char)position * 255 / 10 + (position < 10 ? 1 : 0);
+            SETTINGS.sound.effekte_volume = (uint8_t)position * 255 / 10 + (position < 10 ? 1 : 0);
             AUDIODRIVER.SetMasterEffectVolume(SETTINGS.sound.effekte_volume);
         } break;
         case 15:
         {
-            SETTINGS.sound.musik_volume = (unsigned char)position * 255 / 10 + (position < 10 ? 1 : 0);
+            SETTINGS.sound.musik_volume = (uint8_t)position * 255 / 10 + (position < 10 ? 1 : 0);
             AUDIODRIVER.SetMasterMusicVolume(SETTINGS.sound.musik_volume);
         } break;
     }

@@ -72,12 +72,12 @@ class nofFarmhand : public nofBuildingWorker
         virtual void WorkFinished() = 0;
 
         /// Zeichnen der Figur in sonstigen Arbeitslagen
-        virtual void DrawOtherStates(const int x, const int y);
+        virtual void DrawOtherStates(const int32_t x, const int32_t y);
 
     public:
 
-        nofFarmhand(const Job job, const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofFarmhand(SerializedGameData* sgd, const unsigned obj_id);
+        nofFarmhand(const Job job, const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofFarmhand(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_nofFarmhand() { Destroy_nofBuildingWorker(); }
@@ -89,7 +89,7 @@ class nofFarmhand : public nofBuildingWorker
 
 
 
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
 
 };

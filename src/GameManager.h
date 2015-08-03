@@ -54,24 +54,24 @@ class GameManager : public Singleton<GameManager>
             frame_count = 0;
         }
 
-        inline unsigned int GetRuntime(void)
+        inline uint32_t GetRuntime(void)
         {
             return run_time;
         }
 
-        inline unsigned int GetFrameCount(void)
+        inline uint32_t GetFrameCount(void)
         {
             return frame_count;
         }
 
-        inline unsigned int GetAverageFPS(void)
+        inline uint32_t GetAverageFPS(void)
         {
             if(run_time == 0)
                 return 0;
             return (frame_count / run_time);
         }
 
-        inline unsigned int GetFPS(void)
+        inline uint32_t GetFPS(void)
         {
             return framerate;
         }
@@ -83,14 +83,14 @@ class GameManager : public Singleton<GameManager>
         void DrawCursor();
 
     private:
-        unsigned int frames;
-        unsigned int frame_count;
-        unsigned int framerate;
-        unsigned int frame_time;
-        unsigned int run_time;
-        unsigned int last_time;
-		unsigned int skipgf_last_time;
-		unsigned int skipgf_last_report_gf;
+        uint32_t frames;
+        uint32_t frame_count;
+        uint32_t framerate;
+        uint32_t frame_time;
+        uint32_t run_time;
+        uint32_t last_time;
+		uint32_t skipgf_last_time;
+		uint32_t skipgf_last_report_gf;
         CursorType cursor;
         CursorType cursor_next;
 };

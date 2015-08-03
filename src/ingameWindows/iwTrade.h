@@ -26,8 +26,8 @@ class iwTrade : public IngameWindow
 
         void Msg_PaintBefore();
         void Msg_PaintAfter();
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_ComboSelectItem(const unsigned ctrl_id, const unsigned short selection);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection);
 };
 
 #endif // !IW_TRADE_H_

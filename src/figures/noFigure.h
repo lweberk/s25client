@@ -50,12 +50,12 @@ class noFigure : public noMovable
     protected:
         FigureState fs; // aktueller Status
         Job job; // Beruf(sart)
-        unsigned char player;
+        uint8_t player;
 
         // Straßenlaufzeug: (nur genutzt beim Laufen im Straßennetz!)
 
         const RoadSegment* cur_rs;  /// Straße, auf der er gerade läuft
-        unsigned short rs_pos; /// Position auf der aktuellen Straße (Wegstück)
+        uint16_t rs_pos; /// Position auf der aktuellen Straße (Wegstück)
         bool rs_dir; /// von welcher Seite er auf die Straße läuft
 
         // Befindet sich die Figur gerade auf einem Schiff?
@@ -69,22 +69,22 @@ class noFigure : public noMovable
 
         // nur bei FS_WANDER von Bedeutung:
         /// Restlicher Weg für das Rumirren (0xFFFF wenn schon auf dem Weg zu einer Flagge!)
-        unsigned short wander_way;
+        uint16_t wander_way;
         /// Wieviel (erfolglose) Rumirr-Flaggensuch-Versuche hat es schon gegeben (nach bestimmter Zahl Figur sterben lassen)
-        unsigned short wander_tryings;
+        uint16_t wander_tryings;
         /// Falls eine Flagge gefunden wurde, Zielpunkt, der Flagge
         MapPoint flagPos;
         /// Obj-ID der (damaligen) Flagge, (evtl wurde sie zwischendurch abgerissen)
-        unsigned flag_obj_id;
+        uint32_t flag_obj_id;
         /// Wenn der Typ aus einem Lagerhaus geflohen ist, Obj-ID des abbrennenden Lagerhauses zur
         /// Kommunikation mit anderen Kollegen, die ebenfalls flüchten --> "Kollektivwegfindung", ansonsten ist das 0xFFFFFFFF
-        unsigned burned_wh_id;
+        uint32_t burned_wh_id;
 
 
         static const RoadSegment emulated_wanderroad;
 
         /// Speichert letzten Animationsframes (zum Abspielen von Sounds)
-        unsigned last_id;
+        uint32_t last_id;
 
     private:
 
@@ -93,10 +93,10 @@ class noFigure : public noMovable
         virtual void Walked() = 0; // man gelaufen ist
 
         /// Für alle restlichen Events, die nicht von noFigure behandelt werden
-        virtual void HandleDerivedEvent(const unsigned int id) = 0;
+        virtual void HandleDerivedEvent(const uint32_t id) = 0;
 
         /// Gibt den Sichtradius dieser Figur zurück (0, falls nicht-spähend)
-        virtual unsigned GetVisualRange() const;
+        virtual uint32_t GetVisualRange() const;
 
         /// Unterfunktion von Wander --> zur Flagge irren
         void WanderToFlag();
@@ -111,7 +111,7 @@ class noFigure : public noMovable
         /// In aktueller Richtung ein Stück zurcklegen
         void WalkFigure();
         /// Schatten der Figur malen
-        void DrawShadow(const int x, const int y, const unsigned char anistep, unsigned char dir);
+        void DrawShadow(const int32_t x, const int32_t y, const uint8_t anistep, uint8_t dir);
 
         /// Herumirren
         void Wander();
@@ -123,11 +123,11 @@ class noFigure : public noMovable
     public:
 
         /// Konstruktor für Figuren, die auf dem Wegenetz starten
-        noFigure(const Job job, const MapPoint pt, const unsigned char player, noRoadNode* const goal);
+        noFigure(const Job job, const MapPoint pt, const uint8_t player, noRoadNode* const goal);
         /// Konstruktor für Figuren, die im Job-Modus starten
-        noFigure(const Job job, const MapPoint pt, const unsigned char player);
+        noFigure(const Job job, const MapPoint pt, const uint8_t player);
 
-        noFigure(SerializedGameData* sgd, const unsigned obj_id);
+        noFigure(SerializedGameData* sgd, const uint32_t obj_id);
 
 
         /// Aufräummethoden
@@ -138,7 +138,7 @@ class noFigure : public noMovable
     protected:  void Serialize_noFigure(SerializedGameData* sgd) const;
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_noFigure(sgd); }
 
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
         /// Ziel setzen
         void SetGoalToNULL() { goal = NULL; }
@@ -152,29 +152,29 @@ class noFigure : public noMovable
         /// Tut was, nachdem er rausgehen soll
         void ActAtFirst();
         /// Legt die Anfangsdaten für das Laufen auf Wegen fest
-        void InitializeRoadWalking(const RoadSegment* const road, const unsigned short rs_pos, const bool rs_dir);
+        void InitializeRoadWalking(const RoadSegment* const road, const uint16_t rs_pos, const bool rs_dir);
         /// Gibt Job-Typ zurück
         Job GetJobType() const { return job; }
         /// Zeichnet eine Figur aus "carrier.bob" beim Laufen.
-        void DrawWalkingBobCarrier(int x, int y, unsigned int ware, bool fat);
+        void DrawWalkingBobCarrier(int32_t x, int32_t y, uint32_t ware, bool fat);
         /// Zeichnet eine Figur aus "jobs.bob", wenn sie läuft.
-        void DrawWalkingBobJobs(int x, int y, unsigned int id);
+        void DrawWalkingBobJobs(int32_t x, int32_t y, uint32_t id);
         /// Zeichnet standardmäßig die Figur, wenn sie läuft
-        void DrawWalking(int x, int y, glArchivItem_Bob* file, unsigned int item, bool fat, bool waitingsoldier = false);
+        void DrawWalking(int32_t x, int32_t y, glArchivItem_Bob* file, uint32_t item, bool fat, bool waitingsoldier = false);
         /// Zeichnet standardmäßig die Figur, wenn sie läuft aus einem bestimmten normalen LST Archiv
-        void DrawWalking(int x, int y, const char* const file, unsigned int id);
+        void DrawWalking(int32_t x, int32_t y, const char* const file, uint32_t id);
         /// Zeichnet standardmäßig die Figur, wenn sie läuft, nimmt automatisch richtige Job-ID/Datei
-        void DrawWalking(int x, int y);
+        void DrawWalking(int32_t x, int32_t y);
         /// Interpoliert die Positon zwischen zwei Knotenpunkten
-        bool CalcFigurRelative(int& x, int& y);
+        bool CalcFigurRelative(int32_t& x, int32_t& y);
         /// Anfangen zu laufen (Event anmelden, Tür aufmachen ggf)
-        void StartWalking(const unsigned char dir);
+        void StartWalking(const uint8_t dir);
         /// Anfangen zu laufen (Event anmelden, Tür aufmachen ggf)
-        //void StartWalkingFailedTrade(const unsigned char dir);
+        //void StartWalkingFailedTrade(const uint8_t dir);
         /// Umherirren starten (frei rumlaufen)
-        void StartWandering(const unsigned burned_wh_id = 0xFFFFFFFF);
+        void StartWandering(const uint32_t burned_wh_id = 0xFFFFFFFF);
         /// Umherirren starten (frei rumlaufen - nach fehlgeschlagener handelsroute)
-        //void StartWanderingFailedTrade(const unsigned burned_wh_id = 0xFFFFFFFF);
+        //void StartWanderingFailedTrade(const uint32_t burned_wh_id = 0xFFFFFFFF);
         /// Auf Straßen(!) nach Hause laufen
         void GoHome(noRoadNode* goal = NULL);
         /// Aktuellen Weg, auf dem er läuft, fr ungültig erklären
@@ -206,9 +206,9 @@ class noFigure : public noMovable
         void StopIfNecessary(const MapPoint pt);
 
 
-        unsigned char GetDir() const { return dir; }
+        uint8_t GetDir() const { return dir; }
 
-        unsigned char GetPlayer() const { return player; }
+        uint8_t GetPlayer() const { return player; }
 
         /// Macht die Figur Job-Arbeiten?
         bool DoJobWorks() const { return (fs == FS_JOB); }

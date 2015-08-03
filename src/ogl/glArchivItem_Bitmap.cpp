@@ -91,7 +91,7 @@ glArchivItem_Bitmap::~glArchivItem_Bitmap(void)
  *
  *  @author FloSoft
  */
-void glArchivItem_Bitmap::Draw(short dst_x, short dst_y, short dst_w, short dst_h, short src_x, short src_y, short src_w, short src_h, const unsigned int color, const unsigned int unused)
+void glArchivItem_Bitmap::Draw(int16_t dst_x, int16_t dst_y, int16_t dst_w, int16_t dst_h, int16_t src_x, int16_t src_y, int16_t src_w, int16_t src_h, const uint32_t color, const uint32_t unused)
 {
     if(texture == 0)
         GenerateTexture();
@@ -120,8 +120,8 @@ void glArchivItem_Bitmap::Draw(short dst_x, short dst_y, short dst_w, short dst_
 
     GL_T2F_C4UB_V3F_Struct tmp[4];
 
-    int x = -nx + dst_x;
-    int y = -ny + dst_y;
+    int32_t x = -nx + dst_x;
+    int32_t y = -ny + dst_y;
 
     tmp[0].x = tmp[1].x = GLfloat(x);
     tmp[2].x = tmp[3].x = GLfloat(x + dst_w);
@@ -154,7 +154,7 @@ void glArchivItem_Bitmap::Draw(short dst_x, short dst_y, short dst_w, short dst_
  *
  *  @author FloSoft
  */
-unsigned int glArchivItem_Bitmap::GetTexture()
+uint32_t glArchivItem_Bitmap::GetTexture()
 {
     if(texture == 0)
         GenerateTexture();
@@ -180,7 +180,7 @@ void glArchivItem_Bitmap::DeleteTexture()
  *
  *  @author FloSoft
  */
-void glArchivItem_Bitmap::setFilter(unsigned int filter)
+void glArchivItem_Bitmap::setFilter(uint32_t filter)
 {
     if(this->filter == filter)
         return;
@@ -210,9 +210,9 @@ void glArchivItem_Bitmap::GenerateTexture(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 
-    int iformat = GL_RGBA, dformat = GL_BGRA;
+    int32_t iformat = GL_RGBA, dformat = GL_BGRA;
 
-    unsigned char* buffer = new unsigned char[tex_width * tex_height * 4];
+    uint8_t* buffer = new uint8_t[tex_width * tex_height * 4];
 
     memset(buffer, 0, tex_width * tex_height * 4);
     print(buffer, tex_width, tex_height, libsiedler2::FORMAT_RGBA, palette, 0, 0, 0, 0, 0, 0);

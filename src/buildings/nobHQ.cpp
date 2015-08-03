@@ -40,7 +40,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nobHQ::nobHQ(const MapPoint pos, const unsigned char player, const Nation nation)
+nobHQ::nobHQ(const MapPoint pos, const uint8_t player, const Nation nation)
     : nobBaseWarehouse(BLD_HEADQUARTERS, pos, player, nation)
 {
 
@@ -362,7 +362,7 @@ void nobHQ::Serialize_nobHQ(SerializedGameData* sgd) const
     Serialize_nobBaseWarehouse(sgd);
 }
 
-nobHQ::nobHQ(SerializedGameData* sgd, const unsigned obj_id) : nobBaseWarehouse(sgd, obj_id)
+nobHQ::nobHQ(SerializedGameData* sgd, const uint32_t obj_id) : nobBaseWarehouse(sgd, obj_id)
 {
     // ins Militärquadrat einfügen
     gwg->GetMilitarySquare(pos).push_back(this);
@@ -371,14 +371,14 @@ nobHQ::nobHQ(SerializedGameData* sgd, const unsigned obj_id) : nobBaseWarehouse(
     GAMECLIENT.GetPlayer(player)->hqPos = this->pos;
 }
 
-void nobHQ::Draw(int x, int y)
+void nobHQ::Draw(int32_t x, int32_t y)
 {
     // Gebäude an sich zeichnen
     DrawBaseBuilding(x, y);
 
 
     // 4 Fähnchen zeichnen
-    for(unsigned i = min<unsigned>(GetSoldiersCount() +
+    for(uint32_t i = min<uint32_t>(GetSoldiersCount() +
                                    reserve_soldiers_available[0] + reserve_soldiers_available[1] + reserve_soldiers_available[2] + reserve_soldiers_available[3] + reserve_soldiers_available[4]
                                    , 4); i; --i)
     {
@@ -389,7 +389,7 @@ void nobHQ::Draw(int x, int y)
 }
 
 
-void nobHQ::HandleEvent(const unsigned int id)
+void nobHQ::HandleEvent(const uint32_t id)
 {
     /*switch(id)
     {

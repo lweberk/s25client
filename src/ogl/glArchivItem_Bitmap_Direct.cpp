@@ -64,7 +64,7 @@ glArchivItem_Bitmap_Direct::glArchivItem_Bitmap_Direct(const glArchivItem_Bitmap
  *
  *  @author FloSoft
  */
-void glArchivItem_Bitmap_Direct::tex_setPixel(unsigned short x, unsigned short y, unsigned char color, const libsiedler2::ArchivItem_Palette* palette)
+void glArchivItem_Bitmap_Direct::tex_setPixel(uint16_t x, uint16_t y, uint8_t color, const libsiedler2::ArchivItem_Palette* palette)
 {
     // Pixel in Puffer setzen
     libsiedler2::baseArchivItem_Bitmap::tex_setPixel(x, y, color, palette);
@@ -74,7 +74,7 @@ void glArchivItem_Bitmap_Direct::tex_setPixel(unsigned short x, unsigned short y
     {
         if(x < tex_width && y < tex_height)
         {
-            unsigned char buffer[4] = { 0x00, 0x00, 0x00, 0xFF };
+            uint8_t buffer[4] = { 0x00, 0x00, 0x00, 0xFF };
 
             if(color == libsiedler2::TRANSPARENT_INDEX)
                 buffer[3] = 0x00;
@@ -100,7 +100,7 @@ void glArchivItem_Bitmap_Direct::tex_setPixel(unsigned short x, unsigned short y
  *
  *  @author FloSoft
  */
-void glArchivItem_Bitmap_Direct::tex_setPixel(unsigned short x, unsigned short y, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+void glArchivItem_Bitmap_Direct::tex_setPixel(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     // Pixel in Puffer setzen
     libsiedler2::baseArchivItem_Bitmap::tex_setPixel(x, y, r, g, b, a);
@@ -110,7 +110,7 @@ void glArchivItem_Bitmap_Direct::tex_setPixel(unsigned short x, unsigned short y
     {
         if(x < tex_width && y < tex_height)
         {
-            unsigned char buffer[4] = { r, g, b, a };
+            uint8_t buffer[4] = { r, g, b, a };
 
             VIDEODRIVER.BindTexture(texture);
             glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &buffer);
@@ -119,7 +119,7 @@ void glArchivItem_Bitmap_Direct::tex_setPixel(unsigned short x, unsigned short y
 }
 
 /// liefert die Farbwerte eines Pixels als uc-Array: {r,g,b,a}
-unsigned char* glArchivItem_Bitmap_Direct::tex_getPixel(const unsigned short x, const unsigned short y)
+uint8_t* glArchivItem_Bitmap_Direct::tex_getPixel(const uint16_t x, const uint16_t y)
 {
     return &tex_data[y * tex_width + x];
 }

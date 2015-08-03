@@ -356,7 +356,7 @@ const BuildingSignConst BUILDING_SIGN_CONSTS[NAT_COUNT][40] =
 
 /// Position der nubischen Feuer für alle 4 Bergwerke
 /// (Granit, Kohle, Eisen, Gold)
-const int NUBIAN_MINE_FIRE[4][2] =
+const int32_t NUBIAN_MINE_FIRE[4][2] =
 {
     {31, -18}, {34, -10}, {30, -11}, {32, -10},
 };

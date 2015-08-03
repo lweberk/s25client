@@ -37,8 +37,8 @@ class TradeRoute;
 /// Ein/Auslagereinstellungsstruktur
 struct InventorySettings
 {
-    unsigned char wares[WARE_TYPES_COUNT];
-    unsigned char figures[JOB_TYPES_COUNT];
+    uint8_t wares[WARE_TYPES_COUNT];
+    uint8_t figures[JOB_TYPES_COUNT];
 
     InventorySettings()
     { memset(wares, 0, sizeof(wares)); memset(figures, 0, sizeof(figures)); }
@@ -71,9 +71,9 @@ class nobBaseWarehouse : public nobBaseMilitary
     protected:
 
         /// Soldaten-Reserve-Einstellung
-        unsigned reserve_soldiers_available[5]; /// einkassierte Soldaten zur Reserve
-        unsigned reserve_soldiers_claimed_visual[5]; /// geforderte Soldaten zur Reserve - visuell
-        unsigned reserve_soldiers_claimed_real[5]; /// geforderte Soldaten zur Reserve - real
+        uint32_t reserve_soldiers_available[5]; /// einkassierte Soldaten zur Reserve
+        uint32_t reserve_soldiers_claimed_visual[5]; /// geforderte Soldaten zur Reserve - visuell
+        uint32_t reserve_soldiers_claimed_real[5]; /// geforderte Soldaten zur Reserve - real
 
         /// Waren bzw. Menschenanzahl im Gebäude, real_goods ist die tatsächliche Anzahl und wird zum berechnen verwendet, goods ist nur die, die auch angezeigt wird
         Goods goods, real_goods;
@@ -100,7 +100,7 @@ class nobBaseWarehouse : public nobBaseMilitary
         /// Stellt Verteidiger zur Verfügung
         virtual nofDefender* ProvideDefender(nofAttacker* const attacker);
 
-        void HandleBaseEvent(const unsigned int id);
+        void HandleBaseEvent(const uint32_t id);
         /// Versucht ein Rekrutierungsevent anzumelden, falls ausreichend Waffen und Bier sowie genügend Gehilfen
         /// vorhanden sind (je nach Militäreinstellungen)
         void TryRecruiting();
@@ -110,8 +110,8 @@ class nobBaseWarehouse : public nobBaseMilitary
         /// Aktuellen Warenbestand zur aktuellen Inventur dazu addieren
         void AddToInventory();
 
-        nobBaseWarehouse(const BuildingType type, const MapPoint pt, const unsigned char player, const Nation nation);
-        nobBaseWarehouse(SerializedGameData* sgd, const unsigned obj_id);
+        nobBaseWarehouse(const BuildingType type, const MapPoint pt, const uint8_t player, const Nation nation);
+        nobBaseWarehouse(SerializedGameData* sgd, const uint32_t obj_id);
     public:
 
         void Clear();
@@ -135,29 +135,29 @@ class nobBaseWarehouse : public nobBaseMilitary
 
 
         /// Gibt Anzahl der Waren bzw. Figuren zurück
-        unsigned GetRealWaresCount(GoodType type) const { return real_goods.goods[type]; }
-        unsigned GetRealFiguresCount(Job type) const { return real_goods.people[type]; }
-        unsigned GetVisualWaresCount(GoodType type) const { return goods.goods[type]; }
-        unsigned GetVisualFiguresCount(Job type) const { return goods.people[type]; }
+        uint32_t GetRealWaresCount(GoodType type) const { return real_goods.goods[type]; }
+        uint32_t GetRealFiguresCount(Job type) const { return real_goods.people[type]; }
+        uint32_t GetVisualWaresCount(GoodType type) const { return goods.goods[type]; }
+        uint32_t GetVisualFiguresCount(Job type) const { return goods.people[type]; }
 
 
         /// Verändert Ein/Auslagerungseinstellungen (visuell)
-        void ChangeVisualInventorySettings(unsigned char category, unsigned char state, unsigned char type);
+        void ChangeVisualInventorySettings(uint8_t category, uint8_t state, uint8_t type);
         /// Gibt Ein/Auslagerungseinstellungen zurück (visuell)
-        bool CheckVisualInventorySettings(unsigned char category, unsigned char state, unsigned char type) const;
+        bool CheckVisualInventorySettings(uint8_t category, uint8_t state, uint8_t type) const;
         ///// Generiert einen NC-Befehl für eine Inventory Settings änderung und führt noch entsprechend eigene änderungen aus
         //void SubmitInventorySettings();
 
         /// Verändert Ein/Auslagerungseinstellungen (real)
-        void ChangeRealInventorySetting(unsigned char category, unsigned char state, unsigned char type);
+        void ChangeRealInventorySetting(uint8_t category, uint8_t state, uint8_t type);
         /// Verändert alle Ein/Auslagerungseinstellungen einer Kategorie (also Waren oder Figuren)(real)
-        void ChangeAllRealInventorySettings(unsigned char category, unsigned char state);
+        void ChangeAllRealInventorySettings(uint8_t category, uint8_t state);
         /// Gibt Ein/Auslagerungseinstellungen zurück (real), cannot check for state 0
-        bool CheckRealInventorySettings(unsigned char category, unsigned char state, unsigned char type) const
+        bool CheckRealInventorySettings(uint8_t category, uint8_t state, uint8_t type) const
         { return ((((category == 0) ? inventory_settings_real.wares[type] : inventory_settings_real.figures[type]) & state) == state); }
 
         /// Lässt einen bestimmten Waren/Job-Typ ggf auslagern
-        void CheckOuthousing(unsigned char category, unsigned job_ware_id);
+        void CheckOuthousing(uint8_t category, uint32_t job_ware_id);
 
 
         /// Bestellt einen Träger
@@ -195,7 +195,7 @@ class nobBaseWarehouse : public nobBaseMilitary
         virtual void CancelFigure(noFigure* figure);
 
         /// Sowas ist bei Warenhäusern nicht nötig
-        unsigned CalcDistributionPoints(noRoadNode* start, const GoodType type) { return 0; }
+        uint32_t CalcDistributionPoints(noRoadNode* start, const GoodType type) { return 0; }
         /// Wird aufgerufen, wenn eine neue Ware zum dem Gebäude geliefert wird (nicht wenn sie bestellt wurde vom Gebäude!)
         void TakeWare(Ware* ware);
 
@@ -218,13 +218,13 @@ class nobBaseWarehouse : public nobBaseMilitary
         /// Fügt aktiven Soldaten (der aus von einer Mission) zum Militärgebäude hinzu
         void AddActiveSoldier(nofActiveSoldier* soldier);
         /// Gibt Gesamtanzahl aller im Lager befindlichen Soldaten zurück
-        unsigned GetSoldiersCount() const
+        uint32_t GetSoldiersCount() const
         {
             return real_goods.people[JOB_PRIVATE] + real_goods.people[JOB_PRIVATEFIRSTCLASS] +
                    real_goods.people[JOB_SERGEANT] + real_goods.people[JOB_OFFICER] + real_goods.people[JOB_GENERAL];
         }
         /// Bestellt Soldaten
-        void OrderTroops(nobMilitary* goal, unsigned count,bool ignoresettingsendweakfirst=false);
+        void OrderTroops(nobMilitary* goal, uint32_t count,bool ignoresettingsendweakfirst=false);
 
         /// Schickt einen Verteidiger raus, der einem Angreifer in den Weg rennt
         nofAggressiveDefender* SendDefender(nofAttacker* attacker);
@@ -235,23 +235,23 @@ class nobBaseWarehouse : public nobBaseMilitary
         bool DefendersAvailable() const;
 
         /// Verändert Reserveeinstellung - visuell (nur das geforderte natürlich) und gibt neue Anzahl zurück
-        unsigned IncreaseReserveVisual(unsigned rank);
-        unsigned DecreaseReserveVisual(unsigned rank);
-        void SetRealReserve(const unsigned rank, const unsigned count);
+        uint32_t IncreaseReserveVisual(uint32_t rank);
+        uint32_t DecreaseReserveVisual(uint32_t rank);
+        void SetRealReserve(const uint32_t rank, const uint32_t count);
 
         /// Versucht, die geforderten Reserve-Soldaten bereitzustellen
-        void RefreshReserve(unsigned rank);
+        void RefreshReserve(uint32_t rank);
 
         /// Gibt Zeiger auf dir Reserve zurück für das GUI
-        const unsigned* GetReservePointerAvailable(unsigned rank) const { return &reserve_soldiers_available[rank]; }
-        const unsigned* GetReservePointerClaimed(unsigned rank) const { return &reserve_soldiers_claimed_visual[rank]; }
+        const uint32_t* GetReservePointerAvailable(uint32_t rank) const { return &reserve_soldiers_available[rank]; }
+        const uint32_t* GetReservePointerClaimed(uint32_t rank) const { return &reserve_soldiers_claimed_visual[rank]; }
 
         /// Available goods of a speciefic type that can be used for trading
-        unsigned GetAvailableWaresForTrading(const GoodType gt) const;
+        uint32_t GetAvailableWaresForTrading(const GoodType gt) const;
         /// Available figures of a speciefic type that can be used for trading
-        unsigned GetAvailableFiguresForTrading(const Job job) const;
+        uint32_t GetAvailableFiguresForTrading(const Job job) const;
         /// Starts a trade caravane from this warehouse
-        void StartTradeCaravane(const GoodType gt,  Job job, const unsigned count, const TradeRoute& tr, nobBaseWarehouse* goal);
+        void StartTradeCaravane(const GoodType gt,  Job job, const uint32_t count, const TradeRoute& tr, nobBaseWarehouse* goal);
 
         /// For debug only
         bool CheckDependentFigure(noFigure* fig);
@@ -262,14 +262,14 @@ class nobBaseWarehouse : public nobBaseMilitary
 /// Vorgefertigte Bedingungsfunktionen für FindWarehouse, param jeweils Pointer auf die einzelnen Strukturen
 namespace FW
 {
-    struct Param_Ware { GoodType type; unsigned count; };
+    struct Param_Ware { GoodType type; uint32_t count; };
     bool Condition_Ware(nobBaseWarehouse* wh, const void* param);
-    struct Param_Job { Job type; unsigned count; };
+    struct Param_Job { Job type; uint32_t count; };
     bool Condition_Job(nobBaseWarehouse* wh, const void* param);
     struct Param_WareAndJob { Param_Ware ware; Param_Job job; };
     bool Condition_WareAndJob(nobBaseWarehouse* wh, const void* param);
 
-    bool Condition_Troops(nobBaseWarehouse* wh, const void* param);   // param = &unsigned --> count
+    bool Condition_Troops(nobBaseWarehouse* wh, const void* param);   // param = &uint32_t --> count
     bool Condition_StoreWare(nobBaseWarehouse* wh, const void* param);   // param = &GoodType -> Warentyp
     bool Condition_StoreFigure(nobBaseWarehouse* wh, const void* param);   // param = &Job -> Jobtyp
 

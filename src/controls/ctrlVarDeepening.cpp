@@ -39,16 +39,16 @@ static char THIS_FILE[] = __FILE__;
  *  @author FloSoft
  */
 ctrlVarDeepening::ctrlVarDeepening(Window* parent,
-                                   unsigned int id,
-                                   unsigned short x,
-                                   unsigned short y,
-                                   unsigned short width,
-                                   unsigned short height,
+                                   uint32_t id,
+                                   uint16_t x,
+                                   uint16_t y,
+                                   uint16_t width,
+                                   uint16_t height,
                                    TextureColor tc,
                                    const std::string& text,
                                    glArchivItem_Font* font,
-                                   unsigned int color,
-                                   unsigned int count,
+                                   uint32_t color,
+                                   uint32_t count,
                                    va_list liste)
     : ctrlVarText(parent, id, x, y, text, color, 0, font, count, liste),
       tc(tc)
@@ -74,7 +74,7 @@ bool ctrlVarDeepening::Draw_(void)
     char buffer[1025];
 
     // variablen Inhalt erzeugen
-    for(unsigned int i = 0, j = 0, k = 0; i < text.length() && j < 1024; ++i)
+    for(uint32_t i = 0, j = 0, k = 0; i < text.length() && j < 1024; ++i)
     {
         if(text[i] == '%')
         {
@@ -84,14 +84,14 @@ bool ctrlVarDeepening::Draw_(void)
             {
                 case 'd':
                 {
-                    snprintf(temp, 1024, "%d", *(int*)vars[k++]);
-                    for(unsigned int x = 0; x < strlen(temp); ++x)
+                    snprintf(temp, 1024, "%d", *(int32_t*)vars[k++]);
+                    for(uint32_t x = 0; x < strlen(temp); ++x)
                         buffer[j++] = temp[x];
                 } break;
                 case 's':
                 {
                     snprintf(temp, 1024, "%s", (char*)vars[k++]);
-                    for(unsigned int x = 0; x < strlen(temp); ++x)
+                    for(uint32_t x = 0; x < strlen(temp); ++x)
                         buffer[j++] = temp[x];
                 } break;
                 default:

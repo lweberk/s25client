@@ -41,8 +41,8 @@ class RoadSegment : public GameObject
         };
 
     public:
-        RoadSegment(const RoadType rt, noRoadNode* const f1, noRoadNode* const f2, const std::vector<unsigned char>& route);
-        RoadSegment(SerializedGameData* sgd, const unsigned obj_id);
+        RoadSegment(const RoadType rt, noRoadNode* const f1, noRoadNode* const f2, const std::vector<uint8_t>& route);
+        RoadSegment(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// zerstört das Objekt.
         void Destroy(void) { Destroy_RoadSegment(); }
@@ -55,7 +55,7 @@ class RoadSegment : public GameObject
         /// Gibt Straßen-Typ zurück
         inline RoadType GetRoadType() const { return rt; }
         /// Gibt die Länge der Staße zurück
-        inline unsigned GetLength() const { return route.size(); }
+        inline uint32_t GetLength() const { return route.size(); }
         /// gibt Flagge 1 zurück
         inline noRoadNode* GetF1() const { return f1; }
         /// setzt Flagge 1 auf o
@@ -65,15 +65,15 @@ class RoadSegment : public GameObject
         /// setzt Flagge 2 auf o
         inline void SetF2(noRoadNode* o) { f2 = o; }
         /// gibt die Route nr zurück
-        inline unsigned char GetRoute(unsigned short nr) const { return route.at(nr); }
+        inline uint8_t GetRoute(uint16_t nr) const { return route.at(nr); }
         /// setzt die Route nr auf r
-        inline void SetRoute(unsigned short nr, unsigned char r) { route[nr] = r; }
+        inline void SetRoute(uint16_t nr, uint8_t r) { route[nr] = r; }
         /// gibt den Carrier nr zurück
-        inline nofCarrier* getCarrier(unsigned char nr) const { return carrier[nr]; }
+        inline nofCarrier* getCarrier(uint8_t nr) const { return carrier[nr]; }
         /// setzt den Carrier nr auf c
-        inline void setCarrier(unsigned char nr, nofCarrier* c) { carrier[nr] = c; }
+        inline void setCarrier(uint8_t nr, nofCarrier* c) { carrier[nr] = c; }
         /// haben wir den Carrier "nr"?
-        inline bool hasCarrier(unsigned char nr) const { return (carrier[nr] != NULL); }
+        inline bool hasCarrier(uint8_t nr) const { return (carrier[nr] != NULL); }
         /// Braucht die Straße einen Esel? Nur wenn sie auch einen Träger schon hat!
         inline bool NeedDonkey() const { return (rt == RT_DONKEY && carrier[0] && !carrier[1]); }
         /// Hat einen Esel als Arbeiter dazubekommen.
@@ -85,7 +85,7 @@ class RoadSegment : public GameObject
             return((carrier[0]) || (carrier[1]));
         }
 
-        inline unsigned char GetDir(const bool dir, const unsigned int id) const
+        inline uint8_t GetDir(const bool dir, const uint32_t id) const
         {
             if(dir)
                 return (route[route.size() - id - 1] + 3) % 6;
@@ -96,7 +96,7 @@ class RoadSegment : public GameObject
         /// zerteilt die Straße in 2 Teile.
         void SplitRoad(noFlag* splitflag);
         /// Überprüft ob es an den Flaggen noch Waren zu tragen gibt für den Träger.
-        bool AreWareJobs(const bool flag, unsigned int carrier_type, const bool take_ware_immediately) const;
+        bool AreWareJobs(const bool flag, uint32_t carrier_type, const bool take_ware_immediately) const;
         /// Eine Ware sagt Bescheid, dass sie über dem Weg getragen werden will.
         void AddWareJob(const noRoadNode* rn);
         /// Eine Ware will nicht mehr befördert werden.
@@ -110,7 +110,7 @@ class RoadSegment : public GameObject
         /// given a flag returns the other end location
         noFlag* GetOtherFlag(const noFlag* flag);
         /// given a flag returns last direction of the route towards the other flag
-        unsigned char GetOtherFlagDir(const noFlag* flag);
+        uint8_t GetOtherFlagDir(const noFlag* flag);
 
     protected:
         /// zerstört das Objekt.
@@ -124,7 +124,7 @@ class RoadSegment : public GameObject
         /// die 2 Roadnodes, die den Weg eingrenzen
         noRoadNode* f1, *f2;
         /// Beschreibung des Weges, ist length groß und liegt als Beschreibung der einzelnen Richtungen vor (von f1 zu f2)
-        std::vector<unsigned char> route;
+        std::vector<uint8_t> route;
         /// Träger (und ggf. Esel), der auf diesem Weg arbeitet
         nofCarrier* carrier[2];
 };

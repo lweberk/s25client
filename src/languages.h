@@ -53,10 +53,10 @@ class Languages: public Singleton<Languages>
         Languages() : loaded(false) {}
 
         void setLanguage(const std::string& lang_code);
-        const std::string setLanguage(unsigned int i);
+        const std::string setLanguage(uint32_t i);
 
-        unsigned int getCount(void);
-        const Language& getLanguage(unsigned int i);
+        uint32_t getCount(void);
+        const Language& getLanguage(uint32_t i);
 
     protected:
         void loadLanguages(void);

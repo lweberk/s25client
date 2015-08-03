@@ -47,7 +47,7 @@ static char THIS_FILE[] = __FILE__;
  */
 nobUsual::nobUsual(BuildingType type,
                    MapPoint pos,
-                   unsigned char player,
+                   uint8_t player,
                    Nation nation)
     : noBuilding(type, pos, player, nation),
       worker(NULL), productivity(0), disable_production(false), disable_production_virtual(false),
@@ -71,7 +71,7 @@ nobUsual::nobUsual(BuildingType type,
     gwg->GetPlayer(player)->AddUsualBuilding(this);
 
     // Keine Produktivitäten weiter
-    memset(last_productivities, 0, sizeof(unsigned short)*LAST_PRODUCTIVITIES_COUNT);
+    memset(last_productivities, 0, sizeof(uint16_t)*LAST_PRODUCTIVITIES_COUNT);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ nobUsual::nobUsual(BuildingType type,
  *
  *  @author OLiver
  */
-nobUsual::nobUsual(SerializedGameData* sgd, const unsigned int obj_id)
+nobUsual::nobUsual(SerializedGameData* sgd, const uint32_t obj_id)
     : noBuilding(sgd, obj_id),
       worker(sgd->PopObject<nofBuildingWorker>(GOT_UNKNOWN)),
       productivity(sgd->PopUnsignedShort()),
@@ -91,7 +91,7 @@ nobUsual::nobUsual(SerializedGameData* sgd, const unsigned int obj_id)
       productivity_ev(sgd->PopObject<EventManager::Event>(GOT_EVENT)),
       is_working(sgd->PopBool())
 {
-    for(unsigned i = 0; i < 3; ++i)
+    for(uint32_t i = 0; i < 3; ++i)
         wares[i] = sgd->PopUnsignedChar();
 
     if(USUAL_BUILDING_CONSTS[type - 10].wares_needed_count)
@@ -99,9 +99,9 @@ nobUsual::nobUsual(SerializedGameData* sgd, const unsigned int obj_id)
     else
         ordered_wares.clear();
 
-    for(unsigned i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
+    for(uint32_t i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
         sgd->PopObjectList(ordered_wares[i], GOT_WARE);
-    for(unsigned i = 0; i < LAST_PRODUCTIVITIES_COUNT; ++i)
+    for(uint32_t i = 0; i < LAST_PRODUCTIVITIES_COUNT; ++i)
         last_productivities[i] = sgd->PopUnsignedShort();
 
     // Visuellen Produktionszustand dem realen anpassen
@@ -132,7 +132,7 @@ void nobUsual::Destroy_nobUsual()
         gwg->GetPlayer(player)->JobNotWanted(this);
 
     // Bestellte Waren Bescheid sagen
-    for(unsigned i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
+    for(uint32_t i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
         for(std::list<Ware*>::iterator it = ordered_wares[i].begin(); it != ordered_wares[i].end(); ++it)
             WareNotNeeded((*it));
 
@@ -146,7 +146,7 @@ void nobUsual::Destroy_nobUsual()
     gwg->GetPlayer(player)->RemoveUsualBuilding(this);
 
     // Inventur entsprechend verringern wegen den Waren, die vernichtetet werden
-    for(unsigned i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
+    for(uint32_t i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
         gwg->GetPlayer(player)->DecreaseInventoryWare(USUAL_BUILDING_CONSTS[type - 10].wares_needed[i], wares[i]);
 
     Destroy_noBuilding();
@@ -171,11 +171,11 @@ void nobUsual::Serialize_nobUsual(SerializedGameData* sgd) const
     sgd->PushObject(productivity_ev, true);
     sgd->PushBool(is_working);
 
-    for(unsigned i = 0; i < 3; ++i)
+    for(uint32_t i = 0; i < 3; ++i)
         sgd->PushUnsignedChar(wares[i]);
-    for(unsigned i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
+    for(uint32_t i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
         sgd->PushObjectList(ordered_wares[i], true);
-    for(unsigned i = 0; i < LAST_PRODUCTIVITIES_COUNT; ++i)
+    for(uint32_t i = 0; i < LAST_PRODUCTIVITIES_COUNT; ++i)
         sgd->PushUnsignedShort(last_productivities[i]);
 }
 
@@ -185,7 +185,7 @@ void nobUsual::Serialize_nobUsual(SerializedGameData* sgd) const
  *
  *  @author OLiver
  */
-void nobUsual::Draw(int x, int y)
+void nobUsual::Draw(int32_t x, int32_t y)
 {
     // Gebäude an sich zeichnen
     DrawBaseBuilding(x, y);
@@ -219,11 +219,11 @@ void nobUsual::Draw(int x, int y)
     {
         // Für alle Völker jeweils
         // X-Position der Esel
-        const int DONKEY_X[NAT_COUNT][3] = {{13, 26, 39}, {3, 16, 30}, {2, 15, 29}, {7, 18, 30}, {3, 16, 30}};
+        const int32_t DONKEY_X[NAT_COUNT][3] = {{13, 26, 39}, {3, 16, 30}, {2, 15, 29}, {7, 18, 30}, {3, 16, 30}};
         // Y-Position
-        const int DONKEY_Y[NAT_COUNT] = { -9, -17, -21, -17, -22};
+        const int32_t DONKEY_Y[NAT_COUNT] = { -9, -17, -21, -17, -22};
         // Animations-IDS des Esels
-        const unsigned char DONKEY_ANIMATION[] =
+        const uint8_t DONKEY_ANIMATION[] =
         { 0, 1, 2, 3, 4, 5, 6, 7, 7, 7, 6, 5, 4, 4, 5, 6, 5, 7, 6, 5, 4, 3, 2, 1, 0 };
 
         // Die drei Esel zeichnen mithilfe von Globalanimation
@@ -250,7 +250,7 @@ void nobUsual::Draw(int x, int y)
     else if(type == BLD_PIGFARM && this->HasWorker())
     {
         // Position der 5 Schweinchen für alle 4 Völker (1. ist das große Schwein)
-        const int PIG_POSITIONS[NAT_COUNT][5][2] =
+        const int32_t PIG_POSITIONS[NAT_COUNT][5][2] =
         {
             //  gr. S. 1.klS 2. klS usw
             { {3, -8}, {17, 3}, { -12, 4}, { -2, 10}, { -22, 11} }, // Afrikaner
@@ -268,18 +268,18 @@ void nobUsual::Draw(int x, int y)
             x + PIG_POSITIONS[nation][0][0], y + PIG_POSITIONS[nation][0][1]);
 
         // Die 4 kleinen Schweinchen, je nach Produktivität
-        for(unsigned i = 1; i < min<unsigned>(unsigned(productivity) / 20 + 1, 5); ++i)
+        for(uint32_t i = 1; i < min<uint32_t>(unsigned(productivity) / 20 + 1, 5); ++i)
         {
             //A random (really, dice-rolled by hand:) ) order of the four possible pig animations, with eating three times as much as the others ones
             //To get random-looking, non synchronous, sweet little pigs
-            const unsigned char smallpig_animations[63] =
+            const uint8_t smallpig_animations[63] =
             {
                 0, 0, 3, 2, 0, 0, 1, 3, 0, 3, 1, 3, 2, 0, 0, 1,
                 0, 0, 1, 3, 2, 0, 1, 1, 0, 0, 2, 1, 0, 1, 0, 2,
                 2, 0, 0, 2, 2, 0, 1, 0, 3, 1, 2, 0, 1, 2, 2, 0,
                 0, 0, 3, 0, 2, 0, 3, 0, 3, 0, 1, 1, 0, 3, 0
             };
-            const unsigned short animpos = GAMECLIENT.GetGlobalAnimation(63 * 12, 63 * 4 - i * 5, 1, 183 * i + GetX() * obj_id + GetY() * i);
+            const uint16_t animpos = GAMECLIENT.GetGlobalAnimation(63 * 12, 63 * 4 - i * 5, 1, 183 * i + GetX() * obj_id + GetY() * i);
             LOADER.GetMapImageN(2160)->Draw(
                 x + PIG_POSITIONS[nation][i][0], y + PIG_POSITIONS[nation][i][1], 0, 0, 0, 0, 0, 0, COLOR_SHADOW);
             LOADER.GetMapImageN(2112 + smallpig_animations[animpos / 12] * 12 + animpos % 12)->Draw(
@@ -301,17 +301,17 @@ void nobUsual::Draw(int x, int y)
  *
  *  @author OLiver
  */
-void nobUsual::HandleEvent(const unsigned int id)
+void nobUsual::HandleEvent(const uint32_t id)
 {
     if(id)
     {
         productivity = last_productivities[5];
         // Produktivität "verrücken" und gleich mit ausrechnen
-        for(unsigned short i = LAST_PRODUCTIVITIES_COUNT; i >= 2; --i)
+        for(uint16_t i = LAST_PRODUCTIVITIES_COUNT; i >= 2; --i)
             productivity += (last_productivities[i - 1] = last_productivities[i - 2]);
 
         // Die aktuelle Produktivität nehmen und sie mit einberechnen
-        unsigned short current_productivity = worker->CalcProductivity();
+        uint16_t current_productivity = worker->CalcProductivity();
         productivity += current_productivity;
         last_productivities[0] = current_productivity;
 
@@ -327,7 +327,7 @@ void nobUsual::HandleEvent(const unsigned int id)
         if(!disable_production)
         {
             // Maximale Warenanzahlbestimmen
-            unsigned wares_count;
+            uint32_t wares_count;
             if(USUAL_BUILDING_CONSTS[type - 10].wares_needed_count == 3)
                 wares_count = 2;
             else if(type == BLD_CATAPULT)
@@ -362,7 +362,7 @@ void nobUsual::AddWare(Ware* ware)
 
 {
     // Maximale Warenanzahlbestimmen (nur für assert unten)
-    /*  unsigned wares_count;
+    /*  uint32_t wares_count;
         if(USUAL_BUILDING_CONSTS[this->type-10].wares_needed_count == 3)
             wares_count = 2;
         else if(this->type == BLD_CATAPULT)
@@ -371,7 +371,7 @@ void nobUsual::AddWare(Ware* ware)
             wares_count = 6;*/
 
     // Gucken, um was für einen Warentyp es sich handelt und dann dort hinzufügen
-    for(unsigned char i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
+    for(uint8_t i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
     {
         if(ware->type == USUAL_BUILDING_CONSTS[type - 10].wares_needed[i])
         {
@@ -414,7 +414,7 @@ bool nobUsual::FreePlaceAtFlag()
 void nobUsual::WareLost(Ware* ware)
 {
     // Ware konnte nicht kommen --> raus damit
-    for(unsigned i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
+    for(uint32_t i = 0; i < USUAL_BUILDING_CONSTS[type - 10].wares_needed_count; ++i)
     {
         if(USUAL_BUILDING_CONSTS[type - 10].wares_needed[i] == ware->type)
             ordered_wares[i].remove(ware);
@@ -484,14 +484,14 @@ bool nobUsual::WaresAvailable()
  */
 void nobUsual::ConsumeWares()
 {
-    unsigned char ware_type = 0xFF;
+    uint8_t ware_type = 0xFF;
 
     if(USUAL_BUILDING_CONSTS[type - 10].wares_needed_count == 3)
     {
         // Bei Bergwerken wird immer nur eine Lebensmittelart "konsumiert" und es wird natürlich immer die genommen, die am meisten vorhanden ist
-        unsigned char best = 0;
+        uint8_t best = 0;
 
-        for(unsigned char i = 0; i < 3; ++i)
+        for(uint8_t i = 0; i < 3; ++i)
         {
             if(wares[i] > best)
             {
@@ -564,10 +564,10 @@ void nobUsual::ConsumeWares()
  *
  *  @author OLiver
  */
-unsigned nobUsual::CalcDistributionPoints(noRoadNode* start, const GoodType type)
+uint32_t nobUsual::CalcDistributionPoints(noRoadNode* start, const GoodType type)
 {
     // Warentyp ermitteln
-    unsigned id;
+    uint32_t id;
     for(id = 0; id < 3; ++id)
     {
         if(USUAL_BUILDING_CONSTS[this->type - 10].wares_needed[id] == type)
@@ -579,7 +579,7 @@ unsigned nobUsual::CalcDistributionPoints(noRoadNode* start, const GoodType type
         return 0;
 
     // Maximale Warenanzahlbestimmen
-    unsigned wares_count;
+    uint32_t wares_count;
     if(USUAL_BUILDING_CONSTS[this->type - 10].wares_needed_count == 3)
         wares_count = 2;
     else if(this->type == BLD_CATAPULT)
@@ -592,7 +592,7 @@ unsigned nobUsual::CalcDistributionPoints(noRoadNode* start, const GoodType type
         return 0;
 
     // 10000 als Basis wählen, damit man auch noch was abziehen kann
-    unsigned points = 10000;
+    uint32_t points = 10000;
 
     // Wenn hier schon Waren drin sind oder welche bestellt sind, wirkt sich das natürlich negativ auf die "Wichtigkeit" aus
     points -= (wares[id] + ordered_wares[id].size()) * 30;
@@ -614,7 +614,7 @@ unsigned nobUsual::CalcDistributionPoints(noRoadNode* start, const GoodType type
 void nobUsual::TakeWare(Ware* ware)
 {
     // Ware in die Bestellliste aufnehmen
-    for(unsigned char i = 0; i < 3; ++i)
+    for(uint8_t i = 0; i < 3; ++i)
     {
         if(ware->type == USUAL_BUILDING_CONSTS[this->type - 10].wares_needed[i])
         {
@@ -685,7 +685,7 @@ bool nobUsual::HasWorker() const
 void nobUsual::SetProductivityToZero()
 {
     productivity = 0;
-    for (unsigned i = 0; i < LAST_PRODUCTIVITIES_COUNT; ++i)
+    for (uint32_t i = 0; i < LAST_PRODUCTIVITIES_COUNT; ++i)
     {
         last_productivities[i] = 0;
     }

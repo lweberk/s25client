@@ -32,14 +32,14 @@ class nofGeologist : public nofFlagWorker
     private:
 
         /// Schilder, die er noch aufstellen sollte (max 15 abarbeiten)
-        unsigned short signs;
+        uint16_t signs;
 
         std::vector<MapPoint> available_nodes;
         /// Punkt, zu dem er gerade geht
         MapPoint node_goal;
 
         /// maximaler Radius wie weit die Geologen sich von der Flagge entfernen würde
-        static const unsigned short MAX_RADIUS = 10;
+        static const uint16_t MAX_RADIUS = 10;
 
         std::vector<bool> resAlreadyFound;
 
@@ -47,7 +47,7 @@ class nofGeologist : public nofFlagWorker
 
         void GoalReached();
         void Walked();
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
         /// Kann man an diesem Punkt ein Schild aufstellen?
         bool IsNodeGood(const MapPoint pt);
@@ -57,19 +57,19 @@ class nofGeologist : public nofFlagWorker
         void TestNode(const MapPoint pt);
         /// Bestimmt einen neuen Punkt,wo man hingehen kann, falls es keinen mehr gibt, wird ein ungültiger
         /// Iterator gesetzt, liefert die Richtung in die man zum Punkt gehen muss, zurück
-        unsigned char GetNextNode();
+        uint8_t GetNextNode();
         /// Sucht sich einen neuen Punkt und geht dorthin oder geht wieder nach Hause wenn alle Schilder aufgestellt wurden
         /// oder es keinen Punkt mehr gibt
         void GoToNextNode();
         /// Setzt das Schild, wenn noch was frei ist
-        void SetSign(const unsigned char resources);
+        void SetSign(const uint8_t resources);
 
-        bool IsSignInArea(unsigned char type) const;
+        bool IsSignInArea(uint8_t type) const;
 
     public:
 
-        nofGeologist(const MapPoint pt, const unsigned char player, noRoadNode* goal);
-        nofGeologist(SerializedGameData* sgd, const unsigned obj_id);
+        nofGeologist(const MapPoint pt, const uint8_t player, noRoadNode* goal);
+        nofGeologist(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Serialisierungsfunktionen
     protected:  void Serialize_nofGeologist(SerializedGameData* sgd) const;
@@ -77,7 +77,7 @@ class nofGeologist : public nofFlagWorker
 
         GO_Type GetGOT() const { return GOT_NOF_GEOLOGIST; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Wird aufgerufen, wenn die Flagge abgerissen wurde
         void LostWork();

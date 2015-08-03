@@ -38,17 +38,17 @@
 #include "figures/nofAttacker.h"
 #include "Log.h"
 
-const unsigned int ship_count = 55;
+const uint32_t ship_count = 55;
 
 /// Zeit zum Beladen des Schiffes
-const unsigned LOADING_TIME = 200;
+const uint32_t LOADING_TIME = 200;
 /// Zeit zum Entladen des Schiffes
-const unsigned UNLOADING_TIME = 200;
+const uint32_t UNLOADING_TIME = 200;
 
 /// Maximaler Weg, der zurückgelegt werden kann bei einem Erkundungsschiff
-const unsigned MAX_EXPLORATION_EXPEDITION_DISTANCE = 100;
+const uint32_t MAX_EXPLORATION_EXPEDITION_DISTANCE = 100;
 /// Zeit (in GF), die das Schiff bei der Erkundungs-Expedition jeweils an einem Punkt ankert
-const unsigned EXPLORATION_EXPEDITION_WAITING_TIME = 300;
+const uint32_t EXPLORATION_EXPEDITION_WAITING_TIME = 300;
 
 const std::string ship_names[NAT_COUNT][ship_count] =
 {
@@ -62,36 +62,36 @@ const std::string ship_names[NAT_COUNT][ship_count] =
 //{"FloSoftius", "Demophobius", "Olivianus", "Spikeonius", "Nastius"};
 
 /// Positionen der Flaggen am Schiff für die 6 unterschiedlichen Richtungen jeweils#
-const Point<int> SHIPS_FLAG_POS[12] =
+const Point<int32_t> SHIPS_FLAG_POS[12] =
 {
     // Und wenn das Schiff steht und Segel nicht gehisst hat
-    Point<int>(-3, -77),
-    Point<int>(-6, -71),
-    Point<int>(-3, -71),
-    Point<int>(-1, -71),
-    Point<int>(5, -63),
-    Point<int>(-1, -70),
+    Point<int32_t>(-3, -77),
+    Point<int32_t>(-6, -71),
+    Point<int32_t>(-3, -71),
+    Point<int32_t>(-1, -71),
+    Point<int32_t>(5, -63),
+    Point<int32_t>(-1, -70),
 
     // Und wenn es fährt
-    Point<int>(3, -70),
-    Point<int>(0, -64),
-    Point<int>(3, -64),
-    Point<int>(-1, -70),
-    Point<int>(5, -63),
-    Point<int>(5, -63)
+    Point<int32_t>(3, -70),
+    Point<int32_t>(0, -64),
+    Point<int32_t>(3, -64),
+    Point<int32_t>(-1, -70),
+    Point<int32_t>(5, -63),
+    Point<int32_t>(5, -63)
 };
 
 /// Konstruktor
-noShip::noShip(const MapPoint pos, const unsigned char player)
+noShip::noShip(const MapPoint pos, const uint8_t player)
     : noMovable(NOP_SHIP, pos),
       player(player), state(STATE_IDLE), sea_id(0), goal_harbor_id(0), goal_dir(0),
       name(ship_names[gwg->GetPlayer(player)->nation][RANDOM.Rand(__FILE__, __LINE__, obj_id, ship_count)]),
       lost(false), remaining_sea_attackers(0), home_harbor(0), covered_distance(0)
 {
     // Meer ermitteln, auf dem dieses Schiff fährt
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
-        unsigned short sea_id = gwg->GetNodeAround(pos, i).sea_id;
+        uint16_t sea_id = gwg->GetNodeAround(pos, i).sea_id;
         if(sea_id)
             this->sea_id = sea_id;
     }
@@ -110,7 +110,7 @@ void noShip::Serialize(SerializedGameData* sgd) const
     Serialize_noMovable(sgd);
 
     sgd->PushUnsignedChar(player);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushUnsignedShort(sea_id);
     sgd->PushUnsignedInt(goal_harbor_id);
     sgd->PushUnsignedChar(goal_dir);
@@ -121,7 +121,7 @@ void noShip::Serialize(SerializedGameData* sgd) const
     sgd->PushUnsignedInt(remaining_sea_attackers);
     sgd->PushUnsignedInt(home_harbor);
     sgd->PushUnsignedInt(covered_distance);
-    for(unsigned i = 0; i < route.size(); ++i)
+    for(uint32_t i = 0; i < route.size(); ++i)
         sgd->PushUnsignedChar(route[i]);
     sgd->PushObjectList(figures, false);
     sgd->PushObjectList(wares, true);
@@ -129,7 +129,7 @@ void noShip::Serialize(SerializedGameData* sgd) const
 
 }
 
-noShip::noShip(SerializedGameData* sgd, const unsigned obj_id) :
+noShip::noShip(SerializedGameData* sgd, const uint32_t obj_id) :
     noMovable(sgd, obj_id),
     player(sgd->PopUnsignedChar()),
     state(State(sgd->PopUnsignedChar())),
@@ -144,7 +144,7 @@ noShip::noShip(SerializedGameData* sgd, const unsigned obj_id) :
     home_harbor(sgd->PopUnsignedInt()),
     covered_distance(sgd->PopUnsignedInt())
 {
-    for(unsigned i = 0; i < route.size(); ++i)
+    for(uint32_t i = 0; i < route.size(); ++i)
         route[i] = sgd->PopUnsignedChar();
     sgd->PopObjectList(figures, GOT_UNKNOWN);
     sgd->PopObjectList(wares, GOT_WARE);
@@ -157,7 +157,7 @@ void noShip::Destroy()
 }
 
 /// Zeichnet das Schiff stehend mit oder ohne Waren
-void noShip::DrawFixed(const int x, const int y, const bool draw_wares)
+void noShip::DrawFixed(const int32_t x, const int32_t y, const bool draw_wares)
 {
     LOADER.GetImageN("boot_z",  ((dir + 3) % 6) * 2 + 1)->Draw(x, y, 0, 0, 0, 0, 0, 0, COLOR_SHADOW);
     LOADER.GetImageN("boot_z",  ((dir + 3) % 6) * 2)->Draw(x, y);
@@ -167,9 +167,9 @@ void noShip::DrawFixed(const int x, const int y, const bool draw_wares)
         LOADER.GetImageN("boot_z",  30 + ((dir + 3) % 6))->Draw(x, y);
 }
 
-void noShip::Draw(int x, int y)
+void noShip::Draw(int32_t x, int32_t y)
 {
-    unsigned flag_drawing_type = 1;
+    uint32_t flag_drawing_type = 1;
 
     // Sind wir verloren? Dann immer stehend zeichnen
     if(lost)
@@ -236,7 +236,7 @@ void noShip::Draw(int x, int y)
 
 }
 /// Zeichnet normales Fahren auf dem Meer ohne irgendwelche Güter
-void noShip::DrawDriving(int& x, int& y)
+void noShip::DrawDriving(int32_t& x, int32_t& y)
 {
     // Interpolieren zwischen beiden Knotenpunkten
     CalcWalkingRelative(x, y);
@@ -246,7 +246,7 @@ void noShip::DrawDriving(int& x, int& y)
 }
 
 /// Zeichnet normales Fahren auf dem Meer mit Gütern
-void noShip::DrawDrivingWithWares(int& x, int& y)
+void noShip::DrawDrivingWithWares(int32_t& x, int32_t& y)
 {
     // Interpolieren zwischen beiden Knotenpunkten
     CalcWalkingRelative(x, y);
@@ -258,7 +258,7 @@ void noShip::DrawDrivingWithWares(int& x, int& y)
 }
 
 
-void noShip::HandleEvent(const unsigned int id)
+void noShip::HandleEvent(const uint32_t id)
 {
     current_ev = 0;
 
@@ -311,7 +311,7 @@ void noShip::HandleEvent(const unsigned int id)
                     {
                         Goods goods;
                         memset(&goods, 0, sizeof(Goods));
-                        unsigned char nation = players->getElement(player)->nation;
+                        uint8_t nation = players->getElement(player)->nation;
                         goods.goods[GD_BOARDS] = BUILDING_COSTS[nation][BLD_HARBORBUILDING].boards;
                         goods.goods[GD_STONES] = BUILDING_COSTS[nation][BLD_HARBORBUILDING].stones;
                         goods.people[JOB_BUILDER] = 1;
@@ -334,7 +334,7 @@ void noShip::HandleEvent(const unsigned int id)
                     MapPoint goal_pos(gwg->GetHarborPoint(goal_harbor_id));
                     noBase* hb = gwg->GetNO(goal_pos);
 
-                    unsigned old_visual_range = GetVisualRange();
+                    uint32_t old_visual_range = GetVisualRange();
 
                     if(hb->GetGOT() == GOT_NOB_HARBORBUILDING)
                     {
@@ -429,9 +429,9 @@ void noShip::HandleEvent(const unsigned int id)
 
 }
 
-void noShip::StartDriving(const unsigned char dir)
+void noShip::StartDriving(const uint8_t dir)
 {
-    const unsigned SHIP_SPEEDS[] = {35, 25, 20, 10, 5};
+    const uint32_t SHIP_SPEEDS[] = {35, 25, 20, 10, 5};
 
     StartMoving(dir, SHIP_SPEEDS[GAMECLIENT.GetGGS().getSelection(ADDON_SHIP_SPEED)]);
 }
@@ -465,7 +465,7 @@ void noShip::Driven()
 }
 
 /// Gibt Sichtradius dieses Schiffes zurück
-unsigned noShip::GetVisualRange() const
+uint32_t noShip::GetVisualRange() const
 {
     // Erkundungsschiffe haben einen größeren Sichtbereich
     if(state >= STATE_EXPLORATIONEXPEDITION_LOADING && state <= STATE_EXPLORATIONEXPEDITION_DRIVING)
@@ -478,7 +478,7 @@ unsigned noShip::GetVisualRange() const
 
 
 /// Fährt zum Hafen, um dort eine Mission (Expedition) zu erledigen
-void noShip::GoToHarbor(nobHarborBuilding* hb, const std::vector<unsigned char>& route)
+void noShip::GoToHarbor(nobHarborBuilding* hb, const std::vector<uint8_t>& route)
 {
     state = STATE_GOTOHARBOR;
 
@@ -620,7 +620,7 @@ noShip::Result noShip::DriveToHarbourPlace()
 }
 
 
-unsigned noShip::GetCurrentHarbor() const
+uint32_t noShip::GetCurrentHarbor() const
 {
     assert(state == STATE_EXPEDITION_WAITING);
     return goal_harbor_id;
@@ -628,7 +628,7 @@ unsigned noShip::GetCurrentHarbor() const
 
 
 /// Weist das Schiff an, in einer bestimmten Richtung die Expedition fortzusetzen
-void noShip::ContinueExpedition(const unsigned char dir)
+void noShip::ContinueExpedition(const uint8_t dir)
 {
     if(state != STATE_EXPEDITION_WAITING)
         return;
@@ -636,7 +636,7 @@ void noShip::ContinueExpedition(const unsigned char dir)
     assert(state == STATE_EXPEDITION_WAITING);
 
     // Nächsten Hafenpunkt in dieser Richtung suchen
-    unsigned new_goal = gwg->GetNextFreeHarborPoint(pos, goal_harbor_id, dir, player);
+    uint32_t new_goal = gwg->GetNextFreeHarborPoint(pos, goal_harbor_id, dir, player);
 
     // Auch ein Ziel gefunden?
     if(!new_goal)
@@ -793,7 +793,7 @@ void noShip::HandleState_ExplorationExpeditionDriving()
         case NO_ROUTE_FOUND:
         {
             MapPoint goal(gwg->GetHarborPoint(goal_harbor_id));
-            unsigned old_visual_range = GetVisualRange();
+            uint32_t old_visual_range = GetVisualRange();
             // Nichts machen und idlen
             StartIdling();
             // Sichtbarkeiten neu berechnen
@@ -1138,7 +1138,7 @@ void noShip::ContinueExplorationExpedition()
     else
     {
         // Nächsten Zielpunkt bestimmen
-        std::vector<unsigned> hps;
+        std::vector<uint32_t> hps;
         gwg->GetHarborPointsWithinReach(goal_harbor_id, hps);
 
         // Keine möglichen Häfen gefunden?

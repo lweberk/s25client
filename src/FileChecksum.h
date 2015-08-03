@@ -21,9 +21,11 @@
 
 #pragma once
 
-unsigned int CalcChecksumOfFile(const char* const path);
-unsigned int CalcChecksumOfBuffer(const unsigned char* buffer, unsigned int size);
+#include <cstdint>
 
-inline unsigned int CalcChecksumOfBuffer(const char* buffer, unsigned int size) { return CalcChecksumOfBuffer((const unsigned char*)buffer, size); }
+uint32_t CalcChecksumOfFile(const char* const path);
+uint32_t CalcChecksumOfBuffer(const uint8_t* buffer, uint32_t size);
+
+inline uint32_t CalcChecksumOfBuffer(const char* buffer, uint32_t size) { return CalcChecksumOfBuffer((const uint8_t*)buffer, size); }
 
 #endif // !FILECHECKSUM_H_INCLUDED

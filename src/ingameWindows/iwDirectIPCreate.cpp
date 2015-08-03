@@ -46,7 +46,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author OLiver
  */
-iwDirectIPCreate::iwDirectIPCreate(unsigned int server_type)
+iwDirectIPCreate::iwDirectIPCreate(uint32_t server_type)
     : IngameWindow(CGI_DIRECTIPCREATE, 0xFFFF, 0xFFFF, 300, 285, _("Create Game"), LOADER.GetImageN("resource", 41), true),
       server_type(server_type)
 {
@@ -92,7 +92,7 @@ iwDirectIPCreate::iwDirectIPCreate(unsigned int server_type)
  *
  *  @author FloSoft
  */
-void iwDirectIPCreate::Msg_EditChange(const unsigned int ctrl_id)
+void iwDirectIPCreate::Msg_EditChange(const uint32_t ctrl_id)
 {
     // Statustext resetten
     SetText("", COLOR_RED, true);
@@ -104,7 +104,7 @@ void iwDirectIPCreate::Msg_EditChange(const unsigned int ctrl_id)
  *
  *  @author FloSoft
  */
-void iwDirectIPCreate::Msg_EditEnter(const unsigned int ctrl_id)
+void iwDirectIPCreate::Msg_EditEnter(const uint32_t ctrl_id)
 {
     ctrlEdit* name = GetCtrl<ctrlEdit>(1);
     ctrlEdit* port = GetCtrl<ctrlEdit>(3);
@@ -138,7 +138,7 @@ void iwDirectIPCreate::Msg_EditEnter(const unsigned int ctrl_id)
  *
  *  @author FloSoft
  */
-void iwDirectIPCreate::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void iwDirectIPCreate::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -155,7 +155,7 @@ void iwDirectIPCreate::Msg_OptionGroupChange(const unsigned int ctrl_id, const u
  *
  *  @author FloSoft
  */
-void iwDirectIPCreate::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwDirectIPCreate::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -185,7 +185,7 @@ void iwDirectIPCreate::Msg_ButtonClick(const unsigned int ctrl_id)
             CreateServerInfo csi;
             csi.gamename = name->GetText();
             csi.password = pass->GetText();
-            csi.port = static_cast<unsigned short>(atoi(port->GetText().c_str()));
+            csi.port = static_cast<uint16_t>(atoi(port->GetText().c_str()));
             csi.type = server_type;
             csi.ipv6 = SETTINGS.server.ipv6;
             csi.use_upnp = (SETTINGS.global.use_upnp == 1);
@@ -207,7 +207,7 @@ void iwDirectIPCreate::Msg_ButtonClick(const unsigned int ctrl_id)
  *
  *  @author FloSoft
  */
-void iwDirectIPCreate::SetText(const std::string& text, unsigned int color, bool button)
+void iwDirectIPCreate::SetText(const std::string& text, uint32_t color, bool button)
 {
     // Text setzen
     GetCtrl<ctrlText>(6)->SetColor(color);

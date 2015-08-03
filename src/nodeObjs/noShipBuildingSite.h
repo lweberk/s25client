@@ -26,15 +26,15 @@ class noShipBuildingSite: public noCoordBase
 {
     public:
 
-        noShipBuildingSite(const MapPoint pt, const unsigned char player);
-        noShipBuildingSite(SerializedGameData* sgd, const unsigned obj_id);
+        noShipBuildingSite(const MapPoint pt, const uint8_t player);
+        noShipBuildingSite(SerializedGameData* sgd, const uint32_t obj_id);
         ~noShipBuildingSite();
         void Destroy();
         void Serialize(SerializedGameData* sgd) const;
         GO_Type GetGOT() const { return GOT_SHIPBUILDINGSITE; }
 
         /// Gibt den Eigentümer zurück
-        unsigned char GetPlayer() const { return player; }
+        uint8_t GetPlayer() const { return player; }
 
         /// Das Schiff wird um eine Stufe weitergebaut
         void MakeBuildStep();
@@ -43,14 +43,14 @@ class noShipBuildingSite: public noCoordBase
 
     protected:
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
     private:
 
         /// Spieler, dem dieses Schiff gehört
-        unsigned char player;
+        uint8_t player;
         /// Baufortschritt des Schiffes
-        unsigned char progress;
+        uint8_t progress;
 
 };
 

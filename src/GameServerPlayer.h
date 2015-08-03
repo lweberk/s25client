@@ -34,16 +34,16 @@ class Serializer;
 class GameServerPlayer : public GamePlayerInfo
 {
     public:
-        GameServerPlayer(const unsigned playerid);
-        GameServerPlayer(const unsigned playerid, Serializer* ser);
+        GameServerPlayer(const uint32_t playerid);
+        GameServerPlayer(const uint32_t playerid, Serializer* ser);
         ~GameServerPlayer();
 
         /// Gibt Sekunden bis zum TimeOut (Rausschmiss) zurück
-        unsigned GetTimeOut() const;
+        uint32_t GetTimeOut() const;
 
         void doPing();
         void doTimeout();
-        void reserve(Socket* sock, unsigned char id);
+        void reserve(Socket* sock, uint8_t id);
         void clear();
 
         /// Tauscht Spieler
@@ -56,7 +56,7 @@ class GameServerPlayer : public GamePlayerInfo
 
     private:
 
-        unsigned int connecttime;
+        uint32_t connecttime;
         /// Zeitpunkt, ab dem kein Kommando mehr vom Spieler kommt
         unser_time_t last_command_timeout;
 
@@ -69,10 +69,10 @@ class GameServerPlayer : public GamePlayerInfo
 
         std::list<GameMessage_GameCommand> gc_queue;
 
-        unsigned int lastping;
+        uint32_t lastping;
 
-        unsigned int temp_ul;
-        unsigned int temp_ui;
+        uint32_t temp_ul;
+        uint32_t temp_ui;
 };
 
 

@@ -20,8 +20,10 @@
 #ifndef SOUNDMANAGER_H_
 #define SOUNDMANAGER_H_
 
-#include "Singleton.h"
+#include <cstdint>
 #include <list>
+
+#include "Singleton.h"
 
 class noBase;
 class glArchivItem_Sound;
@@ -37,9 +39,9 @@ class SoundManager : public Singleton<SoundManager>
             /// Objekt, das den Sound "wiedergibt"
             noBase* obj;
             /// Zusätzliche ID, falls das Objekt im Zuge seiner Arbeit mehrere Sounds von sich gibt
-            unsigned id;
+            uint32_t id;
             /// Abspiel ID - identifiziert ein abgespieltes Stück, mit dem man abgespielte Stücke stoppen kann
-            unsigned play_id;
+            uint32_t play_id;
         };
 
         /// Liste von NO-Sounds
@@ -48,11 +50,11 @@ class SoundManager : public Singleton<SoundManager>
         //////////////////////////////////
 
         /// Wann wurde der letzte Vogelzwitschersound abgespielt?
-        unsigned int last_bird;
+        uint32_t last_bird;
         /// Intervall zwischen den Vogelzwitschern
-        unsigned bird_interval;
+        uint32_t bird_interval;
         /// Play-ID fürs Meeresrauschen
-        unsigned ocean_play_id;
+        uint32_t ocean_play_id;
 
     public:
 
@@ -60,7 +62,7 @@ class SoundManager : public Singleton<SoundManager>
         ~SoundManager();
 
         /// Versucht ggf. Objekt-Sound abzuspielen
-        void PlayNOSound(const unsigned sound_lst_id, noBase* const obj, const unsigned int id, unsigned char volume = 255);
+        void PlayNOSound(const uint32_t sound_lst_id, noBase* const obj, const uint32_t id, uint8_t volume = 255);
         /// Wenn die Arbeit (wo er Sounds von sich gegeben hat) von einem Objekt fertig ist bzw. abgebrochen wurde,
         /// wird diese Funktion aufgerufen, die alle Sounds von diesem Objekt entfernt
         void WorkingFinished(noBase* const obj);
@@ -68,9 +70,9 @@ class SoundManager : public Singleton<SoundManager>
         /////////////////////////////////
 
         /// Wird immer aufgerufen, wenn der GameWorld alles gezeichnet hat und die Vögel abgespielt werden
-        void PlayBirdSounds(const unsigned short tree_count);
+        void PlayBirdSounds(const uint16_t tree_count);
         /// Spielt Meeresrauschen ab (wird der Anteil von Wasser an der aktuell gezeichneten Fläche in % angegeben)
-        void PlayOceanBrawling(const unsigned water_percent);
+        void PlayOceanBrawling(const uint32_t water_percent);
 
         void StopAll();
 };

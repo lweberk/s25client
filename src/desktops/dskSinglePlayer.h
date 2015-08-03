@@ -31,7 +31,7 @@ class dskSinglePlayer : public Desktop
         dskSinglePlayer();
     private:
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
         void PrepareSinglePlayerServer();
         void PrepareLoadGame();
 };

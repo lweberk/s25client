@@ -45,7 +45,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /// Konstante für einen ungültigen Vorgänerknoten
-const unsigned INVALID_PREV = 0xFFFFFFFF;
+const uint32_t INVALID_PREV = 0xFFFFFFFF;
 
 /// Vergleichsoperator für die Prioritätswarteschlange bzw. std::set beim straßengebundenen Wegfinden
 class RoadNodeComperator
@@ -69,26 +69,26 @@ struct NewNode
     NewNode() : way(0),  dir(0),  prev(INVALID_PREV),  lastVisited(0) {}
 
     /// Wegkosten,  die vom Startpunkt bis zu diesem Knoten bestehen
-    unsigned way;
-	unsigned wayEven;
+    uint32_t way;
+	uint32_t wayEven;
     /// Die Richtung,  über die dieser Knoten erreicht wurde
-    unsigned char dir;
-	unsigned char dirEven;
+    uint8_t dir;
+	uint8_t dirEven;
     /// ID (gebildet aus y*Kartenbreite+x) des Vorgänngerknotens
-    unsigned prev;
-	unsigned prevEven;
+    uint32_t prev;
+	uint32_t prevEven;
     /// Iterator auf Position in der Prioritätswarteschlange (std::set),  freies Pathfinding
     std::set<PathfindingPoint>::iterator it_p;
     /// Wurde Knoten schon besucht (für A*-Algorithmus),  wenn lastVisited == currentVisit
-    unsigned lastVisited;
-	unsigned lastVisitedEven; //used for road pathfinding (for ai only for now)
+    uint32_t lastVisited;
+	uint32_t lastVisitedEven; //used for road pathfinding (for ai only for now)
 };
 
-const unsigned maxMapSize = 1024;
+const uint32_t maxMapSize = 1024;
 /// Die Knoten der Map gespeichert,  größtmöglichste Kartengröße nehmen
 NewNode pf_nodes[maxMapSize* maxMapSize];
-unsigned currentVisit = 0;
-//unsigned currentVisitEven = 0; //used for road pathfinding (for now only the ai gets the comfort version)
+uint32_t currentVisit = 0;
+//uint32_t currentVisitEven = 0; //used for road pathfinding (for now only the ai gets the comfort version)
 
 /// Punkte als Verweise auf die obengenannen Knoten,  damit nur die beiden Koordinaten x, y im set mit rumgeschleppt
 /// werden müsen
@@ -97,11 +97,11 @@ struct PathfindingPoint
     public:
         /// Die beiden Koordinaten des Punktes
         MapPoint pt;
-        unsigned id,  distance;
+        uint32_t id,  distance;
 
     public:
         /// Konstruktoren
-        PathfindingPoint(const MapPoint s,  const unsigned sid): pt(s)
+        PathfindingPoint(const MapPoint s,  const uint32_t sid): pt(s)
         {
             id = sid;
             distance = gwb->CalcDistance(s,  dst);
@@ -123,8 +123,8 @@ struct PathfindingPoint
         {
             // Weglängen schätzen für beide Punkte,  indem man den bisherigen Weg mit der Luftlinie vom aktullen
             // Punkt zum Ziel addiert und auf diese Weise den kleinsten Weg auswählt
-            unsigned way1 = pf_nodes[id].way + distance;
-            unsigned way2 = pf_nodes[two.id].way + two.distance;
+            uint32_t way1 = pf_nodes[id].way + distance;
+            uint32_t way2 = pf_nodes[two.id].way + two.distance;
 
             // Wenn die Wegkosten gleich sind,  vergleichen wir die Koordinaten,  da wir für std::set eine streng
             // monoton steigende Folge brauchen
@@ -144,16 +144,16 @@ const GameWorldBase* PathfindingPoint::gwb = NULL;
 /// Wegfinden ( A* ),  O(v lg v) --> Wegfindung auf allgemeinen Terrain (ohne Straßen),  für Wegbau und frei herumlaufende Berufe
 bool GameWorldBase::FindFreePath(const MapPoint start, 
                                  const MapPoint dest,  const bool random_route, 
-                                 const unsigned max_route,  std::vector<unsigned char>* route,  unsigned* length, 
-                                 unsigned char* first_dir,   FP_Node_OK_Callback IsNodeOK,  FP_Node_OK_Callback IsNodeToDestOk,  const void* param,  const bool record) const
+                                 const uint32_t max_route,  std::vector<uint8_t>* route,  uint32_t* length, 
+                                 uint8_t* first_dir,   FP_Node_OK_Callback IsNodeOK,  FP_Node_OK_Callback IsNodeToDestOk,  const void* param,  const bool record) const
 {
     // increase currentVisit,  so we don't have to clear the visited-states at every run
     currentVisit++;
 
     // if the counter reaches its maxium,  tidy up
-    if (currentVisit == std::numeric_limits<unsigned>::max() - 1)
+    if (currentVisit == std::numeric_limits<uint32_t>::max() - 1)
     {
-        for (unsigned i = 0; i < (maxMapSize * maxMapSize); ++i)
+        for (uint32_t i = 0; i < (maxMapSize * maxMapSize); ++i)
         {
             pf_nodes[i].lastVisited = 0;
 			pf_nodes[i].lastVisitedEven = 0;
@@ -165,7 +165,7 @@ bool GameWorldBase::FindFreePath(const MapPoint start,
     PathfindingPoint::Init(dest,  this);
 
     // Anfangsknoten einfügen
-    unsigned start_id = MakeCoordID(start);
+    uint32_t start_id = MakeCoordID(start);
     std::pair< std::set<PathfindingPoint>::iterator,  bool > ret = todo.insert(PathfindingPoint(start,  start_id));
     // Und mit entsprechenden Werten füllen
     pf_nodes[start_id].it_p = ret.first;
@@ -175,7 +175,7 @@ bool GameWorldBase::FindFreePath(const MapPoint start,
     pf_nodes[start_id].dir = 0;
 
     // TODO confirm random
-    unsigned rand = (GetIdx(start)) * GAMECLIENT.GetGFNumber() % 6; //RANDOM.Rand(__FILE__,  __LINE__,  y_start * GetWidth() + x_start,  6);
+    uint32_t rand = (GetIdx(start)) * GAMECLIENT.GetGFNumber() % 6; //RANDOM.Rand(__FILE__,  __LINE__,  y_start * GetWidth() + x_start,  6);
 
     while(!todo.empty())
     {
@@ -188,7 +188,7 @@ bool GameWorldBase::FindFreePath(const MapPoint start,
 
         // ID des besten Punktes ausrechnen
 
-        unsigned best_id = best.id;
+        uint32_t best_id = best.id;
 
         // Dieser Knoten wurde aus dem set entfernt,  daher wird der entsprechende Iterator
         // auf das Ende (also nicht definiert) gesetzt,  quasi als "NULL"-Ersatz
@@ -205,7 +205,7 @@ bool GameWorldBase::FindFreePath(const MapPoint start,
                 route->resize(pf_nodes[best_id].way);
 
             // Route rekonstruieren und ggf. die erste Richtung speichern,  falls gewünscht
-            for(unsigned z = pf_nodes[best_id].way - 1; best_id != start_id; --z,  best_id = pf_nodes[best_id].prev)
+            for(uint32_t z = pf_nodes[best_id].way - 1; best_id != start_id; --z,  best_id = pf_nodes[best_id].prev)
             {
                 if(route)
                     (*route)[z] = pf_nodes[best_id].dir;
@@ -222,18 +222,18 @@ bool GameWorldBase::FindFreePath(const MapPoint start,
             continue;
 
         // Bei Zufälliger Richtung anfangen (damit man nicht immer denselben Weg geht,  besonders für die Soldaten wichtig)
-        unsigned start = random_route ? rand : 0;
+        uint32_t start = random_route ? rand : 0;
 
         // Knoten in alle 6 Richtungen bilden
-        for(unsigned z = start + 3; z < start + 9; ++z)
+        for(uint32_t z = start + 3; z < start + 9; ++z)
         {
-            unsigned i = z % 6;
+            uint32_t i = z % 6;
 
             // Koordinaten des entsprechenden umliegenden Punktes bilden
             MapPoint na = GetNeighbour(best.pt,  i);
 
             // ID des umliegenden Knotens bilden
-            unsigned xaid = MakeCoordID(na);
+            uint32_t xaid = MakeCoordID(na);
 
             // Knoten schon auf dem Feld gebildet?
             if (pf_nodes[xaid].lastVisited == currentVisit)
@@ -285,17 +285,17 @@ bool GameWorldBase::FindFreePath(const MapPoint start,
 /// Wegfinden ( A* ),  O(v lg v) --> Wegfindung auf allgemeinen Terrain (ohne Straßen),  für Wegbau und frei herumlaufende Berufe
 bool GameWorldBase::FindFreePathAlternatingConditions(const MapPoint start, 
                                  const MapPoint dest,  const bool random_route, 
-                                 const unsigned max_route,  std::vector<unsigned char>* route,  unsigned* length, 
-                                 unsigned char* first_dir,   FP_Node_OK_Callback IsNodeOK,  FP_Node_OK_Callback IsNodeOKAlternate,  FP_Node_OK_Callback IsNodeToDestOk,  const void* param,  const bool record) const
+                                 const uint32_t max_route,  std::vector<uint8_t>* route,  uint32_t* length, 
+                                 uint8_t* first_dir,   FP_Node_OK_Callback IsNodeOK,  FP_Node_OK_Callback IsNodeOKAlternate,  FP_Node_OK_Callback IsNodeToDestOk,  const void* param,  const bool record) const
 {
     // increase currentVisit,  so we don't have to clear the visited-states at every run
     currentVisit++;
 	//currentVisitEven++;
 
     // if the counter reaches its maxium,  tidy up
-    if (currentVisit == std::numeric_limits<unsigned>::max() - 1)
+    if (currentVisit == std::numeric_limits<uint32_t>::max() - 1)
     {
-        for (unsigned i = 0; i < (maxMapSize * maxMapSize); ++i)
+        for (uint32_t i = 0; i < (maxMapSize * maxMapSize); ++i)
         {
             pf_nodes[i].lastVisited = 0;
 			pf_nodes[i].lastVisitedEven = 0;
@@ -306,11 +306,11 @@ bool GameWorldBase::FindFreePathAlternatingConditions(const MapPoint start,
 
     std::list<PathfindingPoint> todo;
 	bool prevstepEven=true; //flips between even and odd 
-	unsigned stepsTilSwitch=1;
+	uint32_t stepsTilSwitch=1;
     PathfindingPoint::Init(dest,  this);
 
     // Anfangsknoten einfügen
-    unsigned start_id = MakeCoordID(start);
+    uint32_t start_id = MakeCoordID(start);
 	todo.push_back(PathfindingPoint(start,  start_id));
     // Und mit entsprechenden Werten füllen
     //pf_nodes[start_id].it_p = ret.first;
@@ -320,7 +320,7 @@ bool GameWorldBase::FindFreePathAlternatingConditions(const MapPoint start,
     pf_nodes[start_id].dirEven = 0;
 	//LOG.lprintf("pf: from %i, %i to %i, %i \n", x_start, y_start, x_dest, y_dest);
     // TODO confirm random
-    unsigned rand = GetIdx(start) * GAMECLIENT.GetGFNumber() % 6; //RANDOM.Rand(__FILE__,  __LINE__,  y_start * GetWidth() + x_start,  6);
+    uint32_t rand = GetIdx(start) * GAMECLIENT.GetGFNumber() % 6; //RANDOM.Rand(__FILE__,  __LINE__,  y_start * GetWidth() + x_start,  6);
 
 	while(!todo.empty())
     {		
@@ -343,7 +343,7 @@ bool GameWorldBase::FindFreePathAlternatingConditions(const MapPoint start,
 
         // ID des besten Punktes ausrechnen
 
-        unsigned best_id = best.id;
+        uint32_t best_id = best.id;
 		//LOG.lprintf(" now %i, %i id: %i \n", best.x, best.y, best_id);
         // Dieser Knoten wurde aus dem set entfernt,  daher wird der entsprechende Iterator
         // auf das Ende (also nicht definiert) gesetzt,  quasi als "NULL"-Ersatz
@@ -361,7 +361,7 @@ bool GameWorldBase::FindFreePathAlternatingConditions(const MapPoint start,
 
             // Route rekonstruieren und ggf. die erste Richtung speichern,  falls gewünscht
 			bool alternate=prevstepEven;
-            for(unsigned z = prevstepEven? pf_nodes[best_id].wayEven - 1 : pf_nodes[best_id].way - 1; best_id != start_id; --z,  best_id = alternate? pf_nodes[best_id].prevEven : pf_nodes[best_id].prev,  alternate=!alternate)
+            for(uint32_t z = prevstepEven? pf_nodes[best_id].wayEven - 1 : pf_nodes[best_id].way - 1; best_id != start_id; --z,  best_id = alternate? pf_nodes[best_id].prevEven : pf_nodes[best_id].prev,  alternate=!alternate)
             {
                 if(route)
                     (*route)[z] = alternate? pf_nodes[best_id].dirEven : pf_nodes[best_id].dir;
@@ -378,18 +378,18 @@ bool GameWorldBase::FindFreePathAlternatingConditions(const MapPoint start,
             continue;
 
         // Bei Zufälliger Richtung anfangen (damit man nicht immer denselben Weg geht,  besonders für die Soldaten wichtig)
-        unsigned startDir = random_route ? rand : 0;
+        uint32_t startDir = random_route ? rand : 0;
 		//LOG.lprintf("pf get neighbor nodes %i, %i id: %i \n", best.x, best.y, best_id);
         // Knoten in alle 6 Richtungen bilden
-        for(unsigned z = startDir + 3; z < startDir + 9; ++z)
+        for(uint32_t z = startDir + 3; z < startDir + 9; ++z)
         {
-            unsigned i = z % 6;
+            uint32_t i = z % 6;
 
             // Koordinaten des entsprechenden umliegenden Punktes bilden
             MapPoint na = GetNeighbour(best.pt,  i);
 
             // ID des umliegenden Knotens bilden
-            unsigned xaid = MakeCoordID(na);
+            uint32_t xaid = MakeCoordID(na);
 
             // Knoten schon auf dem Feld gebildet?
             if ((prevstepEven && pf_nodes[xaid].lastVisited == currentVisit) || (!prevstepEven && pf_nodes[xaid].lastVisitedEven == currentVisit))
@@ -414,10 +414,10 @@ bool GameWorldBase::FindFreePathAlternatingConditions(const MapPoint start,
 
 					std::vector<MapPoint>evenlocationsonroute;
 					bool alternate=prevstepEven;
-					unsigned back_id=best_id;
-					for(unsigned i=pf_nodes[best_id].way-1; i>1; i--, back_id = alternate? pf_nodes[back_id].prevEven : pf_nodes[back_id].prev,  alternate=!alternate) // backtrack the plannend route and check if another "even" position is too close
+					uint32_t back_id=best_id;
+					for(uint32_t i=pf_nodes[best_id].way-1; i>1; i--, back_id = alternate? pf_nodes[back_id].prevEven : pf_nodes[back_id].prev,  alternate=!alternate) // backtrack the plannend route and check if another "even" position is too close
 					{
-						unsigned char pdir = alternate? pf_nodes[back_id].dirEven : pf_nodes[back_id].dir;
+						uint8_t pdir = alternate? pf_nodes[back_id].dirEven : pf_nodes[back_id].dir;
 						p = GetNeighbour(p,  (pdir+3)%6);
 						if(i%2==0) //even step
 						{	
@@ -492,7 +492,7 @@ class openlist_container : public std::priority_queue<_Ty,   _Container,  _Pr>
 };
 
 // a 'second' current_visit for road pathfinding
-unsigned current_visit_on_roads = 0;
+uint32_t current_visit_on_roads = 0;
 
 // Vergleichsoperator für das straßengebundene Pathfinding,  wird genauso wie das freie Pathfinding
 // gehandelt,  nur dass wir noRoadNodes statt direkt Points vergleichen
@@ -524,14 +524,14 @@ openlist_container<const noRoadNode*,  std::vector<const noRoadNode*>,  RoadNode
 
 /// Wegfinden ( A* ),  O(v lg v) --> Wegfindung auf allgemeinen Terrain (ohne Straßen),  für Wegbau und frei herumlaufende Berufe
 bool GameWorldBase::FindPathOnRoads(const noRoadNode* const start,  const noRoadNode* const goal, 
-                                    const bool ware_mode,  unsigned* length, 
-                                    unsigned char* first_dir,   MapPoint* next_harbor, 
-                                    const RoadSegment* const forbidden,  const bool record,  unsigned max) const
+                                    const bool ware_mode,  uint32_t* length, 
+                                    uint8_t* first_dir,   MapPoint* next_harbor, 
+                                    const RoadSegment* const forbidden,  const bool record,  uint32_t max) const
 {
     // Aus Replay lesen?
     if(GAMECLIENT.ArePathfindingResultsAvailable() && record)
     {
-        unsigned char dir;
+        uint8_t dir;
         if(GAMECLIENT.ReadPathfindingResult(&dir,  length,  next_harbor))
         {
             if(first_dir) *first_dir = dir;
@@ -551,9 +551,9 @@ bool GameWorldBase::FindPathOnRoads(const noRoadNode* const start,  const noRoad
     current_visit_on_roads++;
 
     // if the counter reaches its maxium,  tidy up
-    if (current_visit_on_roads == std::numeric_limits<unsigned>::max())
+    if (current_visit_on_roads == std::numeric_limits<uint32_t>::max())
     {
-        for (int idx = width * height; idx >= 0; --idx)
+        for (int32_t idx = width * height; idx >= 0; --idx)
         {
             const noRoadNode* node = dynamic_cast<const noRoadNode*>(nodes[idx].obj);
 
@@ -603,7 +603,7 @@ bool GameWorldBase::FindPathOnRoads(const noRoadNode* const start,  const noRoad
 
             if (first_dir)
             {
-                *first_dir = (unsigned char) last->dir;
+                *first_dir = (uint8_t) last->dir;
             }
 
             if (next_harbor)
@@ -615,14 +615,14 @@ bool GameWorldBase::FindPathOnRoads(const noRoadNode* const start,  const noRoad
             // Fertig,  es wurde ein Pfad gefunden
             if (record)
             {
-                GAMECLIENT.AddPathfindingResult((unsigned char) last->dir,  length,  next_harbor);
+                GAMECLIENT.AddPathfindingResult((uint8_t) last->dir,  length,  next_harbor);
             }
 
             return true;
         }
 
         // Nachbarflagge bzw. Wege in allen 6 Richtungen verfolgen
-        for (unsigned i = 0; i < 6; ++i)
+        for (uint32_t i = 0; i < 6; ++i)
         {
             // Gibt es auch einen solchen Weg bzw. Nachbarflagge?
             noRoadNode* neighbour = best->GetNeighbour(i);
@@ -647,7 +647,7 @@ bool GameWorldBase::FindPathOnRoads(const noRoadNode* const start,  const noRoad
             }
 
             // Neuer Weg für diesen neuen Knoten berechnen
-            unsigned cost = best->cost + best->routes[i]->GetLength();
+            uint32_t cost = best->cost + best->routes[i]->GetLength();
 
             // Im Warenmodus müssen wir Strafpunkte für überlastete Träger hinzuaddieren, 
             // damit der Algorithmus auch Ausweichrouten auswählt
@@ -697,10 +697,10 @@ bool GameWorldBase::FindPathOnRoads(const noRoadNode* const start,  const noRoad
             std::vector<nobHarborBuilding::ShipConnection> scs;
             static_cast<const nobHarborBuilding*>(best)->GetShipConnections(scs);
 
-            for (unsigned i = 0; i < scs.size(); ++i)
+            for (uint32_t i = 0; i < scs.size(); ++i)
             {
                 // Neuer Weg für diesen neuen Knoten berechnen
-                unsigned cost = best->cost + scs[i].way_costs;
+                uint32_t cost = best->cost + scs[i].way_costs;
 
                 if (cost > max)
                     continue;
@@ -745,14 +745,14 @@ bool GameWorldBase::FindPathOnRoads(const noRoadNode* const start,  const noRoad
 
 
 /// Ermittelt,  ob eine freie Route noch passierbar ist und gibt den Endpunkt der Route zurück
-bool GameWorldBase::CheckFreeRoute(const MapPoint start,  const std::vector<unsigned char>& route,  const unsigned pos, 
+bool GameWorldBase::CheckFreeRoute(const MapPoint start,  const std::vector<uint8_t>& route,  const uint32_t pos, 
                                    FP_Node_OK_Callback IsNodeOK,  FP_Node_OK_Callback IsNodeToDestOk,  MapPoint* dest,  const void* const param) const
 {
     MapPoint pt(start);
 
     assert(pos < route.size());
 
-    for(unsigned i = pos; i < route.size(); ++i)
+    for(uint32_t i = pos; i < route.size(); ++i)
     {
         pt = GetNeighbour(pt,  route[i]);
         if(!IsNodeToDestOk(*this,  pt,  route[i],  param))
@@ -775,7 +775,7 @@ struct Param_RoadPath
 };
 
 /// Abbruch-Bedingungen für Straßenbau-Pathfinding
-bool IsPointOK_RoadPath(const GameWorldBase& gwb,  const MapPoint pt,  const unsigned char dir,  const void* param)
+bool IsPointOK_RoadPath(const GameWorldBase& gwb,  const MapPoint pt,  const uint8_t dir,  const void* param)
 {
     const Param_RoadPath* prp = static_cast<const Param_RoadPath*>(param);
 
@@ -791,7 +791,7 @@ bool IsPointOK_RoadPath(const GameWorldBase& gwb,  const MapPoint pt,  const uns
 }
 
 /// Abbruch-Bedingungen für Straßenbau-Pathfinding for comfort road construction with a possible flag every 2 steps
-bool IsPointOK_RoadPathEvenStep(const GameWorldBase& gwb,  const MapPoint pt,  const unsigned char dir,  const void* param)
+bool IsPointOK_RoadPathEvenStep(const GameWorldBase& gwb,  const MapPoint pt,  const uint8_t dir,  const void* param)
 {
     const Param_RoadPath* prp = static_cast<const Param_RoadPath*>(param);
 
@@ -809,14 +809,14 @@ bool IsPointOK_RoadPathEvenStep(const GameWorldBase& gwb,  const MapPoint pt,  c
 }
 
 /// Straßenbau-Pathfinding
-bool GameWorldViewer::FindRoadPath(const MapPoint start,  const MapPoint dest,  std::vector<unsigned char>& route,  const bool boat_road)
+bool GameWorldViewer::FindRoadPath(const MapPoint start,  const MapPoint dest,  std::vector<uint8_t>& route,  const bool boat_road)
 {
     Param_RoadPath prp = { boat_road };
     return FindFreePath(start,  dest,  false,  100,  &route,  NULL,  NULL,  IsPointOK_RoadPath,  NULL,  &prp,  false);
 }
 
 /// Abbruch-Bedingungen für freien Pfad für Menschen
-bool IsPointOK_HumanPath(const GameWorldBase& gwb,  const MapPoint pt,  const unsigned char dir,  const void* param)
+bool IsPointOK_HumanPath(const GameWorldBase& gwb,  const MapPoint pt,  const uint8_t dir,  const void* param)
 {
     // Feld passierbar?
     noBase::BlockingManner bm = gwb.GetNO(pt)->GetBM();
@@ -830,7 +830,7 @@ bool IsPointOK_HumanPath(const GameWorldBase& gwb,  const MapPoint pt,  const un
 
 /// Zusätzliche Abbruch-Bedingungen für freien Pfad für Menschen,  die auch bei der letzen Kante
 /// zum Ziel eingehalten werden müssen
-bool IsPointToDestOK_HumanPath(const GameWorldBase& gwb,  const MapPoint pt,  const unsigned char dir,  const void* param)
+bool IsPointToDestOK_HumanPath(const GameWorldBase& gwb,  const MapPoint pt,  const uint8_t dir,  const void* param)
 {
     // Feld passierbar?
     // Nicht über Wasser,  Lava,  Sümpfe gehen
@@ -841,10 +841,10 @@ bool IsPointToDestOK_HumanPath(const GameWorldBase& gwb,  const MapPoint pt,  co
 }
 
 /// Abbruch-Bedingungen für freien Pfad für Schiffe
-bool IsPointOK_ShipPath(const GameWorldBase& gwb,  const MapPoint pt,  const unsigned char dir,  const void* param)
+bool IsPointOK_ShipPath(const GameWorldBase& gwb,  const MapPoint pt,  const uint8_t dir,  const void* param)
 {
     // Ein Meeresfeld?
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(gwb.GetTerrainAround(pt,  i) != TT_WATER)
             return false;
@@ -855,7 +855,7 @@ bool IsPointOK_ShipPath(const GameWorldBase& gwb,  const MapPoint pt,  const uns
 
 /// Zusätzliche Abbruch-Bedingungen für freien Pfad für Schiffe,  die auch bei der letzen Kante
 /// zum Ziel eingehalten werden müssen
-bool IsPointToDestOK_ShipPath(const GameWorldBase& gwb,  const MapPoint pt,  const unsigned char dir,  const void* param)
+bool IsPointToDestOK_ShipPath(const GameWorldBase& gwb,  const MapPoint pt,  const uint8_t dir,  const void* param)
 {
     // Der Übergang muss immer aus Wasser sein zu beiden Seiten
     if(gwb.GetWalkingTerrain1(pt,  (dir + 3) % 6) == TT_WATER && gwb.GetWalkingTerrain2(pt,  (dir + 3) % 6) == TT_WATER)
@@ -865,18 +865,18 @@ bool IsPointToDestOK_ShipPath(const GameWorldBase& gwb,  const MapPoint pt,  con
 }
 
 /// Findet einen Weg für Figuren
-unsigned char GameWorldBase::FindHumanPath(const MapPoint start, 
-        const MapPoint dest,  const unsigned max_route,  const bool random_route,  unsigned* length,  const bool record) const
+uint8_t GameWorldBase::FindHumanPath(const MapPoint start, 
+        const MapPoint dest,  const uint32_t max_route,  const bool random_route,  uint32_t* length,  const bool record) const
 {
     // Aus Replay lesen?
     if(GAMECLIENT.ArePathfindingResultsAvailable() && !random_route)
     {
-        unsigned char dir;
+        uint8_t dir;
         if(GAMECLIENT.ReadPathfindingResult(&dir,  length,  NULL))
             return dir;
     }
 
-    unsigned char first_dir = 0xFF;
+    uint8_t first_dir = 0xFF;
     FindFreePath(start,  dest,  random_route,  max_route,  NULL,  length,  &first_dir,  IsPointOK_HumanPath, 
                  IsPointToDestOK_HumanPath,  NULL,  record);
 
@@ -888,9 +888,9 @@ unsigned char GameWorldBase::FindHumanPath(const MapPoint start,
 }
 
 /// Wegfindung für Menschen im Straßennetz
-unsigned char GameWorldGame::FindHumanPathOnRoads(const noRoadNode* const start,  const noRoadNode* const goal,  unsigned* length,  MapPoint* next_harbor,  const RoadSegment* const forbidden)
+uint8_t GameWorldGame::FindHumanPathOnRoads(const noRoadNode* const start,  const noRoadNode* const goal,  uint32_t* length,  MapPoint* next_harbor,  const RoadSegment* const forbidden)
 {
-    unsigned char first_dir = 0xFF;
+    uint8_t first_dir = 0xFF;
     if(FindPathOnRoads(start,  goal,  false,  length,  &first_dir,  next_harbor,  forbidden))
         return first_dir;
     else
@@ -898,9 +898,9 @@ unsigned char GameWorldGame::FindHumanPathOnRoads(const noRoadNode* const start,
 }
 
 /// Wegfindung für Waren im Straßennetz
-unsigned char GameWorldGame::FindPathForWareOnRoads(const noRoadNode* const start,  const noRoadNode* const goal,  unsigned* length,  MapPoint* next_harbor,  unsigned max)
+uint8_t GameWorldGame::FindPathForWareOnRoads(const noRoadNode* const start,  const noRoadNode* const goal,  uint32_t* length,  MapPoint* next_harbor,  uint32_t max)
 {
-    unsigned char first_dir = 0xFF;
+    uint8_t first_dir = 0xFF;
     if(FindPathOnRoads(start,  goal,  true,  length,  &first_dir,  next_harbor,  NULL,  true,  max))
         return first_dir;
     else
@@ -909,21 +909,21 @@ unsigned char GameWorldGame::FindPathForWareOnRoads(const noRoadNode* const star
 
 
 /// Wegfindung für Schiffe auf dem Wasser
-bool GameWorldBase::FindShipPath(const MapPoint start,  const MapPoint dest,  std::vector<unsigned char>* route,  unsigned* length,  const unsigned max_length, 
+bool GameWorldBase::FindShipPath(const MapPoint start,  const MapPoint dest,  std::vector<uint8_t>* route,  uint32_t* length,  const uint32_t max_length, 
                                  GameWorldBase::CrossBorders* cb)
 {
     return FindFreePath(start,  dest,  true,  400,  route,  length,  NULL,  IsPointOK_ShipPath,  IsPointToDestOK_ShipPath,  NULL,  false);
 }
 
 /// Prüft,  ob eine Schiffsroute noch Gültigkeit hat
-bool GameWorldGame::CheckShipRoute(const MapPoint start,  const std::vector<unsigned char>& route,  const unsigned pos,  MapPoint* dest)
+bool GameWorldGame::CheckShipRoute(const MapPoint start,  const std::vector<uint8_t>& route,  const uint32_t pos,  MapPoint* dest)
 {
     return CheckFreeRoute(start,  route,  pos,  IsPointOK_ShipPath,  IsPointToDestOK_ShipPath,  dest,  NULL);
 }
 
 
 /// Abbruch-Bedingungen für freien Pfad für Menschen
-bool IsPointOK_TradePath(const GameWorldBase& gwb,  const MapPoint pt,  const unsigned char dir,  const void* param)
+bool IsPointOK_TradePath(const GameWorldBase& gwb,  const MapPoint pt,  const uint8_t dir,  const void* param)
 {
     // Feld passierbar?
     noBase::BlockingManner bm = gwb.GetNO(pt)->GetBM();
@@ -931,15 +931,15 @@ bool IsPointOK_TradePath(const GameWorldBase& gwb,  const MapPoint pt,  const un
         return false;
 
 
-    unsigned char player = gwb.GetNode(pt).owner;
+    uint8_t player = gwb.GetNode(pt).owner;
     // Ally or no player? Then ok
-    if(player == 0 || gwb.GetPlayer(*((unsigned char*)param))->IsAlly(player - 1))
+    if(player == 0 || gwb.GetPlayer(*((uint8_t*)param))->IsAlly(player - 1))
         return true;
     else
         return false;
 }
 
-bool IsPointToDestOK_TradePath(const GameWorldBase& gwb,  const MapPoint pt,  const unsigned char dir,  const void* param)
+bool IsPointToDestOK_TradePath(const GameWorldBase& gwb,  const MapPoint pt,  const uint8_t dir,  const void* param)
 {
     // Feld passierbar?
     // Nicht über Wasser,  Lava,  Sümpfe gehen
@@ -947,15 +947,15 @@ bool IsPointToDestOK_TradePath(const GameWorldBase& gwb,  const MapPoint pt,  co
         return false;
 
     // Not trough hostile territory?
-    unsigned char old_player = gwb.GetNode(gwb.GetNeighbour(pt,  (dir + 3) % 6)).owner, 
+    uint8_t old_player = gwb.GetNode(gwb.GetNeighbour(pt,  (dir + 3) % 6)).owner, 
                   new_player = gwb.GetNode(pt).owner;
     // Ally or no player? Then ok
-    if(new_player == 0 || gwb.GetPlayer(*((unsigned char*)param))->IsAlly(new_player - 1))
+    if(new_player == 0 || gwb.GetPlayer(*((uint8_t*)param))->IsAlly(new_player - 1))
         return true;
     else
     {
         // Old player also evil?
-        if(old_player != 0 && !gwb.GetPlayer(*((unsigned char*)param))->IsAlly(old_player - 1))
+        if(old_player != 0 && !gwb.GetPlayer(*((uint8_t*)param))->IsAlly(old_player - 1))
             return true;
         else
             return false;
@@ -964,16 +964,16 @@ bool IsPointToDestOK_TradePath(const GameWorldBase& gwb,  const MapPoint pt,  co
 
 
 /// Find a route for trade caravanes
-unsigned char GameWorldGame::FindTradePath(const MapPoint start, 
-        const MapPoint dest,  const unsigned char player,  const unsigned max_route,  const bool random_route, 
-        std::vector<unsigned char>* route,  unsigned* length, 
+uint8_t GameWorldGame::FindTradePath(const MapPoint start, 
+        const MapPoint dest,  const uint8_t player,  const uint32_t max_route,  const bool random_route, 
+        std::vector<uint8_t>* route,  uint32_t* length, 
         const bool record) const
 {
-    //unsigned tt = GetTickCount();
-    //static unsigned cc = 0;
+    //uint32_t tt = GetTickCount();
+    //static uint32_t cc = 0;
     //++cc;
 
-    unsigned char pp = GetNode(dest).owner;
+    uint8_t pp = GetNode(dest).owner;
     if(!(pp == 0 || GetPlayer(player)->IsAlly(pp - 1)))
         return 0xff;
     bool is_warehouse_at_goal = false;
@@ -986,7 +986,7 @@ unsigned char GameWorldGame::FindTradePath(const MapPoint start,
     if(!IsNodeForFigures(dest) && !is_warehouse_at_goal )
         return 0xff;
 
-    unsigned char first_dir = 0xFF;
+    uint8_t first_dir = 0xFF;
     FindFreePath(start,  dest,  random_route,  max_route,  route,  length,  &first_dir,  IsPointOK_TradePath, 
                  IsPointToDestOK_TradePath,  &player,  record);
 
@@ -997,8 +997,8 @@ unsigned char GameWorldGame::FindTradePath(const MapPoint start,
 }
 
 /// Check whether trade path is still valid
-bool GameWorldGame::CheckTradeRoute(const MapPoint start,  const std::vector<unsigned char>& route, 
-                                    const unsigned pos,  const unsigned char player, 
+bool GameWorldGame::CheckTradeRoute(const MapPoint start,  const std::vector<uint8_t>& route, 
+                                    const uint32_t pos,  const uint8_t player, 
                                     MapPoint* dest) const
 {
     return CheckFreeRoute(start,  route,  pos,  IsPointOK_TradePath,  IsPointToDestOK_HumanPath,  dest,  &player);

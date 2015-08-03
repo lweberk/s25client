@@ -83,7 +83,7 @@ iwPlayReplay::iwPlayReplay(void)
     GAMECLIENT.SetInterface(NULL);
 }
 
-void iwPlayReplay::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwPlayReplay::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -101,7 +101,7 @@ void iwPlayReplay::Msg_ButtonClick(const unsigned int ctrl_id)
     }
 }
 
-void iwPlayReplay::Msg_TableChooseItem(const unsigned ctrl_id, const unsigned short selection)
+void iwPlayReplay::Msg_TableChooseItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     StartReplay();
 }
@@ -117,7 +117,7 @@ void iwPlayReplay::StartReplay()
     if(table->GetSelection() < table->GetRowCount())
     {
         GameWorldViewer* gwv;
-        unsigned int error = GAMECLIENT.StartReplay( table->GetItemText(table->GetSelection(), 4), gwv);
+        uint32_t error = GAMECLIENT.StartReplay( table->GetItemText(table->GetSelection(), 4), gwv);
         std::string replay_errors[] =
         {
             _("Error while playing replay!"),
@@ -136,7 +136,7 @@ void iwPlayReplay::StartReplay()
     }
 }
 
-void iwPlayReplay::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr)
+void iwPlayReplay::Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr)
 {
     // Sollen alle Replays gelöscht werden?
     if(mbr == MSR_YES && msgbox_id == 1)
@@ -179,8 +179,8 @@ void iwPlayReplay::FillReplayTable(const std::string& filename, void* param)
 
     // Spielernamen auslesen
     std::string tmp_players;
-    unsigned char j = 0;
-    for(unsigned char i = 0; i < replay.player_count; ++i)
+    uint8_t j = 0;
+    for(uint8_t i = 0; i < replay.player_count; ++i)
     {
         // Was für ein State, wenn es nen KI Spieler oder ein normaler ist, muss das Zeug ausgelesen werden
         if(replay.players[i].ps == PS_OCCUPIED || replay.players[i].ps == PS_KI)

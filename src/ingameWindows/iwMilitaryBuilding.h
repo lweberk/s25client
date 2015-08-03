@@ -42,7 +42,7 @@ class iwMilitaryBuilding : public IngameWindow
 
     private:
         void Msg_PaintAfter();
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 #endif // !iwMILITARYBUILDING_H_INCLUDED

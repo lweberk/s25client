@@ -32,12 +32,12 @@ class nofSoldier : public noFigure
         /// Heimatgebäude, ist bei Soldaten aus HQs das HQ!
         nobBaseMilitary* building;
         /// Hitpoints
-        unsigned char hitpoints;
+        uint8_t hitpoints;
 
     protected:
 
         /// Zeichnet den Soldaten beim ganz normalen Laufen
-        void DrawSoldierWalking(int x, int y, bool waitingsoldier = false);
+        void DrawSoldierWalking(int32_t x, int32_t y, bool waitingsoldier = false);
 
     private:
         /// wenn man beim Arbeitsplatz "kündigen" soll, man das Laufen zum Ziel unterbrechen muss (warum auch immer)
@@ -45,11 +45,11 @@ class nofSoldier : public noFigure
 
     public:
 
-        nofSoldier(const MapPoint pt, const unsigned char player,
-                   nobBaseMilitary* const goal, nobBaseMilitary* const home, const unsigned char rank);
-        nofSoldier(const MapPoint pt, const unsigned char player,
-                   nobBaseMilitary* const home, const unsigned char rank);
-        nofSoldier(SerializedGameData* sgd, const unsigned obj_id);
+        nofSoldier(const MapPoint pt, const uint8_t player,
+                   nobBaseMilitary* const goal, nobBaseMilitary* const home, const uint8_t rank);
+        nofSoldier(const MapPoint pt, const uint8_t player,
+                   nobBaseMilitary* const home, const uint8_t rank);
+        nofSoldier(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_nofSoldier() { Destroy_noFigure(); }
@@ -60,7 +60,7 @@ class nofSoldier : public noFigure
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_nofSoldier(sgd); }
 
         /// Liefert Rang des Soldaten
-        unsigned char GetRank() const { return (job - JOB_PRIVATE); }
+        uint8_t GetRank() const { return (job - JOB_PRIVATE); }
 
 
 };

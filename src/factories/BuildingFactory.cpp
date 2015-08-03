@@ -23,7 +23,7 @@
 #include "buildings/nobShipYard.h"
 #include "buildings/nobUsual.h"
 
-noBuilding* BuildingFactory::CreateBuilding(GameWorldGame* gwg, const BuildingType type, const MapPoint pt, const unsigned char player, const Nation nation){
+noBuilding* BuildingFactory::CreateBuilding(GameWorldGame* gwg, const BuildingType type, const MapPoint pt, const uint8_t player, const Nation nation){
     noBuilding* bld;
     switch (type)
     {

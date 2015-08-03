@@ -39,7 +39,7 @@ class iwBuildings : public IngameWindow
         /// Anzahlen der Gebäude zeichnen
         void Msg_PaintAfter();
 		
-		void Msg_ButtonClick(const unsigned int ctrl_id);
+		void Msg_ButtonClick(const uint32_t ctrl_id);
 
 };
 

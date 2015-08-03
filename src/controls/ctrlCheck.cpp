@@ -38,11 +38,11 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlCheck::ctrlCheck(Window* parent,
-                     unsigned int id,
-                     unsigned short x,
-                     unsigned short y,
-                     unsigned short width,
-                     unsigned short height,
+                     uint32_t id,
+                     uint16_t x,
+                     uint16_t y,
+                     uint16_t width,
+                     uint16_t height,
                      TextureColor tc,
                      const std::string& text,
                      glArchivItem_Font* font,
@@ -83,8 +83,8 @@ bool ctrlCheck::Msg_LeftDown(const MouseCoords& mc)
  */
 bool ctrlCheck::Draw_(void)
 {
-    const unsigned short box_size = 20;
-    unsigned short distance = (height - box_size) / 2;
+    const uint16_t box_size = 20;
+    uint16_t distance = (height - box_size) / 2;
 
     Draw3D(GetX(), GetY(), width, height, tc, 2);
 

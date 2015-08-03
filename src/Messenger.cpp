@@ -42,7 +42,7 @@ const std::string CD_STRINGS[4] =
 };
 
 /// Farbe für die einzelnen CDs
-const unsigned CD_COLORS[4] =
+const uint32_t CD_COLORS[4] =
 {
     0, COLOR_WHITE, COLOR_GREEN, COLOR_RED
 };
@@ -54,10 +54,10 @@ Messenger::~Messenger()
 /// Zeit, die
 void Messenger::Draw()
 {
-    unsigned y = 100;
+    uint32_t y = 100;
     for(std::list<Messenger::Msg>::iterator it = messages.begin(); it != messages.end(); y += LargeFont->getHeight())
     {
-        unsigned diff = VIDEODRIVER.GetTickCount() - it->starttime;
+        uint32_t diff = VIDEODRIVER.GetTickCount() - it->starttime;
         if(diff > 20000)
         {
             it = messages.erase(it);
@@ -65,7 +65,7 @@ void Messenger::Draw()
         }
 
         // Transparenz der Schrift ausrechnen, da sie am Ende ausgeblendet wird
-        unsigned transparency = 0xFF;
+        uint32_t transparency = 0xFF;
         if(diff > 18000)
             transparency = (transparency - transparency * (diff - 18000) / 2000);
 
@@ -77,15 +77,15 @@ void Messenger::Draw()
 
 
         LargeFont->Draw(20, y, it->author, 0, (it->color_author & 0x00FFFFFF) | transparency);
-        LargeFont->Draw(20 + LargeFont->getWidth(it->author, static_cast<unsigned>(it->author.length())), y, cd_str, 0, (CD_COLORS[it->cd] & 0x00FFFFFF) | transparency);
-        LargeFont->Draw(20 + LargeFont->getWidth(it->author, static_cast<unsigned>(it->author.length())) +
-                        +LargeFont->getWidth(cd_str, static_cast<unsigned>(cd_str.length())), y,
+        LargeFont->Draw(20 + LargeFont->getWidth(it->author, static_cast<uint32_t>(it->author.length())), y, cd_str, 0, (CD_COLORS[it->cd] & 0x00FFFFFF) | transparency);
+        LargeFont->Draw(20 + LargeFont->getWidth(it->author, static_cast<uint32_t>(it->author.length())) +
+                        +LargeFont->getWidth(cd_str, static_cast<uint32_t>(cd_str.length())), y,
                         it->msg, 0, (it->color_msg & 0x00FFFFFF) | transparency);
         ++it;
     }
 }
 
-void Messenger::AddMessage(const std::string& author, const unsigned color_author, const ChatDestination cd, const std::string& msg, const unsigned color_msg)
+void Messenger::AddMessage(const std::string& author, const uint32_t color_author, const ChatDestination cd, const std::string& msg, const uint32_t color_msg)
 {
     LOG.lcprintf(color_author, "%s", author.c_str());
     LOG.lcprintf(CD_COLORS[cd], "%s", CD_STRINGS[cd].c_str());
@@ -103,7 +103,7 @@ void Messenger::AddMessage(const std::string& author, const unsigned color_autho
 
     wi.CreateSingleStrings(msg.c_str(), strings);
 
-    for(unsigned i = 0; i < wi.positions.size(); ++i)
+    for(uint32_t i = 0; i < wi.positions.size(); ++i)
     {
         Messenger::Msg tmp;
 

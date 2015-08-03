@@ -4,7 +4,7 @@
 #include "GameWorld.h"
 #include "SerializedGameData.h"
 
-TradeGraph::TradeGraph(const unsigned char player, const GameWorldGame* const gwg)
+TradeGraph::TradeGraph(const uint8_t player, const GameWorldGame* const gwg)
     : gwg(gwg), player(player), size(gwg->GetWidth() / TGN_SIZE, gwg->GetHeight() / TGN_SIZE)
 {
     if(gwg->GetWidth() % TGN_SIZE > 0) ++size.x;
@@ -22,7 +22,7 @@ void TradeGraph::Create()
     for(MapPoint pt(0, 0); pt.y < size.y; ++pt.y)
         for(pt.x = 0; pt.x < size.x; ++pt.x)
         {
-            for(unsigned d = 0; d < 8; ++d)
+            for(uint32_t d = 0; d < 8; ++d)
                 UpdateEdge(pt, d, NULL);
         }
 }
@@ -30,7 +30,7 @@ void TradeGraph::Create()
 void TradeGraphNode::Deserialize(SerializedGameData* sgd)
 {
     main_pos = sgd->PopMapPoint();
-    for(unsigned i = 0; i < 8; ++i)
+    for(uint32_t i = 0; i < 8; ++i)
     {
         dirs[i] = sgd->PopUnsignedShort();
         not_possible_forever[i] = sgd->PopBool();
@@ -41,7 +41,7 @@ void TradeGraphNode::Deserialize(SerializedGameData* sgd)
 void TradeGraphNode::Serialize(SerializedGameData* sgd) const
 {
     sgd->PushMapPoint(main_pos);
-    for(unsigned i = 0; i < 8; ++i)
+    for(uint32_t i = 0; i < 8; ++i)
     {
         sgd->PushUnsignedShort(dirs[i]);
         sgd->PushBool(not_possible_forever[i]);
@@ -53,7 +53,7 @@ TradeGraph::TradeGraph(SerializedGameData* sgd, const GameWorldGame* const gwg) 
     gwg(gwg), player(sgd->PopUnsignedChar()), size(sgd->PopMapPoint()),
     trade_graph(size.x* size.y)
 {
-    for(unsigned i = 0; i < trade_graph.size(); ++i)
+    for(uint32_t i = 0; i < trade_graph.size(); ++i)
         trade_graph[i].Deserialize(sgd);
 }
 
@@ -61,7 +61,7 @@ void TradeGraph::Serialize(SerializedGameData* sgd) const
 {
     sgd->PushUnsignedChar(player);
     sgd->PushMapPoint(size);
-    for(unsigned i = 0; i < trade_graph.size(); ++i)
+    for(uint32_t i = 0; i < trade_graph.size(); ++i)
         trade_graph[i].Serialize(sgd);
 }
 
@@ -73,10 +73,10 @@ void TradeGraph::CreateWithHelpOfAnotherPlayer(const TradeGraph& helper, const G
         {
             MapPoint p(pt);
             // Player hqs far away from this point?
-            unsigned nearest_hq = std::numeric_limits<unsigned>::max();
-            for(unsigned i = 0; i < players.getCount(); ++i)
+            uint32_t nearest_hq = std::numeric_limits<uint32_t>::max();
+            for(uint32_t i = 0; i < players.getCount(); ++i)
             {
-                unsigned new_distance = gwg->CalcDistance(helper.GetNode(p).main_pos, players[i].hqPos);
+                uint32_t new_distance = gwg->CalcDistance(helper.GetNode(p).main_pos, players[i].hqPos);
 
                 if(new_distance < nearest_hq)
                     nearest_hq = new_distance;
@@ -92,22 +92,22 @@ void TradeGraph::CreateWithHelpOfAnotherPlayer(const TradeGraph& helper, const G
         {
             MapPoint p(pt);
             // Player hqs far away from this point?
-            unsigned nearest_hq = std::numeric_limits<unsigned>::max();
-            for(unsigned i = 0; i < players.getCount(); ++i)
+            uint32_t nearest_hq = std::numeric_limits<uint32_t>::max();
+            for(uint32_t i = 0; i < players.getCount(); ++i)
             {
-                unsigned new_distance = gwg->CalcDistance(helper.GetNode(p).main_pos, players[i].hqPos);
+                uint32_t new_distance = gwg->CalcDistance(helper.GetNode(p).main_pos, players[i].hqPos);
 
                 if(new_distance < nearest_hq)
                     nearest_hq = new_distance;
             }
 
             if(nearest_hq < TGN_SIZE * 2)
-                for(unsigned d = 0; d < 8; ++d)
+                for(uint32_t d = 0; d < 8; ++d)
                     UpdateEdge(pt, d, &helper);
         }
 }
 
-TradeRoute::TradeRoute(SerializedGameData* sgd, const GameWorldGame* const gwg, const unsigned char player) :
+TradeRoute::TradeRoute(SerializedGameData* sgd, const GameWorldGame* const gwg, const uint8_t player) :
     tg(gwg->GetTradeGraph(player)),
     start(sgd->PopMapPoint()),
     goal(sgd->PopMapPoint()),
@@ -115,12 +115,12 @@ TradeRoute::TradeRoute(SerializedGameData* sgd, const GameWorldGame* const gwg, 
     current_pos_tg(sgd->PopMapPoint())
 {
     global_route.resize(sgd->PopUnsignedInt());
-    for(unsigned i = 0; i < global_route.size(); ++i)
+    for(uint32_t i = 0; i < global_route.size(); ++i)
         global_route[i] = sgd->PopUnsignedChar();
     global_pos = sgd->PopUnsignedInt();
 
     local_route.resize(sgd->PopUnsignedInt());
-    for(unsigned i = 0; i < local_route.size(); ++i)
+    for(uint32_t i = 0; i < local_route.size(); ++i)
         local_route[i] = sgd->PopUnsignedChar();
     local_pos = sgd->PopUnsignedInt();
 }
@@ -133,12 +133,12 @@ void TradeRoute::Serialize(SerializedGameData* sgd) const
     sgd->PushMapPoint(current_pos_tg);
 
     sgd->PushUnsignedInt(global_route.size());
-    for(unsigned i = 0; i < global_route.size(); ++i)
+    for(uint32_t i = 0; i < global_route.size(); ++i)
         sgd->PushUnsignedChar(global_route[i]);
     sgd->PushUnsignedInt(global_pos);
 
     sgd->PushUnsignedInt(local_route.size());
-    for(unsigned i = 0; i < local_route.size(); ++i)
+    for(uint32_t i = 0; i < local_route.size(); ++i)
         sgd->PushUnsignedChar(local_route[i]);
     sgd->PushUnsignedInt(local_pos);
 
@@ -147,7 +147,7 @@ void TradeRoute::Serialize(SerializedGameData* sgd) const
 
 
 /// Gets the next direction the caravane has to take
-unsigned char TradeRoute::GetNextDir()
+uint8_t TradeRoute::GetNextDir()
 {
     if(local_route.size() == 0) return 0xff;
 
@@ -157,9 +157,9 @@ unsigned char TradeRoute::GetNextDir()
     }
 
     // Test the route in the trade graph
-    for(unsigned i = global_pos; i < global_route.size(); ++i)
+    for(uint32_t i = global_pos; i < global_route.size(); ++i)
     {
-        unsigned char next_dir = global_route[i];
+        uint8_t next_dir = global_route[i];
         MapPoint pos = TradeGraphNode::ConverToTGCoords(current_pos);
         // Next direction not possible?
         if(!tg->GetNode(pos).dirs[next_dir])
@@ -173,7 +173,7 @@ unsigned char TradeRoute::GetNextDir()
         return RecalcLocalRoute();
     }
 
-    unsigned char next_dir = local_route[local_pos];
+    uint8_t next_dir = local_route[local_pos];
     current_pos = tg->gwg->GetNeighbour(current_pos, next_dir);
 
     // Next step
@@ -192,7 +192,7 @@ unsigned char TradeRoute::GetNextDir()
 }
 
 /// Recalc local route and returns next direction
-unsigned char TradeRoute::RecalcLocalRoute()
+uint8_t TradeRoute::RecalcLocalRoute()
 {
     /// Are we at the flag of the goal?
     if(current_pos == goal)
@@ -202,7 +202,7 @@ unsigned char TradeRoute::RecalcLocalRoute()
         return 1;
     }
 
-    unsigned char next_dir;
+    uint8_t next_dir;
     // Global route over or are we near the goal? Then find a (real) path to our goal
     if(global_pos >= global_route.size()
             || tg->gwg->CalcDistance(current_pos, goal) < TGN_SIZE / 2)
@@ -225,15 +225,15 @@ unsigned char TradeRoute::RecalcLocalRoute()
 }
 
 /// Recalc the whole route and returns next direction
-unsigned char TradeRoute::RecalcGlobalRoute()
+uint8_t TradeRoute::RecalcGlobalRoute()
 {
     local_pos = 0;
     global_pos = 0;
     // TG node where we start
     MapPoint start_tgn  = current_pos_tg = TradeGraphNode::ConverToTGCoords(start);
     // Try to calc paths to the main point and - if this doesn't work - to the mainpoints of the surrounded nodes
-    unsigned char next_dir;
-    for(unsigned char i = 0; i <= 8; ++i)
+    uint8_t next_dir;
+    for(uint8_t i = 0; i <= 8; ++i)
     {
         // Try to find path
         start_tgn = tg->GetNodeAround(current_pos_tg, i);
@@ -254,7 +254,7 @@ unsigned char TradeRoute::RecalcGlobalRoute()
     MapPoint goal_tgn = TradeGraphNode::ConverToTGCoords(goal);
     MapPoint goal_tgn_tmp = goal_tgn;
     // Try to calc paths to the main point and - if this doesn't work - to the mainpoints of the surrounded nodes
-    for(unsigned char i = 0; i <= 8; ++i)
+    for(uint8_t i = 0; i <= 8; ++i)
     {
         // Try to find path
         goal_tgn = tg->GetNodeAround(goal_tgn_tmp, i);
@@ -283,20 +283,20 @@ unsigned char TradeRoute::RecalcGlobalRoute()
 
 /// Returns to coordinate of the node around this node
 /// (Directions 1-8 (incl), 0 = no change)
-MapPoint TradeGraph::GetNodeAround(const MapPoint pos, const unsigned char dir) const
+MapPoint TradeGraph::GetNodeAround(const MapPoint pos, const uint8_t dir) const
 {
-    Point<int> cpos = Point<int>(pos.x, pos.y);
-    Point<int> new_pos(cpos);
+    Point<int32_t> cpos = Point<int32_t>(pos.x, pos.y);
+    Point<int32_t> new_pos(cpos);
     switch(dir)
     {
-        case 1: new_pos = Point<int>(cpos.x-1, cpos.y); break;
-        case 2: new_pos = Point<int>(cpos.x-1, cpos.y-1); break;
-        case 3: new_pos = Point<int>(cpos.x, cpos.y-1); break;
-        case 4: new_pos = Point<int>(cpos.x+1, cpos.y-1); break;
-        case 5: new_pos = Point<int>(cpos.x+1, cpos.y); break;
-        case 6: new_pos = Point<int>(cpos.x+1, cpos.y+1); break;
-        case 7: new_pos = Point<int>(cpos.x, cpos.y+1); break;
-        case 8: new_pos = Point<int>(cpos.x-1, cpos.y+1); break;
+        case 1: new_pos = Point<int32_t>(cpos.x-1, cpos.y); break;
+        case 2: new_pos = Point<int32_t>(cpos.x-1, cpos.y-1); break;
+        case 3: new_pos = Point<int32_t>(cpos.x, cpos.y-1); break;
+        case 4: new_pos = Point<int32_t>(cpos.x+1, cpos.y-1); break;
+        case 5: new_pos = Point<int32_t>(cpos.x+1, cpos.y); break;
+        case 6: new_pos = Point<int32_t>(cpos.x+1, cpos.y+1); break;
+        case 7: new_pos = Point<int32_t>(cpos.x, cpos.y+1); break;
+        case 8: new_pos = Point<int32_t>(cpos.x-1, cpos.y+1); break;
         default: break;
     }
 
@@ -311,19 +311,19 @@ MapPoint TradeGraph::GetNodeAround(const MapPoint pos, const unsigned char dir) 
 
 struct TGN
 {
-    unsigned route_length; /// Length of the route consisting of "turn" directions
-    unsigned real_length; /// Length of the route in real steps on the map
-    unsigned char dir;
+    uint32_t route_length; /// Length of the route consisting of "turn" directions
+    uint32_t real_length; /// Length of the route in real steps on the map
+    uint8_t dir;
     bool visited;
     bool in_list;
 
-    TGN() : route_length(std::numeric_limits<unsigned>::max()), real_length(std::numeric_limits<unsigned>::max()), visited(false), in_list(false) {}
+    TGN() : route_length(std::numeric_limits<uint32_t>::max()), real_length(std::numeric_limits<uint32_t>::max()), visited(false), in_list(false) {}
 };
 
 
 
 /// Find a path on the Trade Graph
-bool TradeGraph::FindPath(const MapPoint start, const MapPoint goal, std::vector<unsigned char>& route) const
+bool TradeGraph::FindPath(const MapPoint start, const MapPoint goal, std::vector<uint8_t>& route) const
 {
     // Todo list
     std::list< MapPoint > todo;
@@ -336,13 +336,13 @@ bool TradeGraph::FindPath(const MapPoint start, const MapPoint goal, std::vector
 
     while(!todo.empty())
     {
-        unsigned shortest_route = 0xFFFFFFFF;
+        uint32_t shortest_route = 0xFFFFFFFF;
 
         std::list<MapPoint >::iterator best_it;
 
         for(std::list<MapPoint >::iterator it = todo.begin(); it != todo.end(); ++it)
         {
-            unsigned new_way = nodes[it->y * size.x + it->x].real_length + TGN_SIZE;
+            uint32_t new_way = nodes[it->y * size.x + it->x].real_length + TGN_SIZE;
             if(new_way < shortest_route)
             {
                 shortest_route = new_way;
@@ -353,7 +353,7 @@ bool TradeGraph::FindPath(const MapPoint start, const MapPoint goal, std::vector
         nodes[best_it->y * size.x + best_it->x].visited = true;
 
 
-        for(unsigned i = 0; i < 8; ++i)
+        for(uint32_t i = 0; i < 8; ++i)
         {
             if(GetNode(*best_it).dirs[i] == NO_EDGE)
                 continue;
@@ -371,13 +371,13 @@ bool TradeGraph::FindPath(const MapPoint start, const MapPoint goal, std::vector
 
                 MapPoint pos = *best_it;
 
-                for(int z = route.size() - 2; z >= 0; --z, pos = GetNodeAround(pos, (nodes[pos.y * size.x + pos.x].dir + 4) % 8 + 1))
+                for(int32_t z = route.size() - 2; z >= 0; --z, pos = GetNodeAround(pos, (nodes[pos.y * size.x + pos.x].dir + 4) % 8 + 1))
                     route[z] = nodes[pos.y * size.x + pos.x].dir;
 
                 return true;
             }
 
-            unsigned new_length = nodes[best_it->y * size.x + best_it->x].real_length + GetNode(*best_it).dirs[i];
+            uint32_t new_length = nodes[best_it->y * size.x + best_it->x].real_length + GetNode(*best_it).dirs[i];
 
             if(new_length < nodes[new_pos.y * size.x + new_pos.x].real_length)
             {
@@ -415,7 +415,7 @@ void TradeGraph::FindMainPoint(const MapPoint tgn)
     else
         height = TGN_SIZE;
 
-    const unsigned POTENTIAL_MAIN_POINTS = 5;
+    const uint32_t POTENTIAL_MAIN_POINTS = 5;
 
 
     // We consider the following points as main points
@@ -431,7 +431,7 @@ void TradeGraph::FindMainPoint(const MapPoint tgn)
 
     bool good_points[POTENTIAL_MAIN_POINTS];
 
-    for(unsigned i = 0; i < POTENTIAL_MAIN_POINTS; ++i)
+    for(uint32_t i = 0; i < POTENTIAL_MAIN_POINTS; ++i)
     {
         MapPoint p = ps[i];
         good_points[i] = gwg->IsNodeForFigures(p);
@@ -439,7 +439,7 @@ void TradeGraph::FindMainPoint(const MapPoint tgn)
         // Valid point? Otherwise choose one around this one
         if(!gwg->IsNodeForFigures(p))
         {
-            for(unsigned d = 0; d < 6; ++d)
+            for(uint32_t d = 0; d < 6; ++d)
             {
                 MapPoint pt(gwg->GetNeighbour(p, d));
                 if(gwg->IsNodeForFigures(pt))
@@ -454,16 +454,16 @@ void TradeGraph::FindMainPoint(const MapPoint tgn)
 
     // Try to find paths to the other points if we reach at least 3/4 of the other points, choose
     // this point at once, otherwise choose the point with most connections
-    unsigned best_connections = 0, best_id = 0;
-    for(unsigned i = 0; i < POTENTIAL_MAIN_POINTS; ++i)
+    uint32_t best_connections = 0, best_id = 0;
+    for(uint32_t i = 0; i < POTENTIAL_MAIN_POINTS; ++i)
     {
         MapPoint p = ps[i];
-        unsigned connections = 0;
-        for(unsigned j = 0; j < POTENTIAL_MAIN_POINTS; ++j)
+        uint32_t connections = 0;
+        for(uint32_t j = 0; j < POTENTIAL_MAIN_POINTS; ++j)
         {
             if(i == j || !good_points[j]) continue;
 
-            unsigned char next_dir = gwg->FindTradePath(p, ps[j], player, TG_PF_LENGTH, false, NULL, NULL, false);
+            uint8_t next_dir = gwg->FindTradePath(p, ps[j], player, TG_PF_LENGTH, false, NULL, NULL, false);
             if(next_dir != 0xff) ++connections;
         }
 
@@ -486,7 +486,7 @@ void TradeGraph::FindMainPoint(const MapPoint tgn)
 
 
 /// Updates one speciefic edge
-void TradeGraph::UpdateEdge(MapPoint pos, const unsigned char dir, const TradeGraph* const tg)
+void TradeGraph::UpdateEdge(MapPoint pos, const uint8_t dir, const TradeGraph* const tg)
 {
     if(tg)
         if(tg->GetNode(pos).dont_run_over_player_territory[dir])
@@ -496,7 +496,7 @@ void TradeGraph::UpdateEdge(MapPoint pos, const unsigned char dir, const TradeGr
             return;
         }
     MapPoint other = GetNodeAround(pos, dir + 1);
-    unsigned char other_dir = (dir + 4) % 8;
+    uint8_t other_dir = (dir + 4) % 8;
     if(GetNode(other).dont_run_over_player_territory[other_dir])
     {
         GetNode(pos).dont_run_over_player_territory[dir] = true;
@@ -505,8 +505,8 @@ void TradeGraph::UpdateEdge(MapPoint pos, const unsigned char dir, const TradeGr
     }
 
 
-    unsigned length;
-    std::vector<unsigned char> route;
+    uint32_t length;
+    std::vector<uint8_t> route;
     MapPoint mpos(GetNode(pos).main_pos);
     // Simply try to find a path from one main point to another
     if(gwg->FindTradePath(mpos, GetNode(other).main_pos,
@@ -515,7 +515,7 @@ void TradeGraph::UpdateEdge(MapPoint pos, const unsigned char dir, const TradeGr
     GetNode(pos).dirs[dir] = static_cast<MapCoord>(length);
 
     bool player = false;
-    for(unsigned i = 0; i < route.size(); ++i)
+    for(uint32_t i = 0; i < route.size(); ++i)
     {
         mpos = gwg->GetNeighbour(mpos, route[i]);
         if(gwg->GetNode(mpos).owner != 0)

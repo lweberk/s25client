@@ -43,9 +43,9 @@ static char THIS_FILE[] = __FILE__;
  *  @author FloSoft
  */
 //167, 416
-iwWares::iwWares(unsigned int id, unsigned short x , unsigned short y,
-                 const unsigned short width, const unsigned short height,
-                 const std::string& title, unsigned char page_count,
+iwWares::iwWares(uint32_t id, uint16_t x , uint16_t y,
+                 const uint16_t width, const uint16_t height,
+                 const std::string& title, uint8_t page_count,
                  bool allow_outhousing, glArchivItem_Font* font, const Goods* inventory)
     : IngameWindow(id, x, y, width, height, title, LOADER.GetImageN("io", 5)),
       inventory(inventory), page(0), page_count(page_count)
@@ -54,7 +54,7 @@ iwWares::iwWares(unsigned int id, unsigned short x , unsigned short y,
         font = SmallFont;
 
     // Zuordnungs-IDs
-    const unsigned short INVENTORY_IDS[2][31] =
+    const uint16_t INVENTORY_IDS[2][31] =
     {
         {
             // Waren
@@ -79,7 +79,7 @@ iwWares::iwWares(unsigned int id, unsigned short x , unsigned short y,
         }, // 0xFFFF = unused
     };
 
-    static const unsigned short shield_INVENTORY_IDS[5] = { GD_SHIELDAFRICANS, GD_SHIELDJAPANESE, GD_SHIELDROMANS, GD_SHIELDVIKINGS, GD_SHIELDJAPANESE };
+    static const uint16_t shield_INVENTORY_IDS[5] = { GD_SHIELDAFRICANS, GD_SHIELDJAPANESE, GD_SHIELDROMANS, GD_SHIELDVIKINGS, GD_SHIELDJAPANESE };
 
     // Warenseite hinzufügen
     ctrlGroup* wares = AddGroup(100);
@@ -88,8 +88,8 @@ iwWares::iwWares(unsigned int id, unsigned short x , unsigned short y,
 
     GameClientPlayer* player = GAMECLIENT.GetLocalPlayer();
     bool four = true;
-    unsigned short ware_id = 0;
-    for(int x = 0, y = 0; y < 7; ++x, ++ware_id)
+    uint16_t ware_id = 0;
+    for(int32_t x = 0, y = 0; y < 7; ++x, ++ware_id)
     {
         // 4er und 5er Block abwechselnd
         if(x >= (four ? 4 : 5))
@@ -192,7 +192,7 @@ iwWares::iwWares(unsigned int id, unsigned short x , unsigned short y,
     AddImageButton(12,  16, height - 47, 32, 32, TC_GREY, LOADER.GetImageN("io", 21), _("Help"));
 }
 
-void iwWares::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwWares::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -214,9 +214,9 @@ void iwWares::Msg_PaintBefore()
     ctrlGroup* group = GetCtrl<ctrlGroup>(100 + page);
     if(group)
     {
-        unsigned count = (page == 0) ? 36 : 32;
+        uint32_t count = (page == 0) ? 36 : 32;
 
-        for(unsigned int i = 0; i < count; ++i)
+        for(uint32_t i = 0; i < count; ++i)
         {
             ctrlVarText* text = group->GetCtrl<ctrlVarText>(600 + i);
             if(text)
@@ -234,7 +234,7 @@ void iwWares::Msg_PaintBefore()
  *
  *  @author FloSoft
  */
-void iwWares::SetPage(unsigned char page)
+void iwWares::SetPage(uint8_t page)
 {
     // alte Page verstecken
     ctrlGroup* group = GetCtrl<ctrlGroup>(100 + this->page);

@@ -42,13 +42,13 @@ private:
         /// wurde das Gebäude gerade neu gebaut (muss also die Landgrenze beim Eintreffen von einem Soldaten neu berechnet werden?)
         bool new_built;
         /// Anzahl der Goldmünzen im Gebäude
-        unsigned char coins;
+        uint8_t coins;
         /// Gibt an, ob Goldmünzen gesperrt worden (letzteres nur visuell, um Netzwerk-Latenzen zu verstecken)
         bool disable_coins, disable_coins_virtual;
         /// Entfernung zur freindlichen Grenze (woraus sich dann die Besatzung ergibt) von 0-3, 0 fern, 3 nah, 2 Hafen!
-        unsigned char frontier_distance;
+        uint8_t frontier_distance;
         /// Größe bzw Typ des Militärgebäudes (0 = Baracke, 3 = Festung)
-        unsigned char size;
+        uint8_t size;
         /// Bestellte Soldaten
         SortedTroopsContainer ordered_troops;
         /// Bestellter Goldmünzen
@@ -56,7 +56,7 @@ private:
         /// Gibt an, ob gerade die Eroberer in das Gebäude gehen (und es so nicht angegegriffen werden sollte)
         bool capturing;
         /// Anzahl der Soldaten, die das Militärgebäude gerade noch einnehmen
-        unsigned capturing_soldiers;
+        uint32_t capturing_soldiers;
         /// List of soldiers who are on the way to capture the military building
         /// but who are still quite far away (didn't stand around the building)
         std::list<nofAttacker*> far_away_capturers;
@@ -94,8 +94,8 @@ private:
 
         friend class SerializedGameData;
         friend class BuildingFactory;
-        nobMilitary(const BuildingType type, const MapPoint pt, const unsigned char player, const Nation nation);
-        nobMilitary(SerializedGameData* sgd, const unsigned obj_id);
+        nobMilitary(const BuildingType type, const MapPoint pt, const uint8_t player, const Nation nation);
+        nobMilitary(SerializedGameData* sgd, const uint32_t obj_id);
     public:
 
         ~nobMilitary();
@@ -110,8 +110,8 @@ private:
 
         GO_Type GetGOT() const { return GOT_NOB_MILITARY; }
 
-        void Draw(int x, int y);
-        void HandleEvent(const unsigned int id);
+        void Draw(int32_t x, int32_t y);
+        void HandleEvent(const uint32_t id);
 
         /// Wurde das Militärgebäude neu gebaut und noch nicht besetzt und kann somit abgerissen werden bei Land-verlust?
         bool IsNewBuilt() const { return new_built; }
@@ -125,17 +125,17 @@ private:
 
         /// Wird von gegnerischem Gebäude aufgerufen, wenn sie neu gebaut worden sind und es so ein neues Gebäude im Umkreis gibt
         /// setzt frontier_distance neu falls möglich und sendet ggf. Verstärkung
-        void NewEnemyMilitaryBuilding(const unsigned short distance);
+        void NewEnemyMilitaryBuilding(const uint16_t distance);
         bool IsUseless() const;
         /// Gibt Distanz zurück
-        unsigned char GetFrontierDistance() const { return frontier_distance; }
+        uint8_t GetFrontierDistance() const { return frontier_distance; }
 
         /// Berechnet die gewünschte Besatzung je nach Grenznähe
-        int CalcTroopsCount();
+        int32_t CalcTroopsCount();
         /// Reguliert die Besatzung des Gebäudes je nach Grenznähe, bestellt neue Soldaten und schickt überflüssige raus
         void RegulateTroops();
         /// Gibt aktuelle Besetzung zurück
-        unsigned GetTroopsCount() const { return troops.size(); }
+        uint32_t GetTroopsCount() const { return troops.size(); }
 
 
         /// Wird aufgerufen, wenn eine neue Ware zum dem Gebäude geliefert wird (in dem Fall nur Goldstücke)
@@ -148,7 +148,7 @@ private:
         bool FreePlaceAtFlag();
 
         /// Berechnet, wie dringend eine Goldmünze gebraucht wird, in Punkten, je höher desto dringender
-        unsigned CalcCoinsPoints();
+        uint32_t CalcCoinsPoints();
 
         /// Wird aufgerufen, wenn ein Soldat kommt
         void GotWorker(Job job, noFigure* worker);
@@ -165,22 +165,22 @@ private:
         nofAggressiveDefender* SendDefender(nofAttacker* attacker);
 
         /// Gibt die Anzahl der Soldaten zurück, die für einen Angriff auf ein bestimmtes Ziel zur Verfügung stehen
-        unsigned GetSoldiersForAttack(const MapPoint dest, const unsigned char player_attacker) const;
+        uint32_t GetSoldiersForAttack(const MapPoint dest, const uint8_t player_attacker) const;
         /// Gibt die Soldaten zurück, die für einen Angriff auf ein bestimmtes Ziel zur Verfügung stehen
         void GetSoldiersForAttack(const MapPoint dest,
-                                  const unsigned char player_attacker, std::vector<nofPassiveSoldier*>& soldiers) const;
+                                  const uint8_t player_attacker, std::vector<nofPassiveSoldier*>& soldiers) const;
         /// Gibt die Stärke der Soldaten zurück, die für einen Angriff auf ein bestimmtes Ziel zur Verfügung stehen
-        unsigned GetSoldiersStrengthForAttack(const MapPoint dest,
-                                              const unsigned char player_attacker, unsigned& soldiers_count) const;
+        uint32_t GetSoldiersStrengthForAttack(const MapPoint dest,
+                                              const uint8_t player_attacker, uint32_t& soldiers_count) const;
         /// Gibt die Stärke eines Militärgebäudes zurück
-        unsigned GetSoldiersStrength() const;
+        uint32_t GetSoldiersStrength() const;
 
         /// Gebäude wird vom Gegner eingenommen, player ist die neue Spieler-ID
-        void Capture(const unsigned char new_owner);
+        void Capture(const uint8_t new_owner);
         /// Das Gebäude wurde bereits eingenommen, hier wird geprüft, ob noch weitere Soldaten für die Besetzung
         /// notwendig sind, wenn ja wird ein neuer Soldat gerufen, wenn nein, werden alle restlichen nach Hause
         /// geschickt
-        void NeedOccupyingTroops(const unsigned char new_owner);
+        void NeedOccupyingTroops(const uint8_t new_owner);
         /// Sagt dem Gebäude schonmal, dass es eingenommen wird, wenn er erste Eroberer gerade in das Gebäude reinläuft
         /// (also noch bevor er drinnen ist!) - damit da nicht zusätzliche Soldaten reinlaufen
         void PrepareCapturing() { capturing = true; ++capturing_soldiers; }
@@ -203,7 +203,7 @@ private:
         /// Fragt ab, ob Goldzufuhr ausgeschaltet ist (real)
         bool IsGoldDisabled() const { return disable_coins; }
 		/// is there a max rank soldier in the building?
-		unsigned HasMaxRankSoldier() const;
+		uint32_t HasMaxRankSoldier() const;
 
         /// Sucht sämtliche Lagerhäuser nach Goldmünzen ab und bestellt ggf. eine, falls eine gebraucht wird
         void SearchCoins();

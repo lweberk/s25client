@@ -35,9 +35,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-const unsigned MAX_POS_SAVE_ENTRIES = CGI_MERCHANDISE_STATISTICS + 1;
-std::vector< Point<unsigned short> > IngameWindow::last_pos(MAX_POS_SAVE_ENTRIES,
-        Point<unsigned short>(0xffff, 0xffff));
+const uint32_t MAX_POS_SAVE_ENTRIES = CGI_MERCHANDISE_STATISTICS + 1;
+std::vector< Point<uint16_t> > IngameWindow::last_pos(MAX_POS_SAVE_ENTRIES,
+        Point<uint16_t>(0xffff, 0xffff));
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -45,7 +45,7 @@ std::vector< Point<unsigned short> > IngameWindow::last_pos(MAX_POS_SAVE_ENTRIES
  *
  *  @author OLiver
  */
-IngameWindow::IngameWindow(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, const std::string& title, glArchivItem_Bitmap* background, bool modal, bool close_on_right_click)
+IngameWindow::IngameWindow(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, const std::string& title, glArchivItem_Bitmap* background, bool modal, bool close_on_right_click)
     : Window(x, y, id, NULL, width, height),
       iwHeight(height), title(title), background(background), last_x(0), last_y(0),
       last_down(false), last_down2(false), modal(modal), closeme(false), minimized(false), move(false), close_on_right_click(close_on_right_click)
@@ -59,7 +59,7 @@ IngameWindow::IngameWindow(unsigned int id, unsigned short x, unsigned short y, 
 
         if(id < MAX_POS_SAVE_ENTRIES)
         {
-            Point<unsigned short> pos = last_pos[id];
+            Point<uint16_t> pos = last_pos[id];
             if(pos.x != 0xffff)
             {
                 Move(pos.x, pos.y);
@@ -84,7 +84,7 @@ IngameWindow::~IngameWindow(void)
 {
     // Possibly save our old position
     if(id < MAX_POS_SAVE_ENTRIES)
-        last_pos[id] = Point<unsigned short>(x, y);
+        last_pos[id] = Point<uint16_t>(x, y);
 }
 
 void IngameWindow::SetMinimized(bool minimized)
@@ -97,9 +97,9 @@ void IngameWindow::MouseLeftDown(const MouseCoords& mc)
 {
     // Maus muss sich auf der Titelleiste befinden
     Rect title_rect(
-        static_cast<unsigned short>(x + LOADER.GetImageN("resource", 36)->getWidth()),
+        static_cast<uint16_t>(x + LOADER.GetImageN("resource", 36)->getWidth()),
         y,
-        static_cast<unsigned short>(width - LOADER.GetImageN("resource", 36)->getWidth() - LOADER.GetImageN("resource", 37)->getWidth()),
+        static_cast<uint16_t>(width - LOADER.GetImageN("resource", 36)->getWidth() - LOADER.GetImageN("resource", 37)->getWidth()),
         LOADER.GetImageN("resource", 43)->getHeight()
         );
 
@@ -118,7 +118,7 @@ void IngameWindow::MouseLeftDown(const MouseCoords& mc)
         GetRightButtonRect()
     };
 
-    for(unsigned char i = 0; i < 2; ++i)
+    for(uint8_t i = 0; i < 2; ++i)
     {
         if(Coll(mc.x, mc.y, rec[i]))
             button_state[i] = BUTTON_PRESSED;
@@ -137,7 +137,7 @@ void IngameWindow::MouseLeftUp(const MouseCoords& mc)
         GetRightButtonRect()
     };
 
-    for(unsigned char i = 0; i < 2; ++i)
+    for(uint8_t i = 0; i < 2; ++i)
     {
         button_state[i] = BUTTON_UP;
         if(Coll(mc.x, mc.y, rec[i]))
@@ -158,9 +158,9 @@ void IngameWindow::MouseMove(const MouseCoords& mc)
     // Fenster bewegen, wenn die Bewegung aktiviert wurde
     if(move)
     {
-        int nx, ny;
-        int NewMouseX = mc.x;
-        int NewMouseY = mc.y;
+        int32_t nx, ny;
+        int32_t NewMouseX = mc.x;
+        int32_t NewMouseY = mc.y;
 
         nx = x + (mc.x - last_x);
         ny = y + (mc.y - last_y);
@@ -189,8 +189,8 @@ void IngameWindow::MouseMove(const MouseCoords& mc)
         if(NewMouseX - mc.x || NewMouseY - mc.y)
             VIDEODRIVER.SetMousePos(NewMouseX, NewMouseY);
 
-        x = (unsigned short)nx;
-        y = (unsigned short)ny;
+        x = (uint16_t)nx;
+        y = (uint16_t)ny;
 
         last_x = mc.x;
         last_y = mc.y;
@@ -203,7 +203,7 @@ void IngameWindow::MouseMove(const MouseCoords& mc)
         GetRightButtonRect()
     };
 
-    for(unsigned char i = 0; i < 2; ++i)
+    for(uint8_t i = 0; i < 2; ++i)
     {
         if(Coll(mc.x, mc.y, rec[i]))
         {
@@ -231,7 +231,7 @@ bool IngameWindow::Draw_()
     LOADER.GetImageN("resource", 37)->Draw(x + width - LOADER.GetImageN("resource", 37)->getWidth(), y, 0, 0, 0, 0, 0, 0);
 
     // Die beiden Buttons oben
-    static const unsigned short ids[2][3] =
+    static const uint16_t ids[2][3] =
     {
         {47, 55, 50},
         {48, 56, 52}
@@ -245,12 +245,12 @@ bool IngameWindow::Draw_()
 
 
     // Breite berechnen
-    unsigned title_width = width - LOADER.GetImageN("resource", 36)->getWidth() - LOADER.GetImageN("resource", 37)->getWidth();
+    uint32_t title_width = width - LOADER.GetImageN("resource", 36)->getWidth() - LOADER.GetImageN("resource", 37)->getWidth();
 
     // Wieviel mal nebeneinanderzeichnen?
-    unsigned short title_count = title_width / LOADER.GetImageN("resource", 43)->getWidth();
+    uint16_t title_count = title_width / LOADER.GetImageN("resource", 43)->getWidth();
 
-    unsigned short title_index = 42;
+    uint16_t title_index = 42;
     if(active)
     {
         if(move)
@@ -259,11 +259,11 @@ bool IngameWindow::Draw_()
             title_index = 43;
     }
 
-    for(unsigned short i = 0; i < title_count; ++i)
+    for(uint16_t i = 0; i < title_count; ++i)
         LOADER.GetImageN("resource", title_index)->Draw(x + LOADER.GetImageN("resource", 36)->getWidth() + i * LOADER.GetImageN("resource", title_index)->getWidth(), y, 0, 0, 0, 0, 0, 0);
 
     // Rest zeichnen
-    unsigned short rest = title_width % LOADER.GetImageN("resource", title_index)->getWidth();
+    uint16_t rest = title_width % LOADER.GetImageN("resource", title_index)->getWidth();
 
     if(rest)
         LOADER.GetImageN("resource", title_index)->Draw(x + LOADER.GetImageN("resource", 36)->getWidth() + title_count * LOADER.GetImageN("resource", title_index)->getWidth(), y, rest, 0, 0, 0, rest, 0);
@@ -276,12 +276,12 @@ bool IngameWindow::Draw_()
         // Seitenleisten
 
         // Höhe
-        unsigned side_height = height - LOADER.GetImageN("resource", 36)->getHeight() - LOADER.GetImageN("resource", 45)->getHeight();
+        uint32_t side_height = height - LOADER.GetImageN("resource", 36)->getHeight() - LOADER.GetImageN("resource", 45)->getHeight();
 
         // Wieviel mal nebeneinanderzeichnen?
         title_count = side_height / LOADER.GetImageN("resource", 38)->getHeight();
 
-        for(unsigned short i = 0; i < title_count; ++i)
+        for(uint16_t i = 0; i < title_count; ++i)
         {
             LOADER.GetImageN("resource", 38)->Draw(x, y + LOADER.GetImageN("resource", 36)->getHeight() + i * LOADER.GetImageN("resource", 38)->getHeight(), 0, 0, 0, 0, 0, 0);
             LOADER.GetImageN("resource", 39)->Draw(x + width - LOADER.GetImageN("resource", 38)->getWidth(), y + LOADER.GetImageN("resource", 36)->getHeight() + i * LOADER.GetImageN("resource", 38)->getHeight(), 0, 0, 0, 0, 0, 0);
@@ -299,12 +299,12 @@ bool IngameWindow::Draw_()
 
         // Untere Leiste
 
-        unsigned side_width = width - LOADER.GetImageN("resource", 45)->getWidth() * 2;
+        uint32_t side_width = width - LOADER.GetImageN("resource", 45)->getWidth() * 2;
 
         // Wieviel mal nebeneinanderzeichnen?
         title_count = side_width / LOADER.GetImageN("resource", 40)->getWidth();
 
-        for(unsigned short i = 0; i < title_count; ++i)
+        for(uint16_t i = 0; i < title_count; ++i)
             LOADER.GetImageN("resource", 40)->Draw(x + LOADER.GetImageN("resource", 45)->getWidth() + i * LOADER.GetImageN("resource", 40)->getWidth(), y + iwHeight - LOADER.GetImageN("resource", 40)->getHeight(), 0, 0, 0, 0, 0, 0);
 
         rest = side_width % LOADER.GetImageN("resource", 40)->getWidth();
@@ -318,8 +318,8 @@ bool IngameWindow::Draw_()
         if(background)
         {
             // Bereich ausrechnen
-            unsigned client_width = width - 20;
-            unsigned client_height = iwHeight - 31;
+            uint32_t client_width = width - 20;
+            uint32_t client_height = iwHeight - 31;
 
             background->Draw(this->x + LOADER.GetImageN("resource", 38)->getWidth(), this->y + LOADER.GetImageN("resource", 36)->getHeight(), client_width, client_height, 0, 0, client_width, client_height);
         }
@@ -335,10 +335,10 @@ bool IngameWindow::Draw_()
     }
     else
     {
-        unsigned side_width = width - LOADER.GetImageN("resource", 45)->getWidth() * 2;
+        uint32_t side_width = width - LOADER.GetImageN("resource", 45)->getWidth() * 2;
         title_count = side_width / LOADER.GetImageN("resource", 40)->getWidth();
 
-        for(unsigned short i = 0; i < title_count; ++i)
+        for(uint16_t i = 0; i < title_count; ++i)
             LOADER.GetImageN("resource", 40)->Draw(x + LOADER.GetImageN("resource", 45)->getWidth() + i * LOADER.GetImageN("resource", 40)->getWidth(), y + 20, 0, 0, 0, 0, 0, 0);
 
         rest = side_width % LOADER.GetImageN("resource", 40)->getWidth();

@@ -35,9 +35,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /// Breite der Scrollbar
-static const unsigned short SCROLLBAR_WIDTH = 20;
+static const uint16_t SCROLLBAR_WIDTH = 20;
 /// Einschubbreite für sekundäre Zeilen (die umgebrochen wurden)
-static const unsigned short SECONDARY_PUGGING = 30;
+static const uint16_t SECONDARY_PUGGING = 30;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -55,11 +55,11 @@ static const unsigned short SECONDARY_PUGGING = 30;
  *  @author OLiver
  */
 ctrlChat::ctrlChat(Window* parent,
-                   unsigned int id,
-                   unsigned short x,
-                   unsigned short y,
-                   unsigned short width,
-                   unsigned short height,
+                   uint32_t id,
+                   uint16_t x,
+                   uint16_t y,
+                   uint16_t width,
+                   uint16_t height,
                    TextureColor tc,
                    glArchivItem_Font* font)
     : Window(x, y, id, parent, width, height),
@@ -95,7 +95,7 @@ ctrlChat::~ctrlChat()
  *
  *  @author Divan
  */
-void ctrlChat::Resize_(unsigned short width, unsigned short height)
+void ctrlChat::Resize_(uint16_t width, uint16_t height)
 {
 
     ctrlScrollBar* scroll = GetCtrl<ctrlScrollBar>(0);
@@ -105,9 +105,9 @@ void ctrlChat::Resize_(unsigned short width, unsigned short height)
     // Remember some things
     const bool was_on_bottom = (scroll->GetPos() + page_size == chat_lines.size());
     const bool width_changed = (this->width != width && chat_lines.size());
-    unsigned short position = 0;
+    uint16_t position = 0;
     // Remember the entry on top
-    for(unsigned short i = 1; i <= scroll->GetPos(); ++i)
+    for(uint16_t i = 1; i <= scroll->GetPos(); ++i)
         if(!chat_lines[i].secondary)
             ++position;
 
@@ -116,7 +116,7 @@ void ctrlChat::Resize_(unsigned short width, unsigned short height)
     {
         this->width = width;
         chat_lines.clear();
-        for(unsigned short i = 0; i < raw_chat_lines.size(); ++i)
+        for(uint16_t i = 0; i < raw_chat_lines.size(); ++i)
             WrapLine(i);
     }
 
@@ -132,7 +132,7 @@ void ctrlChat::Resize_(unsigned short width, unsigned short height)
     }
     else if(width_changed)
     {
-        unsigned short i;
+        uint16_t i;
         for(i = 0; position > 0; ++i)
             if(!chat_lines[i].secondary)
                 --position;
@@ -164,11 +164,11 @@ bool ctrlChat::Draw_()
     DrawControls();
 
     // Wieviele Linien anzeigen?
-    unsigned show_lines = (page_size > unsigned(chat_lines.size()) ? unsigned(chat_lines.size()) : page_size);
+    uint32_t show_lines = (page_size > unsigned(chat_lines.size()) ? unsigned(chat_lines.size()) : page_size);
 
     // Listeneinträge zeichnen
-    unsigned int pos = GetCtrl<ctrlScrollBar>(0)->GetPos();
-    for(unsigned int i = 0; i < show_lines; ++i)
+    uint32_t pos = GetCtrl<ctrlScrollBar>(0)->GetPos();
+    for(uint32_t i = 0; i < show_lines; ++i)
     {
         // eine zweite oder n-nte Zeile?
         if(chat_lines[i + pos].secondary)
@@ -179,9 +179,9 @@ bool ctrlChat::Draw_()
         else
         {
             // Breite von Zeitangabe und Spielername ausrechnen
-            unsigned short time_width = (chat_lines[i + pos].time_string.length()) ? font->getWidth(chat_lines[i + pos].time_string) : 0;
-            unsigned short player_width = (chat_lines[i + pos].player.length()) ? font->getWidth(chat_lines[i + pos].player) : 0;
-            unsigned short x_position = GetX() + 2, y_position = GetY() + 2 + i * (font->getHeight() + 2);
+            uint16_t time_width = (chat_lines[i + pos].time_string.length()) ? font->getWidth(chat_lines[i + pos].time_string) : 0;
+            uint16_t player_width = (chat_lines[i + pos].player.length()) ? font->getWidth(chat_lines[i + pos].player) : 0;
+            uint16_t x_position = GetX() + 2, y_position = GetY() + 2 + i * (font->getHeight() + 2);
 
             // Zeit, Spieler und danach Textnachricht
             if(time_width)
@@ -217,12 +217,12 @@ bool ctrlChat::Draw_()
  *
  *  @author Divan
  */
-void ctrlChat::WrapLine(unsigned short i)
+void ctrlChat::WrapLine(uint16_t i)
 {
     ChatLine line = raw_chat_lines[i];
 
     // Breite von Zeitstring und Spielername berechnen (falls vorhanden)
-    unsigned short prefix_width = ( line.time_string.length() ? font->getWidth(line.time_string) : 0) + (line.player.length() ? (bracket1_size + bracket2_size + font->getWidth(line.player)) : 0 );
+    uint16_t prefix_width = ( line.time_string.length() ? font->getWidth(line.time_string) : 0) + (line.player.length() ? (bracket1_size + bracket2_size + font->getWidth(line.player)) : 0 );
 
     // Reicht die Breite des Textfeldes noch nichtmal dafür aus?
     if(prefix_width > width - 2 - SCROLLBAR_WIDTH)
@@ -242,7 +242,7 @@ void ctrlChat::WrapLine(unsigned short i)
     wi.CreateSingleStrings(line.msg, strings);
 
     // Zeilen hinzufügen
-    for(unsigned int i = 0; i < wi.positions.size(); ++i)
+    for(uint32_t i = 0; i < wi.positions.size(); ++i)
     {
         ChatLine wrap_line;
         // Nur bei den ersten Zeilen müssen ja Zeit und Spielername mit angegeben werden
@@ -268,7 +268,7 @@ void ctrlChat::WrapLine(unsigned short i)
  *
  *  @author OLiver
  */
-void ctrlChat::AddMessage(const std::string& time_string, const std::string& player, const unsigned int player_color, const std::string& msg, const unsigned int msg_color)
+void ctrlChat::AddMessage(const std::string& time_string, const std::string& player, const uint32_t player_color, const std::string& msg, const uint32_t msg_color)
 {
     ChatLine line;
 
@@ -279,7 +279,7 @@ void ctrlChat::AddMessage(const std::string& time_string, const std::string& pla
     line.msg_color = msg_color;
     raw_chat_lines.push_back(line);
 
-    const unsigned short oldlength = chat_lines.size();
+    const uint16_t oldlength = chat_lines.size();
 
     // Loggen
     LOG.lprintf("%s <", time_string.c_str());

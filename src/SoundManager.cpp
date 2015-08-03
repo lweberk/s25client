@@ -44,7 +44,7 @@ SoundManager::SoundManager() : last_bird(0), bird_interval(0), ocean_play_id(0)
 SoundManager::~SoundManager()
 {}
 
-void SoundManager::PlayNOSound(const unsigned sound_lst_id, noBase* const obj, const unsigned int id, unsigned char volume)
+void SoundManager::PlayNOSound(const uint32_t sound_lst_id, noBase* const obj, const uint32_t id, uint8_t volume)
 {
     if (GAMECLIENT.IsPaused())
         return;
@@ -60,7 +60,7 @@ void SoundManager::PlayNOSound(const unsigned sound_lst_id, noBase* const obj, c
     }
 
     // Sound wird noch nicht gespielt --> hinzufügen und abspielen
-    unsigned play_id = LOADER.GetSoundN("sound", sound_lst_id)->Play(volume, false);
+    uint32_t play_id = LOADER.GetSoundN("sound", sound_lst_id)->Play(volume, false);
 
     // Konnte er auch abgespielt werden?
 
@@ -93,7 +93,7 @@ void SoundManager::WorkingFinished(noBase* const obj)
 }
 
 
-void SoundManager::PlayBirdSounds(const unsigned short tree_count)
+void SoundManager::PlayBirdSounds(const uint16_t tree_count)
 {
     if (GAMECLIENT.IsPaused())
         return;
@@ -102,7 +102,7 @@ void SoundManager::PlayBirdSounds(const unsigned short tree_count)
         return;
 
     // Abstände zwischen den Vogelsounds berechnen (je nachdem wieviel Bäume)
-    unsigned interval;
+    uint32_t interval;
     if(1000 > tree_count * 10)
         interval = 1000 - tree_count * 10;
     else
@@ -121,7 +121,7 @@ void SoundManager::PlayBirdSounds(const unsigned short tree_count)
     }
 }
 
-void SoundManager::PlayOceanBrawling(const unsigned water_percent)
+void SoundManager::PlayOceanBrawling(const uint32_t water_percent)
 {
     if (GAMECLIENT.IsPaused())
         return;

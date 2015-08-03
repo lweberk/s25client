@@ -30,7 +30,7 @@ class noSkeleton: public noCoordBase
     public:
 
         noSkeleton(const MapPoint pt);
-        noSkeleton(SerializedGameData* sgd, const unsigned obj_id);
+        noSkeleton(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~noSkeleton();
 
@@ -45,12 +45,12 @@ class noSkeleton: public noCoordBase
     protected:
         void Destroy_noSkeleton();
 
-        void Draw(int x, int y);
-        void HandleEvent(const unsigned int id);
+        void Draw(int32_t x, int32_t y);
+        void HandleEvent(const uint32_t id);
 
     private:
         /// Type des Skeletts (0 = ganz "frisch", 1 - schon etwas verdorrt)
-        unsigned char type;
+        uint8_t type;
         /// EventPointer, damit der dann gelöscht werden kann, falls das Skelett von außerhalb gelöscht wird
         EventManager::EventPointer current_event;
 };

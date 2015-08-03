@@ -32,12 +32,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofPassiveWorker::nofPassiveWorker(const Job job, const MapPoint pos, const unsigned char player, noRoadNode* goal)
+nofPassiveWorker::nofPassiveWorker(const Job job, const MapPoint pos, const uint8_t player, noRoadNode* goal)
     : noFigure(job, pos, player, goal)
 {
 }
 
-nofPassiveWorker::nofPassiveWorker(SerializedGameData* sgd, const unsigned obj_id)
+nofPassiveWorker::nofPassiveWorker(SerializedGameData* sgd, const uint32_t obj_id)
     : noFigure(sgd, obj_id)
 {
 }
@@ -65,13 +65,13 @@ void nofPassiveWorker::AbrogateWorkplace()
 
 
 /// Zeichnen
-void nofPassiveWorker::Draw(int x, int y)
+void nofPassiveWorker::Draw(int32_t x, int32_t y)
 {
     DrawWalking(x, y);
 }
 
 /// Für alle restlichen Events, die nicht von noFigure behandelt werden
-void nofPassiveWorker::HandleDerivedEvent(const unsigned int id)
+void nofPassiveWorker::HandleDerivedEvent(const uint32_t id)
 {
 
 }

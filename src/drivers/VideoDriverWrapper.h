@@ -41,9 +41,9 @@ class VideoDriverWrapper : public Singleton<VideoDriverWrapper>
         bool LoadDriver(void);
 
         /// Erstellt das Fenster.
-        bool CreateScreen(const unsigned short screen_width, const unsigned short screen_height, const bool fullscreen);
+        bool CreateScreen(const uint16_t screen_width, const uint16_t screen_height, const bool fullscreen);
         /// Verändert Auflösung, Fenster/Fullscreen
-        bool ResizeScreen(const unsigned short screen_width, const unsigned short screen_height, const bool fullscreen);
+        bool ResizeScreen(const uint16_t screen_width, const uint16_t screen_height, const bool fullscreen);
         // Viewport (neu) setzen
         void RenewViewport(bool onlyRenew = false);
         // zerstört das Fenster.
@@ -51,16 +51,16 @@ class VideoDriverWrapper : public Singleton<VideoDriverWrapper>
         // räumt die Texturen auf
         void CleanUp();
         // erstellt eine Textur
-        unsigned int GenerateTexture();
-        inline void BindTexture(unsigned int t) {if (t != texture_current) {texture_current = t; glBindTexture(GL_TEXTURE_2D, t);}}
-        inline void DeleteTexture(unsigned int t) {if (t == texture_current) {texture_current = 0;} glDeleteTextures(1, &t);}
+        uint32_t GenerateTexture();
+        inline void BindTexture(uint32_t t) {if (t != texture_current) {texture_current = t; glBindTexture(GL_TEXTURE_2D, t);}}
+        inline void DeleteTexture(uint32_t t) {if (t == texture_current) {texture_current = 0;} glDeleteTextures(1, &t);}
 
         // Swapped den Buffer
         bool SwapBuffers();
         // liefert den Mausstatus (sollte nur beim Zeichnen der Maus verwendet werden, für alles andere die Mausmessages
         // benutzen!!!)
-        int GetMouseX();
-        int GetMouseY();
+        int32_t GetMouseX();
+        int32_t GetMouseY();
 
         /// Listet verfügbare Videomodi auf
         void ListVideoModes(std::vector<VideoDriver::VideoMode>& video_modes) const;
@@ -68,24 +68,24 @@ class VideoDriverWrapper : public Singleton<VideoDriverWrapper>
         /// Gibt Pointer auf ein Fenster zurück (device-dependent!), HWND unter Windows
         void* GetMapPointer() const;
 
-        unsigned short GetScreenWidth()  const
-        { const unsigned short w = videodriver->GetScreenWidth(); return (w < 800 ? 800 : w); }
-        unsigned short GetScreenHeight() const
-        { const unsigned short h = videodriver->GetScreenHeight(); return (h < 600 ? 600 : h); }
+        uint16_t GetScreenWidth()  const
+        { const uint16_t w = videodriver->GetScreenWidth(); return (w < 800 ? 800 : w); }
+        uint16_t GetScreenHeight() const
+        { const uint16_t h = videodriver->GetScreenHeight(); return (h < 600 ? 600 : h); }
         bool IsFullscreen() const
         { return videodriver->IsFullscreen(); }
 
         bool IsLeftDown();
         bool IsRightDown();
         // setzt den Mausstatus
-        void SetMousePos(const int x, const int y);
+        void SetMousePos(const int32_t x, const int32_t y);
         /// Get state of the modifier keys
         KeyEvent GetModKeyState(void) const { if(videodriver) return videodriver->GetModKeyState(); const KeyEvent ke = {KT_INVALID, 0, false, false, false}; return ke;  }
 
         // Nachrichtenschleife
         bool Run();
 
-        unsigned int GetTickCount();
+        uint32_t GetTickCount();
 
         const char* GetName(void) const { if(videodriver) return videodriver->GetName();    return NULL; }
 
@@ -107,9 +107,9 @@ class VideoDriverWrapper : public Singleton<VideoDriverWrapper>
         DriverWrapper driver_wrapper;
         VideoDriver* videodriver;
 
-        unsigned int texture_list[100000];
-        unsigned int texture_pos;
-        unsigned int texture_current;
+        uint32_t texture_list[100000];
+        uint32_t texture_pos;
+        uint32_t texture_current;
 };
 
 #define VIDEODRIVER VideoDriverWrapper::inst()

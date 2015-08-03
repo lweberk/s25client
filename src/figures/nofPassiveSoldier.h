@@ -36,7 +36,7 @@ class nofPassiveSoldier : public nofSoldier
     private:
 
         /// Eventhandling
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
         // informieren, wenn ...
         void GoalReached(); // das Ziel erreicht wurde
@@ -50,8 +50,8 @@ class nofPassiveSoldier : public nofSoldier
     public:
 
         nofPassiveSoldier(const nofSoldier& soldier);
-        nofPassiveSoldier(const MapPoint pt, const unsigned char player, nobBaseMilitary* const goal, nobBaseMilitary* const home, const unsigned char rank);
-        nofPassiveSoldier(SerializedGameData* sgd, const unsigned obj_id);
+        nofPassiveSoldier(const MapPoint pt, const uint8_t player, nobBaseMilitary* const goal, nobBaseMilitary* const home, const uint8_t rank);
+        nofPassiveSoldier(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~nofPassiveSoldier();
 
@@ -66,7 +66,7 @@ class nofPassiveSoldier : public nofSoldier
         GO_Type GetGOT() const { return GOT_NOF_PASSIVESOLDIER; }
 
         // Zeichnet den Soldaten
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// wenn Militärgebäude abgerissen wurde und sich der Soldat im Gebäude befand
         void InBuildingDestroyed();

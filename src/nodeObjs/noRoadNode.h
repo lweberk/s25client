@@ -37,29 +37,29 @@ class noRoadNode : public noCoordBase
 {
     protected:
 
-        unsigned char player;
+        uint8_t player;
 
     public:
 
         RoadSegment* routes[6];
 
 // For Pathfinding
-        mutable unsigned coord_id;
+        mutable uint32_t coord_id;
         // cost from start
-        mutable unsigned cost;
+        mutable uint32_t cost;
         // distance to target
-        mutable unsigned distance;
+        mutable uint32_t distance;
         // estimated total distance (cost + distance)
-        mutable unsigned estimate;
+        mutable uint32_t estimate;
 
-        mutable unsigned last_visit;
+        mutable uint32_t last_visit;
 
         mutable const noRoadNode* prev;
-        mutable unsigned dir;
+        mutable uint32_t dir;
     public:
 
-        noRoadNode(const NodalObjectType nop, const MapPoint pt, const unsigned char player);
-        noRoadNode(SerializedGameData* sgd, const unsigned obj_id);
+        noRoadNode(const NodalObjectType nop, const MapPoint pt, const uint8_t player);
+        noRoadNode(SerializedGameData* sgd, const uint32_t obj_id);
 
         virtual ~noRoadNode();
         /// Aufräummethoden
@@ -70,20 +70,20 @@ class noRoadNode : public noCoordBase
     protected:  void Serialize_noRoadNode(SerializedGameData* sgd) const;
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_noRoadNode(sgd); }
 
-        inline noRoadNode* GetNeighbour(const unsigned char dir) const {if(!routes[dir]) return 0; return((routes[dir]->GetF1() == this) ? routes[dir]->GetF2() : routes[dir]->GetF1());}
+        inline noRoadNode* GetNeighbour(const uint8_t dir) const {if(!routes[dir]) return 0; return((routes[dir]->GetF1() == this) ? routes[dir]->GetF2() : routes[dir]->GetF1());}
 
-        void DestroyRoad(const unsigned char dir);
-        void UpgradeRoad(const unsigned char dir);
+        void DestroyRoad(const uint8_t dir);
+        void UpgradeRoad(const uint8_t dir);
         /// Vernichtet Alle Straße um diesen Knoten
         void DestroyAllRoads();
 
-        unsigned char GetPlayer() const { return player; }
+        uint8_t GetPlayer() const { return player; }
 
         /// Legt eine Ware am Objekt ab (an allen Straßenknoten (Gebäude, Baustellen und Flaggen) kann man Waren ablegen
         virtual void AddWare(Ware* ware) = 0;
 
         /// Nur für Flagge, Gebäude können 0 zurückgeben, gibt Wegstrafpunkte für das Pathfinden für Waren, die in eine bestimmte Richtung noch transportiert werden müssen
-        virtual unsigned short GetPunishmentPoints(const unsigned char dir) const { return 0; }
+        virtual uint16_t GetPunishmentPoints(const uint8_t dir) const { return 0; }
 
 };
 

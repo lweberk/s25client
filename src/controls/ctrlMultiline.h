@@ -27,17 +27,17 @@ class ctrlMultiline : public Window
     public:
 
         /// Breite der Scrollbar
-        static const unsigned short SCROLLBAR_WIDTH = 20;
+        static const uint16_t SCROLLBAR_WIDTH = 20;
 
     public:
-        ctrlMultiline(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font, unsigned int format = 0);
+        ctrlMultiline(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font, uint32_t format = 0);
 
-        //void AddText(const std::string& text, unsigned int color);
-        void AddString(const std::string& str, unsigned int color, bool scroll = true);
-        unsigned GetLineCount() { return unsigned(lines.size()); }
+        //void AddText(const std::string& text, uint32_t color);
+        void AddString(const std::string& str, uint32_t color, bool scroll = true);
+        uint32_t GetLineCount() { return unsigned(lines.size()); }
         /// Gibt den index-ten Eintrag zurück
-        const std::string& GetLine(const unsigned index) const { return lines[index].str; }
-        void SetLine(const unsigned index, const std::string& str, unsigned int color);
+        const std::string& GetLine(const uint32_t index) const { return lines[index].str; }
+        void SetLine(const uint32_t index, const std::string& str, uint32_t color);
 
         /// Schaltet Box ein und aus
         void EnableBox(const bool enable) { draw_box = enable; }
@@ -51,24 +51,24 @@ class ctrlMultiline : public Window
     protected:
         virtual bool Draw_(void);
 
-        void Resize_(unsigned short width, unsigned short height);
+        void Resize_(uint16_t width, uint16_t height);
 
     private:
 
         TextureColor tc;
         glArchivItem_Font* font;
-        unsigned int format;
+        uint32_t format;
 
 
         struct Line
         {
             std::string str;
-            unsigned int color;
+            uint32_t color;
         };
         /// Die ganzen Strings
         std::vector<Line> lines;
         /// Anzahl der Zeilen, die in das Control passen
-        unsigned lines_in_control;
+        uint32_t lines_in_control;
 
         /// Soll die Box gezeichnet werden?
         bool draw_box;

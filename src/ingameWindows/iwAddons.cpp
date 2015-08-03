@@ -88,7 +88,7 @@ iwAddons::~iwAddons()
  *
  *  @author FloSoft
  */
-void iwAddons::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwAddons::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -101,9 +101,9 @@ void iwAddons::Msg_ButtonClick(const unsigned int ctrl_id)
                 Close();
 
             // Einstellungen in ADDONMANAGER übertragen
-            for(unsigned int i = 0; i < ggs->getCount(); ++i)
+            for(uint32_t i = 0; i < ggs->getCount(); ++i)
             {
-                unsigned int status;
+                uint32_t status;
                 const Addon* addon = ggs->getAddon(i, status);
 
                 if(!addon)
@@ -141,9 +141,9 @@ void iwAddons::Msg_ButtonClick(const unsigned int ctrl_id)
         case 3: // Load S2 Defaults
         {
             // Standardeinstellungen aufs Fenster übertragen
-            for(unsigned int i = 0; i < ggs->getCount(); ++i)
+            for(uint32_t i = 0; i < ggs->getCount(); ++i)
             {
-                unsigned int status;
+                uint32_t status;
                 const Addon* addon = ggs->getAddon(i, status);
 
                 if(!addon)
@@ -156,22 +156,22 @@ void iwAddons::Msg_ButtonClick(const unsigned int ctrl_id)
 }
 
 /// Aktualisiert die Addons, die angezeigt werden sollen
-void iwAddons::UpdateView(const unsigned short selection)
+void iwAddons::UpdateView(const uint16_t selection)
 {
     //LOG.lprintf("\nUpdateView start\n");
     ctrlScrollBar* scrollbar = GetCtrl<ctrlScrollBar>(6);
-    unsigned short y = 90;
-    unsigned short inthiscategory = 0;
-    //LOG.lprintf("Page range: %u - %u\n", scrollbar->GetPos().x, scrollbar->GetPos().y, (unsigned int)(scrollbar->GetPos()+scrollbar->GetPageSize()));
-    for(unsigned int i = 0; i < ggs->getCount(); ++i)
+    uint16_t y = 90;
+    uint16_t inthiscategory = 0;
+    //LOG.lprintf("Page range: %u - %u\n", scrollbar->GetPos().x, scrollbar->GetPos().y, (uint32_t)(scrollbar->GetPos()+scrollbar->GetPageSize()));
+    for(uint32_t i = 0; i < ggs->getCount(); ++i)
     {
-        unsigned int id = 10 + 20 * (ggs->getCount() - i - 1);
-        unsigned int status;
+        uint32_t id = 10 + 20 * (ggs->getCount() - i - 1);
+        uint32_t status;
         const Addon* addon = ggs->getAddon(i, status);
 
         if(!addon)
             continue;
-        unsigned int groups = addon->getGroups();
+        uint32_t groups = addon->getGroups();
 
         if( (groups & selection) == selection)
         {
@@ -180,7 +180,7 @@ void iwAddons::UpdateView(const unsigned short selection)
         }
         //hide addon's gui if addon is beyond selected group or is beyond current page scope
         if( ((groups & selection) != selection) || inthiscategory < scrollbar->GetPos() + 1
-                || inthiscategory > (unsigned int)(scrollbar->GetPos() + scrollbar->GetPageSize()) + 1 )
+                || inthiscategory > (uint32_t)(scrollbar->GetPos() + scrollbar->GetPageSize()) + 1 )
         {
             //if((groups & selection) != selection)
             //  LOG.lprintf("HIDE addon: %s - category mismatch\n",addon->getName().c_str());
@@ -206,7 +206,7 @@ void iwAddons::UpdateView(const unsigned short selection)
  *
  *  @author FloSoft
  */
-void iwAddons::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void iwAddons::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -226,7 +226,7 @@ void iwAddons::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned 
  *
  *  @author FloSoft
  */
-void iwAddons::Msg_ScrollChange(const unsigned int ctrl_id, const unsigned short position)
+void iwAddons::Msg_ScrollChange(const uint32_t ctrl_id, const uint16_t position)
 {
     ctrlOptionGroup* optiongroup = GetCtrl<ctrlOptionGroup>(5);
     UpdateView(optiongroup->GetSelection());

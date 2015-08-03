@@ -51,7 +51,7 @@ static char THIS_FILE[] = __FILE__;
  */
 VideoDriverWrapper::VideoDriverWrapper() :  videodriver(NULL), texture_pos(0), texture_current(0)
 {
-    memset(texture_list, 0, sizeof(unsigned int) * 100000);
+    memset(texture_list, 0, sizeof(uint32_t) * 100000);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ bool VideoDriverWrapper::LoadDriver(void)
  *
  *  @author FloSoft
  */
-bool VideoDriverWrapper::CreateScreen(const unsigned short screen_width, const unsigned short screen_height, const bool fullscreen)
+bool VideoDriverWrapper::CreateScreen(const uint16_t screen_width, const uint16_t screen_height, const bool fullscreen)
 {
     if(!videodriver)
     {
@@ -175,7 +175,7 @@ bool VideoDriverWrapper::CreateScreen(const unsigned short screen_width, const u
  *
  *  @author FloSoft
  */
-bool VideoDriverWrapper::ResizeScreen(const unsigned short screenWidth, const unsigned short screenHeight, const bool fullscreen)
+bool VideoDriverWrapper::ResizeScreen(const uint16_t screenWidth, const uint16_t screenHeight, const bool fullscreen)
 {
     if(!videodriver)
     {
@@ -208,7 +208,7 @@ bool VideoDriverWrapper::DestroyScreen()
 
     // Texturen aufräumen
     LOG.lprintf("Saeubere Texturespeicher: ");
-    unsigned int ladezeit = GetTickCount();
+    uint32_t ladezeit = GetTickCount();
     CleanUp();
     LOG.lprintf("fertig (nach %dms)\n", GetTickCount() - ladezeit);
 
@@ -230,13 +230,13 @@ bool VideoDriverWrapper::DestroyScreen()
  */
 bool VideoDriverWrapper::hasExtension(const char* extension)
 {
-    const unsigned char* extensions = NULL;
+    const uint8_t* extensions = NULL;
 
-    const unsigned char* start;
-    unsigned char* position, *ende;
+    const uint8_t* start;
+    uint8_t* position, *ende;
 
     // Extension mit Leerzeichen gibts nich
-    position = (unsigned char*)strchr(extension, ' ');
+    position = (uint8_t*)strchr(extension, ' ');
     if( position || *extension == '\0' )
         return false;
 
@@ -247,7 +247,7 @@ bool VideoDriverWrapper::hasExtension(const char* extension)
     start = extensions;
     for(;;)
     {
-        position = (unsigned char*)strstr( (const char*)start, extension );
+        position = (uint8_t*)strstr( (const char*)start, extension );
         if( !position )
             break;
 
@@ -273,7 +273,7 @@ void VideoDriverWrapper::CleanUp()
 {
     glDeleteTextures(texture_pos, (const GLuint*)texture_list);
 
-    memset(texture_list, 0, sizeof(unsigned int)*texture_pos);
+    memset(texture_list, 0, sizeof(uint32_t)*texture_pos);
     texture_pos = 0;
 }
 
@@ -283,7 +283,7 @@ void VideoDriverWrapper::CleanUp()
  *
  *  @author FloSoft
  */
-unsigned int VideoDriverWrapper::GenerateTexture()
+uint32_t VideoDriverWrapper::GenerateTexture()
 {
     if(texture_pos >= 100000)
     {
@@ -390,8 +390,8 @@ bool VideoDriverWrapper::Initialize()
  */
 void VideoDriverWrapper::RenewViewport(bool onlyRenew)
 {
-    const unsigned short width  = videodriver->GetScreenWidth();
-    const unsigned short height = videodriver->GetScreenHeight();
+    const uint16_t width  = videodriver->GetScreenWidth();
+    const uint16_t height = videodriver->GetScreenHeight();
 
     // Viewport mit widthxheight setzen
     glViewport(0, 0, width, height);
@@ -463,12 +463,12 @@ bool VideoDriverWrapper::LoadAllExtensions()
  *
  *  @author FloSoft
  */
-unsigned int VideoDriverWrapper::GetTickCount()
+uint32_t VideoDriverWrapper::GetTickCount()
 {
     if(!videodriver)
-        return (unsigned int)time(NULL);
+        return (uint32_t)time(NULL);
 
-    return (unsigned int)videodriver->GetTickCount();
+    return (uint32_t)videodriver->GetTickCount();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -498,7 +498,7 @@ void* VideoDriverWrapper::loadExtension(const char* extension)
  *
  *  @author FloSoft
  */
-int VideoDriverWrapper::GetMouseX()
+int32_t VideoDriverWrapper::GetMouseX()
 {
     if(!videodriver)
         return 0;
@@ -512,7 +512,7 @@ int VideoDriverWrapper::GetMouseX()
  *
  *  @author FloSoft
  */
-int VideoDriverWrapper::GetMouseY()
+int32_t VideoDriverWrapper::GetMouseY()
 {
     if(!videodriver)
         return 0;
@@ -554,7 +554,7 @@ bool VideoDriverWrapper::IsRightDown()
  *
  *  @author FloSoft
  */
-void VideoDriverWrapper::SetMousePos(const int x, const int y)
+void VideoDriverWrapper::SetMousePos(const int32_t x, const int32_t y)
 {
     if(!videodriver)
         return;

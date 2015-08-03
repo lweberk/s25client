@@ -47,7 +47,7 @@ static char THIS_FILE[] = __FILE__;
 /// Maximale Distanz, die ein Jäger läuft, um ein Tier zu jagen
 const MapCoord MAX_HUNTING_DISTANCE = 50;
 
-nofHunter::nofHunter(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofHunter::nofHunter(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofBuildingWorker(JOB_HUNTER, pos, player, workplace), animal(0), shootingPos(0, 0), shooting_dir(0)
 {
 }
@@ -64,7 +64,7 @@ void nofHunter::Serialize_nofHunter(SerializedGameData* sgd) const
     }
 }
 
-nofHunter::nofHunter(SerializedGameData* sgd, const unsigned obj_id) : nofBuildingWorker(sgd, obj_id)
+nofHunter::nofHunter(SerializedGameData* sgd, const uint32_t obj_id) : nofBuildingWorker(sgd, obj_id)
 {
     if(state != STATE_FIGUREWORK && state != STATE_WAITING1)
     {
@@ -74,7 +74,7 @@ nofHunter::nofHunter(SerializedGameData* sgd, const unsigned obj_id) : nofBuildi
     }
 }
 
-void nofHunter::DrawWorking(int x, int y)
+void nofHunter::DrawWorking(int32_t x, int32_t y)
 {
     switch(state)
     {
@@ -85,7 +85,7 @@ void nofHunter::DrawWorking(int x, int y)
             if(shooting_dir == 3)
             {
                 // die Animation in dieser Richtung ist etwas anders als die in den restlichen
-                unsigned short id = GAMECLIENT.Interpolate(13, current_ev);
+                uint16_t id = GAMECLIENT.Interpolate(13, current_ev);
                 LOADER.GetImageN("rom_bobs", 219 + id)->Draw(x, y, 0, 0, 0, 0, 0, 0, COLOR_WHITE, COLORS[gwg->GetPlayer(player)->color]);
 
                 if(id == 12)
@@ -96,7 +96,7 @@ void nofHunter::DrawWorking(int x, int y)
             }
             else
             {
-                unsigned short id = GAMECLIENT.Interpolate(8, current_ev);
+                uint16_t id = GAMECLIENT.Interpolate(8, current_ev);
                 LOADER.GetImageN("rom_bobs", 1686 + ((shooting_dir + 2) % 6) * 8 + id)->Draw(x, y, 0, 0, 0, 0, 0, 0, COLOR_WHITE, COLORS[gwg->GetPlayer(player)->color]);
 
                 if(id == 7)
@@ -111,8 +111,8 @@ void nofHunter::DrawWorking(int x, int y)
         } break;
         case STATE_HUNTER_EVISCERATING:
         {
-            unsigned short id = GAMECLIENT.Interpolate(45, current_ev);
-            unsigned short draw_id;
+            uint16_t id = GAMECLIENT.Interpolate(45, current_ev);
+            uint16_t draw_id;
 
             if(id < 4) draw_id = 232 + id;
             else if(id < 36) draw_id = 236 + (id - 4) % 8;
@@ -123,7 +123,7 @@ void nofHunter::DrawWorking(int x, int y)
     }
 }
 
-void nofHunter::HandleDerivedEvent(const unsigned int id)
+void nofHunter::HandleDerivedEvent(const uint32_t id)
 {
     switch(state)
     {
@@ -136,7 +136,7 @@ void nofHunter::HandleDerivedEvent(const unsigned int id)
 
             // Unter- und Obergrenzen für das Quadrat bzw. Rechteck (nicht über Kartenränder hinauslesen)
             MapCoord fx, fy, lx, ly;
-            const unsigned short SQUARE_SIZE = 19;
+            const uint16_t SQUARE_SIZE = 19;
 
             if(pos.x > SQUARE_SIZE) fx = pos.x - SQUARE_SIZE; else fx = 0;
             if(pos.y > SQUARE_SIZE) fy = pos.y - SQUARE_SIZE; else fy = 0;
@@ -264,16 +264,16 @@ void nofHunter::HandleStateChasing()
     if(gwg->CalcDistance(pos, animal->GetPos()) < 7)
     {
         // Dann bitten wir es mal, schonmal anzuhalten und bekommen seine Koordinaten, wo es dann steht
-        Point<int> animalPos(animal->HunterIsNear());
+        Point<int32_t> animalPos(animal->HunterIsNear());
 
         // Nun müssen wir drumherum einen Punkt suchen, von dem wir schießen, der natürlich direkt dem Standort
         // des Tieres gegenüberliegen muss (mit zufälliger Richtung beginnen)
-        unsigned char doffset = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
+        uint8_t doffset = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
         shootingPos = MapPoint::Invalid();
-        unsigned char d;
+        uint8_t d;
         for(d = 0; d < 6; ++d)
         {
-            int dx, dy;
+            int32_t dx, dy;
             switch((d + doffset) % 6)
             {
                 case 0:
@@ -306,7 +306,7 @@ void nofHunter::HandleStateChasing()
 
             animalPos.x += dx;
             animalPos.y += dy;
-            if(animalPos.x >=0 && animalPos.y >=0 && animalPos.x < static_cast<int>(gwg->GetWidth()) && animalPos.y < static_cast<int>(gwg->GetHeight()))
+            if(animalPos.x >=0 && animalPos.y >=0 && animalPos.x < static_cast<int32_t>(gwg->GetWidth()) && animalPos.y < static_cast<int32_t>(gwg->GetHeight()))
             {
                 shootingPos = MapPoint(animalPos);
                 break;

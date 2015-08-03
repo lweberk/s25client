@@ -38,9 +38,9 @@
 
 // WGL_EXT_swap_control
 #ifdef _WIN32
-typedef BOOL (APIENTRY* PFNWGLSWAPINTERVALFARPROC)(int);
+typedef BOOL (APIENTRY* PFNWGLSWAPINTERVALFARPROC)(int32_t);
 #else
-typedef int (*PFNWGLSWAPINTERVALFARPROC)(int);
+typedef int32_t (*PFNWGLSWAPINTERVALFARPROC)(int32_t);
 #endif
 
 extern PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT;

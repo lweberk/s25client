@@ -52,8 +52,8 @@ class nofFlagWorker : public noFigure
 
     public:
 
-        nofFlagWorker(const Job job, const MapPoint pt, const unsigned char player, noRoadNode* goal);
-        nofFlagWorker(SerializedGameData* sgd, const unsigned obj_id);
+        nofFlagWorker(const Job job, const MapPoint pt, const uint8_t player, noRoadNode* goal);
+        nofFlagWorker(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_nofFlagWorker();

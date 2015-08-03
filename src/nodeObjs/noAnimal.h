@@ -43,11 +43,11 @@ class noAnimal : public noMovable
         } state;
 
         /// Wie weit kann es noch rumlaufen, bis es mal wieder eine Pause machen muss
-        unsigned short pause_way;
+        uint16_t pause_way;
         /// Jäger, der das Tier jagt (0, falls nicht gejagt)
         nofHunter* hunter;
         /// Nächster Zeitpunkt, ab wann der Sound gespielt werden soll (bei Enten und Schafen)
-        unsigned int sound_moment;
+        uint32_t sound_moment;
 
     private:
 
@@ -55,9 +55,9 @@ class noAnimal : public noMovable
         /// entscheidet, was nach einem gelaufenen Abschnitt weiter zu tun ist
         void Walked();
         /// Sucht eine Richtung, in die das Tier gehen kann
-        unsigned char FindDir();
+        uint8_t FindDir();
         /// Fängt an zu laufen
-        void StartWalking(const unsigned char dir);
+        void StartWalking(const uint8_t dir);
         /// Sucht eine neue Richtung und läuft in diese, ansonsten stirbt es
         void StandardWalking();
 
@@ -66,7 +66,7 @@ class noAnimal : public noMovable
 
         /// Konstruktor
         noAnimal(const Species species, const MapPoint pt);
-        noAnimal(SerializedGameData* sgd, const unsigned obj_id);
+        noAnimal(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~noAnimal() {}
 
@@ -81,9 +81,9 @@ class noAnimal : public noMovable
         GO_Type GetGOT() const { return GOT_ANIMAL; }
 
         // An x,y zeichnen
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
         // Benachrichtigen, wenn neuer gf erreicht wurde
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
         /// Wird aufgerufen, nachdem das Tier erzeugt wurde und zur Figurenliste hinzugefügt wurde
         void StartLiving();

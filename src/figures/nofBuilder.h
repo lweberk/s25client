@@ -29,10 +29,10 @@ class nofBuilder : public noFigure
     private:
 
         // Wie weit der Bauarbeiter maximal in alle vier richtungen laufen darf (in Pixeln, rel..)
-        static const short LEFT_MAX = -28;
-        static const short RIGHT_MAX = 28;
-        static const short UP_MAX = 0;
-        static const short DOWN_MAX = 16;
+        static const int16_t LEFT_MAX = -28;
+        static const int16_t RIGHT_MAX = 28;
+        static const int16_t UP_MAX = 0;
+        static const int16_t DOWN_MAX = 16;
 
 
         enum BuilderState
@@ -51,18 +51,18 @@ class nofBuilder : public noFigure
 
         /// X,Y relativ zur Baustelle in Pixeln
         /// next ist der angesteuerte Punkt
-        short rel_x, rel_y;
-        short next_rel_x, next_rel_y;
+        int16_t rel_x, rel_y;
+        int16_t next_rel_x, next_rel_y;
 
         /// Wie viele Bauschritte noch verfügbar sind, bis der nächste Rohstoff geholt werden muss
-        unsigned char building_steps_available;
+        uint8_t building_steps_available;
 
     private:
 
         void GoalReached();
         void Walked();
         void AbrogateWorkplace();
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
         /// In neue Richtung laufen (Freewalk)
         void StartFreewalk();
@@ -71,8 +71,8 @@ class nofBuilder : public noFigure
 
     public:
 
-        nofBuilder(const MapPoint pt, const unsigned char player, noRoadNode* building_site);
-        nofBuilder(SerializedGameData* sgd, const unsigned obj_id);
+        nofBuilder(const MapPoint pt, const uint8_t player, noRoadNode* building_site);
+        nofBuilder(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Serialisierungsfunktionen
     protected:  void Serialize_nofBuilder(SerializedGameData* sgd) const;
@@ -80,7 +80,7 @@ class nofBuilder : public noFigure
 
         GO_Type GetGOT() const { return GOT_NOF_BUILDER; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         // Wird von der Baustelle aus aufgerufen, um den Bauarbeiter zu sagen, dass er gehen kann
         void LostWork();

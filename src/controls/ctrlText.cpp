@@ -31,7 +31,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-ctrlBaseText::ctrlBaseText(const std::string& text, const unsigned color, glArchivItem_Font* font) :
+ctrlBaseText::ctrlBaseText(const std::string& text, const uint32_t color, glArchivItem_Font* font) :
     text(text), color(color), font(font)
 {
 }
@@ -43,12 +43,12 @@ ctrlBaseText::ctrlBaseText(const std::string& text, const unsigned color, glArch
  *  @author OLiver
  */
 ctrlText::ctrlText(Window* parent,
-                   unsigned int id,
-                   unsigned short x,
-                   unsigned short y,
+                   uint32_t id,
+                   uint16_t x,
+                   uint16_t y,
                    const std::string& text,
-                   unsigned int color,
-                   unsigned int format,
+                   uint32_t color,
+                   uint32_t format,
                    glArchivItem_Font* font)
     : Window(x, y, id, parent), ctrlBaseText(text, color, font), format(format)
 {

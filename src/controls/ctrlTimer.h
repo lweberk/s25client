@@ -26,9 +26,9 @@
 class ctrlTimer : public Window
 {
     public:
-        ctrlTimer(Window* parent, unsigned int id, unsigned int timeout);
+        ctrlTimer(Window* parent, uint32_t id, uint32_t timeout);
 
-        void Start(unsigned int timeout);
+        void Start(uint32_t timeout);
         void Stop(void);
 
         virtual void Msg_PaintBefore();
@@ -37,8 +37,8 @@ class ctrlTimer : public Window
         virtual bool Draw_(void) { return true; };
 
     private:
-        unsigned int timeout;
-        unsigned int timer;
+        uint32_t timeout;
+        uint32_t timer;
 };
 
 #endif // !CTRLTIMER_H_INCLUDED

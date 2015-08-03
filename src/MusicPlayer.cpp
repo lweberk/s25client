@@ -61,7 +61,7 @@ void Playlist::Prepare()
         order.resize(songs.size() * repeats);
 
         // normale Reihenfolge
-        for(unsigned int i = 0; i < songs.size() * repeats; ++i)
+        for(uint32_t i = 0; i < songs.size() * repeats; ++i)
             order[i] = i % songs.size();
 
         // Bei Zufall nochmal mischen
@@ -98,7 +98,7 @@ bool Playlist::SaveAs(const std::string& filename, const bool overwrite)
     out << (random ? "random" : "ordered") << std::endl;
 
     // songs reinschreiben
-    for(unsigned int i = 0; i < songs.size(); ++i)
+    for(uint32_t i = 0; i < songs.size(); ++i)
         out << songs[i] << "\n";
 
     out.close();
@@ -200,9 +200,9 @@ void Playlist::ReadMusicPlayer(const iwMusicPlayer* const window)
 }
 
 // Wählt den Start-Song aus
-void Playlist::SetStartSong(const unsigned id)
+void Playlist::SetStartSong(const uint32_t id)
 {
-    for(unsigned i = 0; i < order.size(); ++i)
+    for(uint32_t i = 0; i < order.size(); ++i)
     {
         if(order[i] == id)
         {
@@ -267,7 +267,7 @@ void MusicPlayer::PlayNext()
     // Evtl ein Siedlerstück ("sNN")?
     if(song.length() == 3)
     {
-        unsigned int nr = atoi(song.substr(1).c_str());
+        uint32_t nr = atoi(song.substr(1).c_str());
         if( nr <= 14)
         {
             // Siedlerstück abspielen (falls es geladen wurde)

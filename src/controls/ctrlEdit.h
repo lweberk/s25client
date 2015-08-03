@@ -27,17 +27,17 @@ class ctrlEdit : public Window
 {
     public:
         /// Konstruktor von @p ctrlEdit.
-        ctrlEdit(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font, unsigned short maxlength = 0, bool password = false, bool disabled = false, bool notify = false);
+        ctrlEdit(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font, uint16_t maxlength = 0, bool password = false, bool disabled = false, bool notify = false);
         /// setzt den Text.
         void SetText(const std::string& text);
-        void SetText(const unsigned int text);
+        void SetText(const uint32_t text);
 
         const std::string GetText(void) const;
         const std::wstring& GetWText(void) const { return text; }
         void SetFocus(bool focus = true) { newfocus = focus; }
         void SetDisabled(bool disabled = true) { this->disabled = disabled; }
         void SetNotify(bool notify = true) { this->notify = notify; }
-        void SetMaxLength(unsigned short maxlength = 0) { this->maxlength = maxlength; }
+        void SetMaxLength(uint16_t maxlength = 0) { this->maxlength = maxlength; }
         void SetNumberOnly(const bool activated) {this->number_only = activated; }
 
         virtual void Msg_PaintAfter();
@@ -49,7 +49,7 @@ class ctrlEdit : public Window
         virtual bool Draw_(void);
 
     private:
-        void AddChar(unsigned int c);
+        void AddChar(uint32_t c);
         void RemoveChar(void);
         void Notify(void);
 
@@ -57,7 +57,7 @@ class ctrlEdit : public Window
         void CursorRight() { if(cursor_pos == text.length()) return; ++cursor_pos; Notify(); };
 
     private:
-        unsigned short maxlength;
+        uint16_t maxlength;
         TextureColor tc;
         glArchivItem_Font* font;
         bool password;
@@ -67,8 +67,8 @@ class ctrlEdit : public Window
         bool notify;
 
         std::wstring text;
-        unsigned cursor_pos;
-        unsigned view_start;
+        uint32_t cursor_pos;
+        uint32_t view_start;
 
         bool number_only;
 };

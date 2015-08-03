@@ -57,12 +57,12 @@ Window::Window(void)
  *
  *  @author OLiver
  */
-Window::Window(unsigned short x,
-               unsigned short y,
-               unsigned int id,
+Window::Window(uint16_t x,
+               uint16_t y,
+               uint32_t id,
                Window* parent,
-               unsigned short width,
-               unsigned short height,
+               uint16_t width,
+               uint16_t height,
                const std::string& tooltip)
     : x(x), y(y), width(width), height(height), id(id), parent(parent), active(false), visible(true), scale(false), tooltip(tooltip)
 {
@@ -77,7 +77,7 @@ Window::Window(unsigned short x,
 Window::~Window(void)
 {
     // Steuerelemente aufräumen
-    for(std::map<unsigned int, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
+    for(std::map<uint32_t, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
         delete it->second;
 }
 
@@ -105,12 +105,12 @@ bool Window::Draw(void)
  *
  *  @author OLiver
  */
-unsigned short Window::GetX(bool absolute) const
+uint16_t Window::GetX(bool absolute) const
 {
     if(!absolute)
         return x;
 
-    unsigned short abs_x = x;
+    uint16_t abs_x = x;
     const Window* temp = this;
 
     // Relative Koordinaten in absolute umrechnen
@@ -134,12 +134,12 @@ unsigned short Window::GetX(bool absolute) const
  *
  *  @author OLiver
  */
-unsigned short Window::GetY(bool absolute) const
+uint16_t Window::GetY(bool absolute) const
 {
     if(!absolute)
         return y;
 
-    unsigned short abs_y = y;
+    uint16_t abs_y = y;
     const Window* temp = this;
 
     // Relative Koordinaten in absolute umrechnen
@@ -173,7 +173,7 @@ bool Window::RelayKeyboardMessage(bool (Window::*msg)(const KeyEvent&), const Ke
 
     // Alle Controls durchgehen
     // Falls das Fenster dann plötzlich nich mehr aktiv ist (z.b. neues Fenster geöffnet, sofort abbrechen!)
-    for(std::map<unsigned int, Window*>::iterator it = idmap.begin(); it != idmap.end() && active; ++it)
+    for(std::map<uint32_t, Window*>::iterator it = idmap.begin(); it != idmap.end() && active; ++it)
     {
         if(it->second->visible && it->second->active)
             if((it->second->*msg)(ke))
@@ -195,7 +195,7 @@ bool Window::RelayMouseMessage(bool (Window::*msg)(const MouseCoords&), const Mo
     // Alle Controls durchgehen
     // Falls das Fenster dann plötzlich nich mehr aktiv ist (z.b. neues Fenster geöffnet, sofort abbrechen!)
     // Use reverse iterator because the topmost (=last elements) should receive the messages first!
-    for(std::map<unsigned int, Window*>::reverse_iterator it = idmap.rbegin(); it != idmap.rend() && active; ++it)
+    for(std::map<uint32_t, Window*>::reverse_iterator it = idmap.rbegin(); it != idmap.rend() && active; ++it)
     {
         if(!locked_areas.empty())
             if(TestWindowInRegion(it->second, mc))
@@ -213,7 +213,7 @@ bool Window::RelayMouseMessage(bool (Window::*msg)(const MouseCoords&), const Mo
     /*// Nur vorläufig
     if(processed && msg == &Window::Msg_LeftDown)
     {
-        for(std::map<unsigned int,Window*>::iterator it = idmap.begin(); it != idmap.end() && active; ++it)
+        for(std::map<uint32_t,Window*>::iterator it = idmap.begin(); it != idmap.end() && active; ++it)
         {
             if(!locked_areas.empty())
                 if(TestWindowInRegion(it->second, mc))
@@ -253,7 +253,7 @@ void Window::SetActive(bool activate)
  */
 void Window::ActivateControls(bool activate)
 {
-    for(std::map<unsigned int, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
+    for(std::map<uint32_t, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
         it->second->SetActive(activate);
 }
 
@@ -296,12 +296,12 @@ bool Window::IsMessageRelayAllowed() const
  *
  *  @author OLiver
  */
-ctrlBuildingIcon* Window::AddBuildingIcon(unsigned int id,
-        unsigned short x,
-        unsigned short y,
+ctrlBuildingIcon* Window::AddBuildingIcon(uint32_t id,
+        uint16_t x,
+        uint16_t y,
         BuildingType type,
         const Nation nation,
-        unsigned short size,
+        uint16_t size,
         const std::string& tooltip)
 {
     if(scale)
@@ -333,7 +333,7 @@ ctrlBuildingIcon* Window::AddBuildingIcon(unsigned int id,
 
 
 /// fügt einen Text-ButtonCtrl hinzu.
-ctrlTextButton* Window::AddTextButton(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, const TextureColor tc, const std::string& text,  glArchivItem_Font* font, const std::string& tooltip)
+ctrlTextButton* Window::AddTextButton(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, const TextureColor tc, const std::string& text,  glArchivItem_Font* font, const std::string& tooltip)
 {
     if(scale)
     {
@@ -347,7 +347,7 @@ ctrlTextButton* Window::AddTextButton(unsigned int id, unsigned short x, unsigne
 }
 
 /// fügt einen Color-ButtonCtrl hinzu.
-ctrlColorButton* Window::AddColorButton(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, const TextureColor tc, const unsigned int fillColor, const std::string& tooltip)
+ctrlColorButton* Window::AddColorButton(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, const TextureColor tc, const uint32_t fillColor, const std::string& tooltip)
 {
     if(scale)
     {
@@ -362,7 +362,7 @@ ctrlColorButton* Window::AddColorButton(unsigned int id, unsigned short x, unsig
 
 
 /// fügt einen Image-ButtonCtrl hinzu.
-ctrlImageButton* Window::AddImageButton(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, const TextureColor tc, glArchivItem_Bitmap* const image,  const std::string& tooltip)
+ctrlImageButton* Window::AddImageButton(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, const TextureColor tc, glArchivItem_Bitmap* const image,  const std::string& tooltip)
 {
     if(scale)
     {
@@ -382,11 +382,11 @@ ctrlImageButton* Window::AddImageButton(unsigned int id, unsigned short x, unsig
  *
  *  @author Devil
  */
-ctrlChat* Window::AddChatCtrl(unsigned int id,
-                              unsigned short x,
-                              unsigned short y,
-                              unsigned short width,
-                              unsigned short height,
+ctrlChat* Window::AddChatCtrl(uint32_t id,
+                              uint16_t x,
+                              uint16_t y,
+                              uint16_t width,
+                              uint16_t height,
                               TextureColor tc,
                               glArchivItem_Font* font)
 {
@@ -407,11 +407,11 @@ ctrlChat* Window::AddChatCtrl(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlCheck* Window::AddCheckBox(unsigned int id,
-                               unsigned short x,
-                               unsigned short y,
-                               unsigned short width,
-                               unsigned short height,
+ctrlCheck* Window::AddCheckBox(uint32_t id,
+                               uint16_t x,
+                               uint16_t y,
+                               uint16_t width,
+                               uint16_t height,
                                TextureColor tc,
                                const std::string& text,
                                glArchivItem_Font* font,
@@ -434,14 +434,14 @@ ctrlCheck* Window::AddCheckBox(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlComboBox* Window::AddComboBox(unsigned int id,
-                                  unsigned short x,
-                                  unsigned short y,
-                                  unsigned short width,
-                                  unsigned short height,
+ctrlComboBox* Window::AddComboBox(uint32_t id,
+                                  uint16_t x,
+                                  uint16_t y,
+                                  uint16_t width,
+                                  uint16_t height,
                                   TextureColor tc,
                                   glArchivItem_Font* font,
-                                  unsigned short max_list_height,
+                                  uint16_t max_list_height,
                                   bool readonly)
 {
     if(scale)
@@ -461,15 +461,15 @@ ctrlComboBox* Window::AddComboBox(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlDeepening* Window::AddDeepening(unsigned int id,
-                                    unsigned short x,
-                                    unsigned short y,
-                                    unsigned short width,
-                                    unsigned short height,
+ctrlDeepening* Window::AddDeepening(uint32_t id,
+                                    uint16_t x,
+                                    uint16_t y,
+                                    uint16_t width,
+                                    uint16_t height,
                                     TextureColor tc,
                                     const std::string& text,
                                     glArchivItem_Font* font,
-                                    unsigned int color)
+                                    uint32_t color)
 {
     if(scale)
     {
@@ -488,13 +488,13 @@ ctrlDeepening* Window::AddDeepening(unsigned int id,
  *
  *  @author Divan
  */
-ctrlColorDeepening* Window::AddColorDeepening(unsigned int id,
-        unsigned short x,
-        unsigned short y,
-        unsigned short width,
-        unsigned short height,
+ctrlColorDeepening* Window::AddColorDeepening(uint32_t id,
+        uint16_t x,
+        uint16_t y,
+        uint16_t width,
+        uint16_t height,
         TextureColor tc,
-        unsigned int fillColor)
+        uint32_t fillColor)
 {
     if(scale)
     {
@@ -513,14 +513,14 @@ ctrlColorDeepening* Window::AddColorDeepening(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlEdit* Window::AddEdit(unsigned int id,
-                          unsigned short x,
-                          unsigned short y,
-                          unsigned short width,
-                          unsigned short height,
+ctrlEdit* Window::AddEdit(uint32_t id,
+                          uint16_t x,
+                          uint16_t y,
+                          uint16_t width,
+                          uint16_t height,
                           TextureColor tc,
                           glArchivItem_Font* font,
-                          unsigned short maxlength,
+                          uint16_t maxlength,
                           bool password,
                           bool disabled,
                           bool notify)
@@ -542,7 +542,7 @@ ctrlEdit* Window::AddEdit(unsigned int id,
  *
  *  @author FloSoft
  */
-ctrlGroup* Window::AddGroup(unsigned int id, bool scale)
+ctrlGroup* Window::AddGroup(uint32_t id, bool scale)
 {
     return AddCtrl(id, new ctrlGroup(this, id, scale));
 }
@@ -553,9 +553,9 @@ ctrlGroup* Window::AddGroup(unsigned int id, bool scale)
  *
  *  @author OLiver
  */
-ctrlImage* Window::AddImage(unsigned int id,
-                            unsigned short x,
-                            unsigned short y,
+ctrlImage* Window::AddImage(uint32_t id,
+                            uint16_t x,
+                            uint16_t y,
                             glArchivItem_Bitmap* image, const std::string& tooltip)
 {
     if(scale)
@@ -573,11 +573,11 @@ ctrlImage* Window::AddImage(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlList* Window::AddList(unsigned int id,
-                          unsigned short x,
-                          unsigned short y,
-                          unsigned short width,
-                          unsigned short height,
+ctrlList* Window::AddList(uint32_t id,
+                          uint16_t x,
+                          uint16_t y,
+                          uint16_t width,
+                          uint16_t height,
                           TextureColor tc,
                           glArchivItem_Font* font)
 {
@@ -598,14 +598,14 @@ ctrlList* Window::AddList(unsigned int id,
  *
  *  @author Devil
  */
-ctrlMultiline* Window::AddMultiline(unsigned int id,
-                                    unsigned short x,
-                                    unsigned short y,
-                                    unsigned short width,
-                                    unsigned short height,
+ctrlMultiline* Window::AddMultiline(uint32_t id,
+                                    uint16_t x,
+                                    uint16_t y,
+                                    uint16_t width,
+                                    uint16_t height,
                                     TextureColor tc,
                                     glArchivItem_Font* font,
-                                    unsigned int format)
+                                    uint32_t format)
 {
     if(scale)
     {
@@ -629,8 +629,8 @@ ctrlMultiline* Window::AddMultiline(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlOptionGroup* Window::AddOptionGroup(unsigned int id,
-                                        int select_type,
+ctrlOptionGroup* Window::AddOptionGroup(uint32_t id,
+                                        int32_t select_type,
                                         bool scale)
 {
     return AddCtrl(id, new ctrlOptionGroup(this, id, select_type, scale));
@@ -647,8 +647,8 @@ ctrlOptionGroup* Window::AddOptionGroup(unsigned int id,
  *
  *  @author jh
  */
-ctrlMultiSelectGroup* Window::AddMultiSelectGroup(unsigned int id,
-        int select_type,
+ctrlMultiSelectGroup* Window::AddMultiSelectGroup(uint32_t id,
+        int32_t select_type,
         bool scale)
 {
     return AddCtrl(id, new ctrlMultiSelectGroup(this, id, select_type, scale));
@@ -660,15 +660,15 @@ ctrlMultiSelectGroup* Window::AddMultiSelectGroup(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlPercent* Window::AddPercent(unsigned int id,
-                                unsigned short x,
-                                unsigned short y,
-                                unsigned short width,
-                                unsigned short height,
+ctrlPercent* Window::AddPercent(uint32_t id,
+                                uint16_t x,
+                                uint16_t y,
+                                uint16_t width,
+                                uint16_t height,
                                 TextureColor tc,
-                                unsigned int text_color,
+                                uint32_t text_color,
                                 glArchivItem_Font* font,
-                                const unsigned short* percentage)
+                                const uint16_t* percentage)
 {
     if(scale)
     {
@@ -687,19 +687,19 @@ ctrlPercent* Window::AddPercent(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlProgress* Window::AddProgress(unsigned int id,
-                                  unsigned short x,
-                                  unsigned short y,
-                                  unsigned short width,
-                                  unsigned short height,
+ctrlProgress* Window::AddProgress(uint32_t id,
+                                  uint16_t x,
+                                  uint16_t y,
+                                  uint16_t width,
+                                  uint16_t height,
                                   TextureColor tc,
-                                  unsigned short button_minus,
-                                  unsigned short button_plus,
-                                  unsigned short maximum,
+                                  uint16_t button_minus,
+                                  uint16_t button_plus,
+                                  uint16_t maximum,
                                   const std::string& tooltip,
-                                  unsigned short x_padding,
-                                  unsigned short y_padding,
-                                  unsigned int force_color,
+                                  uint16_t x_padding,
+                                  uint16_t y_padding,
+                                  uint32_t force_color,
                                   const std::string& button_minus_tooltip,
                                   const std::string& button_plus_tooltip)
 {
@@ -720,14 +720,14 @@ ctrlProgress* Window::AddProgress(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlScrollBar* Window::AddScrollBar(unsigned int id,
-                                    unsigned short x,
-                                    unsigned short y,
-                                    unsigned short width,
-                                    unsigned short height,
-                                    unsigned short button_height,
+ctrlScrollBar* Window::AddScrollBar(uint32_t id,
+                                    uint16_t x,
+                                    uint16_t y,
+                                    uint16_t width,
+                                    uint16_t height,
+                                    uint16_t button_height,
                                     TextureColor tc,
-                                    unsigned short page_size)
+                                    uint16_t page_size)
 {
     if(scale)
     {
@@ -747,10 +747,10 @@ ctrlScrollBar* Window::AddScrollBar(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlTab* Window::AddTabCtrl(unsigned int id,
-                            unsigned short x,
-                            unsigned short y,
-                            unsigned short width)
+ctrlTab* Window::AddTabCtrl(uint32_t id,
+                            uint16_t x,
+                            uint16_t y,
+                            uint16_t width)
 {
     if(scale)
     {
@@ -765,18 +765,18 @@ ctrlTab* Window::AddTabCtrl(unsigned int id,
 ///////////////////////////////////////////////////////////////////////////////
 /**
  *  fügt eine Tabelle hinzu.
- *  ... sollte eine Menge von const char*, int und SortType sein
+ *  ... sollte eine Menge von const char*, int32_t und SortType sein
  *
  *  @author OLiver
  */
-ctrlTable* Window::AddTable(unsigned int id,
-                            unsigned short x,
-                            unsigned short y,
-                            unsigned short width,
-                            unsigned short height,
+ctrlTable* Window::AddTable(uint32_t id,
+                            uint16_t x,
+                            uint16_t y,
+                            uint16_t width,
+                            uint16_t height,
                             TextureColor tc,
                             glArchivItem_Font* font,
-                            unsigned int columns,
+                            uint32_t columns,
                             ...)
 {
     ctrlTable* ctrl;
@@ -804,7 +804,7 @@ ctrlTable* Window::AddTable(unsigned int id,
  *
  *  @author FloSoft
  */
-ctrlTimer* Window::AddTimer(unsigned int id, unsigned int timeout)
+ctrlTimer* Window::AddTimer(uint32_t id, uint32_t timeout)
 {
     return AddCtrl(id, new ctrlTimer(this, id, timeout));
 }
@@ -828,12 +828,12 @@ ctrlTimer* Window::AddTimer(unsigned int id, unsigned int timeout)
  *
  *  @author OLiver
  */
-ctrlText* Window::AddText(unsigned int id,
-                          unsigned short x,
-                          unsigned short y,
+ctrlText* Window::AddText(uint32_t id,
+                          uint16_t x,
+                          uint16_t y,
                           const std::string& text,
-                          unsigned int color,
-                          unsigned int format,
+                          uint32_t color,
+                          uint32_t format,
                           glArchivItem_Font* font)
 {
     if(scale)
@@ -851,16 +851,16 @@ ctrlText* Window::AddText(unsigned int id,
  *
  *  @author FloSoft
  */
-ctrlVarDeepening* Window::AddVarDeepening(unsigned int id,
-        unsigned short x,
-        unsigned short y,
-        unsigned short width,
-        unsigned short height,
+ctrlVarDeepening* Window::AddVarDeepening(uint32_t id,
+        uint16_t x,
+        uint16_t y,
+        uint16_t width,
+        uint16_t height,
         TextureColor tc,
         const std::string& formatstr,
         glArchivItem_Font* font,
-        unsigned int color,
-        unsigned int parameters,
+        uint32_t color,
+        uint32_t parameters,
         ...)
 {
     ctrlVarDeepening* ctrl;
@@ -903,14 +903,14 @@ ctrlVarDeepening* Window::AddVarDeepening(unsigned int id,
  *
  *  @author OLiver
  */
-ctrlVarText* Window::AddVarText(unsigned int id,
-                                unsigned short x,
-                                unsigned short y,
+ctrlVarText* Window::AddVarText(uint32_t id,
+                                uint16_t x,
+                                uint16_t y,
                                 const std::string& formatstr,
-                                unsigned int color,
-                                unsigned int format,
+                                uint32_t color,
+                                uint32_t format,
                                 glArchivItem_Font* font,
-                                unsigned int parameters,
+                                uint32_t parameters,
                                 ...)
 {
     ctrlVarText* ctrl;
@@ -930,11 +930,11 @@ ctrlVarText* Window::AddVarText(unsigned int id,
     return AddCtrl(id, ctrl);
 }
 
-ctrlPreviewMinimap* Window::AddPreviewMinimap(const unsigned id,
-        unsigned short x,
-        unsigned short y,
-        unsigned short width,
-        unsigned short height,
+ctrlPreviewMinimap* Window::AddPreviewMinimap(const uint32_t id,
+        uint16_t x,
+        uint16_t y,
+        uint16_t width,
+        uint16_t height,
         glArchivItem_Map* const map)
 {
     if(scale)
@@ -954,12 +954,12 @@ ctrlPreviewMinimap* Window::AddPreviewMinimap(const unsigned id,
  *
  *  @author OLiver
  */
-void Window::Draw3D(const unsigned short x,
-                    const unsigned short y,
-                    const unsigned short width,
-                    const unsigned short height,
+void Window::Draw3D(const uint16_t x,
+                    const uint16_t y,
+                    const uint16_t width,
+                    const uint16_t height,
                     const TextureColor tc,
-                    const unsigned short type,
+                    const uint16_t type,
                     const bool illuminated,
                     const bool draw_content)
 {
@@ -1085,7 +1085,7 @@ void Window::Draw3D(const unsigned short x,
  *
  *  @author OLiver
  */
-void Window::DrawRectangle(unsigned short x, unsigned short y, unsigned short width, unsigned short height, unsigned int color)
+void Window::DrawRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color)
 {
     glDisable(GL_TEXTURE_2D);
 
@@ -1109,7 +1109,7 @@ void Window::DrawRectangle(unsigned short x, unsigned short y, unsigned short wi
  *
  *  @author jh
  */
-void Window::DrawLine(unsigned short ax, unsigned short ay, unsigned short bx, unsigned short by, unsigned short width, unsigned int color)
+void Window::DrawLine(uint16_t ax, uint16_t ay, uint16_t bx, uint16_t by, uint16_t width, uint32_t color)
 {
     glDisable(GL_TEXTURE_2D);
     glColor4ub(GetRed(color), GetGreen(color), GetBlue(color), GetAlpha(color));
@@ -1131,7 +1131,7 @@ void Window::DrawLine(unsigned short ax, unsigned short ay, unsigned short bx, u
  */
 void Window::DrawControls(void)
 {
-    for(std::map<unsigned int, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
+    for(std::map<uint32_t, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
     {
         Window* control = it->second;
         assert(control);
@@ -1140,7 +1140,7 @@ void Window::DrawControls(void)
         control->Draw();
     }
 
-    for(std::map<unsigned int, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
+    for(std::map<uint32_t, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
     {
         Window* control = it->second;
         assert(control);
@@ -1180,12 +1180,12 @@ bool Window::TestWindowInRegion(Window* window, const MouseCoords& mc) const
  *
  *  @author FloSoft
  */
-unsigned short Window::ScaleX(unsigned short val) const
+uint16_t Window::ScaleX(uint16_t val) const
 {
     return  val * VIDEODRIVER.GetScreenWidth() / 800;
 }
 
-unsigned short Window::ScaleY(unsigned short val) const
+uint16_t Window::ScaleY(uint16_t val) const
 {
     return val * VIDEODRIVER.GetScreenHeight() / 600;
 }
@@ -1310,7 +1310,7 @@ bool Window::Msg_KeyDown(const KeyEvent& ke)
  *
  *  @author OLiver
  */
-void Window::Msg_ButtonClick(const unsigned int ctrl_id)
+void Window::Msg_ButtonClick(const uint32_t ctrl_id)
 {
 }
 
@@ -1331,7 +1331,7 @@ void Window::Msg_ScreenResize(const ScreenResizeEvent& sr)
  *
  *  @author OLiver
  */
-void Window::Msg_EditEnter(const unsigned int ctrl_id)
+void Window::Msg_EditEnter(const uint32_t ctrl_id)
 {
 }
 
@@ -1341,7 +1341,7 @@ void Window::Msg_EditEnter(const unsigned int ctrl_id)
  *
  *  @author OLiver
  */
-void Window::Msg_EditChange(const unsigned int ctrl_id)
+void Window::Msg_EditChange(const uint32_t ctrl_id)
 {
 }
 
@@ -1351,7 +1351,7 @@ void Window::Msg_EditChange(const unsigned int ctrl_id)
  *
  *  @author OLiver
  */
-void Window::Msg_TabChange(const unsigned int ctrl_id, const unsigned short tab_id)
+void Window::Msg_TabChange(const uint32_t ctrl_id, const uint16_t tab_id)
 {
 }
 
@@ -1361,21 +1361,11 @@ void Window::Msg_TabChange(const unsigned int ctrl_id, const unsigned short tab_
  *
  *  @author OLiver
  */
-void Window::Msg_ListSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_ListSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
-void Window::Msg_ListChooseItem(const unsigned int ctrl_id, const unsigned short selection)
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/**
- *
- *
- *  @author OLiver
- */
-void Window::Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_ListChooseItem(const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1385,7 +1375,7 @@ void Window::Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned shor
  *
  *  @author OLiver
  */
-void Window::Msg_CheckboxChange(const unsigned int ctrl_id, const bool checked)
+void Window::Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1395,7 +1385,17 @@ void Window::Msg_CheckboxChange(const unsigned int ctrl_id, const bool checked)
  *
  *  @author OLiver
  */
-void Window::Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position)
+void Window::Msg_CheckboxChange(const uint32_t ctrl_id, const bool checked)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ *
+ *
+ *  @author OLiver
+ */
+void Window::Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position)
 {
 }
 
@@ -1405,7 +1405,7 @@ void Window::Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short
  *
  *  @author FloSoft
  */
-void Window::Msg_ScrollChange(const unsigned int ctrl_id, const unsigned short position)
+void Window::Msg_ScrollChange(const uint32_t ctrl_id, const uint16_t position)
 {
 }
 
@@ -1415,7 +1415,7 @@ void Window::Msg_ScrollChange(const unsigned int ctrl_id, const unsigned short p
  *
  *  @author OLiver
  */
-void Window::Msg_ScrollShow(const unsigned int ctrl_id, const bool visible)
+void Window::Msg_ScrollShow(const uint32_t ctrl_id, const bool visible)
 {
 }
 
@@ -1425,7 +1425,7 @@ void Window::Msg_ScrollShow(const unsigned int ctrl_id, const bool visible)
  *
  *  @author OLiver
  */
-void Window::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1435,7 +1435,7 @@ void Window::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned sh
  *
  *  @author OLiver
  */
-void Window::Msg_Timer(const unsigned int ctrl_id)
+void Window::Msg_Timer(const uint32_t ctrl_id)
 {
 }
 
@@ -1445,21 +1445,11 @@ void Window::Msg_Timer(const unsigned int ctrl_id)
  *
  *  @author OLiver
  */
-void Window::Msg_TableSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_TableSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
-void Window::Msg_TableChooseItem(const unsigned ctrl_id, const unsigned short selection)
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/**
- *
- *
- *  @author OLiver
- */
-void Window::Msg_TableRightButton(const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_TableChooseItem(const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1469,7 +1459,7 @@ void Window::Msg_TableRightButton(const unsigned int ctrl_id, const unsigned sho
  *
  *  @author OLiver
  */
-void Window::Msg_TableLeftButton(const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_TableRightButton(const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1479,7 +1469,7 @@ void Window::Msg_TableLeftButton(const unsigned int ctrl_id, const unsigned shor
  *
  *  @author OLiver
  */
-void Window::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr)
+void Window::Msg_TableLeftButton(const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1489,7 +1479,7 @@ void Window::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr)
  *
  *  @author OLiver
  */
-void Window::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id)
+void Window::Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr)
 {
 }
 
@@ -1499,7 +1489,7 @@ void Window::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned i
  *
  *  @author OLiver
  */
-void Window::Msg_Group_EditEnter(const unsigned int group_id, const unsigned int ctrl_id)
+void Window::Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id)
 {
 }
 
@@ -1509,7 +1499,7 @@ void Window::Msg_Group_EditEnter(const unsigned int group_id, const unsigned int
  *
  *  @author OLiver
  */
-void Window::Msg_Group_EditChange(const unsigned int group_id, const unsigned int ctrl_id)
+void Window::Msg_Group_EditEnter(const uint32_t group_id, const uint32_t ctrl_id)
 {
 }
 
@@ -1519,7 +1509,7 @@ void Window::Msg_Group_EditChange(const unsigned int group_id, const unsigned in
  *
  *  @author OLiver
  */
-void Window::Msg_Group_TabChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short tab_id)
+void Window::Msg_Group_EditChange(const uint32_t group_id, const uint32_t ctrl_id)
 {
 }
 
@@ -1529,7 +1519,7 @@ void Window::Msg_Group_TabChange(const unsigned int group_id, const unsigned int
  *
  *  @author OLiver
  */
-void Window::Msg_Group_ListSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_Group_TabChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t tab_id)
 {
 }
 
@@ -1539,7 +1529,7 @@ void Window::Msg_Group_ListSelectItem(const unsigned int group_id, const unsigne
  *
  *  @author OLiver
  */
-void Window::Msg_Group_ComboSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_Group_ListSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1549,7 +1539,7 @@ void Window::Msg_Group_ComboSelectItem(const unsigned int group_id, const unsign
  *
  *  @author OLiver
  */
-void Window::Msg_Group_CheckboxChange(const unsigned int group_id, const unsigned int ctrl_id, const bool checked)
+void Window::Msg_Group_ComboSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1559,7 +1549,7 @@ void Window::Msg_Group_CheckboxChange(const unsigned int group_id, const unsigne
  *
  *  @author OLiver
  */
-void Window::Msg_Group_ProgressChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short position)
+void Window::Msg_Group_CheckboxChange(const uint32_t group_id, const uint32_t ctrl_id, const bool checked)
 {
 }
 
@@ -1569,7 +1559,7 @@ void Window::Msg_Group_ProgressChange(const unsigned int group_id, const unsigne
  *
  *  @author OLiver
  */
-void Window::Msg_Group_ScrollShow(const unsigned int group_id, const unsigned int ctrl_id, const bool visible)
+void Window::Msg_Group_ProgressChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t position)
 {
 }
 
@@ -1579,7 +1569,7 @@ void Window::Msg_Group_ScrollShow(const unsigned int group_id, const unsigned in
  *
  *  @author OLiver
  */
-void Window::Msg_Group_OptionGroupChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_Group_ScrollShow(const uint32_t group_id, const uint32_t ctrl_id, const bool visible)
 {
 }
 
@@ -1589,7 +1579,7 @@ void Window::Msg_Group_OptionGroupChange(const unsigned int group_id, const unsi
  *
  *  @author OLiver
  */
-void Window::Msg_Group_Timer(const unsigned int group_id, const unsigned int ctrl_id)
+void Window::Msg_Group_OptionGroupChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1599,7 +1589,7 @@ void Window::Msg_Group_Timer(const unsigned int group_id, const unsigned int ctr
  *
  *  @author OLiver
  */
-void Window::Msg_Group_TableSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_Group_Timer(const uint32_t group_id, const uint32_t ctrl_id)
 {
 }
 
@@ -1609,7 +1599,7 @@ void Window::Msg_Group_TableSelectItem(const unsigned int group_id, const unsign
  *
  *  @author OLiver
  */
-void Window::Msg_Group_TableRightButton(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_Group_TableSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
 {
 }
 
@@ -1619,6 +1609,16 @@ void Window::Msg_Group_TableRightButton(const unsigned int group_id, const unsig
  *
  *  @author OLiver
  */
-void Window::Msg_Group_TableLeftButton(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void Window::Msg_Group_TableRightButton(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ *
+ *
+ *  @author OLiver
+ */
+void Window::Msg_Group_TableLeftButton(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
 {
 }

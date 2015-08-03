@@ -117,7 +117,7 @@ GameServer::CountDown::CountDown()
     Clear();
 }
 
-void GameServer::CountDown::Clear(int time)
+void GameServer::CountDown::Clear(int32_t time)
 {
     do_countdown = false;
     countdown = time;
@@ -230,11 +230,11 @@ bool GameServer::Start()
     fseek(map_f, 0, SEEK_SET);
 
     char* map_data = new char[mapinfo.length + 1];
-    mapinfo.zipdata = new unsigned char[mapinfo.length * 2 + 600]; // + 1prozent + 600 ;)
+    mapinfo.zipdata = new uint8_t[mapinfo.length * 2 + 600]; // + 1prozent + 600 ;)
 
     mapinfo.ziplength = mapinfo.length * 2 + 600;
 
-    bool read_succeeded = ((unsigned int)libendian::le_read_c(map_data, mapinfo.length, map_f) == mapinfo.length);
+    bool read_succeeded = ((uint32_t)libendian::le_read_c(map_data, mapinfo.length, map_f) == mapinfo.length);
     fclose(map_f);
 
     // read lua script - if any
@@ -278,21 +278,21 @@ bool GameServer::Start()
         return false;
 
     // map mit bzip2 komprimieren
-    int err = BZ_OK;
-    if( (err = BZ2_bzBuffToBuffCompress( (char*)mapinfo.zipdata, (unsigned int*)&mapinfo.ziplength, map_data, mapinfo.length, 9, 0, 250)) != BZ_OK)
+    int32_t err = BZ_OK;
+    if( (err = BZ2_bzBuffToBuffCompress( (char*)mapinfo.zipdata, (uint32_t*)&mapinfo.ziplength, map_data, mapinfo.length, 9, 0, 250)) != BZ_OK)
     {
         LOG.lprintf("FATAL ERROR: BZ2_bzBuffToBuffCompress failed with error: %d\n", err);
         return false;
     }
 
-    mapinfo.checksum = CalcChecksumOfBuffer((unsigned char*)map_data, mapinfo.length);
+    mapinfo.checksum = CalcChecksumOfBuffer((uint8_t*)map_data, mapinfo.length);
 
     delete[] map_data;
 
     mapinfo.partcount = mapinfo.ziplength / MAP_PART_SIZE +  ( (mapinfo.ziplength % MAP_PART_SIZE) ? 1 : 0);
 
     // Speicher für Spieler anlegen
-    for(unsigned i = 0; i < serverconfig.playercount; ++i)
+    for(uint32_t i = 0; i < serverconfig.playercount; ++i)
         players.push_back(GameServerPlayer(i));
 
     // Potentielle KI-Player anlegen
@@ -323,7 +323,7 @@ bool GameServer::Start()
                 return false;
 
             // Bei Savegames die Originalspieldaten noch mit auslesen
-            for(unsigned char i = 0; i < serverconfig.playercount; ++i)
+            for(uint8_t i = 0; i < serverconfig.playercount; ++i)
             {
                 // PlayerState
                 players[i].ps = PlayerState(save.players[i].ps);
@@ -450,10 +450,10 @@ void GameServer::Run(void)
     }
 
     // queues abarbeiten
-    for(unsigned int client = 0; client < serverconfig.playercount; ++client)
+    for(uint32_t client = 0; client < serverconfig.playercount; ++client)
     {
         GameServerPlayer* player = &players[client];
-        //unsigned char count = 0;
+        //uint8_t count = 0;
 
         // maximal 10 Pakete verschicken
         player->send_queue.send(&player->so, 10);
@@ -481,7 +481,7 @@ void GameServer::Stop(void)
     countdown.Clear();
 
     // KI-Player zerstören
-    for(unsigned i = 0; i < ai_players.size(); ++i)
+    for(uint32_t i = 0; i < ai_players.size(); ++i)
         delete ai_players[i];
     ai_players.clear();
 
@@ -506,9 +506,9 @@ void GameServer::Stop(void)
 bool GameServer::StartCountdown()
 {
     GameServerPlayer* player = NULL;
-    unsigned char client = 0xFF;
+    uint8_t client = 0xFF;
 
-    int playerCount = 0;
+    int32_t playerCount = 0;
 
     // Alle Spieler da?
     for(client = 0; client < serverconfig.playercount; ++client)
@@ -573,12 +573,12 @@ void GameServer::CancelCountdown()
 bool GameServer::StartGame()
 {
     // Bei Savegames wird der Startwert von den Clients aus der Datei gelesen!
-    unsigned random_init = (mapinfo.map_type == MAPTYPE_SAVEGAME) ? 0xFFFFFFFF : VIDEODRIVER.GetTickCount();
+    uint32_t random_init = (mapinfo.map_type == MAPTYPE_SAVEGAME) ? 0xFFFFFFFF : VIDEODRIVER.GetTickCount();
 
     // Höchsten Ping ermitteln
-    unsigned highest_ping = 0;
+    uint32_t highest_ping = 0;
     GameServerPlayer* player = NULL;
-    unsigned char client = 0xFF;
+    uint8_t client = 0xFF;
 
     for(client = 0; client < serverconfig.playercount; ++client)
     {
@@ -594,7 +594,7 @@ bool GameServer::StartGame()
     framesinfo.gf_length_new = framesinfo.gf_length = SPEED_GF_LENGTHS[ggs.game_speed];
 
     // NetworkFrame-Länge bestimmen, je schlechter (also höher) die Pings, desto länger auch die Framelänge
-    unsigned i = 1;
+    uint32_t i = 1;
     for( ; i < 20; ++i)
     {
         if(i * framesinfo.gf_length > highest_ping + 200)
@@ -626,7 +626,7 @@ bool GameServer::StartGame()
         framesinfo.gf_nr = GAMECLIENT.GetGFNumber();
 
     // Erste KI-Nachrichten schicken
-    for(unsigned i = 0; i < this->serverconfig.playercount; ++i)
+    for(uint32_t i = 0; i < this->serverconfig.playercount; ++i)
     {
         if(players[i].ps == PS_KI)
         {
@@ -648,7 +648,7 @@ bool GameServer::StartGame()
 
 ///////////////////////////////////////////////////////////////////////////////
 // wechselt Spielerstatus durch
-void GameServer::TogglePlayerState(unsigned char client)
+void GameServer::TogglePlayerState(uint8_t client)
 {
     GameServerPlayer* player = &players[client];
 
@@ -726,8 +726,8 @@ void GameServer::TogglePlayerState(unsigned char client)
     bool reserved_colors[PLAYER_COLORS_COUNT];
     memset(reserved_colors, 0, sizeof(bool) * PLAYER_COLORS_COUNT);
 
-    unsigned char rc = 0, cc = 0;
-    for(unsigned char cl = 0; cl < serverconfig.playercount; ++cl)
+    uint8_t rc = 0, cc = 0;
+    for(uint8_t cl = 0; cl < serverconfig.playercount; ++cl)
     {
         GameServerPlayer* ki = &players[cl];
 
@@ -748,7 +748,7 @@ void GameServer::TogglePlayerState(unsigned char client)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Team der KI ändern
-void GameServer::TogglePlayerTeam(unsigned char client)
+void GameServer::TogglePlayerTeam(uint8_t client)
 {
     GameServerPlayer* player = &players[client];
 
@@ -765,7 +765,7 @@ void GameServer::TogglePlayerTeam(unsigned char client)
     {
         if(player->team == TM_NOTEAM) //switch to random team?
         {
-            int rand = RANDOM.Rand(__FILE__, __LINE__, 0, 4);
+            int32_t rand = RANDOM.Rand(__FILE__, __LINE__, 0, 4);
             switch(rand)
             {
                 case 0:
@@ -793,7 +793,7 @@ void GameServer::TogglePlayerTeam(unsigned char client)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Farbe der KI ändern
-void GameServer::TogglePlayerColor(unsigned char client)
+void GameServer::TogglePlayerColor(uint8_t client)
 {
     GameServerPlayer* player = &players[client];
 
@@ -807,7 +807,7 @@ void GameServer::TogglePlayerColor(unsigned char client)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Nation der KI ändern
-void GameServer::TogglePlayerNation(unsigned char client)
+void GameServer::TogglePlayerNation(uint8_t client)
 {
     GameServerPlayer* player = &players[client];
 
@@ -837,7 +837,7 @@ void GameServer::ChangeGlobalGameSettings(const GlobalGameSettings& ggs)
  */
 void GameServer::SendToAll(const GameMessage& msg)
 {
-    for(unsigned int id = 0; id < players.getCount(); ++id)
+    for(uint32_t id = 0; id < players.getCount(); ++id)
     {
         GameServerPlayer* player = players.getElement(id);
 
@@ -849,7 +849,7 @@ void GameServer::SendToAll(const GameMessage& msg)
 
 ///////////////////////////////////////////////////////////////////////////////
 // kickt einen spieler und räumt auf
-void GameServer::KickPlayer(unsigned char playerid, unsigned char cause, unsigned short param)
+void GameServer::KickPlayer(uint8_t playerid, uint8_t cause, uint16_t param)
 {
     NS_PlayerKicked npk;
     npk.playerid = playerid;
@@ -884,8 +884,8 @@ void GameServer::KickPlayer(NS_PlayerKicked npk)
 
     if(serverconfig.servertype == NP_LOBBY)
     {
-        unsigned char rc = 0;
-        for(unsigned char cl = 0; cl < serverconfig.playercount; ++cl)
+        uint8_t rc = 0;
+        for(uint8_t cl = 0; cl < serverconfig.playercount; ++cl)
         {
             GameServerPlayer* ki = &players[cl];
             if( (ki->ps == PS_OCCUPIED) || (ki->ps == PS_KI) )
@@ -906,7 +906,7 @@ void GameServer::KickPlayer(NS_PlayerKicked npk)
 void GameServer::ClientWatchDog()
 {
     GameServerPlayer* player = NULL;
-    unsigned char client = 0xFF;
+    uint8_t client = 0xFF;
     SocketSet set;
 
     // auf Fehler prüfen
@@ -949,7 +949,7 @@ void GameServer::ClientWatchDog()
     // prüfen ob GF vergangen
     if(status == SS_GAME)
     {
-        unsigned int currenttime = VIDEODRIVER.GetTickCount();
+        uint32_t currenttime = VIDEODRIVER.GetTickCount();
 
         if(!framesinfo.pause)
         {
@@ -960,7 +960,7 @@ void GameServer::ClientWatchDog()
 					//LOG.lprintf("skipping to gf %i \n",skiptogf);
                 ++framesinfo.gf_nr;
                 // KIs ausführen
-                for(unsigned i = 0; i < ai_players.size(); ++i)
+                for(uint32_t i = 0; i < ai_players.size(); ++i)
                 {
                     if(ai_players[i])
 						ai_players[i]->RunGF(framesinfo.gf_nr, framesinfo.gf_nr%framesinfo.nwf_length==0);
@@ -970,7 +970,7 @@ void GameServer::ClientWatchDog()
                 if(framesinfo.gf_nr % framesinfo.nwf_length == 0)
                 {
                     // auf laggende spieler prüfen und evtl Kommandos der KI-Spieler senden
-                    unsigned char lagging_player = 0xFF;
+                    uint8_t lagging_player = 0xFF;
 
                     for(client = 0; client < serverconfig.playercount; ++client)
                     {
@@ -993,7 +993,7 @@ void GameServer::ClientWatchDog()
                         framesinfo.lasttime = currenttime - ( currenttime - framesinfo.lasttime - framesinfo.gf_length);
 
                         // Bei evtl. Spielerwechsel die IDs speichern, die "gewechselt" werden sollen
-                        unsigned char player_switch_old_id = 255, player_switch_new_id = 255;
+                        uint8_t player_switch_old_id = 255, player_switch_new_id = 255;
 
                         // Checksumme des ersten Spielers als Richtwert
                         GameServerPlayer* firstHumanPlayer = NULL;
@@ -1048,8 +1048,8 @@ void GameServer::ClientWatchDog()
                                                 player->obj_cnt, firstHumanPlayer->obj_cnt, player->obj_id_cnt, firstHumanPlayer->obj_id_cnt);
 
                                     // Checksummenliste erzeugen
-                                    std::vector<int> checksums;
-                                    for(unsigned int i = 0; i < players.getCount(); ++i)
+                                    std::vector<int32_t> checksums;
+                                    for(uint32_t i = 0; i < players.getCount(); ++i)
                                         checksums.push_back(players.getElement(i)->checksum);
 
                                     // AsyncLog der asynchronen Player anfordern
@@ -1093,7 +1093,7 @@ void GameServer::ClientWatchDog()
 
                         if(framesinfo.gf_length_new != framesinfo.gf_length)
                         {
-                            int oldnwf = framesinfo.nwf_length;
+                            int32_t oldnwf = framesinfo.nwf_length;
 
                             framesinfo.gf_length = framesinfo.gf_length_new;
                             if(framesinfo.gf_length == 1)
@@ -1141,7 +1141,7 @@ void GameServer::ClientWatchDog()
  *
  *  @author OLiver
  */
-void GameServer::SendNothingNC(const unsigned int& id)
+void GameServer::SendNothingNC(const uint32_t& id)
 {
     SendToAll(GameMessage_GameCommand(id, 0, std::vector<gc::GameCommand*>()));
 }
@@ -1158,14 +1158,14 @@ void GameServer::WaitForClients(void)
         if(set.InSet(serversocket))
         {
             Socket socket;
-            unsigned char playerid = 0xFF;
+            uint8_t playerid = 0xFF;
 
             // Verbindung annehmen
             if(!serversocket.Accept(socket))
                 return;
 
             // Geeigneten Platz suchen
-            for(unsigned int client = 0; client < serverconfig.playercount; ++client)
+            for(uint32_t client = 0; client < serverconfig.playercount; ++client)
             {
                 if(players[client].ps == PS_FREE)
                 {
@@ -1193,7 +1193,7 @@ void GameServer::WaitForClients(void)
 void GameServer::FillPlayerQueues(void)
 {
     SocketSet set;
-    unsigned char client = 0xFF;
+    uint8_t client = 0xFF;
     bool not_empty = false;
 
     // erstmal auf Daten überprüfen
@@ -1240,9 +1240,9 @@ inline void GameServer::OnNMSPong(const GameMessage_Pong& msg)
 {
     GameServerPlayer* player = &players[msg.player];
 
-    unsigned int currenttime = VIDEODRIVER.GetTickCount();
+    uint32_t currenttime = VIDEODRIVER.GetTickCount();
 
-    player->ping = (unsigned short)(currenttime - player->lastping);
+    player->ping = (uint16_t)(currenttime - player->lastping);
     player->pinging = false;
     player->lastping = currenttime;
 
@@ -1258,7 +1258,7 @@ inline void GameServer::OnNMSServerType(const GameMessage_Server_Type& msg)
 {
     GameServerPlayer* player = &players[msg.player];
 
-    int typok = 0;
+    int32_t typok = 0;
     if(msg.type != serverconfig.servertype)
         typok = 1;
     else if(msg.version != GetWindowVersion())
@@ -1312,7 +1312,7 @@ void GameServer::OnNMSServerChat(const GameMessage_Server_Chat& msg)
             // Besiegte dürfen nicht mehr heimlich mit Verbündeten reden
             if(!player->isDefeated())
             {
-                for(unsigned int i = 0; i < players.getCount(); ++i)
+                for(uint32_t i = 0; i < players.getCount(); ++i)
                 {
                     GameServerPlayer *p = players.getElement(i);
 
@@ -1326,7 +1326,7 @@ void GameServer::OnNMSServerChat(const GameMessage_Server_Chat& msg)
             // Besiegte dürfen nicht mehr heimlich mit Feinden reden
             if(!player->isDefeated())
             {
-                for(unsigned int i = 0; i < players.getCount(); ++i)
+                for(uint32_t i = 0; i < players.getCount(); ++i)
                 {
                     GameServerPlayer *p = players.getElement(i);
 
@@ -1356,9 +1356,9 @@ inline void GameServer::OnNMSPlayerName(const GameMessage_Player_Name& msg)
                             mapinfo.ziplength, mapinfo.length, mapinfo.script));
 
     // Und Kartendaten
-    for(unsigned i = 0; i < mapinfo.partcount; ++i)
+    for(uint32_t i = 0; i < mapinfo.partcount; ++i)
     {
-        unsigned data_size = ( (mapinfo.ziplength - player->temp_ul) > MAP_PART_SIZE )
+        uint32_t data_size = ( (mapinfo.ziplength - player->temp_ul) > MAP_PART_SIZE )
                              ? MAP_PART_SIZE : (mapinfo.ziplength - player->temp_ul);
 
         player->send_queue.push(new GameMessage_Map_Data(&mapinfo.zipdata[player->temp_ul], data_size));
@@ -1406,7 +1406,7 @@ inline void GameServer::OnNMSPlayerToggleColor(const GameMessage_Player_Toggle_C
     bool reserved_colors[PLAYER_COLORS_COUNT];
     memset(reserved_colors, 0, sizeof(bool) * PLAYER_COLORS_COUNT);
 
-    for(unsigned char cl = 0; cl < serverconfig.playercount; ++cl)
+    for(uint8_t cl = 0; cl < serverconfig.playercount; ++cl)
     {
         GameServerPlayer* ki = &players[cl];
 
@@ -1485,8 +1485,8 @@ inline void GameServer::OnNMSMapChecksum(const GameMessage_Map_Checksum& msg)
         bool reserved_colors[PLAYER_COLORS_COUNT];
         memset(reserved_colors, 0, sizeof(bool) * PLAYER_COLORS_COUNT);
 
-        unsigned char rc = 0;
-        for(unsigned char cl = 0; cl < serverconfig.playercount; ++cl)
+        uint8_t rc = 0;
+        for(uint8_t cl = 0; cl < serverconfig.playercount; ++cl)
         {
             GameServerPlayer* ki = &players[cl];
 
@@ -1603,7 +1603,7 @@ void GameServer::OnNMSSendAsyncLog(const GameMessage_SendAsyncLog& msg, std::lis
     }
 
     // count identical lines
-    unsigned identical = 0;
+    uint32_t identical = 0;
     while ((it1 != async_player1_log.end()) && (it2 != async_player2_log.end()) &&
             (it1->max == it2->max) && (it1->value == it2->value) && (it1->obj_id == it2->obj_id))
     {
@@ -1690,7 +1690,7 @@ void GameServer::OnNMSSendAsyncLog(const GameMessage_SendAsyncLog& msg, std::lis
     KickPlayer(msg.player, NP_ASYNC, 0);
 }
 
-void GameServer::ChangePlayer(const unsigned char old_id, const unsigned char new_id)
+void GameServer::ChangePlayer(const uint8_t old_id, const uint8_t new_id)
 {
 	LOG.lprintf("GameServer::ChangePlayer %i - %i \n",old_id, new_id);
     // old_id muss richtiger Spieler, new_id KI sein, ansonsten geht das natürlich nicht
@@ -1723,7 +1723,7 @@ bool GameServer::TogglePause()
 }
 
 
-void GameServer::SwapPlayer(const unsigned char player1, const unsigned char player2)
+void GameServer::SwapPlayer(const uint8_t player1, const uint8_t player2)
 {
     // Message verschicken
     SendToAll(GameMessage_Player_Swap(player1, player2));
@@ -1731,7 +1731,7 @@ void GameServer::SwapPlayer(const unsigned char player1, const unsigned char pla
     players[player1].SwapPlayer(players[player2]);
 }
 
-void GameServer::SetAIName(const unsigned player_id)
+void GameServer::SetAIName(const uint32_t player_id)
 {
     // Baby mit einem Namen Taufen ("Name (KI)")
     char str[128];
@@ -1762,7 +1762,7 @@ void GameServer::SetAIName(const unsigned player_id)
 }
 
 
-void GameServer::SendAIEvent(AIEvent::Base* ev, unsigned receiver)
+void GameServer::SendAIEvent(AIEvent::Base* ev, uint32_t receiver)
 {
     if (ai_players[receiver])
         ai_players[receiver]->SendAIEvent(ev);

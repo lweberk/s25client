@@ -30,9 +30,9 @@ struct JobConst
     /// Ob der Beruf dick oder dünn ist
     bool fat;
     /// ID in Jobs.BOB
-    unsigned short jobs_bob_id;
+    uint16_t jobs_bob_id;
     /// Arbeitszeit in gf, Wartezeit (vor dem Arbeiten) in gf
-    unsigned short work_length, wait1_length, wait2_length;
+    uint16_t work_length, wait1_length, wait2_length;
 };
 
 
@@ -78,10 +78,10 @@ const JobConst JOB_CONSTS[JOB_TYPES_COUNT] =
 };
 
 /// Katapultmann-Wartezeit
-const unsigned CATAPULT_WAIT1_LENGTH = 1300; //eigenlich 310 - aber hochgestellt wegen zu schneller Warenverteilung
+const uint32_t CATAPULT_WAIT1_LENGTH = 1300; //eigenlich 310 - aber hochgestellt wegen zu schneller Warenverteilung
 
 /// Positionen der Ware für jede Richtung beim Zeichnen für Esel und Boot
-const int WARE_POS_DONKEY[96] =
+const int32_t WARE_POS_DONKEY[96] =
 {
     0, -13, 0, -12, 0, -12, 1, -13, 2, -13, 2, -12, 2, -12, 1, -13,
     3, -12, 3, -11, 3, -11, 3, -12, 4, -12, 5, -11, 5, -11, 5, -12,
@@ -92,7 +92,7 @@ const int WARE_POS_DONKEY[96] =
 };
 
 /// Positionen der Ware im Boat für jede Richtung
-const int WARE_POS_BOAT[12] =
+const int32_t WARE_POS_BOAT[12] =
 {
     11, -4, 11, 0, -7, -1, -8, -5, -7, -7, 6, -7
 };

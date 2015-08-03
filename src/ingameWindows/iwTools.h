@@ -41,13 +41,13 @@ class iwTools : public IngameWindow
         /// Sendet veränderte Einstellungen (an den Client), falls sie verändert wurden
         void TransmitSettings();
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position);
-        void Msg_Timer(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position);
+        void Msg_Timer(const uint32_t ctrl_id);
 
         //qx:tools
-        unsigned int m_Updated;
-        static unsigned int m_UpdateReq;
+        uint32_t m_Updated;
+        static uint32_t m_UpdateReq;
         void UpdateTexts();
         void Msg_PaintBefore();
     public:

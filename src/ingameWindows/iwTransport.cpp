@@ -37,7 +37,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 // Tooltips in der der Standardbelegung
-const unsigned short STD_TOOLTIP_INDICES[14] =
+const uint16_t STD_TOOLTIP_INDICES[14] =
 {
     190,
     192,
@@ -116,12 +116,12 @@ iwTransport::iwTransport()
     TRANSPORT_SPRITES[13] = LOADER.GetMapImageN(2250 + GD_BOAT);
 
     //// Tooltips festlegen
-    //for(unsigned i = 0;i<14;++i)
+    //for(uint32_t i = 0;i<14;++i)
     //  tooltip_indices[i] = STD_TOOLTIP_INDICES[GAMECLIENT.visual_settings.transport_order[i]];
 
 
     // Positionen der einzelnen Buttons
-    const unsigned short BUTTON_POS[14][2] =
+    const uint16_t BUTTON_POS[14][2] =
     {
         {20, 25},
         {52, 42},
@@ -140,7 +140,7 @@ iwTransport::iwTransport()
     };
 
     // Einstellungen festlegen
-    for(unsigned char i = 0; i < 14; ++i)
+    for(uint8_t i = 0; i < 14; ++i)
         group->AddImageButton(i, BUTTON_POS[i][0], BUTTON_POS[i][1], 30, 30, TC_GREY,
                               TRANSPORT_SPRITES[GAMECLIENT.visual_settings.transport_order[i]],
                               _(TOOLTIPS[GAMECLIENT.visual_settings.transport_order[i]]));
@@ -167,7 +167,7 @@ void iwTransport::TransmitSettings()
 }
 
 
-void iwTransport::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwTransport::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -178,9 +178,9 @@ void iwTransport::Msg_ButtonClick(const unsigned int ctrl_id)
             GAMECLIENT.visual_settings.transport_order = GAMECLIENT.default_settings.transport_order;
 
             //// Tooltips in der der Standardbelegung
-            //memcpy(tooltip_indices,STD_TOOLTIP_INDICES,14*sizeof(unsigned short));
+            //memcpy(tooltip_indices,STD_TOOLTIP_INDICES,14*sizeof(uint16_t));
 
-            for(unsigned char i = 0; i < 14; ++i)
+            for(uint8_t i = 0; i < 14; ++i)
             {
                 group->GetCtrl<ctrlImageButton>(i)->SetImage(TRANSPORT_SPRITES[i]);
                 group->GetCtrl<ctrlImageButton>(i)->SetTooltip(_(TOOLTIPS[i]));
@@ -251,7 +251,7 @@ void iwTransport::Msg_ButtonClick(const unsigned int ctrl_id)
     }
 }
 
-void iwTransport::Msg_Timer(const unsigned int ctrl_id)
+void iwTransport::Msg_Timer(const uint32_t ctrl_id)
 {
     if(GAMECLIENT.IsReplayModeOn())
         // Im Replay aktualisieren wir die Werte
@@ -266,7 +266,7 @@ void iwTransport::UpdateSettings()
     ctrlOptionGroup* group = GetCtrl<ctrlOptionGroup>(6);
 
     // Einstellungen festlegen
-    for(unsigned char i = 0; i < 14; ++i)
+    for(uint8_t i = 0; i < 14; ++i)
     {
         group->GetCtrl<ctrlImageButton>(i)->SetImage(TRANSPORT_SPRITES[GAMECLIENT.visual_settings.transport_order[i]]);
         group->GetCtrl<ctrlImageButton>(i)->SetTooltip(_(TOOLTIPS[GAMECLIENT.visual_settings.transport_order[i]]));

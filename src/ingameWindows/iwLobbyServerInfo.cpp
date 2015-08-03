@@ -86,7 +86,7 @@ iwLobbyServerInfo::iwLobbyServerInfo(void)
 }
 
 
-void iwLobbyServerInfo::Msg_Timer(const unsigned int ctrl_id)
+void iwLobbyServerInfo::Msg_Timer(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -108,7 +108,7 @@ void iwLobbyServerInfo::Msg_Timer(const unsigned int ctrl_id)
  *
  *  @author Devil
  */
-void iwLobbyServerInfo::Set(const LobbyServerInfo* serverinfo, unsigned int server)
+void iwLobbyServerInfo::Set(const LobbyServerInfo* serverinfo, uint32_t server)
 {
     this->serverinfo = serverinfo;
     this->server = server;

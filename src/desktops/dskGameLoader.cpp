@@ -63,7 +63,7 @@ dskGameLoader::dskGameLoader(GameWorldViewer* gwv)
 
     AddText(10, 800 / 2, 600 - 50, "", COLOR_YELLOW, glArchivItem_Font::DF_CENTER, LargeFont);
 
-    for(unsigned int i = 0; i < 8; ++i)
+    for(uint32_t i = 0; i < 8; ++i)
         AddText(11 + i, 30, 30 + i * 20, "", COLOR_GREEN, 0, LargeFont);
 
     LOBBYCLIENT.SetInterface(this);
@@ -81,7 +81,7 @@ dskGameLoader::~dskGameLoader()
  *
  *  @author OLiver
  */
-void dskGameLoader::Msg_MsgBoxResult(const unsigned int msgbox_id, const MsgboxResult mbr)
+void dskGameLoader::Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr)
 {
     if(msgbox_id == 0) // Verbindung zu Server verloren?
     {
@@ -100,13 +100,13 @@ void dskGameLoader::Msg_MsgBoxResult(const unsigned int msgbox_id, const MsgboxR
  *
  *  @author FloSoft
  */
-void dskGameLoader::Msg_Timer(const unsigned int ctrl_id)
+void dskGameLoader::Msg_Timer(const uint32_t ctrl_id)
 {
     static bool load_nations[NAT_COUNT];
 
     ctrlTimer* timer = GetCtrl<ctrlTimer>(1);
     ctrlText* text = GetCtrl<ctrlText>(10 + position);
-    int interval = 500;
+    int32_t interval = 500;
 
     timer->Stop();
 
@@ -127,7 +127,7 @@ void dskGameLoader::Msg_Timer(const unsigned int ctrl_id)
         case 2: // Nationen ermitteln
         {
             memset(load_nations, 0, sizeof(bool) * NAT_COUNT);
-            for(unsigned char i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+            for(uint8_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
                 load_nations[GAMECLIENT.GetPlayer(i)->nation] = true;
 
             text->SetText(_("Tribal chiefs assembled around the table..."));

@@ -42,7 +42,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofFarmer::nofFarmer(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofFarmer::nofFarmer(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofFarmhand(JOB_FARMER, pos, player, workplace), harvest(false)
 {
 }
@@ -55,16 +55,16 @@ void nofFarmer::Serialize_nofFarmer(SerializedGameData* sgd) const
     sgd->PushBool(harvest);
 }
 
-nofFarmer::nofFarmer(SerializedGameData* sgd, const unsigned obj_id) : nofFarmhand(sgd, obj_id),
+nofFarmer::nofFarmer(SerializedGameData* sgd, const uint32_t obj_id) : nofFarmhand(sgd, obj_id),
     harvest(sgd->PopBool())
 {
 }
 
 
 /// Malt den Arbeiter beim Arbeiten
-void nofFarmer::DrawWorking(int x, int y)
+void nofFarmer::DrawWorking(int32_t x, int32_t y)
 {
-    unsigned now_id;
+    uint32_t now_id;
 
 
     if(harvest)
@@ -90,7 +90,7 @@ void nofFarmer::DrawWorking(int x, int y)
 }
 
 /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-unsigned short nofFarmer::GetCarryID() const
+uint16_t nofFarmer::GetCarryID() const
 {
     return 71;
 }
@@ -118,7 +118,7 @@ void nofFarmer::WorkFinished()
         if(nob->GetGOT() != GOT_GRAINFIELD)
             return;
         noGrainfield* gf = static_cast<noGrainfield*>(nob);
-        //unsigned env_obj_id = gf->GetHarvestMapLstID();
+        //uint32_t env_obj_id = gf->GetHarvestMapLstID();
         gwg->SetNO(new noEnvObject(pos, gf->GetHarvestMapLstID()), pos);
         gf->Destroy();
         delete gf;
@@ -129,7 +129,7 @@ void nofFarmer::WorkFinished()
     else
     {
         // If there is any road now, don't set the grain field
-        for(unsigned i = 0; i < 6; ++i)
+        for(uint32_t i = 0; i < 6; ++i)
         {
             if(gwg->GetPointRoad(pos, i))
                 return;
@@ -176,15 +176,15 @@ nofFarmhand::PointQuality nofFarmer::GetPointQuality(const MapPoint pt)
     else
     {
         // Nicht auf Straßen bauen!
-        for(unsigned char i = 0; i < 6; ++i)
+        for(uint8_t i = 0; i < 6; ++i)
         {
             if(gwg->GetPointRoad(pt, i))
                 return PQ_NOTPOSSIBLE;
         }
 
         // Terrain untersuchen (nur auf Wiesen und Savanne und Steppe pflanzen
-        unsigned char t, good_terrains = 0;
-        for(unsigned char i = 0; i < 6; ++i)
+        uint8_t t, good_terrains = 0;
+        for(uint8_t i = 0; i < 6; ++i)
         {
             t = gwg->GetTerrainAround(pt, i);
             if(t == 3 || (t >= 8 && t <= 12))
@@ -198,7 +198,7 @@ nofFarmhand::PointQuality nofFarmer::GetPointQuality(const MapPoint pt)
         if(nop != NOP_ENVIRONMENT && nop && nop != NOP_NOTHING)
             return PQ_NOTPOSSIBLE;
 
-        for(unsigned char i = 0; i < 6; ++i)
+        for(uint8_t i = 0; i < 6; ++i)
         {
             // Nicht direkt neben andere Getreidefelder und Gebäude setzen!
             nop = gwg->GetNO(gwg->GetNeighbour(pt, i))->GetType();

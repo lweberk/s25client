@@ -43,30 +43,30 @@ class AudioDriverWrapper : public Singleton<AudioDriverWrapper>, public AudioDri
         bool LoadDriver(void);
 
         /// Lädt einen Sound.
-        Sound* LoadEffect(unsigned int data_type, unsigned char* data, unsigned int size);
-        Sound* LoadMusic(unsigned int data_type, unsigned char* data, unsigned int size);
+        Sound* LoadEffect(uint32_t data_type, uint8_t* data, uint32_t size);
+        Sound* LoadMusic(uint32_t data_type, uint8_t* data, uint32_t size);
 
         /// Spielt einen Sound
-        unsigned PlayEffect(Sound* sound, const unsigned char volume, const bool loop);
+        uint32_t PlayEffect(Sound* sound, const uint8_t volume, const bool loop);
         /// Stoppt einen Sound
-        void StopEffect(const unsigned int play_id);
+        void StopEffect(const uint32_t play_id);
 
         /// Spielt Midi ab
-        void PlayMusic(Sound* sound, const unsigned repeats)
+        void PlayMusic(Sound* sound, const uint32_t repeats)
         { if(audiodriver) audiodriver->PlayMusic(sound, repeats); }
         /// Stoppt die Musik.
         void StopMusic(void)
         { if(audiodriver) audiodriver->StopMusic();  }
         /// Wird ein Sound (noch) abgespielt?
-        bool IsEffectPlaying(const unsigned play_id)
+        bool IsEffectPlaying(const uint32_t play_id)
         { if(audiodriver) return audiodriver->IsEffectPlaying(play_id); else return false; }
         /// Verändert die Lautstärke von einem abgespielten Sound (falls er noch abgespielt wird)
-        void ChangeVolume(const unsigned play_id, const unsigned char volume)
+        void ChangeVolume(const uint32_t play_id, const uint8_t volume)
         { if(audiodriver) audiodriver->ChangeVolume(play_id, volume); }
 
-        void SetMasterEffectVolume(unsigned char volume)
+        void SetMasterEffectVolume(uint8_t volume)
         { if(audiodriver) audiodriver->SetMasterEffectVolume(volume); }
-        void SetMasterMusicVolume(unsigned char volume)
+        void SetMasterMusicVolume(uint8_t volume)
         { if(audiodriver) audiodriver->SetMasterMusicVolume(volume); }
 
         const char* GetName(void) const { if(audiodriver) return audiodriver->GetName();    return EMPTY_STR; }

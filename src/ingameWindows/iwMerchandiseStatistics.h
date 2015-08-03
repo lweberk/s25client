@@ -41,7 +41,7 @@ class iwMerchandiseStatistics : public IngameWindow
         void DrawStatistic();
 
         // Die Farben für die einzelnen Warenlinien
-        static const unsigned int BarColors[14];
+        static const uint32_t BarColors[14];
 
         // Aktueller Zeitbereich
         StatisticTime currentTime;
@@ -54,8 +54,8 @@ class iwMerchandiseStatistics : public IngameWindow
 
         // Durchgereichte Methoden vom Window
         void Msg_PaintAfter();
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 
 
 };

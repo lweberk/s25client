@@ -47,13 +47,13 @@ void noAnimal::Serialize_noAnimal(SerializedGameData* sgd) const
 {
     Serialize_noMovable(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(species));
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(species));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushUnsignedShort(pause_way);
     sgd->PushObject(hunter, true);
 }
 
-noAnimal::noAnimal(SerializedGameData* sgd, const unsigned obj_id) : noMovable(sgd, obj_id),
+noAnimal::noAnimal(SerializedGameData* sgd, const uint32_t obj_id) : noMovable(sgd, obj_id),
     species(Species(sgd->PopUnsignedChar())),
     state(State(sgd->PopUnsignedChar())),
     pause_way(sgd->PopUnsignedShort()),
@@ -68,7 +68,7 @@ void noAnimal::StartLiving()
     StandardWalking();
 }
 
-void noAnimal::Draw(int x, int y)
+void noAnimal::Draw(int32_t x, int32_t y)
 {
     // Tier zeichnen
 
@@ -88,7 +88,7 @@ void noAnimal::Draw(int x, int y)
             // Interpolieren zwischen beiden Knotenpunkten
             CalcWalkingRelative(x, y);
 
-            unsigned ani_step = GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % ANIMALCONSTS[species].animation_steps;
+            uint32_t ani_step = GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % ANIMALCONSTS[species].animation_steps;
 
             // Zeichnen
             Loader::animal_cache[species][dir][ani_step].draw(x, y);
@@ -96,7 +96,7 @@ void noAnimal::Draw(int x, int y)
             // Bei Enten und Schafen: Soll ein Sound gespielt werden?
             if(species == SPEC_DUCK || species == SPEC_SHEEP)
             {
-                unsigned int now = VIDEODRIVER.GetTickCount();
+                uint32_t now = VIDEODRIVER.GetTickCount();
                 // Wurde der Soundzeitpunkt schon überschritten?
                 if(now > sound_moment)
                 {
@@ -126,7 +126,7 @@ void noAnimal::Draw(int x, int y)
         case STATE_DISAPPEARING:
         {
             // Alpha-Wert ausrechnen
-            unsigned char alpha = 0xFF - GAMECLIENT.Interpolate(0xFF, current_ev);
+            uint8_t alpha = 0xFF - GAMECLIENT.Interpolate(0xFF, current_ev);
 
             // Gibts ein Leichenbild?
             if (Loader::animal_cache[species][0][ANIMAL_MAX_ANIMATION_STEPS].isGenerated())
@@ -145,7 +145,7 @@ void noAnimal::Draw(int x, int y)
 }
 
 
-void noAnimal::HandleEvent(const unsigned int id)
+void noAnimal::HandleEvent(const uint32_t id)
 {
     current_ev = 0;
 
@@ -195,7 +195,7 @@ void noAnimal::HandleEvent(const unsigned int id)
 
 }
 
-void noAnimal::StartWalking(const unsigned char dir)
+void noAnimal::StartWalking(const uint8_t dir)
 {
     StartMoving(dir, ANIMALCONSTS[species].speed);
 }
@@ -253,7 +253,7 @@ void noAnimal::Walked()
             // Bei Enten und Schafen: Soundzeitpunkt ggf. setzen
             if(species == SPEC_DUCK || species == SPEC_SHEEP)
             {
-                unsigned int now = VIDEODRIVER.GetTickCount();
+                uint32_t now = VIDEODRIVER.GetTickCount();
                 // Wurde der Soundzeitpunkt schon überschritten?
                 if(now > sound_moment)
                     // Neuen Zeitpunkt errechnen
@@ -263,16 +263,16 @@ void noAnimal::Walked()
     }
 }
 
-unsigned char noAnimal::FindDir()
+uint8_t noAnimal::FindDir()
 {
     // mit zufälliger Richtung anfangen
-    unsigned doffset = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
+    uint32_t doffset = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
 
-    for(unsigned char dtmp = 0; dtmp < 6; ++dtmp)
+    for(uint8_t dtmp = 0; dtmp < 6; ++dtmp)
     {
-        unsigned char d = (dtmp + doffset) % 6;
+        uint8_t d = (dtmp + doffset) % 6;
 
-        unsigned char t1 = gwg->GetWalkingTerrain1(pos, d);
+        uint8_t t1 = gwg->GetWalkingTerrain1(pos, d);
 
 		/* Animals are people, too. They should be allowed to cross borders as well!
 		
@@ -301,7 +301,7 @@ unsigned char noAnimal::FindDir()
         if(species == SPEC_DUCK)
         {
             // Enten schwimmen nur auf dem Wasser --> muss daher Wasser sein (ID 14 = Wasser)
-            unsigned char t2 = gwg->GetWalkingTerrain2(pos, d);
+            uint8_t t2 = gwg->GetWalkingTerrain2(pos, d);
             
             if(t1 == 14 &&
                     t2 == 14)
@@ -310,7 +310,7 @@ unsigned char noAnimal::FindDir()
         else if(species == SPEC_POLARBEAR)
         {
             // Polarbären laufen nur auf Schnee rum
-            unsigned char t2 = gwg->GetWalkingTerrain2(pos, d);
+            uint8_t t2 = gwg->GetWalkingTerrain2(pos, d);
 
             if(t1 == 0 ||
                     t2 == 0)
@@ -335,7 +335,7 @@ unsigned char noAnimal::FindDir()
 
             // Und möglichst auch keine Straßen
             bool roads = false;
-            for(unsigned char d2 = 0; d2 < 6; ++d2)
+            for(uint8_t d2 = 0; d2 < 6; ++d2)
             {
                 if(gwg->GetPointRoad(dst, d2))
                 {

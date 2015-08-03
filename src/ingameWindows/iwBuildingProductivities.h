@@ -25,7 +25,7 @@
 class iwBuildingProductivities : public IngameWindow
 {
         /// Prozentzahlen der einzelnen Gebäude
-        std::vector<unsigned short> percents;
+        std::vector<uint16_t> percents;
 
     public:
 

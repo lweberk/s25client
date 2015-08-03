@@ -46,11 +46,11 @@ class dskSelectMap :
         /// Callbackfunktion zum Eintragen einer Karte in der Tabelle.
         static void FillTable(const std::string& filename, void* param);
 
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr);
-        void Msg_TableSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_TableChooseItem(const unsigned ctrl_id, const unsigned short selection);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr);
+        void Msg_TableSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_TableChooseItem(const uint32_t ctrl_id, const uint16_t selection);
 
         void CI_NextConnectState(const ConnectState cs);
         void CI_Error(const ClientError ce);

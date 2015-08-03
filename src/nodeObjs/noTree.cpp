@@ -43,10 +43,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-unsigned noTree::INSTANCE_COUNTER = 0;
-unsigned short noTree::DRAW_COUNTER = 0;
+uint32_t noTree::INSTANCE_COUNTER = 0;
+uint16_t noTree::DRAW_COUNTER = 0;
 
-noTree::noTree(const MapPoint pos, const unsigned char type, const unsigned char size)
+noTree::noTree(const MapPoint pos, const uint8_t type, const uint8_t size)
     : noCoordBase(NOP_TREE, pos), type(type), size(size), event(0), produce_animal_event(0)
 {
     // Wenn der Baum klein ist, muss später mal wachsen
@@ -62,7 +62,7 @@ noTree::noTree(const MapPoint pos, const unsigned char type, const unsigned char
     ++INSTANCE_COUNTER;
 
     // Jeder 20. Baum produziert Tiere, aber keine Palmen und Ananas!
-	const unsigned TREESPERANIMALSPAWN[] = {20, 13, 10, 6, 4, 2};
+	const uint32_t TREESPERANIMALSPAWN[] = {20, 13, 10, 6, 4, 2};
     produce_animals = (type < 3 || type > 5) && (INSTANCE_COUNTER % TREESPERANIMALSPAWN[GAMECLIENT.GetGGS().getSelection(ADDON_MORE_ANIMALS)] == 0);
 
     // Falls das der Fall ist, dann wollen wir doch gleich mal eins produzieren
@@ -87,13 +87,13 @@ void noTree::Serialize_noTree(SerializedGameData* sgd) const
 
     sgd->PushUnsignedChar(type);
     sgd->PushUnsignedChar(size);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushObject(event, true);
     sgd->PushObject(produce_animal_event, true);
     sgd->PushBool(produce_animals);
 }
 
-noTree::noTree(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noTree::noTree(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     type(sgd->PopUnsignedChar()),
     size(sgd->PopUnsignedChar()),
     state(State(sgd->PopUnsignedChar())),
@@ -104,7 +104,7 @@ noTree::noTree(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd
 }
 
 
-void noTree::Draw( int x,   int y)
+void noTree::Draw( int32_t x,   int32_t y)
 {
     switch(state)
     {
@@ -125,7 +125,7 @@ void noTree::Draw( int x,   int y)
         case STATE_GROWING_GROW:
         {
             // alten Baum ausblenden
-            unsigned transparency = (GAMECLIENT.Interpolate(0xFF, event)) << 24;
+            uint32_t transparency = (GAMECLIENT.Interpolate(0xFF, event)) << 24;
 
             Loader::tree_cache[type][8 + size].draw(x, y, 0xFFFFFFFF - transparency);
 
@@ -141,7 +141,7 @@ void noTree::Draw( int x,   int y)
         case STATE_FALLING_FALL:
         {
             // Umfallen beschleunigen --> für erste Frames mehr Zeit
-            unsigned short i = GAMECLIENT.Interpolate(9, event);
+            uint16_t i = GAMECLIENT.Interpolate(9, event);
 
             if(i < 4)
                 i = 0;
@@ -159,7 +159,7 @@ void noTree::Draw( int x,   int y)
     }
 }
 
-void noTree::HandleEvent(const unsigned int id)
+void noTree::HandleEvent(const uint32_t id)
 {
     // Ein Tier-Produzier-Event?
     if(id == 3)

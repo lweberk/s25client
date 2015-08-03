@@ -26,39 +26,39 @@
 class ctrlGroup : public Window
 {
     public:
-        ctrlGroup(Window* parent, unsigned int id, bool scale = false);
+        ctrlGroup(Window* parent, uint32_t id, bool scale = false);
 
         void Msg_ScreenResize(const ScreenResizeEvent& sr);
 
-        virtual void Msg_ButtonClick(const unsigned int ctrl_id);
-        virtual void Msg_EditEnter(const unsigned int ctrl_id);
-        virtual void Msg_EditChange(const unsigned int ctrl_id);
-        virtual void Msg_TabChange(const unsigned int ctrl_id, const unsigned short tab_id);
-        virtual void Msg_ListSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_CheckboxChange(const unsigned int ctrl_id, const bool checked);
-        virtual void Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position);
-        virtual void Msg_ScrollShow(const unsigned int ctrl_id, const bool visible);
-        virtual void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Timer(const unsigned int ctrl_id);
-        virtual void Msg_TableSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_TableRightButton(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_TableLeftButton(const unsigned int ctrl_id, const unsigned short selection);
+        virtual void Msg_ButtonClick(const uint32_t ctrl_id);
+        virtual void Msg_EditEnter(const uint32_t ctrl_id);
+        virtual void Msg_EditChange(const uint32_t ctrl_id);
+        virtual void Msg_TabChange(const uint32_t ctrl_id, const uint16_t tab_id);
+        virtual void Msg_ListSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_CheckboxChange(const uint32_t ctrl_id, const bool checked);
+        virtual void Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position);
+        virtual void Msg_ScrollShow(const uint32_t ctrl_id, const bool visible);
+        virtual void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Timer(const uint32_t ctrl_id);
+        virtual void Msg_TableSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_TableRightButton(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_TableLeftButton(const uint32_t ctrl_id, const uint16_t selection);
 
-        virtual void Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_EditEnter(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_EditChange(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_TabChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short tab_id);
-        virtual void Msg_Group_ListSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_ComboSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_CheckboxChange(const unsigned int group_id, const unsigned int ctrl_id, const bool checked);
-        virtual void Msg_Group_ProgressChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short position);
-        virtual void Msg_Group_ScrollShow(const unsigned int group_id, const unsigned int ctrl_id, const bool visible);
-        virtual void Msg_Group_OptionGroupChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_Timer(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_TableSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_TableRightButton(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_TableLeftButton(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
+        virtual void Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_EditEnter(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_EditChange(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_TabChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t tab_id);
+        virtual void Msg_Group_ListSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_ComboSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_CheckboxChange(const uint32_t group_id, const uint32_t ctrl_id, const bool checked);
+        virtual void Msg_Group_ProgressChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t position);
+        virtual void Msg_Group_ScrollShow(const uint32_t group_id, const uint32_t ctrl_id, const bool visible);
+        virtual void Msg_Group_OptionGroupChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_Timer(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_TableSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_TableRightButton(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_TableLeftButton(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
 
         virtual bool Msg_LeftDown(const MouseCoords& mc);
         virtual bool Msg_RightDown(const MouseCoords& mc);

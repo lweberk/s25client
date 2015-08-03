@@ -28,23 +28,23 @@ class nobUsualBuilding;
 class nofMiller : public nofWorkman
 {
         /// Letzter Mühlensound-Zeitpunkt
-        unsigned last_sound;
+        uint32_t last_sound;
         /// Intervall zum nächsten Mühlensound
-        unsigned next_interval;
+        uint32_t next_interval;
 
     private:
 
         /// Zeichnet ihn beim Arbeiten
-        void DrawWorking(int x, int y);
+        void DrawWorking(int32_t x, int32_t y);
         /// Gibt die ID in JOBS.BOB zurück, wenn der Beruf Waren rausträgt (bzw rein)
-        unsigned short GetCarryID() const { return 75; }
+        uint16_t GetCarryID() const { return 75; }
         /// Der Arbeiter erzeugt eine Ware
         GoodType ProduceWare();
 
     public:
 
-        nofMiller(const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofMiller(SerializedGameData* sgd, const unsigned obj_id);
+        nofMiller(const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofMiller(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Serialisierungsfunktionen
     protected:  void Serialize_nofMiller(SerializedGameData* sgd) const;

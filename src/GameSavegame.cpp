@@ -26,7 +26,7 @@
 /// Kleine Signatur am Anfang "RTTRSAVE", die ein gültiges S25 RTTR Savegame kennzeichnet
 const char Savegame::SAVE_SIGNATURE[8] = {'R', 'T', 'T', 'R', 'S', 'A', 'V', 'E'};
 /// Version des Savegame-Formates
-const unsigned short Savegame::SAVE_VERSION = 25;
+const uint16_t Savegame::SAVE_VERSION = 25;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -85,15 +85,15 @@ bool Savegame::Save(BinaryFile& file)
     file.WriteUnsignedChar(player_count);
 
     // Größe der Spielerdaten (später ausfüllen)
-    unsigned players_size = 0;
-    unsigned players_pos = file.Tell();
+    uint32_t players_size = 0;
+    uint32_t players_pos = file.Tell();
     file.WriteUnsignedInt(players_size);
 
     // Spielerdaten
     WritePlayerData(file);
 
     // Wieder zurückspringen und Größe des Spielerblocks eintragen
-    unsigned new_pos = file.Tell();
+    uint32_t new_pos = file.Tell();
     file.Seek(players_pos, SEEK_SET);
     file.WriteUnsignedInt(new_pos - players_pos - 4);
     file.Seek(new_pos, SEEK_SET);
@@ -164,7 +164,7 @@ bool Savegame::Load(BinaryFile& file, const bool load_players, const bool load_s
     {
         // Überspringen
         players = 0;
-        unsigned player_size = file.ReadUnsignedInt();
+        uint32_t player_size = file.ReadUnsignedInt();
         file.Seek(player_size, SEEK_CUR);
     }
 

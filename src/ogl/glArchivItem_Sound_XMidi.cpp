@@ -43,7 +43,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author FloSoft
  */
-void glArchivItem_Sound_XMidi::Play(const unsigned repeats)
+void glArchivItem_Sound_XMidi::Play(const uint32_t repeats)
 {
     if(!SETTINGS.sound.musik)
         return;

@@ -38,7 +38,7 @@ class nobHarborBuilding : public nobBaseWarehouse
             /// Expedition in Vorbereitung?
             bool active;
             /// Anzahl an Brettern und Steinen, die bereits angesammelt wurden
-            unsigned boards, stones;
+            uint32_t boards, stones;
             /// Bauarbeiter schon da?
             bool builder;
         } expedition;
@@ -52,14 +52,14 @@ class nobHarborBuilding : public nobBaseWarehouse
             /// Expedition in Vorbereitung?
             bool active;
             /// Anzahl der Erkunder, die schon da sind
-            unsigned scouts;
+            uint32_t scouts;
         } exploration_expedition;
 
 
         /// Bestell-Ware-Event
         EventManager::EventPointer orderware_ev;
         /// Die Meeres-IDs aller angrenzenden Meere (jeweils für die 6 drumherumliegenden Küstenpunkte)
-        unsigned short sea_ids[6];
+        uint16_t sea_ids[6];
         /// Liste von Waren, die weggeschifft werden sollen
         std::list<Ware*> wares_for_ships;
         /// Liste von Menschen, die weggeschifft werden sollen
@@ -103,12 +103,12 @@ class nobHarborBuilding : public nobBaseWarehouse
         /// Stellt Verteidiger zur Verfügung
         virtual nofDefender* ProvideDefender(nofAttacker* const attacker);
 
-        unsigned ordered_ships;
+        uint32_t ordered_ships;
 
         friend class SerializedGameData;
         friend class BuildingFactory;
-        nobHarborBuilding(const MapPoint pt, const unsigned char player, const Nation nation);
-        nobHarborBuilding(SerializedGameData* sgd, const unsigned obj_id);
+        nobHarborBuilding(const MapPoint pt, const uint8_t player, const Nation nation);
+        nobHarborBuilding(SerializedGameData* sgd, const uint32_t obj_id);
 public:
 
         MapCoord GetMilitaryRadius() const { return HARBOR_ALONE_RADIUS; }
@@ -118,8 +118,8 @@ public:
         /// Serialisierung
         void Serialize(SerializedGameData* sgd) const;
         GO_Type GetGOT() const { return GOT_NOB_HARBORBUILDING; }
-        void Draw(int x, int y);
-        void HandleEvent(const unsigned int id);
+        void Draw(int32_t x, int32_t y);
+        void HandleEvent(const uint32_t id);
 
         /// Eine bestellte Ware konnte doch nicht kommen
         void WareLost(Ware* ware);
@@ -129,7 +129,7 @@ public:
         void AddFigure(noFigure* figure, const bool increase_visual_counts);
         /// Berechnet Wichtigkeit einer neuen Ware für den Hafen (Waren werden für Expeditionen
         /// benötigt!)
-        unsigned CalcDistributionPoints(const GoodType type);
+        uint32_t CalcDistributionPoints(const GoodType type);
 
         /// Storniert die Bestellung für eine bestimmte Ware, die mit einem Schiff transportiert werden soll
         void CancelWareForShip(Ware* ware);
@@ -152,14 +152,14 @@ public:
         void RemoveDependentFigure(noFigure* figure);
 
         /// Gibt die Hafenplatz-ID zurück, auf der der Hafen steht
-        unsigned GetHarborPosID() const;
+        uint32_t GetHarborPosID() const;
 
         struct ShipConnection
         {
             /// Zielhafen
             noRoadNode* dest;
             /// Kosten für die Strecke in Weglänge eines einfachen Trägers
-            unsigned way_costs;
+            uint32_t way_costs;
         };
         /// Gibt eine Liste mit möglichen Verbindungen zurück
         void GetShipConnections(std::vector<ShipConnection>& connections) const;
@@ -173,9 +173,9 @@ public:
         void WareDontWantToTravelByShip(Ware* ware);
 
         /// Gibt Anzahl der Schiffe zurück, die noch für ausstehende Aufgaben benötigt werden
-        unsigned GetNeededShipsCount() const;
+        uint32_t GetNeededShipsCount() const;
         /// Gibt die Wichtigkeit an, dass ein Schiff kommen muss (0 -> keine Bedürftigkeit)
-        int GetNeedForShip(unsigned ships_coming) const;
+        int32_t GetNeedForShip(uint32_t ships_coming) const;
 
         /// Erhält die Waren von einem Schiff und nimmt diese in den Warenbestand auf
         void ReceiveGoodsFromShip(const std::list<noFigure*> figures, const std::list<Ware*> wares);
@@ -187,7 +187,7 @@ public:
             // Dazugehöriger Hafen, wo die Angreifer dann auf das Schiff warten sollen
             nobHarborBuilding* harbor;
             /// Entfernung Hafen - anderer Hafen
-            unsigned distance;
+            uint32_t distance;
 
             bool operator==(const nobMilitary* const building) const
             {
@@ -198,7 +198,7 @@ public:
         /// Gibt die Angreifer zurück, die dieser Hafen für einen Seeangriff zur Verfügung stellen kann
         /// defender_harbors sind dabei mögliche Zielhäfen
         void GetAttackerBuildingsForSeaAttack(std::vector<SeaAttackerBuilding> * buildings,
-                                              const std::vector<unsigned>& defender_harbors);
+                                              const std::vector<uint32_t>& defender_harbors);
         ///Gibt verfügbare Angreifer zurück
         void GetAttackerBuildingsForSeaIdAttack(std::vector<SeaAttackerBuilding>*buildings);
 

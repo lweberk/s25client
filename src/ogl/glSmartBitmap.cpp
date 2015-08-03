@@ -40,7 +40,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-bool glSmartTexturePackerNode::insert(glSmartBitmap* b, unsigned char* buffer, unsigned gw, unsigned gh, unsigned reserve)
+bool glSmartTexturePackerNode::insert(glSmartBitmap* b, uint8_t* buffer, uint32_t gw, uint32_t gh, uint32_t reserve)
 {
     std::vector<glSmartTexturePackerNode*> todo;
 
@@ -48,8 +48,8 @@ bool glSmartTexturePackerNode::insert(glSmartBitmap* b, unsigned char* buffer, u
 
     todo.push_back(this);
 
-    int bw = b->getTexWidth();
-    int bh = b->getTexHeight();
+    int32_t bw = b->getTexWidth();
+    int32_t bh = b->getTexHeight();
 
     while (!todo.empty())
     {
@@ -96,8 +96,8 @@ bool glSmartTexturePackerNode::insert(glSmartBitmap* b, unsigned char* buffer, u
         current->child[0] = new glSmartTexturePackerNode();
         current->child[1] = new glSmartTexturePackerNode();
 
-        int dw = current->w - bw;
-        int dh = current->h - bh;
+        int32_t dw = current->w - bw;
+        int32_t dh = current->h - bh;
 
         if (dw > dh)
         {
@@ -126,7 +126,7 @@ bool glSmartTexturePackerNode::insert(glSmartBitmap* b, unsigned char* buffer, u
     return(false);
 }
 
-void glSmartTexturePackerNode::destroy(unsigned reserve)
+void glSmartTexturePackerNode::destroy(uint32_t reserve)
 {
     std::vector<glSmartTexturePackerNode*> todo;
 
@@ -155,7 +155,7 @@ void glSmartTexturePackerNode::destroy(unsigned reserve)
 
 glSmartTexturePacker::~glSmartTexturePacker()
 {
-    for (std::vector<unsigned>::const_iterator it = textures.begin(); it != textures.end(); ++it)
+    for (std::vector<uint32_t>::const_iterator it = textures.begin(); it != textures.end(); ++it)
     {
         VIDEODRIVER.DeleteTexture((*it));
     }
@@ -168,12 +168,12 @@ bool glSmartTexturePacker::sortSmartBitmap(glSmartBitmap* a, glSmartBitmap* b)
 
 bool glSmartTexturePacker::packHelper(std::vector<glSmartBitmap*> &list)
 {
-    int w = 0;
-    int h = 0;
-    int tmp = 0;
-    int total = 0;
+    int32_t w = 0;
+    int32_t h = 0;
+    int32_t tmp = 0;
+    int32_t total = 0;
 
-    unsigned texture;
+    uint32_t texture;
 
     texture = VIDEODRIVER.GenerateTexture();
 
@@ -232,7 +232,7 @@ bool glSmartTexturePacker::packHelper(std::vector<glSmartBitmap*> &list)
             // list to store bitmaps we could not fit in our current texture
             std::vector<glSmartBitmap*> left;
 
-            unsigned char* buffer = new unsigned char[w * h * 4];
+            uint8_t* buffer = new uint8_t[w * h * 4];
 
             if (!buffer)
             {
@@ -261,9 +261,9 @@ bool glSmartTexturePacker::packHelper(std::vector<glSmartBitmap*> &list)
 
                         FILE *f = fopen(tmp, "w+");
 
-                        for (int y = 0; y < h; ++y)
+                        for (int32_t y = 0; y < h; ++y)
                         {
-                            for (int x = 0; x < w; ++x)
+                            for (int32_t x = 0; x < w; ++x)
                             {
                                 fputc(buffer[((y * w + x) << 2) + 2], f);
                                 fputc(buffer[((y * w + x) << 2) + 1], f);
@@ -368,7 +368,7 @@ bool glSmartTexturePacker::pack()
     }
 
     // free all textures allocated by us
-    for (std::vector<unsigned>::const_iterator it = textures.begin(); it != textures.end(); ++it)
+    for (std::vector<uint32_t>::const_iterator it = textures.begin(); it != textures.end(); ++it)
     {
         VIDEODRIVER.DeleteTexture((*it));
     }
@@ -399,7 +399,7 @@ glSmartBitmap::~glSmartBitmap()
     reset();
 }
 
-unsigned glSmartBitmap::nextPowerOfTwo(unsigned k)
+uint32_t glSmartBitmap::nextPowerOfTwo(uint32_t k)
 {
     if (k == 0)
     {
@@ -408,7 +408,7 @@ unsigned glSmartBitmap::nextPowerOfTwo(unsigned k)
 
     k--;
 
-    for (unsigned i = 1; i < sizeof(unsigned)*CHAR_BIT; i <<= 1)
+    for (uint32_t i = 1; i < sizeof(uint32_t)*CHAR_BIT; i <<= 1)
     {
         k = k | k >> i;
     }
@@ -425,8 +425,8 @@ void glSmartBitmap::calcDimensions()
         return;
     }
 
-    int max_x = 0;
-    int max_y = 0;
+    int32_t max_x = 0;
+    int32_t max_y = 0;
 
     nx = ny = INT_MIN;
 
@@ -464,7 +464,7 @@ void glSmartBitmap::calcDimensions()
     h = ny + max_y;
 }
 
-void glSmartBitmap::drawTo(unsigned char* buffer, unsigned stride, unsigned height, int x_offset, int y_offset)
+void glSmartBitmap::drawTo(uint8_t* buffer, uint32_t stride, uint32_t height, int32_t x_offset, int32_t y_offset)
 {
     libsiedler2::ArchivItem_Palette* p_colors = LOADER.GetPaletteN("colors");
     libsiedler2::ArchivItem_Palette* p_5 = LOADER.GetPaletteN("pal5");
@@ -476,8 +476,8 @@ void glSmartBitmap::drawTo(unsigned char* buffer, unsigned stride, unsigned heig
             continue;
         }
 
-        unsigned xo = (nx - (*it).nx);
-        unsigned yo = (ny - (*it).ny);
+        uint32_t xo = (nx - (*it).nx);
+        uint32_t yo = (ny - (*it).ny);
 
         switch ((*it).type)
         {
@@ -501,18 +501,18 @@ void glSmartBitmap::drawTo(unsigned char* buffer, unsigned stride, unsigned heig
             }
             case TYPE_ARCHIVITEM_BITMAP_SHADOW:
             {
-                unsigned char* tmp = new unsigned char[w * h * 4];
+                uint8_t* tmp = new uint8_t[w * h * 4];
                 memset(tmp, 0, w * h * 4);
 
                 (*it).bmp->print(tmp, w, h, libsiedler2::FORMAT_RGBA, p_5, xo, yo, (*it).x, (*it).y, (*it).w, (*it).h);
 
-                unsigned tmpIdx = 0;
+                uint32_t tmpIdx = 0;
 
-                for (int y = 0; y < h; ++y)
+                for (int32_t y = 0; y < h; ++y)
                 {
-                    unsigned idx = ((y_offset + y) * stride + x_offset) << 2;
+                    uint32_t idx = ((y_offset + y) * stride + x_offset) << 2;
 
-                    for (int x = 0; x < w; ++x)
+                    for (int32_t x = 0; x < w; ++x)
                     {
                         if (tmp[tmpIdx + 3] != 0x00)
                         {
@@ -563,9 +563,9 @@ void glSmartBitmap::generateTexture()
     h = nextPowerOfTwo(h);
 
     // do we have a player-colored overlay?
-    unsigned stride = hasPlayer ? w * 2 : w;
+    uint32_t stride = hasPlayer ? w * 2 : w;
 
-    unsigned char* buffer = new unsigned char[stride * h * 4];
+    uint8_t* buffer = new uint8_t[stride * h * 4];
     memset(buffer, 0, stride * h * 4);
 
     drawTo(buffer, stride, h);
@@ -589,7 +589,7 @@ void glSmartBitmap::generateTexture()
     tmp[6].tx = tmp[7].tx = 1.0f;
 }
 
-void glSmartBitmap::draw(int x, int y, unsigned color, unsigned player_color)
+void glSmartBitmap::draw(int32_t x, int32_t y, uint32_t color, uint32_t player_color)
 {
     if (!texture)
     {
@@ -636,7 +636,7 @@ void glSmartBitmap::draw(int x, int y, unsigned color, unsigned player_color)
     glDrawArrays(GL_QUADS, 0, 4);
 }
 
-void glSmartBitmap::drawPercent(int x, int y, unsigned percent, unsigned color, unsigned player_color)
+void glSmartBitmap::drawPercent(int32_t x, int32_t y, uint32_t percent, uint32_t color, uint32_t player_color)
 {
     if (!texture)
     {

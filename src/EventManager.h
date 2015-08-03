@@ -41,20 +41,20 @@ class EventManager
             public:
 
                 GameObject* obj;
-                unsigned int gf;
-                unsigned int gf_length;
-                unsigned int gf_next;
-                unsigned int id;
+                uint32_t gf;
+                uint32_t gf_length;
+                uint32_t gf_next;
+                uint32_t id;
 
             public:
 
-                Event(GameObject* const  obj, const unsigned int gf, const unsigned int gf_length, const unsigned int id)
+                Event(GameObject* const  obj, const uint32_t gf, const uint32_t gf_length, const uint32_t id)
                     : obj(obj), gf(gf), gf_length(gf_length), id(id)
                 {
                     gf_next = gf + gf_length;
                 }
 
-                Event(SerializedGameData* sgd, const unsigned obj_id);
+                Event(SerializedGameData* sgd, const uint32_t obj_id);
 
                 void Destroy(void);
 
@@ -75,12 +75,12 @@ class EventManager
         /// führt alle Events des aktuellen GameFrames aus.
         void NextGF();
         /// fügt ein Event der Eventliste hinzu.
-        EventPointer AddEvent(GameObject* obj, const unsigned int gf_length, const unsigned int id = 0);
+        EventPointer AddEvent(GameObject* obj, const uint32_t gf_length, const uint32_t id = 0);
         /// Deserialisiert ein Event und fügt es hinzu
-        EventPointer AddEvent(SerializedGameData* sgd, const unsigned obj_id);
+        EventPointer AddEvent(SerializedGameData* sgd, const uint32_t obj_id);
         /// Fügt ein schon angebrochenes Event hinzu (Events, wenn jemand beim Laufen stehengeblieben ist z.B.)
         /// Ein altes Event wird also quasi fortgeführt (um gf_elapsed in der Vergangenheit angelegt)
-        EventPointer AddEvent(GameObject* obj, const unsigned int gf_length, const unsigned int id, const unsigned gf_elapsed);
+        EventPointer AddEvent(GameObject* obj, const uint32_t gf_length, const uint32_t id, const uint32_t gf_elapsed);
 
         /// Löscht alle Listen für Spielende
         void Clear() { eis.clear(); kill_list.clear(); }
@@ -95,11 +95,11 @@ class EventManager
         void Deserialize(SerializedGameData* sgd);
 
         /// Ist ein Event mit bestimmter id für ein bestimmtes Objekt bereits vorhanden?
-        bool IsEventActive(const GameObject* const obj, const unsigned id) const;
+        bool IsEventActive(const GameObject* const obj, const uint32_t id) const;
 
         void RemoveAllEventsOfObject(GameObject* obj);
     private:
-        std::map<unsigned, std::list<Event*> > eis;     ///< Liste der Events für die einzelnen Objekte
+        std::map<uint32_t, std::list<Event*> > eis;     ///< Liste der Events für die einzelnen Objekte
         std::list<GameObject*> kill_list; ///< Liste mit Objekten die unmittelbar nach NextGF gekillt werden sollen
 };
 

@@ -55,9 +55,9 @@ static char THIS_FILE[] = __FILE__;
 
 
 /// Duration for one credits page
-const unsigned PAGE_TIME = 12900;
+const uint32_t PAGE_TIME = 12900;
 /// Duration for fading between pages
-const unsigned FADING_TIME = 2000;
+const uint32_t FADING_TIME = 2000;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -259,7 +259,7 @@ dskCredits::~dskCredits()
  */
 void dskCredits::Msg_PaintAfter()
 {
-    unsigned int time = VIDEODRIVER.GetTickCount() - startTime;
+    uint32_t time = VIDEODRIVER.GetTickCount() - startTime;
 
     if (time > PAGE_TIME)
     {
@@ -270,11 +270,11 @@ void dskCredits::Msg_PaintAfter()
     }
 
     // Frameratebegrenzer
-    int bob_time = VIDEODRIVER.GetTickCount() - bobTime;
-    int bob_prosec = 25;
+    int32_t bob_time = VIDEODRIVER.GetTickCount() - bobTime;
+    int32_t bob_prosec = 25;
 
-    int bob_spawntime = VIDEODRIVER.GetTickCount() - bobSpawnTime;
-    int bob_spawnprosec = 5;
+    int32_t bob_spawntime = VIDEODRIVER.GetTickCount() - bobSpawnTime;
+    int32_t bob_spawnprosec = 5;
 
     if(GAMEMANAGER.GetFPS() < 30)
         bob_spawnprosec = 0;
@@ -284,7 +284,7 @@ void dskCredits::Msg_PaintAfter()
         bob_spawnprosec = 2;
 
     // add new bob
-    if ( bob_spawnprosec > 0 && bob_spawntime > (1000 / bob_spawnprosec) && (int)bobs.size() < (int)(50 + VIDEODRIVER.GetScreenWidth() / 2))
+    if ( bob_spawnprosec > 0 && bob_spawntime > (1000 / bob_spawnprosec) && (int32_t)bobs.size() < (int32_t)(50 + VIDEODRIVER.GetScreenWidth() / 2))
     {
         bobSpawnTime = VIDEODRIVER.GetTickCount();
 
@@ -305,7 +305,7 @@ void dskCredits::Msg_PaintAfter()
         }
 
         b.color = COLORS[rand() % PLAYER_COLORS_COUNT];
-        unsigned int job = rand() % 29;
+        uint32_t job = rand() % 29;
 
         // exclude "headless" bobs
         if (job == 8 || job == 9 || job == 12 || job == 18)
@@ -364,7 +364,7 @@ void dskCredits::Msg_PaintAfter()
         bobTime = VIDEODRIVER.GetTickCount();
 
     // calculate text transparency
-    unsigned transparency = 0xFF;
+    uint32_t transparency = 0xFF;
 
     if(time < FADING_TIME)
         transparency = 0xFF * time / FADING_TIME;
@@ -379,7 +379,7 @@ void dskCredits::Msg_PaintAfter()
     // draw text
     LargeFont->Draw(40, 100, it->title, 0, (COLOR_RED & 0x00FFFFFF) | transparency);
 
-    unsigned int y[2] = {150, 150};
+    uint32_t y[2] = {150, 150};
 
     for(std::list<CreditsEntry::Line>::iterator line = this->it->lines.begin(); line != it->lines.end(); ++line)
     {
@@ -420,7 +420,7 @@ bool dskCredits::Msg_KeyDown(const KeyEvent& ke)
 }
 
 
-void dskCredits::Msg_ButtonClick(const unsigned ctrl_id)
+void dskCredits::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     Close();
 }

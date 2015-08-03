@@ -27,7 +27,7 @@ class iwChat : public IngameWindow
 {
     private:
         /// Chat-Destination auch merken, wenn das Fenster zugegangen ist
-        static unsigned char chat_dest;
+        static uint8_t chat_dest;
 
     public:
         iwChat();
@@ -35,8 +35,8 @@ class iwChat : public IngameWindow
     private:
 
         void Msg_PaintBefore();
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_EditEnter(const unsigned int ctrl_id);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_EditEnter(const uint32_t ctrl_id);
 };
 
 #endif // !iwCHAT_H_INCLUDED

@@ -35,7 +35,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-void glArchivItem_Bitmap_Player::Draw(short dst_x, short dst_y, short dst_w, short dst_h, short src_x, short src_y, short src_w, short src_h, const unsigned int color, const unsigned int player_color)
+void glArchivItem_Bitmap_Player::Draw(int16_t dst_x, int16_t dst_y, int16_t dst_w, int16_t dst_h, int16_t src_x, int16_t src_y, int16_t src_w, int16_t src_h, const uint32_t color, const uint32_t player_color)
 {
     if(texture == 0)
         GenerateTexture();
@@ -62,8 +62,8 @@ void glArchivItem_Bitmap_Player::Draw(short dst_x, short dst_y, short dst_w, sho
 
     tmp[0].z = tmp[1].z = tmp[2].z = tmp[3].z = 0.0;
 
-    int x = -nx + dst_x;
-    int y = -ny + dst_y;
+    int32_t x = -nx + dst_x;
+    int32_t y = -ny + dst_y;
 
     tmp[0].x = tmp[1].x = GLfloat(x);
     tmp[2].x = tmp[3].x = GLfloat(x + dst_w);
@@ -112,9 +112,9 @@ void glArchivItem_Bitmap_Player::GenerateTexture(void)
     // damit man per OpenGL einfärben kann!
     setPalette(LOADER.GetPaletteN("colors"));
 
-    int iformat = GL_RGBA, dformat = GL_BGRA; //GL_BGRA_EXT;
+    int32_t iformat = GL_RGBA, dformat = GL_BGRA; //GL_BGRA_EXT;
 
-    unsigned char* buffer = new unsigned char[tex_width * 2 * tex_height * 4];
+    uint8_t* buffer = new uint8_t[tex_width * 2 * tex_height * 4];
 
     VIDEODRIVER.BindTexture(texture);
 

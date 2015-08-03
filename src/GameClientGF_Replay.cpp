@@ -46,7 +46,7 @@ void GameClient::ExecuteGameFrame_Replay()
             // Chat Command?
             if(rc == Replay::RC_CHAT)
             {
-                unsigned char player, dest;
+                uint8_t player, dest;
                 std::string message;
                 replayinfo.replay.ReadChatCommand(&player, &dest, message);
 
@@ -62,8 +62,8 @@ void GameClient::ExecuteGameFrame_Replay()
             // Game Command?
             else if(rc == Replay::RC_GAME)
             {
-                unsigned char* data;
-                unsigned short length;
+                uint8_t* data;
+                uint16_t length;
 
                 replayinfo.replay.ReadGameCommand(&length, &data);
                 // Nächsten Zeitpunkt lesen
@@ -74,7 +74,7 @@ void GameClient::ExecuteGameFrame_Replay()
                 ExecuteAllGCs(msg, 0, 0);
 
                 // Replay ist NSYNC äh ASYNC!
-                if(msg.checksum != 0 && msg.checksum != (unsigned)randcheckinfo.rand)
+                if(msg.checksum != 0 && msg.checksum != (uint32_t)randcheckinfo.rand)
                 {
                     if(replayinfo.async == 0)
                     {

@@ -27,7 +27,7 @@
 /// Kleine Signatur am Anfang "RTTRRP", die ein gültiges S25 RTTR Replay kennzeichnet
 const char Replay::REPLAY_SIGNATURE[6] = {'R', 'T', 'T', 'R', 'R', 'P'};
 /// Version des Replay-Formates
-const unsigned short Replay::REPLAY_VERSION = 26;
+const uint16_t Replay::REPLAY_VERSION = 26;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -102,7 +102,7 @@ bool Replay::WriteHeader(const std::string& filename)
     WriteGGS(file);
 
     // Map-Type
-    file.WriteUnsignedShort(static_cast<unsigned short>(map_type));
+    file.WriteUnsignedShort(static_cast<uint16_t>(map_type));
 
     switch(map_type)
     {
@@ -194,7 +194,7 @@ bool Replay::LoadHeader(const std::string& filename, const bool load_extended_he
                 // Map-Daten
                 map_length = file.ReadUnsignedInt();
                 map_zip_length = file.ReadUnsignedInt();
-                map_data = new unsigned char[map_zip_length];
+                map_data = new uint8_t[map_zip_length];
                 file.ReadRawData(map_data, map_zip_length);
             } break;
             case MAPTYPE_SAVEGAME:
@@ -230,7 +230,7 @@ bool Replay::LoadHeader(const std::string& filename, const bool load_extended_he
  *
  *  @author OLiver
  */
-void Replay::AddChatCommand(const unsigned gf, const unsigned char player, const unsigned char dest, const std::string& str)
+void Replay::AddChatCommand(const uint32_t gf, const uint8_t player, const uint8_t dest, const std::string& str)
 {
     if(!file.IsValid())
         return;
@@ -238,7 +238,7 @@ void Replay::AddChatCommand(const unsigned gf, const unsigned char player, const
     // GF-Anzahl
     if(gf_file_pos)
     {
-        unsigned current_pos = file.Tell();
+        uint32_t current_pos = file.Tell();
         file.Seek(gf_file_pos, SEEK_SET);
         file.WriteUnsignedInt(gf);
         file.Seek(current_pos, SEEK_SET);
@@ -274,7 +274,7 @@ void Replay::AddChatCommand(const unsigned gf, const unsigned char player, const
  *
  *  @author OLiver
  */
-void Replay::AddGameCommand(const unsigned gf, const unsigned short length, const unsigned char* const data)
+void Replay::AddGameCommand(const uint32_t gf, const uint16_t length, const uint8_t* const data)
 {
     if(!file.IsValid())
         return;
@@ -285,7 +285,7 @@ void Replay::AddGameCommand(const unsigned gf, const unsigned short length, cons
     // GF-Anzahl
     if(gf_file_pos)
     {
-        unsigned current_pos = file.Tell();
+        uint32_t current_pos = file.Tell();
         file.Seek(gf_file_pos, SEEK_SET);
         file.WriteUnsignedInt(gf);
         file.Seek(current_pos, SEEK_SET);
@@ -314,7 +314,7 @@ void Replay::AddGameCommand(const unsigned gf, const unsigned short length, cons
 }
 
 /// Fügt Pathfinding-Result hinzu
-void Replay::AddPathfindingResult(const unsigned char data, const unsigned* const length, const MapPoint * const next_harbor)
+void Replay::AddPathfindingResult(const uint8_t data, const uint32_t* const length, const MapPoint * const next_harbor)
 {
     //if(!pathfinding_results)
     //  return;
@@ -337,7 +337,7 @@ void Replay::AddPathfindingResult(const unsigned char data, const unsigned* cons
  *
  *  @author OLiver
  */
-bool Replay::ReadGF(unsigned* gf)
+bool Replay::ReadGF(uint32_t* gf)
 {
     // bei ungerader 4er position aufrunden
     //while(file.Tell() % 4 && !file.EndOfFile())
@@ -374,7 +374,7 @@ Replay::ReplayCommand Replay::ReadRCType()
  *
  *  @author OLiver
  */
-void Replay::ReadChatCommand(unsigned char* player, unsigned char*   dest, std::string& str)
+void Replay::ReadChatCommand(uint8_t* player, uint8_t*   dest, std::string& str)
 {
     *player = file.ReadUnsignedChar();
     *dest = file.ReadUnsignedChar();
@@ -386,19 +386,19 @@ void Replay::ReadChatCommand(unsigned char* player, unsigned char*   dest, std::
  *
  *  @author OLiver
  */
-void Replay::ReadGameCommand(unsigned short* length, unsigned char** data)
+void Replay::ReadGameCommand(uint16_t* length, uint8_t** data)
 {
     *length = file.ReadUnsignedShort();
-    *data = new unsigned char[*length];
+    *data = new uint8_t[*length];
     file.ReadRawData(*data, *length);
 }
 
-bool Replay::ReadPathfindingResult(unsigned char* data, unsigned* length, MapPoint * next_harbor)
+bool Replay::ReadPathfindingResult(uint8_t* data, uint32_t* length, MapPoint * next_harbor)
 {
     if(!pathfinding_results)
         return false;
 
-    unsigned char tmp = pf_file.ReadUnsignedChar();
+    uint8_t tmp = pf_file.ReadUnsignedChar();
 
     if(pf_file.EndOfFile())
     {
@@ -426,7 +426,7 @@ bool Replay::ReadPathfindingResult(unsigned char* data, unsigned* length, MapPoi
  *
  *  @author OLiver
  */
-void Replay::UpdateLastGF(const unsigned last_gf)
+void Replay::UpdateLastGF(const uint32_t last_gf)
 {
     // An die Stelle springen
     file.Seek(last_gf_file_pos, SEEK_SET);

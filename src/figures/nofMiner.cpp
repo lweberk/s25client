@@ -36,18 +36,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofMiner::nofMiner(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofMiner::nofMiner(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_MINER, pos, player, workplace)
 {
 }
 
-nofMiner::nofMiner(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id)
+nofMiner::nofMiner(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id)
 {
 }
 
-void nofMiner::DrawWorking(int x, int y)
+void nofMiner::DrawWorking(int32_t x, int32_t y)
 {
-    const signed char offsets[40] = //work animation offset in x,y granite, coal, iron, gold 
+    const int8_t offsets[40] = //work animation offset in x,y granite, coal, iron, gold 
     {
         5, 3, 5, 3, 5, 3, 5, 3,		//africans
         4, 1, 4, 1, 4, 1, 4, 1,		//japanese
@@ -56,7 +56,7 @@ void nofMiner::DrawWorking(int x, int y)
         8, 3, 8, 3, 8, 3, 8, 3		//babylonians
     };
 
-    unsigned now_id = GAMECLIENT.Interpolate(160, current_ev);
+    uint32_t now_id = GAMECLIENT.Interpolate(160, current_ev);
     if(workplace->GetNation() == 2)
         LOADER.GetImageN("rom_bobs", 92 + now_id % 8)->Draw(x + offsets[workplace->GetNation() * 8 + (workplace->GetBuildingType() - BLD_GRANITEMINE) * 2],
                 y + offsets[workplace->GetNation() * 8 + (workplace->GetBuildingType() - BLD_GRANITEMINE) * 2 + 1], 0, 0, 0, 0, 0, 0, COLOR_WHITE, COLOR_WHITE);
@@ -73,7 +73,7 @@ void nofMiner::DrawWorking(int x, int y)
     }
 }
 
-unsigned short nofMiner::GetCarryID() const
+uint16_t nofMiner::GetCarryID() const
 {
     switch(workplace->GetBuildingType())
     {

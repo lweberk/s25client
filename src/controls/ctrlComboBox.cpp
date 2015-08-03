@@ -42,14 +42,14 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlComboBox::ctrlComboBox(Window* parent,
-                           unsigned int id,
-                           unsigned short x,
-                           unsigned short y,
-                           unsigned short width,
-                           unsigned short height,
+                           uint32_t id,
+                           uint16_t x,
+                           uint16_t y,
+                           uint16_t width,
+                           uint16_t height,
                            TextureColor tc,
                            glArchivItem_Font* font,
-                           unsigned short max_list_height,
+                           uint16_t max_list_height,
                            bool readonly)
     : Window(x, y, id, parent, width, height),
       tc(tc), font(font), max_list_height(max_list_height), readonly(readonly), selection(0), last_show(false)
@@ -72,7 +72,7 @@ ctrlComboBox::ctrlComboBox(Window* parent,
  *  @author Divan
  *  @author OLiver
  */
-void ctrlComboBox::Resize_(unsigned short width, unsigned short height)
+void ctrlComboBox::Resize_(uint16_t width, uint16_t height)
 {
     ctrlButton* button = GetCtrl<ctrlButton>(1);
     if(button)
@@ -83,10 +83,10 @@ void ctrlComboBox::Resize_(unsigned short width, unsigned short height)
 
     ctrlList* list = GetCtrl<ctrlList>(0);
 
-    unsigned short list_height = 4;
+    uint16_t list_height = 4;
 
     // Langsam die Höhe der maximalen annähern
-    for(unsigned int i = 0; i < list->GetLineCount(); ++i)
+    for(uint32_t i = 0; i < list->GetLineCount(); ++i)
     {
         // zu große geworden?
         list_height += font->getHeight();
@@ -256,7 +256,7 @@ bool ctrlComboBox::Msg_WheelDown(const MouseCoords& mc)
  *
  *  @author OLiver
  */
-void ctrlComboBox::Msg_ListSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void ctrlComboBox::Msg_ListSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     // Liste wieder ausblenden
     ShowList(false);
@@ -304,7 +304,7 @@ void ctrlComboBox::DeleteAllItems()
  *
  *  @author OLiver
  */
-void ctrlComboBox::SetSelection(unsigned short selection)
+void ctrlComboBox::SetSelection(uint16_t selection)
 {
     this->selection = selection;
     GetCtrl<ctrlList>(0)->SetSelection(selection);

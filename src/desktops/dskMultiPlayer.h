@@ -31,7 +31,7 @@ class dskMultiPlayer : public Desktop
         dskMultiPlayer();
 
     private:
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 #endif // !dskMULTIPLAYER_H_INCLUDED

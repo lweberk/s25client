@@ -38,7 +38,7 @@
 #include "files.h"
 
 
-const unsigned BUILDINGS_COUNT = 32;
+const uint32_t BUILDINGS_COUNT = 32;
 
 /// Reihenfolge der Gebäude
 const BuildingType bts[BUILDINGS_COUNT] =
@@ -79,22 +79,22 @@ const BuildingType bts[BUILDINGS_COUNT] =
 
 
 // Abstand des ersten Icons vom linken oberen Fensterrand
-const unsigned short first_x = 30;
-const unsigned short first_y = 40;
+const uint16_t first_x = 30;
+const uint16_t first_y = 40;
 // Abstand der einzelnen Symbole untereinander
-const unsigned short icon_distance_x = 40;
-const unsigned short icon_distance_y = 48;
+const uint16_t icon_distance_x = 40;
+const uint16_t icon_distance_y = 48;
 // Abstand der Schriften unter den Icons
-const unsigned short font_distance_y = 20;
+const uint16_t font_distance_y = 20;
 
 
 /// Konstruktor von @p iwMilitary.
 iwBuildings::iwBuildings(GameWorldViewer* const gwv, dskGameInterface* const gi) : IngameWindow(CGI_BUILDINGS, 0xFFFE, 0xFFFE, 185, 480, _("Buildings"), LOADER.GetImageN("resource", 41)),gwv(gwv),gi(gi)
 {
     // Symbole für die einzelnen Gebäude erstellen
-    for(unsigned short y = 0; y < BUILDINGS_COUNT / 4 + (BUILDINGS_COUNT % 4 > 0 ? 1 : 0); ++y)
+    for(uint16_t y = 0; y < BUILDINGS_COUNT / 4 + (BUILDINGS_COUNT % 4 > 0 ? 1 : 0); ++y)
     {
-        for(unsigned short x = 0; x < ((y == BUILDINGS_COUNT / 4) ? BUILDINGS_COUNT % 4 : 4); ++x)
+        for(uint16_t x = 0; x < ((y == BUILDINGS_COUNT / 4) ? BUILDINGS_COUNT % 4 : 4); ++x)
         {
 			if(bts[y*4+x] != BLD_CHARBURNER)
 				AddImageButton(y * 4 + x, first_x - 16 + icon_distance_x * x, first_y - 16 + icon_distance_y * y,32,32,TC_GREY,LOADER.GetImageN(NATION_ICON_IDS[GAMECLIENT.GetLocalPlayer()->nation], bts[y * 4 + x]), _(BUILDING_NAMES[bts[y * 4 + x]]));
@@ -117,9 +117,9 @@ void iwBuildings::Msg_PaintAfter()
     GAMECLIENT.GetLocalPlayer()->GetBuildingCount(bc);
 
     // Anzahlen unter die Gebäude schreiben
-    for(unsigned short y = 0; y < BUILDINGS_COUNT / 4 + (BUILDINGS_COUNT % 4 > 0 ? 1 : 0); ++y)
+    for(uint16_t y = 0; y < BUILDINGS_COUNT / 4 + (BUILDINGS_COUNT % 4 > 0 ? 1 : 0); ++y)
     {
-        for(unsigned short x = 0; x < ((y == BUILDINGS_COUNT / 4) ? BUILDINGS_COUNT % 4 : 4); ++x)
+        for(uint16_t x = 0; x < ((y == BUILDINGS_COUNT / 4) ? BUILDINGS_COUNT % 4 : 4); ++x)
         {
             char txt[64];
             sprintf(txt, "%u/%u", bc.building_counts[bts[y * 4 + x]], bc.building_site_counts[bts[y * 4 + x]]);
@@ -130,7 +130,7 @@ void iwBuildings::Msg_PaintAfter()
     }
 }
 
-void iwBuildings::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwBuildings::Msg_ButtonClick(const uint32_t ctrl_id)
 {	
 	//no buildings of type complete? -> do nothing
 	BuildingCount bc;

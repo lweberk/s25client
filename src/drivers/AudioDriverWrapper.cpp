@@ -81,7 +81,7 @@ bool AudioDriverWrapper::LoadDriver(void)
  *
  *  @author FloSoft
  */
-Sound* AudioDriverWrapper::LoadMusic(unsigned int data_type, unsigned char* data, unsigned int size)
+Sound* AudioDriverWrapper::LoadMusic(uint32_t data_type, uint8_t* data, uint32_t size)
 {
     if(!audiodriver)
         return NULL;
@@ -89,7 +89,7 @@ Sound* AudioDriverWrapper::LoadMusic(unsigned int data_type, unsigned char* data
     return audiodriver->LoadMusic(data_type, data, size);
 }
 
-Sound* AudioDriverWrapper::LoadEffect(unsigned int data_type, unsigned char* data, unsigned int size)
+Sound* AudioDriverWrapper::LoadEffect(uint32_t data_type, uint8_t* data, uint32_t size)
 {
     if(!audiodriver)
         return NULL;
@@ -98,7 +98,7 @@ Sound* AudioDriverWrapper::LoadEffect(unsigned int data_type, unsigned char* dat
 }
 
 
-unsigned AudioDriverWrapper::PlayEffect(Sound* sound, const unsigned char volume, const bool loop)
+uint32_t AudioDriverWrapper::PlayEffect(Sound* sound, const uint8_t volume, const bool loop)
 {
     if(!audiodriver)
         return 0;
@@ -106,7 +106,7 @@ unsigned AudioDriverWrapper::PlayEffect(Sound* sound, const unsigned char volume
     return audiodriver->PlayEffect(sound, volume, loop);
 }
 
-void AudioDriverWrapper::StopEffect(const unsigned int play_id)
+void AudioDriverWrapper::StopEffect(const uint32_t play_id)
 {
     if(!audiodriver)
         return;

@@ -40,7 +40,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofFarmhand::nofFarmhand(const Job job, const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofFarmhand::nofFarmhand(const Job job, const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofBuildingWorker(job, pos, player, workplace), dest(0, 0)
 {
 }
@@ -52,7 +52,7 @@ void nofFarmhand::Serialize_nofFarmhand(SerializedGameData* sgd) const
     sgd->PushMapPoint(dest);
 }
 
-nofFarmhand::nofFarmhand(SerializedGameData* sgd, const unsigned obj_id) : nofBuildingWorker(sgd, obj_id), dest(sgd->PopMapPoint())
+nofFarmhand::nofFarmhand(SerializedGameData* sgd, const uint32_t obj_id) : nofBuildingWorker(sgd, obj_id), dest(sgd->PopMapPoint())
 {}
 
 
@@ -68,7 +68,7 @@ void nofFarmhand::WalkedDerived()
 }
 
 
-void nofFarmhand::HandleDerivedEvent(const unsigned int id)
+void nofFarmhand::HandleDerivedEvent(const uint32_t id)
 {
     switch(state)
     {
@@ -93,23 +93,23 @@ void nofFarmhand::HandleDerivedEvent(const unsigned int id)
         {
             // Fertig mit warten --> anfangen zu arbeiten
             // Die Arbeitsradien der Berufe wie in JobConst.h (ab JOB_WOODCUTTER!)
-            const unsigned char RADIUS[7] =
+            const uint8_t RADIUS[7] =
             { 6, 7, 6, 0, 8, 2, 2 };
 
             // Additional radius delta r which is used when a point in radius r was found
             // I.e. looks till radius r + delta r
-            const unsigned ADD_RADIUS_WHEN_FOUND[7] =
+            const uint32_t ADD_RADIUS_WHEN_FOUND[7] =
             { 1, 1, 1, 1, 0, 1, 1};
 
 
             // Anzahl der Radien, wo wir gültige Punkte gefunden haben
-            unsigned radius_count = 0;
+            uint32_t radius_count = 0;
 
             // Available points: 1st class and 2st class
             std::vector< MapPoint > available_points[3];
 
-            unsigned max_radius = (job == JOB_CHARBURNER) ? 3 : RADIUS[job - JOB_WOODCUTTER];
-            unsigned add_radius_when_found = (job == JOB_CHARBURNER) ? 1 : ADD_RADIUS_WHEN_FOUND[job - JOB_WOODCUTTER];
+            uint32_t max_radius = (job == JOB_CHARBURNER) ? 3 : RADIUS[job - JOB_WOODCUTTER];
+            uint32_t add_radius_when_found = (job == JOB_CHARBURNER) ? 1 : ADD_RADIUS_WHEN_FOUND[job - JOB_WOODCUTTER];
 
             bool points_found = false;
             bool wait = false;
@@ -120,7 +120,7 @@ void nofFarmhand::HandleDerivedEvent(const unsigned int id)
                 bool found_in_radius = false;
 
                 MapPoint t2(tx, pos.y);
-                for(unsigned i = 2; i < 8; ++i)
+                for(uint32_t i = 2; i < 8; ++i)
                 {
                     for(MapCoord r2 = 0; r2 < r; t2 = gwg->GetNeighbour(t2,  i % 6), ++r2)
                     {
@@ -155,7 +155,7 @@ void nofFarmhand::HandleDerivedEvent(const unsigned int id)
             {
                 // Prefer 1st class objects and use only 2nd class objects if there are no more other objects anymore
                 MapPoint p(0, 0);
-                for(unsigned i = 0; i < 3; ++i)
+                for(uint32_t i = 0; i < 3; ++i)
                 {
                     if(!available_points[i].empty())
                     {
@@ -334,7 +334,7 @@ void nofFarmhand::WorkAborted_Farmhand()
 
 
 /// Zeichnen der Figur in sonstigen Arbeitslagen
-void nofFarmhand::DrawOtherStates(const int x, const int y)
+void nofFarmhand::DrawOtherStates(const int32_t x, const int32_t y)
 {
     switch(state)
     {

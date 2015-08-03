@@ -37,10 +37,10 @@ class DebugInfo : Socket
         DebugInfo();
         ~DebugInfo();
 
-        bool Send(const void* buffer, int length);
-        bool SendSigned(signed i);
-        bool SendUnsigned(unsigned i);
-        bool SendString(const char* str, unsigned len = 0);
+        bool Send(const void* buffer, int32_t length);
+        bool SendSigned(int32_t i);
+        bool SendUnsigned(uint32_t i);
+        bool SendString(const char* str, uint32_t len = 0);
 
 #ifdef _MSC_VER
         bool SendStackTrace(LPCONTEXT ctx = NULL);
@@ -49,7 +49,7 @@ class DebugInfo : Socket
 #endif
         bool SendReplay();
         bool SendAsyncLog(std::list<RandomEntry>::iterator first_a, std::list<RandomEntry>::iterator first_b,
-                          std::list<RandomEntry> &a, std::list<RandomEntry> &b, unsigned identical);
+                          std::list<RandomEntry> &a, std::list<RandomEntry> &b, uint32_t identical);
 };
 
 #endif

@@ -29,16 +29,16 @@ class ctrlChat : public Window
 {
     public:
         /// Konstruktor von @p ctrlChat.
-        ctrlChat(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font);
+        ctrlChat(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font);
         /// Destruktor von @p ctrlChat.
         virtual ~ctrlChat();
 
         /// Größe ändern
-        void Resize_(unsigned short width, unsigned short height);
+        void Resize_(uint16_t width, uint16_t height);
         /// Fügt eine Chatnachricht hinzu.
-        void AddMessage(const std::string& time_string, const std::string& player, const unsigned int player_color, const std::string& msg, unsigned int msg_color);
+        void AddMessage(const std::string& time_string, const std::string& player, const uint32_t player_color, const std::string& msg, uint32_t msg_color);
         /// Setzt Farbe der Zeitangaben.
-        void SetTimeColor(const unsigned int color) { time_color = color; }
+        void SetTimeColor(const uint32_t color) { time_color = color; }
 
         virtual bool Msg_MouseMove(const MouseCoords& mc);
         virtual bool Msg_LeftDown(const MouseCoords& mc);
@@ -50,9 +50,9 @@ class ctrlChat : public Window
         /// Zeichnet das Chat-Control.
         virtual bool Draw_();
         /// Vergrößert die Anzahl der Chatzeilen.
-        void ExtendMemory(const unsigned int count);
+        void ExtendMemory(const uint32_t count);
         /// Converts an unwrapped line into a wrapped one and appends it
-        void WrapLine(unsigned short i);
+        void WrapLine(uint16_t i);
 
     private:
         // Struktur für eine Chatzeile.
@@ -65,11 +65,11 @@ class ctrlChat : public Window
             /// Spielername
             std::string player;
             /// Farbe des Spieler(namens) (optional, 0 wenn nicht benutzt)
-            unsigned int player_color;
+            uint32_t player_color;
             /// Chatnachricht
             std::string msg;
             /// Farbe der Chatnachricht
-            unsigned int msg_color;
+            uint32_t msg_color;
         };
 
     private:
@@ -79,11 +79,11 @@ class ctrlChat : public Window
         std::vector<ChatLine> raw_chat_lines;  ///< Chatzeilen, noch nicht umgebrochen
         std::vector<ChatLine> chat_lines;  ///< Chatzeilen
 
-        unsigned int page_size;  ///< Chatzeilen pro Seite
-        unsigned int time_color; ///< Farbe der Zeitangaben
+        uint32_t page_size;  ///< Chatzeilen pro Seite
+        uint32_t time_color; ///< Farbe der Zeitangaben
 
-        unsigned short bracket1_size; /// Breite der Klammer "<" um den Spielernamen
-        unsigned short bracket2_size; /// Breite der Klammer ">" um den Spielernamen
+        uint16_t bracket1_size; /// Breite der Klammer "<" um den Spielernamen
+        uint16_t bracket2_size; /// Breite der Klammer ">" um den Spielernamen
 };
 
 #endif // !CTRLCHAT_H_INCLUDED

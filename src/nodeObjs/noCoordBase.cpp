@@ -31,12 +31,12 @@ void noCoordBase::Serialize_noCoordBase(SerializedGameData* sgd) const
     sgd->PushMapPoint(pos);
 }
 
-noCoordBase::noCoordBase(SerializedGameData* sgd, const unsigned obj_id) : noBase(sgd, obj_id),
+noCoordBase::noCoordBase(SerializedGameData* sgd, const uint32_t obj_id) : noBase(sgd, obj_id),
     pos(sgd->PopMapPoint())
 {
 }
 
-unsigned noCoordBase::CreateGUIID() const
+uint32_t noCoordBase::CreateGUIID() const
 {
     return gwg->CreateGUIID(pos);
 }

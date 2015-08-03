@@ -40,12 +40,12 @@ class Savegame : public SavedFile
 
     public:
         /// Start-GF
-        unsigned int start_gf;
+        uint32_t start_gf;
         /// Serialisierte Spieldaten
         SerializedGameData sgd;
 
     private:
-        static const unsigned short SAVE_VERSION;
+        static const uint16_t SAVE_VERSION;
         static const char SAVE_SIGNATURE[8];
 };
 

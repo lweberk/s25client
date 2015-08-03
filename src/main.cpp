@@ -120,7 +120,7 @@ void ExitHandler(void)
  *
  *  @author OLiver
  */
-void ExceptionHandler (unsigned int exception_type, _EXCEPTION_POINTERS* exception_pointer)
+void ExceptionHandler (uint32_t exception_type, _EXCEPTION_POINTERS* exception_pointer)
 {
     fatal_error("C-Exception caught\n");
 }
@@ -136,7 +136,7 @@ WinExceptionHandler(
 #ifdef _MSC_VER
     LPEXCEPTION_POINTERS info
 #else
-    int sig
+    int32_t sig
 #endif
 )
 {
@@ -167,7 +167,7 @@ WinExceptionHandler(
 #endif
 }
 #else
-void LinExceptionHandler(int sig)
+void LinExceptionHandler(int32_t sig)
 {
     if (SETTINGS.global.submit_debug_data == 1)
     {
@@ -193,7 +193,7 @@ void LinExceptionHandler(int sig)
  *  @author FloSoft
  *  @author OLiver
  */
-int main(int argc, char* argv[])
+int32_t main(int32_t argc, char* argv[])
 {
 #if defined _WIN32 && defined _DEBUG && defined _MSC_VER && !defined NOHWETRANS
     _set_se_translator(ExceptionHandler);
@@ -234,8 +234,8 @@ int main(int argc, char* argv[])
 #endif // _WIN32
 
     // diverse dirs anlegen
-    const unsigned int dir_count = 7;
-    unsigned int dirs[dir_count] = { 94, 47, 48, 51, 85, 98, 99 }; // settingsdir muss zuerst angelegt werden (94)
+    const uint32_t dir_count = 7;
+    uint32_t dirs[dir_count] = { 94, 47, 48, 51, 85, 98, 99 }; // settingsdir muss zuerst angelegt werden (94)
 
 #ifdef _WIN32
     if(IsDir(GetFilePath("~/Siedler II.5 RttR")))
@@ -247,7 +247,7 @@ int main(int argc, char* argv[])
         rename(GetFilePath("~/.s25rttr").c_str(), GetFilePath(FILE_PATHS[94]).c_str());
 #endif
 
-    for(unsigned int i = 0; i < dir_count; ++i)
+    for(uint32_t i = 0; i < dir_count; ++i)
     {
         std::string dir = GetFilePath(FILE_PATHS[dirs[i]]);
 
@@ -263,7 +263,7 @@ int main(int argc, char* argv[])
     libsiedler2::setAllocator(glAllocator);
 
     // Zufallsgenerator initialisieren (Achtung: nur für Animationens-Offsets interessant, für alles andere (spielentscheidende) wird unser Generator verwendet)
-    srand(static_cast<unsigned int>(std::time(NULL)));
+    srand(static_cast<uint32_t>(std::time(NULL)));
 
     // Exit-Handler initialisieren
     atexit(&ExitHandler);
@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
             if(!GAMESERVER.TryToStart(csi, argv[1], MAPTYPE_OLDMAP))
             {
                 GameWorldViewer* gwv;
-                unsigned int error = GAMECLIENT.StartReplay(argv[1], gwv);
+                uint32_t error = GAMECLIENT.StartReplay(argv[1], gwv);
 
                 std::string replay_errors[] =
                 {

@@ -49,9 +49,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-const unsigned AUTO_SAVE_INTERVALS_COUNT = 6;
+const uint32_t AUTO_SAVE_INTERVALS_COUNT = 6;
 
-const unsigned AUTO_SAVE_INTERVALS[AUTO_SAVE_INTERVALS_COUNT] =
+const uint32_t AUTO_SAVE_INTERVALS[AUTO_SAVE_INTERVALS_COUNT] =
 {
     500, 1000, 5000, 10000, 50000, 100000
 };
@@ -62,7 +62,7 @@ const unsigned AUTO_SAVE_INTERVALS[AUTO_SAVE_INTERVALS_COUNT] =
  *
  *  @author OLiver
  */
-iwSaveLoad::iwSaveLoad(const unsigned short add_height, const std::string& window_title)
+iwSaveLoad::iwSaveLoad(const uint16_t add_height, const std::string& window_title)
     : IngameWindow(CGI_SAVE, 0xFFFF, 0xFFFF, 600, 400 + add_height, window_title, LOADER.GetImageN("resource", 41))
 {
     AddTable(0, 20, 30, 560, 300, TC_GREEN2, NormalFont, 5, _("Filename"), 270, ctrlTable::SRT_STRING, _("Map"), 250, ctrlTable::SRT_STRING, _("Time"), 250, ctrlTable::SRT_DATE, _("Start GF"), 320, ctrlTable::SRT_NUMBER,  "", 0, ctrlTable::SRT_STRING);
@@ -78,7 +78,7 @@ iwSaveLoad::iwSaveLoad(const unsigned short add_height, const std::string& windo
  *
  *  @author OLiver
  */
-void iwSaveLoad::Msg_EditEnter(const unsigned int ctrl_id)
+void iwSaveLoad::Msg_EditEnter(const uint32_t ctrl_id)
 {
     SaveLoad();
 }
@@ -89,7 +89,7 @@ void iwSaveLoad::Msg_EditEnter(const unsigned int ctrl_id)
  *
  *  @author OLiver
  */
-void iwSaveLoad::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwSaveLoad::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     SaveLoad();
 }
@@ -100,7 +100,7 @@ void iwSaveLoad::Msg_ButtonClick(const unsigned int ctrl_id)
  *
  *  @author OLiver
  */
-void iwSaveLoad::Msg_TableSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void iwSaveLoad::Msg_TableSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     // Dateiname ins Edit schreiben, wenn wir entsprechende Einträge auswählen
     GetCtrl<ctrlEdit>(1)->SetText
@@ -204,7 +204,7 @@ iwSave::iwSave() : iwSaveLoad(40, _("Save game!"))
     combo->AddString(_("Disabled")); // deaktiviert
 
     // Die Intervalle
-    for(unsigned i = 0; i < AUTO_SAVE_INTERVALS_COUNT; ++i)
+    for(uint32_t i = 0; i < AUTO_SAVE_INTERVALS_COUNT; ++i)
     {
         char str[64];
         sprintf(str, "%u GF", AUTO_SAVE_INTERVALS[i]);
@@ -213,7 +213,7 @@ iwSave::iwSave() : iwSaveLoad(40, _("Save game!"))
 
     // Richtigen Eintrag auswählen
     bool found = false;
-    for(unsigned i = 0; i < AUTO_SAVE_INTERVALS_COUNT; ++i)
+    for(uint32_t i = 0; i < AUTO_SAVE_INTERVALS_COUNT; ++i)
     {
         if(SETTINGS.interface.autosave_interval == AUTO_SAVE_INTERVALS[i])
         {
@@ -234,7 +234,7 @@ iwSave::iwSave() : iwSaveLoad(40, _("Save game!"))
  *
  *  @author OLiver
  */
-void iwSave::Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void iwSave::Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
 
     // Erster Eintrag --> deaktiviert
@@ -288,7 +288,7 @@ void iwLoad::SaveLoad(void)
 
 
 /// Handle double click on the table
-void iwLoad::Msg_TableChooseItem(const unsigned ctrl_id, const unsigned short selection)
+void iwLoad::Msg_TableChooseItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     SaveLoad();
 }

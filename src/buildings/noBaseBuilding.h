@@ -37,8 +37,8 @@ class noBaseBuilding : public noRoadNode
         /// Volk des Gebäudes (muss extra gespeichert werden, da ja auch z.B. fremde Gebäude erobert werden können)
         const Nation nation;
         /// Doorpoints - Punkte, wo die Tür ist, bis wohin die Träger gehen dürfen
-        int door_point_x;
-        int door_point_y;
+        int32_t door_point_x;
+        int32_t door_point_y;
 
     protected:
 
@@ -49,8 +49,8 @@ class noBaseBuilding : public noRoadNode
 
     public:
 
-        noBaseBuilding(const NodalObjectType nop, const BuildingType type, const MapPoint pt, const unsigned char player);
-        noBaseBuilding(SerializedGameData* sgd, const unsigned obj_id);
+        noBaseBuilding(const NodalObjectType nop, const BuildingType type, const MapPoint pt, const uint8_t player);
+        noBaseBuilding(SerializedGameData* sgd, const uint32_t obj_id);
 
         virtual ~noBaseBuilding();
 
@@ -81,11 +81,11 @@ class noBaseBuilding : public noRoadNode
         /// Ermittelt die Flagge, die vor dem Gebäude steht
         noFlag* GetFlag() const;
 
-        short GetDoorPointX();
-        short GetDoorPointY() const { return (door_point_y & 0xFFFF); }
+        int16_t GetDoorPointX();
+        int16_t GetDoorPointY() const { return (door_point_y & 0xFFFF); }
 
         /*/// Gibt die Warenverteilungspunkte zurück (bei 0 wurde kein Weg gefunden)
-        virtual unsigned CalcDistributionPoints(noRoadNode * start,const GoodType type) = 0;*/
+        virtual uint32_t CalcDistributionPoints(noRoadNode * start,const GoodType type) = 0;*/
         /// Wird aufgerufen, wenn eine neue Ware zum dem Gebäude geliefert wird (nicht wenn sie bestellt wurde vom Gebäude!)
         virtual void TakeWare(Ware* ware) = 0;
         /// Wird aufgerufen, wenn ein bestimmter Arbeiter für das hier gerufen wurde

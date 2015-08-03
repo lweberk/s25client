@@ -37,20 +37,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofBrewer::nofBrewer(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofBrewer::nofBrewer(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_BREWER, pos, player, workplace)
 {
 }
 
-nofBrewer::nofBrewer(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id)
+nofBrewer::nofBrewer(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id)
 {
 }
 
-void nofBrewer::DrawWorking(int x, int y)
+void nofBrewer::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[NAT_COUNT][2] = { {10, 17}, {10, 17}, {10, 17}, {10, 17}, {10, 17} };
+    int8_t offsets[NAT_COUNT][2] = { {10, 17}, {10, 17}, {10, 17}, {10, 17}, {10, 17} };
 
-    unsigned now_id = GAMECLIENT.Interpolate(128, current_ev);
+    uint32_t now_id = GAMECLIENT.Interpolate(128, current_ev);
 
     if(now_id < 16)
         LOADER.GetImageN("rom_bobs", now_id)

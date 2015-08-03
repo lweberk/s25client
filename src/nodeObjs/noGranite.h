@@ -26,12 +26,12 @@
 class noGranite : public noBase
 {
         GraniteType type; // Welcher Typ ( gibt 2 )
-        unsigned char state; // Status, 0 - 5, von sehr wenig bis sehr viel
+        uint8_t state; // Status, 0 - 5, von sehr wenig bis sehr viel
 
     public:
 
-        noGranite(const GraniteType type, const unsigned char state);
-        noGranite(SerializedGameData* sgd, const unsigned obj_id);
+        noGranite(const GraniteType type, const uint8_t state);
+        noGranite(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_noGranite() { Destroy_noBase(); }
@@ -43,7 +43,7 @@ class noGranite : public noBase
 
         GO_Type GetGOT() const { return GOT_GRANITE; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         BlockingManner GetBM() const { return BM_GRANITE; }
 

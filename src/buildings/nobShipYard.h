@@ -42,8 +42,8 @@ class nobShipYard : public nobUsual
 
         friend class SerializedGameData;
         friend class BuildingFactory;
-        nobShipYard(const MapPoint pt, const unsigned char player, const Nation nation);
-        nobShipYard(SerializedGameData* sgd, const unsigned obj_id);
+        nobShipYard(const MapPoint pt, const uint8_t player, const Nation nation);
+        nobShipYard(SerializedGameData* sgd, const uint32_t obj_id);
 
     public:
         /// Serialisierungsfunktionen

@@ -35,16 +35,16 @@ class nofHunter : public nofBuildingWorker
         /// Punkt, von dem aus geschossen wird
         MapPoint shootingPos;
         /// Richtung, in die geschossen wird
-        unsigned char shooting_dir;
+        uint8_t shooting_dir;
 
     private:
 
         /// Funktionen, die nur von der Basisklasse (noFigure) aufgerufen werden, wenn man gelaufen ist
         void WalkedDerived();
         /// Malt den Arbeiter beim Arbeiten
-        void DrawWorking(int x, int y);
+        void DrawWorking(int32_t x, int32_t y);
         /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-        unsigned short GetCarryID() const { return 89; }
+        uint16_t GetCarryID() const { return 89; }
 
         /// Trifft Vorbereitungen fürs nach Hause - Laufen
         void StartWalkingHome();
@@ -63,8 +63,8 @@ class nofHunter : public nofBuildingWorker
 
     public:
 
-        nofHunter(const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofHunter(SerializedGameData* sgd, const unsigned obj_id);
+        nofHunter(const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofHunter(SerializedGameData* sgd, const uint32_t obj_id);
         ~nofHunter() {/* assert(obj_id != 266501);*/ }
 
         /// Serialisierungsfunktionen
@@ -73,7 +73,7 @@ class nofHunter : public nofBuildingWorker
 
         GO_Type GetGOT() const { return GOT_NOF_HUNTER; }
 
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
         /// das Tier ist nicht mehr verfügbar (von selbst gestorben o.Ä.)
         void AnimalLost();

@@ -39,12 +39,12 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlBuildingIcon::ctrlBuildingIcon(Window* const parent,
-                                   const unsigned int id,
-                                   const unsigned short x,
-                                   const unsigned short y,
+                                   const uint32_t id,
+                                   const uint16_t x,
+                                   const uint16_t y,
                                    const BuildingType type,
                                    const Nation nation,
-                                   const unsigned short size,
+                                   const uint16_t size,
                                    const std::string& tooltip)
     : ctrlButton(parent, id, x, y, size, size, TC_GREY, tooltip),
       type(type), nation(nation), size(size)

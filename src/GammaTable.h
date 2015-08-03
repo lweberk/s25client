@@ -26,7 +26,7 @@
 template <class T> class GammaTable
 {
     private:
-        unsigned int size;
+        uint32_t size;
         float        sizef;
         T*            table;
         float        gamma;
@@ -46,11 +46,11 @@ template <class T> class GammaTable
             if (g == gamma) return;
             gamma = g;
 
-            for (unsigned int i = 0; i < size; i++)
+            for (uint32_t i = 0; i < size; i++)
                 table[i] = (T) (pow (i / sizef, 1 / gamma) * sizef);
         }
 
-        GammaTable (unsigned int s, float g = 1) : sizef(-1), gamma(-1)
+        GammaTable (uint32_t s, float g = 1) : sizef(-1), gamma(-1)
         {
             sizef += size = s > 2 ? s : 2;
             table = new T [size];

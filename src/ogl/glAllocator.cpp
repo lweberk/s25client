@@ -42,7 +42,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author FloSoft
  */
-libsiedler2::ArchivItem* glAllocator(unsigned short type, unsigned short subtype, const libsiedler2::ArchivItem* item)
+libsiedler2::ArchivItem* glAllocator(uint16_t type, uint16_t subtype, const libsiedler2::ArchivItem* item)
 {
     if(item)
         type = item->getBobType();

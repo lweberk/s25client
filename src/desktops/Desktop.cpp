@@ -63,13 +63,13 @@ bool Desktop::Draw_(void)
     if(background)
     {
         /*
-                short w,h;
+                int16_t w,h;
                 double sW,sH, s;
                 sW = (double)VIDEODRIVER.GetScreenWidth() / background->getWidth();
                 sH = (double)VIDEODRIVER.GetScreenHeight() / background->getHeight();
                 s = (sW < sH ? sW : sH);
-                w = (short)((double) background->getWidth() * s);
-                h = (short)((double) background->getHeight() * s);
+                w = (int16_t)((double) background->getWidth() * s);
+                h = (int16_t)((double) background->getHeight() * s);
                 background->Draw(0, 0, w, h, 0, 0, 0, 0);*/
         background->Draw(0, 0, VIDEODRIVER.GetScreenWidth(), VIDEODRIVER.GetScreenHeight(), 0, 0, 0, 0);
     }
@@ -103,15 +103,15 @@ void Desktop::Msg_ScreenResize(const ScreenResizeEvent& sr)
     if (scale)
     {
         //Zunächst an die Kinder weiterleiten
-        for(std::map<unsigned int, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
+        for(std::map<uint32_t, Window*>::iterator it = idmap.begin(); it != idmap.end(); ++it)
             if(it->second)
             {
                 Window* ctrl = it->second;
                 // unskalierte Position und Größe bekommen
-                unsigned realx = ctrl->GetX() * 800 / sr.oldWidth;
-                unsigned realy = ctrl->GetY() * 600 / sr.oldHeight;
-                unsigned realwidth  = ctrl->GetWidth()  * 800 / sr.oldWidth;
-                unsigned realheight = ctrl->GetHeight() * 600 / sr.oldHeight;
+                uint32_t realx = ctrl->GetX() * 800 / sr.oldWidth;
+                uint32_t realy = ctrl->GetY() * 600 / sr.oldHeight;
+                uint32_t realwidth  = ctrl->GetWidth()  * 800 / sr.oldWidth;
+                uint32_t realheight = ctrl->GetHeight() * 600 / sr.oldHeight;
                 // Rundungsfehler?
                 if (realx * sr.oldWidth  / 800 < ctrl->GetX()) ++realx;
                 if (realy * sr.oldHeight / 600 < ctrl->GetY()) ++realy;

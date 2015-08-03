@@ -62,7 +62,7 @@ class WindowManager : public Singleton<WindowManager>, public VideoDriverLoaderI
         /// schliesst ein IngameWindow und entfernt es aus der Fensterliste.
         void Close(IngameWindow* window);
         /// Sucht ein Fenster mit der entsprechenden Fenster-ID und schließt es (falls es so eins gibt)
-        void Close(unsigned int id);
+        void Close(uint32_t id);
         /// merkt einen Desktop zum Wechsel vor.
         void Switch(Desktop* desktop, void* data = NULL, bool mouse = false);
         /// Verarbeitung des Drückens der Linken Maustaste.
@@ -85,10 +85,10 @@ class WindowManager : public Singleton<WindowManager>, public VideoDriverLoaderI
         void SetToolTip(Window* ttw, const std::string& tooltip);
 
         /// Verarbeitung Spielfenstergröße verändert (vom Betriebssystem aus)
-        void ScreenResized(unsigned short width, unsigned short height);
+        void ScreenResized(uint16_t width, uint16_t height);
         /// Verarbeitung Spielfenstergröße verändert (vom Spiel aus)
         // Achtung: nicht dieselbe Nachricht, die die Window-Klasse empfängt
-        void Msg_ScreenResize(unsigned short width, unsigned short height);
+        void Msg_ScreenResize(uint16_t width, uint16_t height);
 
     protected:
         void DrawToolTip();
@@ -106,17 +106,17 @@ class WindowManager : public Singleton<WindowManager>, public VideoDriverLoaderI
         IgwList windows; ///< Fensterliste
         const MouseCoords* mc;
         std::string tooltip;
-        unsigned short screenWidth;  /// letzte gültige Bildschirm-/Fensterbreite
-        unsigned short screenHeight; /// letzte gültige Bildschirm-/Fensterhöhe
+        uint16_t screenWidth;  /// letzte gültige Bildschirm-/Fensterbreite
+        uint16_t screenHeight; /// letzte gültige Bildschirm-/Fensterhöhe
 
         // Für Doppelklick merken:
-        unsigned last_left_click_time; /// Zeit des letzten Links-Klicks
-        Point<int> last_left_click_point; /// Position beim letzten Links-Klick
+        uint32_t last_left_click_time; /// Zeit des letzten Links-Klicks
+        Point<int32_t> last_left_click_point; /// Position beim letzten Links-Klick
 
         // um Schleifen abzufangen, die entstehen, weil wir mindestens 800x600 haben wollen.
-//  unsigned short lastScreenWidthSignal;
-//  unsigned short lastScreenHeightSignal;
-//  unsigned short lastScreenSignalCount;
+//  uint16_t lastScreenWidthSignal;
+//  uint16_t lastScreenHeightSignal;
+//  uint16_t lastScreenSignalCount;
 };
 
 #define WINDOWMANAGER WindowManager::inst()

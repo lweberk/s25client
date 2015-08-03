@@ -39,11 +39,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-noFire::noFire(const MapPoint pos, const unsigned char size)
+noFire::noFire(const MapPoint pos, const uint8_t size)
     : noCoordBase(NOP_FIRE, pos), size(size), was_sounding(false), last_sound(0), next_interval(0)
 {
     // Bestimmte Zeit lang brennen
-	const unsigned FIREDURATION[] = {3700, 2775, 1850, 925, 370, 5550, 7400};
+	const uint32_t FIREDURATION[] = {3700, 2775, 1850, 925, 370, 5550, 7400};
     dead_event = em->AddEvent(this, FIREDURATION[GAMECLIENT.GetGGS().getSelection(ADDON_BURN_DURATION)]);
 }
 noFire::~noFire()
@@ -71,7 +71,7 @@ void noFire::Serialize_noFire(SerializedGameData* sgd) const
     sgd->PushObject(dead_event, true);
 }
 
-noFire::noFire(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noFire::noFire(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     size(sgd->PopUnsignedChar()),
     dead_event(sgd->PopObject<EventManager::Event>(GOT_EVENT)),
     was_sounding(false),
@@ -80,11 +80,11 @@ noFire::noFire(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd
 {
 }
 
-void noFire::Draw(int x, int y)
+void noFire::Draw(int32_t x, int32_t y)
 {
     //// Die ersten 2 Drittel (zeitlich) brennen, das 3. Drittel Schutt daliegen lassen
-	const unsigned FIREANIMATIONDURATION[] = {1000, 750, 500, 250, 100, 1500, 2000};
-    unsigned id = GAMECLIENT.Interpolate(FIREANIMATIONDURATION[GAMECLIENT.GetGGS().getSelection(ADDON_BURN_DURATION)], dead_event);
+	const uint32_t FIREANIMATIONDURATION[] = {1000, 750, 500, 250, 100, 1500, 2000};
+    uint32_t id = GAMECLIENT.Interpolate(FIREANIMATIONDURATION[GAMECLIENT.GetGGS().getSelection(ADDON_BURN_DURATION)], dead_event);
 
     if(id < FIREANIMATIONDURATION[GAMECLIENT.GetGGS().getSelection(ADDON_BURN_DURATION)]*2/3)
     {
@@ -110,7 +110,7 @@ void noFire::Draw(int x, int y)
 }
 
 /// Benachrichtigen, wenn neuer gf erreicht wurde
-void noFire::HandleEvent(const unsigned int id)
+void noFire::HandleEvent(const uint32_t id)
 {
     // Todesevent --> uns vernichten
     dead_event = 0;

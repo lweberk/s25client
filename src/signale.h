@@ -22,12 +22,14 @@
 
 #pragma once
 
+#include <cstdint>
+
 ///////////////////////////////////////////////////////////////////////////////
 // externs
 #ifdef _WIN32
 BOOL WINAPI HandlerRoutine(DWORD dwCtrlType);
 #else
-void HandlerRoutine(int sig);
+void HandlerRoutine(int32_t sig);
 #endif // _WIN32
 
 #endif // SIGNAL_H_INCLUDED

@@ -33,8 +33,8 @@ class iwOptionsWindow : public IngameWindow
 
     private:
         dskGameInterface* gameDesktop;
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position);
 };
 
 #endif

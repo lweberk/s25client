@@ -50,29 +50,29 @@ ctrlPreviewMinimap::Player::Player() : x(0), y(0), color(0)
  *  @author OLiver
  */
 ctrlPreviewMinimap::ctrlPreviewMinimap(Window* parent,
-                                       const unsigned int id,
-                                       const unsigned short x,
-                                       const unsigned short y,
-                                       unsigned short width,
-                                       unsigned short height,
+                                       const uint32_t id,
+                                       const uint16_t x,
+                                       const uint16_t y,
+                                       uint16_t width,
+                                       uint16_t height,
                                        glArchivItem_Map* s2map) :
     ctrlMinimap(parent, id, x, y, width, height, 2, 2, s2map ? s2map->getHeader().getWidth() : width, s2map ? s2map->getHeader().getHeight() : height),
     minimap(s2map)
 {
     if(s2map)
     {
-        unsigned short map_width = s2map->getHeader().getWidth();
-        unsigned short map_height = s2map->getHeader().getHeight();
+        uint16_t map_width = s2map->getHeader().getWidth();
+        uint16_t map_height = s2map->getHeader().getHeight();
 
         // Startpositionen merken
-        for(unsigned short y = 0; y < map_height; ++y)
+        for(uint16_t y = 0; y < map_height; ++y)
         {
-            for(unsigned short x = 0; x < map_width; ++x)
+            for(uint16_t x = 0; x < map_width; ++x)
             {
                 // Startposition eines Spielers an dieser Stelle?
                 if(s2map->GetMapDataAt(MAP_TYPE, x, y) == 0x80)
                 {
-                    unsigned player = s2map->GetMapDataAt(MAP_LANDSCAPE, x, y);
+                    uint32_t player = s2map->GetMapDataAt(MAP_LANDSCAPE, x, y);
                     assert(player < MAX_PLAYERS);
                     players[player].x = x;
                     players[player].y = y;
@@ -97,7 +97,7 @@ bool ctrlPreviewMinimap::Draw_()
     DrawMap(minimap);
 
     // Startpositionen zeichnen
-    for(unsigned i = 0; i < MAX_PLAYERS; ++i)
+    for(uint32_t i = 0; i < MAX_PLAYERS; ++i)
     {
         // Spieler anwesend?
         if(players[i].color)

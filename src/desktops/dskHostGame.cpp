@@ -141,7 +141,7 @@ dskHostGame::dskHostGame(bool single_player) :
     if(LOBBYCLIENT.LoggedIn())
     {
         // Then add tournament modes as possible "objectives"
-        for(unsigned i = 0; i < TOURNAMENT_MODES_COUNT; ++i)
+        for(uint32_t i = 0; i < TOURNAMENT_MODES_COUNT; ++i)
         {
             char str[512];
             sprintf (str, _("Tournament: %u minutes"), TOURNAMENT_MODES_DURATION[i]);
@@ -179,7 +179,7 @@ dskHostGame::dskHostGame(bool single_player) :
     if (single_player && !GAMECLIENT.IsSavegame())
     {
         // Setze initial auf KI
-        for (unsigned char i = 0; i < GAMECLIENT.GetPlayerCount(); i++)
+        for (uint8_t i = 0; i < GAMECLIENT.GetPlayerCount(); i++)
         {
             if (!GAMECLIENT.GetPlayer(i)->is_host)
                 GAMESERVER.TogglePlayerState(i);
@@ -187,12 +187,12 @@ dskHostGame::dskHostGame(bool single_player) :
     }
 
     // Alle Spielercontrols erstellen
-    for(unsigned char i = GAMECLIENT.GetPlayerCount(); i; --i)
+    for(uint8_t i = GAMECLIENT.GetPlayerCount(); i; --i)
         UpdatePlayerRow(i - 1);
     //swap buttons erstellen
     if(GAMECLIENT.IsHost() && !GAMECLIENT.IsSavegame())
     {
-        for(unsigned char i = GAMECLIENT.GetPlayerCount(); i; --i)
+        for(uint8_t i = GAMECLIENT.GetPlayerCount(); i; --i)
             AddTextButton(80 + i, 5, 80 + (i - 1) * 30, 10, 22, TC_RED1, _("-"), NormalFont);;
     }
     // GGS aktualisieren, zum ersten Mal
@@ -204,7 +204,7 @@ dskHostGame::dskHostGame(bool single_player) :
     {
         LOBBYCLIENT.SendServerJoinRequest();
         LOBBYCLIENT.SendRankingInfoRequest(GAMECLIENT.GetPlayer(GAMECLIENT.GetPlayerID())->name);
-        for(unsigned char i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+        for(uint8_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
         {
             GameClientPlayer* player = GAMECLIENT.GetPlayer(i);
             if(player->ps == PS_OCCUPIED)
@@ -221,7 +221,7 @@ dskHostGame::dskHostGame(bool single_player) :
  *
  *  @author Divan
  */
-void dskHostGame::Resize_(unsigned short width, unsigned short height)
+void dskHostGame::Resize_(uint16_t width, uint16_t height)
 {
     // Text unter der PreviewMinimap verschieben, dessen Höhe von der Höhe der
     // PreviewMinimap abhängt, welche sich gerade geändert hat.
@@ -238,12 +238,12 @@ void dskHostGame::Resize_(unsigned short width, unsigned short height)
  *
  *  @author OLiver
  */
-void dskHostGame::UpdatePlayerRow(const unsigned row)
+void dskHostGame::UpdatePlayerRow(const uint32_t row)
 {
     GameClientPlayer* player = GAMECLIENT.GetPlayer(row);
     assert(player);
 
-    unsigned cy = 80 + row * 30;
+    uint32_t cy = 80 + row * 30;
     TextureColor tc = (row & 1 ? TC_GREY : TC_GREEN2);
 
     // Alle Controls erstmal zerstören (die ganze Gruppe)
@@ -336,7 +336,7 @@ void dskHostGame::UpdatePlayerRow(const unsigned row)
             ctrlComboBox* combo = group->AddComboBox(8, 570, cy, 150, 22, tc, NormalFont, 150, !GAMECLIENT.IsHost());
 
             // Mit den alten Namen füllen
-            for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+            for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
             {
                 if(GAMECLIENT.GetPlayer(i)->origin_name.length())
                 {
@@ -381,9 +381,9 @@ void dskHostGame::Msg_PaintBefore()
  *
  *  @author OLiver
  */
-void dskHostGame::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id)
+void dskHostGame::Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id)
 {
-    unsigned player_id = 8 - (group_id - 50);
+    uint32_t player_id = 8 - (group_id - 50);
 
     switch(ctrl_id)
     {
@@ -423,7 +423,7 @@ void dskHostGame::Msg_Group_ButtonClick(const unsigned int group_id, const unsig
                 bool reserved_colors[PLAYER_COLORS_COUNT];
                 memset(reserved_colors, 0, sizeof(bool) * PLAYER_COLORS_COUNT);
 
-                for(unsigned char cl = 0; cl < GAMECLIENT.GetPlayerCount(); ++cl)
+                for(uint8_t cl = 0; cl < GAMECLIENT.GetPlayerCount(); ++cl)
                 {
                     GameClientPlayer* others = GAMECLIENT.GetPlayer(cl);
 
@@ -458,7 +458,7 @@ void dskHostGame::Msg_Group_ButtonClick(const unsigned int group_id, const unsig
                 {
                     if(GAMECLIENT.GetLocalPlayer()->team == TM_NOTEAM) // 0(noteam)->randomteam(1-4)
                     {
-                        int rnd = RANDOM.Rand(__FILE__, __LINE__, 0, 4);
+                        int32_t rnd = RANDOM.Rand(__FILE__, __LINE__, 0, 4);
                         if(!rnd)
                             GAMECLIENT.GetLocalPlayer()->team = TM_RANDOMTEAM;
                         else
@@ -482,9 +482,9 @@ void dskHostGame::Msg_Group_ButtonClick(const unsigned int group_id, const unsig
  *
  *  @author OLiver
  */
-void dskHostGame::Msg_Group_CheckboxChange(const unsigned int group_id, const unsigned int ctrl_id, const bool checked)
+void dskHostGame::Msg_Group_CheckboxChange(const uint32_t group_id, const uint32_t ctrl_id, const bool checked)
 {
-    unsigned player_id = 8 - (group_id - 50);
+    uint32_t player_id = 8 - (group_id - 50);
 
     // Bereit
     if(player_id < 8)
@@ -497,14 +497,14 @@ void dskHostGame::Msg_Group_CheckboxChange(const unsigned int group_id, const un
  *
  *  @author OLiver
  */
-void dskHostGame::Msg_Group_ComboSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void dskHostGame::Msg_Group_ComboSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
 {
-    unsigned player_id = 8 - (group_id - 50);
+    uint32_t player_id = 8 - (group_id - 50);
 
     // Spieler wurden vertauscht
 
     // 2. Player herausfinden (Strings vergleichen
-    unsigned player2;
+    uint32_t player2;
     for(player2 = 0; player2 < GAMECLIENT.GetPlayerCount(); ++player2)
     {
         if(GAMECLIENT.GetPlayer(player2)->origin_name == GetCtrl<ctrlGroup>(group_id)->
@@ -528,7 +528,7 @@ void dskHostGame::Msg_Group_ComboSelectItem(const unsigned int group_id, const u
  *
  *  @author OLiver
  */
-void dskHostGame::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskHostGame::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -543,7 +543,7 @@ void dskHostGame::Msg_ButtonClick(const unsigned int ctrl_id)
         case 80: //swap
         {
             LOG.lprintf("dskHostGame: swap button pressed\n");
-            unsigned char p = 0;
+            uint8_t p = 0;
             while (true)
             {
                 if (GAMECLIENT.GetPlayer(p)->is_host)
@@ -625,7 +625,7 @@ void dskHostGame::Msg_ButtonClick(const unsigned int ctrl_id)
  *
  *  @author OLiver
  */
-void dskHostGame::Msg_EditEnter(const unsigned int ctrl_id)
+void dskHostGame::Msg_EditEnter(const uint32_t ctrl_id)
 {
     GAMECLIENT.Command_Chat(GetCtrl<ctrlEdit>(4)->GetText(), CD_ALL);
     GetCtrl<ctrlEdit>(4)->SetText("");
@@ -637,7 +637,7 @@ void dskHostGame::Msg_EditEnter(const unsigned int ctrl_id)
  *
  *  @author FloSoft
  */
-void dskHostGame::CI_Countdown(int countdown)
+void dskHostGame::CI_Countdown(int32_t countdown)
 {
     has_countdown = true;
 
@@ -690,7 +690,7 @@ void dskHostGame::CI_CancelCountdown()
  *
  *  @author FloSoft
  */
-void dskHostGame::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr)
+void dskHostGame::Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr)
 {
     switch(msgbox_id)
     {
@@ -721,7 +721,7 @@ void dskHostGame::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult 
  *
  *  @author OLiver
  */
-void dskHostGame::Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void dskHostGame::Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -745,7 +745,7 @@ void dskHostGame::Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned
  *
  *  @author OLiver
  */
-void dskHostGame::Msg_CheckboxChange(const unsigned int ctrl_id, const bool checked)
+void dskHostGame::Msg_CheckboxChange(const uint32_t ctrl_id, const bool checked)
 {
 
     switch(ctrl_id)
@@ -795,7 +795,7 @@ void dskHostGame::UpdateGGS()
  *
  *  @author OLiver
  */
-void dskHostGame::ChangeTeam(const unsigned i, const unsigned char nr)
+void dskHostGame::ChangeTeam(const uint32_t i, const uint8_t nr)
 {
     const std::string teams[9] =
     { "-", "?", "1", "2", "3", "4", "?", "?", "?"};
@@ -809,7 +809,7 @@ void dskHostGame::ChangeTeam(const unsigned i, const unsigned char nr)
  *
  *  @author OLiver
  */
-void dskHostGame::ChangeReady(const unsigned int player, const bool ready)
+void dskHostGame::ChangeReady(const uint32_t player, const bool ready)
 {
     ctrlCheck* check;
     if( (check = GetCtrl<ctrlGroup>(58 - player)->GetCtrl<ctrlCheck>(6)))
@@ -831,7 +831,7 @@ void dskHostGame::ChangeReady(const unsigned int player, const bool ready)
  *
  *  @author OLiver
  */
-void dskHostGame::ChangeNation(const unsigned i, const Nation nation)
+void dskHostGame::ChangeNation(const uint32_t i, const Nation nation)
 {
     GetCtrl<ctrlGroup>(58 - i)->GetCtrl<ctrlBaseText>(3)->SetText(_(NationNames[nation]));
 }
@@ -842,9 +842,9 @@ void dskHostGame::ChangeNation(const unsigned i, const Nation nation)
  *
  *  @author OLiver
  */
-void dskHostGame::ChangePing(const unsigned i)
+void dskHostGame::ChangePing(const uint32_t i)
 {
-    unsigned int color = COLOR_RED;
+    uint32_t color = COLOR_RED;
 
     // Farbe bestimmen
     if(GAMECLIENT.GetPlayer(id)->ping < 300)
@@ -862,7 +862,7 @@ void dskHostGame::ChangePing(const unsigned i)
  *
  *  @author OLiver
  */
-void dskHostGame::ChangeColor(const unsigned i, const unsigned char color)
+void dskHostGame::ChangeColor(const uint32_t i, const uint8_t color)
 {
     GetCtrl<ctrlGroup>(58 - i)->GetCtrl<ColorControlInterface>(4)->SetColor(COLORS[color]);
 
@@ -877,7 +877,7 @@ void dskHostGame::ChangeColor(const unsigned i, const unsigned char color)
  *
  *  @author OLiver
  */
-void dskHostGame::TogglePlayerReady(unsigned char player, bool ready)
+void dskHostGame::TogglePlayerReady(uint8_t player, bool ready)
 {
     if(player == GAMECLIENT.GetPlayerID())
     {
@@ -893,7 +893,7 @@ void dskHostGame::TogglePlayerReady(unsigned char player, bool ready)
  *
  *  @author OLiver
  */
-void dskHostGame::CI_NewPlayer(const unsigned player_id)
+void dskHostGame::CI_NewPlayer(const uint32_t player_id)
 {
     // Spielername setzen
     UpdatePlayerRow(player_id);
@@ -901,7 +901,7 @@ void dskHostGame::CI_NewPlayer(const unsigned player_id)
     // Rankinginfo abrufen
     if(LOBBYCLIENT.LoggedIn())
     {
-        for(unsigned char i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+        for(uint8_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
         {
             GameClientPlayer* player = GAMECLIENT.GetPlayer(i);
             if(player->ps == PS_OCCUPIED)
@@ -916,7 +916,7 @@ void dskHostGame::CI_NewPlayer(const unsigned player_id)
  *
  *  @author OLiver
  */
-void dskHostGame::CI_PlayerLeft(const unsigned player_id)
+void dskHostGame::CI_PlayerLeft(const uint32_t player_id)
 {
     UpdatePlayerRow(player_id);
 }
@@ -939,7 +939,7 @@ void dskHostGame::CI_GameStarted(GameWorldViewer* gwv)
  *
  *  @author OLiver
  */
-void dskHostGame::CI_PSChanged(const unsigned player_id, const PlayerState ps)
+void dskHostGame::CI_PSChanged(const uint32_t player_id, const PlayerState ps)
 {
     if ((single_player) && (ps == PS_FREE))
         GAMESERVER.TogglePlayerState(player_id);
@@ -953,7 +953,7 @@ void dskHostGame::CI_PSChanged(const unsigned player_id, const PlayerState ps)
  *
  *  @author OLiver
  */
-void dskHostGame::CI_NationChanged(const unsigned player_id, const Nation nation)
+void dskHostGame::CI_NationChanged(const uint32_t player_id, const Nation nation)
 {
     ChangeNation(player_id, nation);
 }
@@ -964,7 +964,7 @@ void dskHostGame::CI_NationChanged(const unsigned player_id, const Nation nation
  *
  *  @author OLiver
  */
-void dskHostGame::CI_TeamChanged(const unsigned player_id, const unsigned char team)
+void dskHostGame::CI_TeamChanged(const uint32_t player_id, const uint8_t team)
 {
     ChangeTeam(player_id, team);
 }
@@ -975,7 +975,7 @@ void dskHostGame::CI_TeamChanged(const unsigned player_id, const unsigned char t
  *
  *  @author OLiver
  */
-void dskHostGame::CI_ColorChanged(const unsigned player_id, const unsigned char color)
+void dskHostGame::CI_ColorChanged(const uint32_t player_id, const uint8_t color)
 {
     ChangeColor(player_id, color);
 }
@@ -986,7 +986,7 @@ void dskHostGame::CI_ColorChanged(const unsigned player_id, const unsigned char 
  *
  *  @author OLiver
  */
-void dskHostGame::CI_PingChanged(const unsigned player_id, const unsigned short ping)
+void dskHostGame::CI_PingChanged(const uint32_t player_id, const uint16_t ping)
 {
     ChangePing(player_id);
 }
@@ -997,7 +997,7 @@ void dskHostGame::CI_PingChanged(const unsigned player_id, const unsigned short 
  *
  *  @author OLiver
  */
-void dskHostGame::CI_ReadyChanged(const unsigned player_id, const bool ready)
+void dskHostGame::CI_ReadyChanged(const uint32_t player_id, const bool ready)
 {
     ChangeReady(player_id, ready);
 }
@@ -1008,7 +1008,7 @@ void dskHostGame::CI_ReadyChanged(const unsigned player_id, const bool ready)
  *
  *  @author OLiver
  */
-void dskHostGame::CI_PlayersSwapped(const unsigned player1, const unsigned player2)
+void dskHostGame::CI_PlayersSwapped(const uint32_t player1, const uint32_t player2)
 {
     // Spieler wurden vertauscht, beide Reihen updaten
     UpdatePlayerRow(player1);
@@ -1026,13 +1026,13 @@ void dskHostGame::CI_GGSChanged(const GlobalGameSettings& ggs)
     this->ggs = ggs;
 
     // Geschwindigkeit
-    GetCtrl<ctrlComboBox>(43)->SetSelection(static_cast<unsigned short>(ggs.game_speed));
+    GetCtrl<ctrlComboBox>(43)->SetSelection(static_cast<uint16_t>(ggs.game_speed));
     // Ziel
-    GetCtrl<ctrlComboBox>(42)->SetSelection(static_cast<unsigned short>(ggs.game_objective));
+    GetCtrl<ctrlComboBox>(42)->SetSelection(static_cast<uint16_t>(ggs.game_objective));
     // Waren
-    GetCtrl<ctrlComboBox>(41)->SetSelection(static_cast<unsigned short>(ggs.start_wares));
+    GetCtrl<ctrlComboBox>(41)->SetSelection(static_cast<uint16_t>(ggs.start_wares));
     // Aufklärung
-    GetCtrl<ctrlComboBox>(40)->SetSelection(static_cast<unsigned short>(ggs.exploration));
+    GetCtrl<ctrlComboBox>(40)->SetSelection(static_cast<uint16_t>(ggs.exploration));
     // Teams
     GetCtrl<ctrlCheck>(20)->SetCheck(ggs.lock_teams);
     // Team-Sicht
@@ -1049,7 +1049,7 @@ void dskHostGame::CI_GGSChanged(const GlobalGameSettings& ggs)
  *
  *  @author OLiver
  */
-void dskHostGame::CI_Chat(const unsigned player_id, const ChatDestination cd, const std::string& msg)
+void dskHostGame::CI_Chat(const uint32_t player_id, const ChatDestination cd, const std::string& msg)
 {
     if ((player_id != 0xFFFFFFFF) && !single_player) // Keine Lobby-Nachrichten anzeigen
     {
@@ -1090,7 +1090,7 @@ void dskHostGame::CI_Error(const ClientError ce)
  */
 void dskHostGame::LC_RankingInfo(const LobbyPlayerInfo& player)
 {
-    for(unsigned int i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         if(GAMECLIENT.GetPlayer(i)->name == player.getName())
             GAMECLIENT.GetPlayer(i)->rating = player.getPunkte();

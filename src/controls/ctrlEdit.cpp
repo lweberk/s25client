@@ -42,14 +42,14 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlEdit::ctrlEdit(Window* parent,
-                   unsigned int id,
-                   unsigned short x,
-                   unsigned short y,
-                   unsigned short width,
-                   unsigned short height,
+                   uint32_t id,
+                   uint16_t x,
+                   uint16_t y,
+                   uint16_t width,
+                   uint16_t height,
                    TextureColor tc,
                    glArchivItem_Font* font,
-                   unsigned short maxlength,
+                   uint16_t maxlength,
                    bool password,
                    bool disabled,
                    bool notify)
@@ -75,11 +75,11 @@ void ctrlEdit::SetText(const std::string& text)
 
     this->text = L"";
 
-    for(unsigned i = 0; i < unsigned(text.length()); ++i)
+    for(uint32_t i = 0; i < unsigned(text.length()); ++i)
         AddChar(text.at(i));
 }
 
-void ctrlEdit::SetText(const unsigned int text)
+void ctrlEdit::SetText(const uint32_t text)
 {
     std::stringstream textt;
     textt << text;
@@ -89,14 +89,14 @@ void ctrlEdit::SetText(const unsigned int text)
 
     this->text = L"";
 
-    for(unsigned i = 0; i < unsigned(textt.str().length()); ++i)
+    for(uint32_t i = 0; i < unsigned(textt.str().length()); ++i)
         AddChar(textt.str().at(i));
 }
 
 const std::string ctrlEdit::GetText(void) const
 {
     std::string t;
-    for(unsigned int i = 0; i < text.length(); ++i)
+    for(uint32_t i = 0; i < text.length(); ++i)
         t += font->Unicode_to_Utf8(text[i]);
     return t;
 }
@@ -122,8 +122,8 @@ bool ctrlEdit::Draw_(void)
     else
         dtext = text;
 
-    const unsigned max_width = width - 8 - font->getDx();
-    unsigned short max;
+    const uint32_t max_width = width - 8 - font->getDx();
+    uint16_t max;
     font->getWidth(dtext.substr(view_start), unsigned(text.length()) - view_start, max_width, &max);
     while(max > 0 && text.length() - view_start > max)
     {
@@ -143,7 +143,7 @@ bool ctrlEdit::Draw_(void)
         }
     }
 
-    unsigned short start = view_start;
+    uint16_t start = view_start;
     if(cursor_pos > 5 && cursor_pos - 5 < view_start)
         start = cursor_pos - 5;
     if(cursor_pos <= 5)
@@ -154,7 +154,7 @@ bool ctrlEdit::Draw_(void)
     // Alle 500ms Cursor für 500ms anzeigen
     if(focus && !disabled && VIDEODRIVER.GetTickCount() % 1000 < 500)
     {
-        unsigned short cwidth = 5;
+        uint16_t cwidth = 5;
 
         if(cursor_pos - start > 0)
             cwidth = font->getWidth(&dtext[start], cursor_pos - start) + 4;
@@ -173,7 +173,7 @@ bool ctrlEdit::Draw_(void)
  *
  *  @author FloSoft
  */
-void ctrlEdit::AddChar(unsigned int c)
+void ctrlEdit::AddChar(uint32_t c)
 {
     // Number-only text fields accept numbers only ;)
     if(number_only && !(c >= '0' && c <= '9'))

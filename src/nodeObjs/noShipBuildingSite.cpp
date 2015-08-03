@@ -40,7 +40,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-noShipBuildingSite::noShipBuildingSite(const MapPoint pos, const unsigned char player)
+noShipBuildingSite::noShipBuildingSite(const MapPoint pos, const uint8_t player)
     : noCoordBase(NOP_ENVIRONMENT, pos),
       player(player), progress(0)
 {
@@ -65,24 +65,24 @@ void noShipBuildingSite::Serialize(SerializedGameData* sgd) const
     sgd->PushUnsignedChar(progress);
 }
 
-noShipBuildingSite::noShipBuildingSite(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noShipBuildingSite::noShipBuildingSite(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     player(sgd->PopUnsignedChar()),
     progress(sgd->PopUnsignedChar())
 {
 }
 
 /// Progress-Anteile für die 3 Baustufen
-const unsigned PROGRESS_PARTS[3] =
+const uint32_t PROGRESS_PARTS[3] =
 { 4, 2, 3};
 
-//const unsigned TOTAL_PROGRESS = PROGRESS_PARTS[0] + PROGRESS_PARTS[1] + PROGRESS_PARTS[2];
+//const uint32_t TOTAL_PROGRESS = PROGRESS_PARTS[0] + PROGRESS_PARTS[1] + PROGRESS_PARTS[2];
 
-void noShipBuildingSite::Draw(int x, int y)
+void noShipBuildingSite::Draw(int32_t x, int32_t y)
 {
     if(progress < PROGRESS_PARTS[0] + PROGRESS_PARTS[1])
     {
         glArchivItem_Bitmap* image = LOADER.GetImageN("boot_z", 24);
-        unsigned height = std::min(image->getHeight() * unsigned(progress) / PROGRESS_PARTS[0],
+        uint32_t height = std::min(image->getHeight() * unsigned(progress) / PROGRESS_PARTS[0],
                               unsigned(image->getHeight()));
         image->Draw(x, y + (image->getHeight() - height), 0, 0, 0, (image->getHeight() - height), 0, height);
         image =  LOADER.GetImageN("boot_z", 25);
@@ -92,9 +92,9 @@ void noShipBuildingSite::Draw(int x, int y)
     }
     if(progress > PROGRESS_PARTS[0])
     {
-        unsigned real_progress = progress - PROGRESS_PARTS[0];
+        uint32_t real_progress = progress - PROGRESS_PARTS[0];
         glArchivItem_Bitmap* image =  LOADER.GetImageN("boot_z", 26);
-        unsigned height = std::min(image->getHeight() * unsigned(real_progress) / PROGRESS_PARTS[1],
+        uint32_t height = std::min(image->getHeight() * unsigned(real_progress) / PROGRESS_PARTS[1],
                               unsigned(image->getHeight()));
         image->Draw(x, y + (image->getHeight() - height), 0, 0, 0, (image->getHeight() - height), 0, height);
         image =  LOADER.GetImageN("boot_z", 27);
@@ -104,9 +104,9 @@ void noShipBuildingSite::Draw(int x, int y)
     }
     if(progress > PROGRESS_PARTS[0] + PROGRESS_PARTS[1])
     {
-        unsigned real_progress = progress - PROGRESS_PARTS[0] - PROGRESS_PARTS[1];
+        uint32_t real_progress = progress - PROGRESS_PARTS[0] - PROGRESS_PARTS[1];
         glArchivItem_Bitmap* image =  LOADER.GetImageN("boot_z", 28);
-        unsigned height = image->getHeight() * unsigned(real_progress) / PROGRESS_PARTS[2];
+        uint32_t height = image->getHeight() * unsigned(real_progress) / PROGRESS_PARTS[2];
         image->Draw(x, y + (image->getHeight() - height), 0, 0, 0, (image->getHeight() - height), 0, height);
         image =  LOADER.GetImageN("boot_z", 29);
         height = image->getHeight() * unsigned(real_progress) / PROGRESS_PARTS[2];

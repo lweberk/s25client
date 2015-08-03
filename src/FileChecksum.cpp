@@ -33,19 +33,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-unsigned int CalcChecksumOfFile(const char* const path)
+uint32_t CalcChecksumOfFile(const char* const path)
 {
     FILE* dat = fopen(path, "rb");
     if(!dat)
         return 0;
 
     fseek(dat, 0, SEEK_END);
-    unsigned int length = (int)ftell(dat);
+    uint32_t length = (int32_t)ftell(dat);
     fseek(dat, 0, SEEK_SET);
 
-    unsigned int checksum = 0;
+    uint32_t checksum = 0;
 
-    for(unsigned int i = 0; i < length; ++i)
+    for(uint32_t i = 0; i < length; ++i)
         checksum += fgetc(dat);
 
     fclose(dat);
@@ -53,16 +53,16 @@ unsigned int CalcChecksumOfFile(const char* const path)
     return checksum;
 }
 
-unsigned int CalcChecksumOfBuffer(const unsigned char* buffer, unsigned int size)
+uint32_t CalcChecksumOfBuffer(const uint8_t* buffer, uint32_t size)
 {
     if(!buffer || size == 0)
         return 0;
 
-    unsigned int checksum = 0;
-    for(unsigned int i = 0; i < size; ++i)
+    uint32_t checksum = 0;
+    for(uint32_t i = 0; i < size; ++i)
     {
         //LOG.lprintf("%d - %d\n", i, checksum);
-        checksum += (unsigned int)buffer[i];
+        checksum += (uint32_t)buffer[i];
     }
     return checksum;
 }

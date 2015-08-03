@@ -35,13 +35,13 @@
 #include "buildings/nobShipYard.h"
 #include "GameCommands.h"
 
-typedef unsigned char Direction;
+typedef uint8_t Direction;
 
 class AIInterface
 {
     public:
         AIInterface(const GameWorldBase* const gwb, const GameClientPlayer* const player,
-                    const GameClientPlayerList* const players, std::vector<gc::GameCommand*> *gcs, const unsigned char playerID) :
+                    const GameClientPlayerList* const players, std::vector<gc::GameCommand*> *gcs, const uint8_t playerID) :
             gwb(gwb), player(player), players(players), gcs(gcs), playerID(playerID) { assert(gcs); }
 
     private:
@@ -54,18 +54,18 @@ class AIInterface
         /// Pointer to the game commands queue, to send commands to the game
         std::vector<gc::GameCommand*> * gcs;
         /// ID of AI player
-        const unsigned char playerID;
+        const uint8_t playerID;
 
     public:
         // "Get" commands, to retrieve information from the game
 
         /// Returns the width of the map
-        unsigned short GetMapWidth() const { return gwb->GetWidth(); }
+        uint16_t GetMapWidth() const { return gwb->GetWidth(); }
 
         /// Returns the height of the map
-        unsigned short GetMapHeight() const { return gwb->GetHeight(); }
+        uint16_t GetMapHeight() const { return gwb->GetHeight(); }
 
-        unsigned GetIdx(MapPoint pt) const { return gwb->GetIdx(pt); }
+        uint32_t GetIdx(MapPoint pt) const { return gwb->GetIdx(pt); }
 
         /// Returns x-coordinate of the neighbouring point in given direction (6 possible directions)
         inline MapCoord GetXA(const MapPoint pt, Direction direction) { return gwb->GetXA(pt, direction); }
@@ -84,9 +84,9 @@ class AIInterface
         inline MapPoint GetNeighbour(const MapPoint pt, Direction direction) const { return gwb->GetNeighbour(pt, direction); }
 
         /// Get Distance between to points (wraps around at end of world)
-        unsigned GetDistance(MapPoint p1, MapPoint p2) const { return gwb->CalcDistance(p1, p2); }
+        uint32_t GetDistance(MapPoint p1, MapPoint p2) const { return gwb->CalcDistance(p1, p2); }
 
-        unsigned char GetPlayerID() const { return playerID; }
+        uint8_t GetPlayerID() const { return playerID; }
 
 		bool IsDefeated() const {return player->isDefeated();}
 
@@ -101,7 +101,7 @@ class AIInterface
 
         /// calculates the surface resource value on a given spot (wood/ stones/ farmland)
         /// when given a direction and lastvalue the calculation will be much faster O(n) vs O(n^2)
-        int CalcResourceValue(const MapPoint pt, AIJH::Resource res, char direction = -1, int lastval = 0xffff) const;
+        int32_t CalcResourceValue(const MapPoint pt, AIJH::Resource res, char direction = -1, int32_t lastval = 0xffff) const;
 
         /// Tests whether a given point is part of the border or not
         bool IsBorder(const MapPoint pt) const  { return gwb->GetNode(pt).boundary_stones[0] == (playerID + 1); }
@@ -118,7 +118,7 @@ class AIInterface
         bool GetPointRoad(const MapPoint pt, Direction dir) { return gwb->GetPointRoad(pt, dir) > 0; }
 
         /// Returns the terrain around a given point in a given direction
-        unsigned char GetTerrainAround(const MapPoint pt, Direction direction) const { return gwb->GetTerrainAround(pt, direction); }
+        uint8_t GetTerrainAround(const MapPoint pt, Direction direction) const { return gwb->GetTerrainAround(pt, direction); }
 
         /// Tests whether there is a object of a certain type on a spot
         bool IsObjectTypeOnNode(const MapPoint pt, NodalObjectType objectType) const { return gwb->GetNO(pt)->GetType() == objectType; }
@@ -132,9 +132,9 @@ class AIInterface
         /// Tests whether the ai player can see a point
         bool IsVisible(const MapPoint pt) const { return gwb->CalcWithAllyVisiblity(pt, playerID) == VIS_VISIBLE; }
 
-        bool IsMilitaryBuildingNearNode(const MapPoint pt, const unsigned char player) const { return gwb->IsMilitaryBuildingNearNode(pt, player); }
+        bool IsMilitaryBuildingNearNode(const MapPoint pt, const uint8_t player) const { return gwb->IsMilitaryBuildingNearNode(pt, player); }
 
-        bool RoadAvailable(const MapPoint pt, unsigned char dir, bool boat_road = false) {return gwb->RoadAvailable(boat_road, pt, dir, false);}
+        bool RoadAvailable(const MapPoint pt, uint8_t dir, bool boat_road = false) {return gwb->RoadAvailable(boat_road, pt, dir, false);}
 
         ///returns true when the buildingqulity at the 2nd point is lower than the bq on the first point
         bool CalcBQSumDifference(const MapPoint pt, const MapPoint t);
@@ -145,10 +145,10 @@ class AIInterface
 
         // Tries to find a free path for a road and return length and the route
         bool FindFreePathForNewRoad(MapPoint start, MapPoint target, std::vector<Direction> *route = NULL,
-                                    unsigned* length = NULL) const;
+                                    uint32_t* length = NULL) const;
 
         // Tries to find a route from start to target, returning length of that route if it exists
-        bool FindPathOnRoads(const noRoadNode* start, const noRoadNode* target, unsigned* length = NULL) const;
+        bool FindPathOnRoads(const noRoadNode* start, const noRoadNode* target, uint32_t* length = NULL) const;
 
         // Checks if it is allowed to build catapults
         bool CanBuildCatapult() const { return player->CanBuildCatapult(); }
@@ -157,13 +157,13 @@ class AIInterface
 		bool CanBuildBuildingtype(BuildingType bt) const { return player->IsBuildingEnabled(bt); }
 
         /// Tests whether a player is attackable or not (alliances, etc)
-        bool IsPlayerAttackable(unsigned char playerID) const { return player->IsPlayerAttackable(playerID); }
+        bool IsPlayerAttackable(uint8_t playerID) const { return player->IsPlayerAttackable(playerID); }
 
 		/// player->FindWarehouse
-		nobBaseWarehouse* FindWarehouse(const noRoadNode* const start, bool (*IsWarehouseGood)(nobBaseWarehouse*, const void*), const RoadSegment* const forbidden, const bool to_wh, const void* param, const bool use_boat_roads, unsigned* const length = 0);
+		nobBaseWarehouse* FindWarehouse(const noRoadNode* const start, bool (*IsWarehouseGood)(nobBaseWarehouse*, const void*), const RoadSegment* const forbidden, const bool to_wh, const void* param, const bool use_boat_roads, uint32_t* const length = 0);
 		
         /// Returns a list of military buildings around a given point and a given radius
-		nobBaseMilitarySet GetMilitaryBuildings(const MapPoint pt, unsigned radius) const { return gwb->LookForMilitaryBuildings(pt, radius); }
+		nobBaseMilitarySet GetMilitaryBuildings(const MapPoint pt, uint32_t radius) const { return gwb->LookForMilitaryBuildings(pt, radius); }
 
         /// Returns the headquarter of the player (or null if destroyed)
         const nobHQ* GetHeadquarter() const;
@@ -190,36 +190,36 @@ class AIInterface
         const Goods* GetInventory() const { return player->GetInventory(); }
 
         // Returns the number of ships
-        unsigned GetShipCount() const { return player->GetShipCount(); }
+        uint32_t GetShipCount() const { return player->GetShipCount(); }
 
         // Returns the list of ships
         const std::vector<noShip*>&GetShips() const {return player->GetShips();}
 
         //returns distance
-        unsigned CalcDistance(MapCoord x1, MapCoord y1, MapCoord x2, MapCoord y2) {return gwb->CalcDistance(x1, y1, x2, y2);}
-        unsigned CalcDistance(MapPoint p1, MapPoint p2) {return gwb->CalcDistance(p1, p2);}
+        uint32_t CalcDistance(MapCoord x1, MapCoord y1, MapCoord x2, MapCoord y2) {return gwb->CalcDistance(x1, y1, x2, y2);}
+        uint32_t CalcDistance(MapPoint p1, MapPoint p2) {return gwb->CalcDistance(p1, p2);}
 
         /// Returns the ID of a given ship
-        unsigned GetShipID(const noShip* ship) const { return player->GetShipID(ship); }
+        uint32_t GetShipID(const noShip* ship) const { return player->GetShipID(ship); }
 
         /// Tests whether there is a possibility to start a expedtion in a given direction from a given position, assuming a given starting harbor
         bool IsExplorationDirectionPossible(const MapPoint pt, const nobHarborBuilding* originHarbor, Direction direction) const;
 
         /// Tests whether there is a possibility to start a expedtion in a given direction from a given position, assuming a given starting harbor
-        bool IsExplorationDirectionPossible(const MapPoint pt, unsigned int originHarborID, Direction direction) const;
+        bool IsExplorationDirectionPossible(const MapPoint pt, uint32_t originHarborID, Direction direction) const;
 
-        void SetDefenders(const MapPoint pt, unsigned char rank, unsigned char count) {gcs->push_back(new gc::ChangeReserve(pt, rank, count));}
+        void SetDefenders(const MapPoint pt, uint8_t rank, uint8_t count) {gcs->push_back(new gc::ChangeReserve(pt, rank, count));}
 
         // "Set" commands, to send commands to the game
 
         /// Sets new military settings for the ai player (8 values)
-        void SetMilitarySettings(std::vector<unsigned char> &newSettings) { gcs->push_back(new gc::ChangeMilitary(newSettings)); }
+        void SetMilitarySettings(std::vector<uint8_t> &newSettings) { gcs->push_back(new gc::ChangeMilitary(newSettings)); }
 
         /// Sets new tool production settings -poc
-        void SetToolSettings(std::vector<unsigned char> &newSettings) {gcs->push_back(new gc::ChangeTools(newSettings));}
+        void SetToolSettings(std::vector<uint8_t> &newSettings) {gcs->push_back(new gc::ChangeTools(newSettings));}
 
         // Sets new distribution of goods
-        void SetDistribution(const std::vector<unsigned char>&distribution_settings) {gcs->push_back(new gc::ChangeDistribution(distribution_settings));}
+        void SetDistribution(const std::vector<uint8_t>&distribution_settings) {gcs->push_back(new gc::ChangeDistribution(distribution_settings));}
 
         /// Simply surrenders...
         void Surrender() { gcs->push_back(new gc::Surrender()); }
@@ -229,7 +229,7 @@ class AIInterface
         void ToggleCoins(const nobMilitary* building) { ToggleCoins(building->GetPos()); }
 
 		///getnation
-		unsigned GetNation() {return player->nation;}
+		uint32_t GetNation() {return player->nation;}
 
 		/// send out soldiers
 		void SendSoldiersHome(const MapPoint pt) {gcs->push_back(new gc::SendSoldiersHome(pt));}
@@ -246,15 +246,15 @@ class AIInterface
         void ChangeInventorySetting(const nobBaseWarehouse* warehouse) { ChangeInventorySetting(warehouse->GetPos()); }
 
         /// Lets a ship found a colony
-        void FoundColony(unsigned int shipID) { gcs->push_back(new gc::ExpeditionCommand(gc::ExpeditionCommand::FOUNDCOLONY, shipID)); }
+        void FoundColony(uint32_t shipID) { gcs->push_back(new gc::ExpeditionCommand(gc::ExpeditionCommand::FOUNDCOLONY, shipID)); }
         void FoundColony(const noShip* ship) { FoundColony(player->GetShipID(ship)); }
 
         /// Lets a ship travel to a new harbor spot in a given direction
-        void TravelToNextSpot(Direction direction, unsigned int shipID) { gcs->push_back(new gc::ExpeditionCommand(gc::ExpeditionCommand::Action(direction + 2), shipID)); }
+        void TravelToNextSpot(Direction direction, uint32_t shipID) { gcs->push_back(new gc::ExpeditionCommand(gc::ExpeditionCommand::Action(direction + 2), shipID)); }
         void TravelToNextSpot(Direction direction, const noShip* ship) { TravelToNextSpot(direction, player->GetShipID(ship)); }
 
         /// Cancels an expedition
-        void CancelExpedition(unsigned int shipID) { gcs->push_back(new gc::ExpeditionCommand(gc::ExpeditionCommand::CANCELEXPEDITION, shipID)); }
+        void CancelExpedition(uint32_t shipID) { gcs->push_back(new gc::ExpeditionCommand(gc::ExpeditionCommand::CANCELEXPEDITION, shipID)); }
         void CancelExpedition(const noShip* ship) { CancelExpedition(player->GetShipID(ship)); }
 
         /// Toggles the construction mode of the shipyard between boat and ship
@@ -270,16 +270,16 @@ class AIInterface
         void DestroyFlag(const noFlag* flag) { DestroyFlag(flag->GetPos()); }
 		
         /// Destroys a road on a spot
-        void DestroyRoad(const MapPoint pt, unsigned char start_dir) { gcs->push_back(new gc::DestroyRoad(pt,start_dir)); }
+        void DestroyRoad(const MapPoint pt, uint8_t start_dir) { gcs->push_back(new gc::DestroyRoad(pt,start_dir)); }
 
         /// Attacks an enemy building
-        void Attack(const MapPoint pt, unsigned soldiers_count, bool strong_soldiers)
+        void Attack(const MapPoint pt, uint32_t soldiers_count, bool strong_soldiers)
         {
             gcs->push_back(new gc::Attack(pt, soldiers_count, strong_soldiers));
         }
 
         /// Sea-Attacks an enemy building
-        void SeaAttack(const MapPoint pt, unsigned soldiers_count, bool strong_soldiers) {gcs->push_back(new gc::SeaAttack(pt, soldiers_count, strong_soldiers));}
+        void SeaAttack(const MapPoint pt, uint32_t soldiers_count, bool strong_soldiers) {gcs->push_back(new gc::SeaAttack(pt, soldiers_count, strong_soldiers));}
 
         /// Builds a road from a starting point along a given route
         void BuildRoad(const MapPoint pt, const std::vector<Direction> &route) { gcs->push_back(new gc::BuildRoad(pt, false, route)); }
@@ -301,7 +301,7 @@ class AIInterface
         void StopProduction(const MapPoint pt) { gcs->push_back(new gc::StopProduction(pt)); }
 
         /// changes inventory settings for a warehouse by XOR with old settings (self fixing stupid settings)
-        void ChangeInventorySetting(const MapPoint pt, unsigned char category, unsigned char state, unsigned char type)
+        void ChangeInventorySetting(const MapPoint pt, uint8_t category, uint8_t state, uint8_t type)
         {
             gcs->push_back(new gc::ChangeInventorySetting(pt, category, state, type));
         }

@@ -40,9 +40,9 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlImage::ctrlImage(Window* parent,
-                     unsigned int id,
-                     unsigned short x,
-                     unsigned short y,
+                     uint32_t id,
+                     uint16_t x,
+                     uint16_t y,
                      glArchivItem_Bitmap* image,
                      const std::string& tooltip)
     : Window(x, y, id, parent),

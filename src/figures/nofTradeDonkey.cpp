@@ -11,20 +11,20 @@
 #include "buildings/nobBaseWarehouse.h"
 #include "SerializedGameData.h"
 
-nofTradeDonkey::nofTradeDonkey(const MapPoint pos, const unsigned char player,
+nofTradeDonkey::nofTradeDonkey(const MapPoint pos, const uint8_t player,
                                nofTradeLeader* const leader, const GoodType gt, const Job job)
     : noFigure((job != JOB_NOTHING) ? job : JOB_PACKDONKEY, pos, player), leader(leader), successor(NULL), gt(gt)
 {
 }
 
-nofTradeDonkey::nofTradeDonkey(SerializedGameData* sgd, const unsigned obj_id)
+nofTradeDonkey::nofTradeDonkey(SerializedGameData* sgd, const uint32_t obj_id)
     : noFigure(sgd, obj_id),
       leader(sgd->PopObject<nofTradeLeader>(GOT_NOF_TRADELEADER)),
       successor(sgd->PopObject<nofTradeDonkey>(GOT_NOF_TRADEDONKEY)),
       gt(GoodType(sgd->PopUnsignedChar())),
       next_dirs(sgd->PopUnsignedInt())
 {
-    for(unsigned i = 0; i < next_dirs.size(); ++i)
+    for(uint32_t i = 0; i < next_dirs.size(); ++i)
         next_dirs[i] = sgd->PopUnsignedChar();
 }
 
@@ -35,10 +35,10 @@ void nofTradeDonkey::Serialize(SerializedGameData* sgd) const
 
     sgd->PushObject(leader, true);
     sgd->PushObject(successor, true);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(gt));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(gt));
     sgd->PushUnsignedInt(next_dirs.size());
 
-    for(unsigned i = 0; i < next_dirs.size(); ++i)
+    for(uint32_t i = 0; i < next_dirs.size(); ++i)
         sgd->PushUnsignedChar(next_dirs[i]);
 }
 
@@ -54,7 +54,7 @@ void nofTradeDonkey::Walked()
         gwg->RemoveFigure(this, pos);
         return;
     }
-    unsigned char next_dir = GetNextDir();
+    uint8_t next_dir = GetNextDir();
     // Are we now at the goal?
     if(next_dir == REACHED_GOAL)
     {
@@ -102,21 +102,21 @@ void nofTradeDonkey::Walked()
         successor->AddNextDir(next_dir);
 }
 
-void nofTradeDonkey::HandleDerivedEvent(const unsigned int id)
+void nofTradeDonkey::HandleDerivedEvent(const uint32_t id)
 {
 }
 void nofTradeDonkey::AbrogateWorkplace()
 {
 }
 
-void nofTradeDonkey::Draw(int x, int y)
+void nofTradeDonkey::Draw(int32_t x, int32_t y)
 {
 
     if(job == JOB_PACKDONKEY)
     {
         // Wenn wir warten auf ein freies Plätzchen, müssen wir den stehend zeichnen!
         // Wenn event = 0, dann sind wir mittem auf dem Weg angehalten!
-        unsigned ani_step = GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
+        uint32_t ani_step = GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
 
         CalcFigurRelative(x, y);
 

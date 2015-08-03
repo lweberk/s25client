@@ -58,7 +58,7 @@ dskAboutRTTR::dskAboutRTTR(void) : Desktop(LOADER.GetImageN("menu", 0))
 }
 
 
-void dskAboutRTTR::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskAboutRTTR::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

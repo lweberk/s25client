@@ -31,13 +31,13 @@ class noFighting : public noBase
         /// die kämpfenden Soldaten
         nofActiveSoldier* soldiers[2];
         // Wer ist an der Reihe mit angreifen (2 = Beginn des Kampfes)
-        unsigned char turn;
+        uint8_t turn;
         /// Verteidigungsanimation (3 = keine Verteidigung,  Treffer)
-        unsigned char defending_animation;
+        uint8_t defending_animation;
         /// Event
         EventManager::EventPointer current_ev;
         /// Spieler des Soldaten, der gewonnen hat
-        unsigned char player_won;
+        uint8_t player_won;
 
     private:
 
@@ -48,7 +48,7 @@ class noFighting : public noBase
     public:
 
         noFighting(nofActiveSoldier* soldier1, nofActiveSoldier* soldier2);
-        noFighting(SerializedGameData* sgd, const unsigned obj_id);
+        noFighting(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_noFighting();
@@ -60,15 +60,15 @@ class noFighting : public noBase
 
         GO_Type GetGOT() const { return GOT_FIGHTING; }
 
-        void Draw(int x, int y);
-        void HandleEvent(const unsigned int id);
+        void Draw(int32_t x, int32_t y);
+        void HandleEvent(const uint32_t id);
 
         /// Dürfen andern Figuren diesen Kampf schon durchqueren?
         bool IsActive() const;
 		bool IsFighter(nofActiveSoldier* as) {return as==soldiers[0] || as ==soldiers[1];}
 
         /// Prüfen, ob ein Soldat von einem bestimmten Spieler in den Kampf verwickelt ist
-        bool IsSoldierOfPlayer(const unsigned char player) const;
+        bool IsSoldierOfPlayer(const uint8_t player) const;
 
 };
 

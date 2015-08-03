@@ -38,7 +38,7 @@ class VideoDriverLoaderInterface
 
         virtual void Msg_KeyDown(const KeyEvent& ke) = 0;
 
-        virtual void ScreenResized(unsigned short width, unsigned short height) = 0;
+        virtual void ScreenResized(uint16_t width, uint16_t height) = 0;
 };
 
 #endif // !DRIVERLOADERINTERFACE_H_INCLUDED

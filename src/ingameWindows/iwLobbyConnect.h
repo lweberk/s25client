@@ -37,13 +37,13 @@ class iwLobbyConnect : public IngameWindow, public LobbyInterface
         void LC_Status_Error(const std::string& error);
 
     protected:
-        void Msg_EditChange(const unsigned int ctrl_id);
-        void Msg_EditEnter(const unsigned int ctrl_id);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
+        void Msg_EditChange(const uint32_t ctrl_id);
+        void Msg_EditEnter(const uint32_t ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
 
     private:
-        void SetText(std::string text, unsigned int color, bool button);
+        void SetText(std::string text, uint32_t color, bool button);
         void LobbyForm(std::string& user, std::string& pass, std::string& email);
 };
 

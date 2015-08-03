@@ -29,10 +29,10 @@ class noBuilding : public noBaseBuilding
     protected:
 
         /// Gibt an, wie viele Leute die Tür geöffnet haben (wenns 0 ist, ist die Tür zu, ansonsten offen)
-        unsigned char opendoor;
+        uint8_t opendoor;
 
-        noBuilding(const BuildingType type, const MapPoint pt, const unsigned char player, const Nation nation);
-        noBuilding(SerializedGameData* sgd, const unsigned obj_id);
+        noBuilding(const BuildingType type, const MapPoint pt, const uint8_t player, const Nation nation);
+        noBuilding(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_noBuilding();
@@ -43,7 +43,7 @@ class noBuilding : public noBaseBuilding
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_noBuilding(sgd); }
 
         /// Zeichnet das Gebäude an sich mit Tür ohne zusätzlichen Schnickschnack
-        void DrawBaseBuilding(int x, int y);
+        void DrawBaseBuilding(int32_t x, int32_t y);
 
         void OpenDoor() {++opendoor;}
         void CloseDoor() {--opendoor;}

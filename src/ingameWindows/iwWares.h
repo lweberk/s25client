@@ -28,21 +28,21 @@ class iwWares : public IngameWindow
 {
     protected:
         const Goods* const inventory;     ///< Warenbestand
-        unsigned char page;       ///< aktuelle Seite des Inventurfensters.
-        unsigned char page_count; ///< maximale Seite des Inventurfensters.
+        uint8_t page;       ///< aktuelle Seite des Inventurfensters.
+        uint8_t page_count; ///< maximale Seite des Inventurfensters.
 
     public:
         /// Konstruktor von @p iwInventory.
-        iwWares(unsigned int id, unsigned short x, unsigned short y, const unsigned short width, const unsigned short height, const std::string& title, unsigned char page_count,
+        iwWares(uint32_t id, uint16_t x, uint16_t y, const uint16_t width, const uint16_t height, const std::string& title, uint8_t page_count,
                 bool allow_outhousing, glArchivItem_Font* font, const Goods* inventory);
         /// bestimmte Inventurseite zeigen.
-        void SetPage(unsigned char page);
+        void SetPage(uint8_t page);
         /// setzt die maximale Seitenzahl.
-        void SetPageCount(unsigned char page_count) { this->page_count = page_count; }
+        void SetPageCount(uint8_t page_count) { this->page_count = page_count; }
 
     protected:
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
         void Msg_PaintBefore();
 };
 

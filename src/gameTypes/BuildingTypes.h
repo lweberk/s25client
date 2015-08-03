@@ -24,8 +24,8 @@
 
 struct BuildingCost
 {
-	unsigned char boards;
-	unsigned char stones;
+	uint8_t boards;
+	uint8_t stones;
 };
 
 // Größe der Gebäude
@@ -58,7 +58,7 @@ struct UsualBuilding
 	/// Ware, die das Gebäude produziert
 	GoodType produced_ware;
 	/// Anzahl Waren, die das Gebäude benötigt
-	unsigned char wares_needed_count;
+	uint8_t wares_needed_count;
 	/// Waren, die das Gebäude benötigt
 	GoodType wares_needed[3];
 };
@@ -67,14 +67,14 @@ struct UsualBuilding
 struct SmokeConst
 {
 	/// Art des Rauches (von 1-4), 0 = kein Rauch!
-	unsigned char type;
+	uint8_t type;
 	/// Position des Rauches relativ zum Nullpunkt des Gebäudes
-	signed char x, y;
+	int8_t x, y;
 };
 
 /// Konstanten der "Produktions-Stopp"- und der "Gold-Stopp"-Schilder bei normalen und Militärgebäuden
 struct BuildingSignConst
-{ signed char x, y; };
+{ int8_t x, y; };
 
 enum BuildingType
 {
@@ -123,7 +123,7 @@ enum BuildingType
 };
 
 // Anzahl an unterschiedlichen Gebäudetypen
-const unsigned BUILDING_TYPES_COUNT = BLD_COUNT;
+const uint32_t BUILDING_TYPES_COUNT = BLD_COUNT;
 
 const std::string BUILDING_NAMES[BLD_COUNT] =
 {

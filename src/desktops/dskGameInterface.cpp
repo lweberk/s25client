@@ -97,8 +97,8 @@ dskGameInterface::dskGameInterface()
 
     SetScale(false);;
 
-    int barx = (VIDEODRIVER.GetScreenWidth() - LOADER.GetImageN("resource", 29)->getWidth()) / 2 + 44;
-    int bary = VIDEODRIVER.GetScreenHeight() - LOADER.GetImageN("resource", 29)->getHeight() + 4;
+    int32_t barx = (VIDEODRIVER.GetScreenWidth() - LOADER.GetImageN("resource", 29)->getWidth()) / 2 + 44;
+    int32_t bary = VIDEODRIVER.GetScreenHeight() - LOADER.GetImageN("resource", 29)->getHeight() + 4;
 
     AddImageButton(0, barx,        bary, 37, 32, TC_GREEN1, LOADER.GetImageN("io",  50), _("Map"))
     ->SetBorder(false);
@@ -149,14 +149,14 @@ void dskGameInterface::SettingsChanged(void)
 {
 }
 
-void dskGameInterface::Resize_(unsigned short width, unsigned short height)
+void dskGameInterface::Resize_(uint16_t width, uint16_t height)
 {
     // recreate borders
     cbb.buildBorder(width, height, &borders);
 
     // move buttons
-    int barx = (width - LOADER.GetImageN("resource", 29)->getWidth()) / 2 + 44;
-    int bary = height - LOADER.GetImageN("resource", 29)->getHeight() + 4;
+    int32_t barx = (width - LOADER.GetImageN("resource", 29)->getWidth()) / 2 + 44;
+    int32_t bary = height - LOADER.GetImageN("resource", 29)->getHeight() + 4;
 
     ctrlImageButton* button = GetCtrl<ctrlImageButton>(0);
     button->Move(barx, bary, true);
@@ -181,7 +181,7 @@ void dskGameInterface::Resize_(unsigned short width, unsigned short height)
  *
  *  @author OLiver
  */
-void dskGameInterface::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskGameInterface::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -247,12 +247,12 @@ void dskGameInterface::Msg_PaintAfter()
         snprintf(nwf_string, 255, _("Current GF: %u / GF length: %u ms / NWF length: %u gf (%u ms) /  Ping: %u ms"), GAMECLIENT.GetGFNumber(), GAMECLIENT.GetGFLength(), GAMECLIENT.GetNWFLength(), GAMECLIENT.GetNWFLength() * GAMECLIENT.GetGFLength(), GAMECLIENT.GetLocalPlayer()->ping);
 
     // tournament mode?
-    unsigned tmd = GAMECLIENT.GetTournamentModeDuration();
+    uint32_t tmd = GAMECLIENT.GetTournamentModeDuration();
 
     if(tmd)
     {
         // Convert gf to seconds
-        unsigned sec = (GAMECLIENT.GetGGS().game_objective - OBJECTIVES_COUNT) * 60 -
+        uint32_t sec = (GAMECLIENT.GetGGS().game_objective - OBJECTIVES_COUNT) * 60 -
                        GAMECLIENT.GetGFNumber() * GAMECLIENT.GetGFLength() / 1000;
         char str[512];
         sprintf(str, "tournament mode: %02u:%02u:%02u remaining", sec / 3600, (sec / 60) % 60, sec % 60);
@@ -278,7 +278,7 @@ void dskGameInterface::Msg_PaintAfter()
     }
 
     // Laggende Spieler anzeigen in Form von Schnecken
-    for(unsigned int i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         GameClientPlayer* player = GAMECLIENT.GetPlayer(i);
         if(player->is_lagging)
@@ -321,10 +321,10 @@ bool dskGameInterface::Msg_LeftDown(const MouseCoords& mc)
         else
         {
             // altes Roadwindow schließen
-            WINDOWMANAGER.Close((unsigned int)CGI_ROADWINDOW);
+            WINDOWMANAGER.Close((uint32_t)CGI_ROADWINDOW);
 
             // Ist das ein gültiger neuer Wegpunkt?
-            if(gwv->RoadAvailable(road.mode == RM_BOAT, cSel, 0xFF) && gwv->GetNode(cSel).owner - 1 == (signed)GAMECLIENT.GetPlayerID() &&
+            if(gwv->RoadAvailable(road.mode == RM_BOAT, cSel, 0xFF) && gwv->GetNode(cSel).owner - 1 == (int32_t)GAMECLIENT.GetPlayerID() &&
                     gwv->IsPlayerTerritory(cSel))
             {
                 if(!BuildRoadPart(cSel, false))
@@ -333,7 +333,7 @@ bool dskGameInterface::Msg_LeftDown(const MouseCoords& mc)
             else if(gwv->CalcBQ(cSel, GAMECLIENT.GetPlayerID(), 1))
             {
                 // Wurde bereits auf das gebaute Stück geklickt?
-                unsigned tbr;
+                uint32_t tbr;
                 if((tbr = TestBuiltRoad(cSel)))
                     DemolishRoad(tbr);
                 else
@@ -362,7 +362,7 @@ bool dskGameInterface::Msg_LeftDown(const MouseCoords& mc)
 
             else
             {
-                unsigned tbr;
+                uint32_t tbr;
                 // Wurde bereits auf das gebaute Stück geklickt?
                 if((tbr = TestBuiltRoad(cSel)))
                     DemolishRoad(tbr);
@@ -388,7 +388,7 @@ bool dskGameInterface::Msg_LeftDown(const MouseCoords& mc)
         }
 
         // Evtl ists nen Haus? (unser Haus)
-        if(gwv->GetNO(cSel)->GetType() == NOP_BUILDING   && gwv->GetNode(cSel).owner - 1 == (signed)GAMECLIENT.GetPlayerID())
+        if(gwv->GetNO(cSel)->GetType() == NOP_BUILDING   && gwv->GetNode(cSel).owner - 1 == (int32_t)GAMECLIENT.GetPlayerID())
         {
             BuildingType bt = static_cast<noBuilding*>(gwv->GetNO(cSel))->GetBuildingType();
             // HQ
@@ -410,7 +410,7 @@ bool dskGameInterface::Msg_LeftDown(const MouseCoords& mc)
         }
 
         // oder vielleicht eine Baustelle?
-        else if(gwv->GetNO(cSel)->GetType() == NOP_BUILDINGSITE && gwv->GetNode(cSel).owner - 1 == (signed)GAMECLIENT.GetPlayerID())
+        else if(gwv->GetNO(cSel)->GetType() == NOP_BUILDINGSITE && gwv->GetNode(cSel).owner - 1 == (int32_t)GAMECLIENT.GetPlayerID())
         {
             WINDOWMANAGER.Show(new iwBuildingSite(gwv, gwv->GetSpecObj<noBuildingSite>(cSel)));
             return true;
@@ -455,7 +455,7 @@ bool dskGameInterface::Msg_LeftDown(const MouseCoords& mc)
 
             // Prüfen, ob irgendwo Straßen anliegen
             bool roads = false;
-            for(unsigned i = 0; i < 6; ++i)
+            for(uint32_t i = 0; i < 6; ++i)
                 if(gwv->GetPointRoad(cSel, i, true))
                     roads = true;
 
@@ -500,7 +500,7 @@ bool dskGameInterface::Msg_LeftDown(const MouseCoords& mc)
 
         // Bisheriges Actionfenster schließen, falls es eins gab
         // aktuelle Mausposition merken, da diese durch das Schließen verändert werden kann
-        int mx = mc.x, my = mc.y;
+        int32_t mx = mc.x, my = mc.y;
         WINDOWMANAGER.Close(actionwindow);
         VIDEODRIVER.SetMousePos(mx, my);
 
@@ -670,7 +670,7 @@ bool dskGameInterface::Msg_KeyDown(const KeyEvent& ke)
         } return true;
         case 'v':
         {
-            unsigned singleplayer = 0, i = 0;
+            uint32_t singleplayer = 0, i = 0;
             while(i < GAMECLIENT.GetPlayerCount() && singleplayer < 2)
             {
                 if(GAMECLIENT.GetPlayer(i)->ps == PS_OCCUPIED)singleplayer++;
@@ -703,7 +703,7 @@ bool dskGameInterface::Msg_KeyDown(const KeyEvent& ke)
         } return true;
         case 'j': // GFs überspringen
         {
-            unsigned singleplayer = 0, i = 0;
+            uint32_t singleplayer = 0, i = 0;
             while(i < GAMECLIENT.GetPlayerCount() && singleplayer < 2)
             {
                 if(GAMECLIENT.GetPlayer(i)->ps == PS_OCCUPIED)singleplayer++;
@@ -763,7 +763,7 @@ bool dskGameInterface::Msg_KeyDown(const KeyEvent& ke)
  */
 void dskGameInterface::Run()
 {
-    unsigned water_percent;
+    uint32_t water_percent;
     gwv->Draw(GAMECLIENT.GetPlayerID(), &water_percent, actionwindow ? true : false, selected, road);
 
     // Evtl Meeresrauschen-Sounds abspieln
@@ -795,7 +795,7 @@ void dskGameInterface::ActivateRoadMode(const RoadMode rm)
     else
     {
         gwv->RemoveVisualRoad(road.start, road.route);
-        for(unsigned i = 0; i < road.route.size(); ++i)
+        for(uint32_t i = 0; i < road.route.size(); ++i)
         {
             gwv->SetPointVirtualRoad(road.start, road.route[i], 0);
             road.start = gwv->GetNeighbour(road.start, road.route[i]);
@@ -812,7 +812,7 @@ void dskGameInterface::ActivateRoadMode(const RoadMode rm)
  */
 bool dskGameInterface::BuildRoadPart(MapPoint& cSel, bool end)
 {
-    std::vector<unsigned char> new_route;
+    std::vector<uint8_t> new_route;
     bool path_found = gwv->FindRoadPath(road.point, cSel, new_route, road.mode == RM_BOAT);
 
     // Weg gefunden?
@@ -822,13 +822,13 @@ bool dskGameInterface::BuildRoadPart(MapPoint& cSel, bool end)
     // Test on water way length
     if(road.mode == RM_BOAT)
     {
-        unsigned char waterway_lengthes[] = {3, 5, 9, 13, 21, 0}; // these are written into GameWorldViewer.cpp, too
-        unsigned char index = GAMECLIENT.GetGGS().getSelection(ADDON_MAX_WATERWAY_LENGTH);
+        uint8_t waterway_lengthes[] = {3, 5, 9, 13, 21, 0}; // these are written into GameWorldViewer.cpp, too
+        uint8_t index = GAMECLIENT.GetGGS().getSelection(ADDON_MAX_WATERWAY_LENGTH);
 
         assert(index <= sizeof(waterway_lengthes) - 1);
-        const unsigned char max_length = waterway_lengthes[index];
+        const uint8_t max_length = waterway_lengthes[index];
 
-        unsigned short length = road.route.size() + new_route.size();
+        uint16_t length = road.route.size() + new_route.size();
 
         // max_length == 0 heißt beliebig lang, ansonsten
         // Weg zurechtstutzen.
@@ -843,7 +843,7 @@ bool dskGameInterface::BuildRoadPart(MapPoint& cSel, bool end)
     }
 
     // Weg (visuell) bauen
-    for(unsigned i = 0; i < new_route.size(); ++i)
+    for(uint32_t i = 0; i < new_route.size(); ++i)
     {
         gwv->SetPointVirtualRoad(road.point, new_route[i], (road.mode == RM_BOAT) ? 3 : 1);
         road.point = gwv->GetNeighbour(road.point, new_route[i]);
@@ -863,10 +863,10 @@ bool dskGameInterface::BuildRoadPart(MapPoint& cSel, bool end)
  *
  *  @author OLiver
  */
-unsigned dskGameInterface::TestBuiltRoad(const MapPoint pt)
+uint32_t dskGameInterface::TestBuiltRoad(const MapPoint pt)
 {
     MapPoint pt2 = road.start;
-    for(unsigned i = 0; i < road.route.size(); ++i)
+    for(uint32_t i = 0; i < road.route.size(); ++i)
     {
         if(pt2 == pt)
             return i + 1;
@@ -882,7 +882,7 @@ unsigned dskGameInterface::TestBuiltRoad(const MapPoint pt)
  *
  *  @author OLiver
  */
-void dskGameInterface::ShowRoadWindow(int mouse_x, int mouse_y)
+void dskGameInterface::ShowRoadWindow(int32_t mouse_x, int32_t mouse_y)
 {
     if(gwv->CalcBQ(road.point, GAMECLIENT.GetPlayerID(), 1))
         WINDOWMANAGER.Show(roadwindow = new iwRoadWindow(this, 1, mouse_x, mouse_y), true);
@@ -896,14 +896,14 @@ void dskGameInterface::ShowRoadWindow(int mouse_x, int mouse_y)
  *
  *  @author OLiver
  */
-void dskGameInterface::ShowActionWindow(const iwAction::Tabs& action_tabs, MapPoint cSel, int mouse_x, int mouse_y, const bool enable_military_buildings)
+void dskGameInterface::ShowActionWindow(const iwAction::Tabs& action_tabs, MapPoint cSel, int32_t mouse_x, int32_t mouse_y, const bool enable_military_buildings)
 {
-    unsigned int params = 0;
+    uint32_t params = 0;
 
     // Sind wir am Wasser?
     if(action_tabs.setflag)
     {
-        for(unsigned char x = 0; x < 6; ++x)
+        for(uint8_t x = 0; x < 6; ++x)
         {
             if(gwv->GetTerrainAround(cSel, x) == 14)
                 params = iwAction::AWFT_WATERFLAG;
@@ -998,7 +998,7 @@ void dskGameInterface::RoadWindowClosed()
  *
  *  @author OLiver
  */
-void dskGameInterface::CI_PlayerLeft(const unsigned player_id)
+void dskGameInterface::CI_PlayerLeft(const uint32_t player_id)
 {
     // Info-Meldung ausgeben
     char text[256];
@@ -1029,7 +1029,7 @@ void dskGameInterface::CI_GGSChanged(const GlobalGameSettings& ggs)
  *
  *  @author OLiver
  */
-void dskGameInterface::CI_Chat(const unsigned player_id, const ChatDestination cd, const std::string& msg)
+void dskGameInterface::CI_Chat(const uint32_t player_id, const ChatDestination cd, const std::string& msg)
 {
     char from[256];
     snprintf(from, sizeof(from), _("<%s> "), GAMECLIENT.GetPlayer(player_id)->name.c_str());
@@ -1163,7 +1163,7 @@ void dskGameInterface::LC_Status_Error(const std::string& error)
  *
  *  @author OLiver
  */
-void dskGameInterface::CI_PlayersSwapped(const unsigned player1, const unsigned player2)
+void dskGameInterface::CI_PlayersSwapped(const uint32_t player1, const uint32_t player2)
 {
     // Meldung anzeigen
     char text[256];
@@ -1187,7 +1187,7 @@ void dskGameInterface::CI_PlayersSwapped(const unsigned player1, const unsigned 
  *
  *  @author OLiver
  */
-void dskGameInterface::GI_PlayerDefeated(const unsigned player_id)
+void dskGameInterface::GI_PlayerDefeated(const uint32_t player_id)
 {
     char text[256];
     snprintf(text, sizeof(text), _("Player '%s' was defeated!"), GAMECLIENT.GetPlayer(player_id)->name.c_str());
@@ -1239,9 +1239,9 @@ void dskGameInterface::GI_TreatyOfAllianceChanged()
  *
  *  @author OLiver
  */
-void dskGameInterface::DemolishRoad(const unsigned start_id)
+void dskGameInterface::DemolishRoad(const uint32_t start_id)
 {
-    for(unsigned i = road.route.size(); i >= start_id; --i)
+    for(uint32_t i = road.route.size(); i >= start_id; --i)
     {
         MapPoint t = road.point;
         road.point = gwv->GetNeighbour(road.point, (road.route[i - 1] + 3) % 6);
@@ -1258,7 +1258,7 @@ void dskGameInterface::DemolishRoad(const unsigned start_id)
  *
  *  @author OLiver
  */
-void dskGameInterface::UpdatePostIcon(const unsigned postmessages_count, bool showPigeon)
+void dskGameInterface::UpdatePostIcon(const uint32_t postmessages_count, bool showPigeon)
 {
     // Taube setzen oder nicht (Post)
     if (postmessages_count == 0 || !showPigeon)
@@ -1284,7 +1284,7 @@ void dskGameInterface::UpdatePostIcon(const unsigned postmessages_count, bool sh
  *
  *  @author OLiver
  */
-void dskGameInterface::CI_NewPostMessage(const unsigned postmessages_count)
+void dskGameInterface::CI_NewPostMessage(const uint32_t postmessages_count)
 {
     UpdatePostIcon(postmessages_count, true);
 
@@ -1298,7 +1298,7 @@ void dskGameInterface::CI_NewPostMessage(const unsigned postmessages_count)
  *
  *  @author OLiver
  */
-void dskGameInterface::CI_PostMessageDeleted(const unsigned postmessages_count)
+void dskGameInterface::CI_PostMessageDeleted(const uint32_t postmessages_count)
 {
     UpdatePostIcon(postmessages_count, false);
 }
@@ -1309,7 +1309,7 @@ void dskGameInterface::CI_PostMessageDeleted(const unsigned postmessages_count)
  *
  *  @author OLiver
  */
-void dskGameInterface::GI_Winner(const unsigned player_id)
+void dskGameInterface::GI_Winner(const uint32_t player_id)
 {
     char text[256];
     snprintf(text, sizeof(text), _("Player '%s' is the winner!"), GAMECLIENT.GetPlayer(player_id)->name.c_str());
@@ -1321,11 +1321,11 @@ void dskGameInterface::GI_Winner(const unsigned player_id)
  *
  *  @author poc
  */
-void dskGameInterface::GI_TeamWinner(const unsigned player_id)
+void dskGameInterface::GI_TeamWinner(const uint32_t player_id)
 {
-    unsigned winnercount = 0;
+    uint32_t winnercount = 0;
     char winners[5];
-    for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount() && winnercount < 5; i++)
+    for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount() && winnercount < 5; i++)
     {
         winners[winnercount] = i;
         winnercount += player_id & (1 << i) ? 1 : 0;

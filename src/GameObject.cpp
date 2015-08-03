@@ -42,8 +42,8 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author OLiver
  */
-unsigned int GameObject::obj_id_counter = 1;
-unsigned int GameObject::obj_counter = 0;
+uint32_t GameObject::obj_id_counter = 1;
+uint32_t GameObject::obj_counter = 0;
 
 GameWorldGame* GameObject::gwg = NULL;
 EventManager* GameObject::em = NULL;
@@ -63,7 +63,7 @@ GameObject::GameObject(void) : obj_id(obj_id_counter++)
     ++obj_counter;
 }
 
-GameObject::GameObject(SerializedGameData* sgd, const unsigned obj_id) : obj_id(obj_id)
+GameObject::GameObject(SerializedGameData* sgd, const uint32_t obj_id) : obj_id(obj_id)
 {
     // ein Objekt mehr
     ++obj_counter;

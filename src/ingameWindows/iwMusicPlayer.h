@@ -29,13 +29,13 @@ class iwMusicPlayer : public IngameWindow
         {
                 /// Fenster, von dem aus die Box aufgerufen wurde
                 iwMusicPlayer* parent;
-                const unsigned win_id;
+                const uint32_t win_id;
             public:
 
-                InputWindow(iwMusicPlayer* parent, const unsigned win_id, const std::string& title);
+                InputWindow(iwMusicPlayer* parent, const uint32_t win_id, const std::string& title);
 
-                void Msg_ButtonClick(const unsigned int ctrl_id);
-                void Msg_EditEnter(const unsigned int ctrl_id);
+                void Msg_ButtonClick(const uint32_t ctrl_id);
+                void Msg_EditEnter(const uint32_t ctrl_id);
         };
 
         /// Merken, ob Veränderungen an den Musikeinstellungen durchgeführt wurden und ob deswegen
@@ -49,12 +49,12 @@ class iwMusicPlayer : public IngameWindow
 
         /// Setzt Werte
         void SetSegments(const std::vector<std::string>& segments);
-        void SetRepeats(const unsigned repeats);
+        void SetRepeats(const uint32_t repeats);
         void SetRandomPlayback(const bool random_playback);
 
         /// Gibt Werte zurück
         void GetSegments(std::vector<std::string>& segments) const;
-        unsigned GetRepeats() const;
+        uint32_t GetRepeats() const;
         bool GetRandomPlayback() const;
 
         /// Updatet die Playlist- Combo, selektiert entsprechenden Eintrag, falls vorhanden
@@ -65,11 +65,11 @@ class iwMusicPlayer : public IngameWindow
 
     private:
 
-        void Msg_ListChooseItem(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_ComboSelectItem(const unsigned ctrl_id, const unsigned short selection);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ListChooseItem(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 
-        void Msg_Input(const unsigned int win_id, const std::string& msg);
+        void Msg_Input(const uint32_t win_id, const std::string& msg);
 
 
 };

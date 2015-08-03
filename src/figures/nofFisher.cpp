@@ -38,7 +38,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofFisher::nofFisher(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofFisher::nofFisher(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofFarmhand(JOB_FISHER, pos, player, workplace), fishing_dir(0), successful(false)
 {
 }
@@ -51,17 +51,17 @@ void nofFisher::Serialize_nofFisher(SerializedGameData* sgd) const
     sgd->PushBool(successful);
 }
 
-nofFisher::nofFisher(SerializedGameData* sgd, const unsigned obj_id) : nofFarmhand(sgd, obj_id),
+nofFisher::nofFisher(SerializedGameData* sgd, const uint32_t obj_id) : nofFarmhand(sgd, obj_id),
     fishing_dir(sgd->PopUnsignedChar()),
     successful(sgd->PopBool())
 {
 }
 
 /// Malt den Arbeiter beim Arbeiten
-void nofFisher::DrawWorking(int x, int y)
+void nofFisher::DrawWorking(int32_t x, int32_t y)
 {
-    unsigned short id = GAMECLIENT.Interpolate(232, current_ev);
-    unsigned short draw_id;
+    uint16_t id = GAMECLIENT.Interpolate(232, current_ev);
+    uint16_t draw_id;
 
     if(id < 16)
     {
@@ -109,7 +109,7 @@ void nofFisher::DrawWorking(int x, int y)
 }
 
 /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-unsigned short nofFisher::GetCarryID() const
+uint16_t nofFisher::GetCarryID() const
 {
     return 70;
 }
@@ -117,10 +117,10 @@ unsigned short nofFisher::GetCarryID() const
 /// Abgeleitete Klasse informieren, wenn sie anfängt zu arbeiten (Vorbereitungen)
 void nofFisher::WorkStarted()
 {
-    unsigned char doffset = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
+    uint8_t doffset = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
     // Punkt mit Fisch suchen (mit zufälliger Richtung beginnen)
     fishing_dir = 0xFF;
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         fishing_dir = (i + doffset) % 6;
         if(gwg->GetNode(gwg->GetNeighbour(pos, fishing_dir)).resources > 0x80 &&
@@ -129,7 +129,7 @@ void nofFisher::WorkStarted()
     }
 
     // Wahrscheinlichkeit, einen Fisch zu fangen sinkt mit abnehmendem Bestand
-    unsigned short probability = 40 + (gwg->GetNode(gwg->GetNeighbour(pos, fishing_dir)).resources - 0x80) * 10;
+    uint16_t probability = 40 + (gwg->GetNode(gwg->GetNeighbour(pos, fishing_dir)).resources - 0x80) * 10;
     successful = (RANDOM.Rand(__FILE__, __LINE__, obj_id, 100) < probability);
 }
 
@@ -157,7 +157,7 @@ nofFarmhand::PointQuality nofFisher::GetPointQuality(const MapPoint pt)
         return PQ_NOTPOSSIBLE;
 
     // irgendwo drumherum muss es Fisch geben
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         if(gwg->GetNode(gwg->GetNeighbour(pt, i)).resources > 0x80 &&
                 gwg->GetNode(gwg->GetNeighbour(pt, i)).resources < 0x90)

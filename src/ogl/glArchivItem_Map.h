@@ -59,7 +59,7 @@ class glArchivItem_Map : public libsiedler2::ArchivItem_Map
         ~glArchivItem_Map(void);
 
         /// lädt die Mapdaten aus einer Datei.
-        int load(FILE* file, bool only_header);
+        int32_t load(FILE* file, bool only_header);
 
         void Serialize(SerializedGameData* sgd) const;
         void Deserialize(SerializedGameData* sgd, const char* const map_name);
@@ -68,19 +68,19 @@ class glArchivItem_Map : public libsiedler2::ArchivItem_Map
         const libsiedler2::ArchivItem_Map_Header& getHeader(void) const { return *header; }
 
         /// liefert einen Map-Layer zurück.
-        const unsigned char* GetLayer(MapLayer type) const;
+        const uint8_t* GetLayer(MapLayer type) const;
         /// liefert einen Map-Layer zurück.
-        unsigned char* GetLayer(MapLayer type);
+        uint8_t* GetLayer(MapLayer type);
 
         /// liefert die Mapdaten an einer bestimmten Stelle zurück.
-        unsigned char GetMapDataAt(MapLayer type, unsigned int pos) const;
+        uint8_t GetMapDataAt(MapLayer type, uint32_t pos) const;
         /// setzt die Mapdaten an einer bestimmten Stelle.
-        void SetMapDataAt(MapLayer type, unsigned int pos, unsigned char value);
+        void SetMapDataAt(MapLayer type, uint32_t pos, uint8_t value);
 
         /// liefert die Mapdaten an der Stelle X,Y zurück.
-        unsigned char GetMapDataAt(MapLayer type, unsigned short x, unsigned short y) const;
+        uint8_t GetMapDataAt(MapLayer type, uint16_t x, uint16_t y) const;
         /// setzt die Mapdaten an der Stelle X,Y.
-        void SetMapDataAt(MapLayer type, unsigned short x, unsigned short y, unsigned char value);
+        void SetMapDataAt(MapLayer type, uint16_t x, uint16_t y, uint8_t value);
 
     private:
         const libsiedler2::ArchivItem_Map_Header* header;

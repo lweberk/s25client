@@ -37,7 +37,7 @@ class AIBase
 {
     protected:
         /// Eigene PlayerID, die der KI-Spieler wissen sollte, z.B. wenn er die Karte untersucht
-        const unsigned char playerid;
+        const uint8_t playerid;
         /// Verweis auf die Spielwelt, um entsprechend Informationen daraus zu erhalten
         const GameWorldBase* const gwb;
         /// Verweis auf den eigenen GameClientPlayer, d.h. die Wirtschaft, um daraus entsprechend Informationen zu gewinnen
@@ -53,14 +53,14 @@ class AIBase
 
     public:
 
-        AIBase(const unsigned char playerid, const GameWorldBase* const gwb, const GameClientPlayer* const player,
+        AIBase(const uint8_t playerid, const GameWorldBase* const gwb, const GameClientPlayer* const player,
                const GameClientPlayerList* const players, const GlobalGameSettings* const ggs, const AI::Level level)
             : playerid(playerid), gwb(gwb), player(player), players(players), level(level), aii(new AIInterface(gwb, player, players, &gcs, playerid)), ggs(ggs) {}
 
         virtual ~AIBase() {}
 
         /// Wird jeden GF aufgerufen und die KI kann hier entsprechende Handlungen vollziehen
-        virtual void RunGF(const unsigned gf, bool gfisnwf) = 0;
+        virtual void RunGF(const uint32_t gf, bool gfisnwf) = 0;
 
         /// Verweis auf die Globalen Spieleinstellungen, da diese auch die weiteren Entscheidungen beeinflussen können
         /// (beispielsweise Siegesbedingungen, FOW usw.)

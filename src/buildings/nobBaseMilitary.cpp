@@ -47,7 +47,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 nobBaseMilitary::nobBaseMilitary(const BuildingType type, const MapPoint pos,
-                                 const unsigned char player, const Nation nation)
+                                 const uint8_t player, const Nation nation)
     : noBuilding(type, pos, player, nation), leaving_event(0), go_out(false), defender(0)
 {
 
@@ -131,7 +131,7 @@ void nobBaseMilitary::Serialize_nobBaseMilitary(SerializedGameData* sgd) const
     sgd->PushObject(defender, true);
 }
 
-nobBaseMilitary::nobBaseMilitary(SerializedGameData* sgd, const unsigned obj_id) : noBuilding(sgd, obj_id)
+nobBaseMilitary::nobBaseMilitary(SerializedGameData* sgd, const uint32_t obj_id) : noBuilding(sgd, obj_id)
 {
     sgd->PopObjectList(leave_house, GOT_UNKNOWN);
     leaving_event = sgd->PopObject<EventManager::Event>(GOT_EVENT);
@@ -187,11 +187,11 @@ nofAttacker* nobBaseMilitary::FindAggressor(nofAggressiveDefender* defender)
     return NULL;
 }
 
-MapPoint nobBaseMilitary::FindAnAttackerPlace(unsigned short& ret_radius, nofAttacker* soldier)
+MapPoint nobBaseMilitary::FindAnAttackerPlace(uint16_t& ret_radius, nofAttacker* soldier)
 {
     const MapPoint flagPos = gwg->GetNeighbour(pos, 4);
 
-    unsigned short d;
+    uint16_t d;
 
     // Diesen Flaggenplatz nur nehmen, wenn es auch nich gerade eingenommen wird, sonst gibts Deserteure!
     // Eigenommen werden können natürlich nur richtige Militärgebäude
@@ -212,42 +212,42 @@ MapPoint nobBaseMilitary::FindAnAttackerPlace(unsigned short& ret_radius, nofAtt
         // links anfangen und im Uhrzeigersinn vorgehen
         MapPoint ret(flagPos.x - d, pos.y + 1);
 
-        for(unsigned short i = 0; i < d; ++i, ret.x += (ret.y & 1), --ret.y)
+        for(uint16_t i = 0; i < d; ++i, ret.x += (ret.y & 1), --ret.y)
         {
             if(gwg->ValidWaitingAroundBuildingPoint(ret, soldier, pos))
             {
                 nodes.push_back(ret);
             }
         }
-        for(unsigned short i = 0; i < d; ++i, ++ret.x)
+        for(uint16_t i = 0; i < d; ++i, ++ret.x)
         {
             if(gwg->ValidWaitingAroundBuildingPoint(ret, soldier, pos))
             {
                 nodes.push_back(ret);
             }
         }
-        for(unsigned short i = 0; i < d; ++i, ret.x += (ret.y & 1), ++ret.y)
+        for(uint16_t i = 0; i < d; ++i, ret.x += (ret.y & 1), ++ret.y)
         {
             if(gwg->ValidWaitingAroundBuildingPoint(ret, soldier, pos))
             {
                 nodes.push_back(ret);
             }
         }
-        for(unsigned short i = 0; i < d; ++i, ret.x -= !(ret.y & 1), ++ret.y)
+        for(uint16_t i = 0; i < d; ++i, ret.x -= !(ret.y & 1), ++ret.y)
         {
             if(gwg->ValidWaitingAroundBuildingPoint(ret, soldier, pos))
             {
                 nodes.push_back(ret);
             }
         }
-        for(unsigned short i = 0; i < d; ++i, --ret.x)
+        for(uint16_t i = 0; i < d; ++i, --ret.x)
         {
             if(gwg->ValidWaitingAroundBuildingPoint(ret, soldier, pos))
             {
                 nodes.push_back(ret);
             }
         }
-        for(unsigned short i = 0; i < d; ++i, ret.x -= !(ret.y & 1), --ret.y)
+        for(uint16_t i = 0; i < d; ++i, ret.x -= !(ret.y & 1), --ret.y)
         {
             if(gwg->ValidWaitingAroundBuildingPoint(ret, soldier, pos))
             {
@@ -262,7 +262,7 @@ MapPoint nobBaseMilitary::FindAnAttackerPlace(unsigned short& ret_radius, nofAtt
 
     // Weg zu allen gefundenen Punkten berechnen und den mit den kürzesten Weg nehmen
     // Die bisher kürzeste gefundene Länge
-    unsigned min_length = std::numeric_limits<unsigned>::max();
+    uint32_t min_length = std::numeric_limits<uint32_t>::max();
     MapPoint minPt = MapPoint::Invalid();
     for(std::vector<MapPoint>::iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
@@ -273,7 +273,7 @@ MapPoint nobBaseMilitary::FindAnAttackerPlace(unsigned short& ret_radius, nofAtt
             return *it;
         }
 
-        unsigned length = 0;
+        uint32_t length = 0;
         // Gültiger Weg gefunden
         if(gwg->FindHumanPath(soldier->GetPos(), *it, 100, false, &length) != 0xFF)
         {
@@ -325,7 +325,7 @@ nofAttacker* nobBaseMilitary::FindAttackerNearBuilding()
     // Alle angreifenden Soldaten durchgehen
     // Den Soldaten, der am nächsten dran steht, nehmen
     nofAttacker* best_attacker = 0;
-    unsigned best_radius = 0xFFFFFFFF;
+    uint32_t best_radius = 0xFFFFFFFF;
 
 
     for(std::list<nofAttacker*>::iterator it = aggressors.begin(); it != aggressors.end(); ++it)
@@ -369,7 +369,7 @@ void nobBaseMilitary::CheckArrestedAttackers()
     }
 }
 
-bool nobBaseMilitary::SendSuccessor(const MapPoint pt, const unsigned short radius, const unsigned char dir)
+bool nobBaseMilitary::SendSuccessor(const MapPoint pt, const uint16_t radius, const uint8_t dir)
 {
     for(std::list<nofAttacker*>::iterator it = aggressors.begin(); it != aggressors.end(); ++it)
     {

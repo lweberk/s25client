@@ -69,7 +69,7 @@ dskDirectIP::dskDirectIP(void) : Desktop(LOADER.GetImageN("menu", 0))
 }
 
 
-void dskDirectIP::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskDirectIP::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

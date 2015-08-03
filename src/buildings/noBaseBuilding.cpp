@@ -46,7 +46,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-noBaseBuilding::noBaseBuilding(const NodalObjectType nop, const BuildingType type, const MapPoint pos, const unsigned char player)
+noBaseBuilding::noBaseBuilding(const NodalObjectType nop, const BuildingType type, const MapPoint pos, const uint8_t player)
     : noRoadNode(nop, pos, player), type(type), nation(GAMECLIENT.GetPlayer(player)->nation), door_point_x(1000000), door_point_y(DOOR_CONSTS[GAMECLIENT.GetPlayer(player)->nation][type])
 {
 
@@ -70,7 +70,7 @@ noBaseBuilding::noBaseBuilding(const NodalObjectType nop, const BuildingType typ
 
         // Straßenverbindung erstellen zwischen Flagge und Haus
         // immer von Flagge ZU Gebäude (!)
-        std::vector<unsigned char> route(1, 1);
+        std::vector<uint8_t> route(1, 1);
         // Straße zuweisen
         gwg->GetSpecObj<noRoadNode>(gwg->GetNeighbour(pos, 4))->routes[1] = // der Flagge
             routes[4] = // dem Gebäude
@@ -90,7 +90,7 @@ noBaseBuilding::noBaseBuilding(const NodalObjectType nop, const BuildingType typ
     // Werde/Bin ich (mal) ein großes Schloss? Dann müssen die Anbauten gesetzt werden
     if(GetSize() == BQ_CASTLE || GetSize() == BQ_HARBOR)
     {
-        for(unsigned i = 0; i < 3; ++i)
+        for(uint32_t i = 0; i < 3; ++i)
         {
             MapPoint pos2 = gwg->GetNeighbour(pos, i);
 
@@ -133,7 +133,7 @@ void noBaseBuilding::Destroy_noBaseBuilding()
         noFlag* flag = GetFlag();
         if(flag)
         {
-            unsigned int percent_index = 0;
+            uint32_t percent_index = 0;
 
             // wenn Rückerstattung aktiv ist, entsprechende Prozentzahl wählen
             if(GAMECLIENT.GetGGS().isEnabled(ADDON_REFUND_MATERIALS))
@@ -144,12 +144,12 @@ void noBaseBuilding::Destroy_noBaseBuilding()
                 percent_index = 2;
 
             // wieviel kriegt man von jeder Ware wieder?
-            const unsigned int percents[5] = { 0, 25, 50, 75, 100 };
-            const unsigned int percent = 10 * percents[percent_index];
+            const uint32_t percents[5] = { 0, 25, 50, 75, 100 };
+            const uint32_t percent = 10 * percents[percent_index];
 
             // zurückgaben berechnen (abgerundet)
-            unsigned int boards = (percent * BUILDING_COSTS[nation][type].boards) / 1000;
-            unsigned int stones = (percent * BUILDING_COSTS[nation][type].stones) / 1000;
+            uint32_t boards = (percent * BUILDING_COSTS[nation][type].boards) / 1000;
+            uint32_t stones = (percent * BUILDING_COSTS[nation][type].stones) / 1000;
 
             GoodType goods[2] = {GD_BOARDS, GD_STONES};
             bool which = 0;
@@ -188,13 +188,13 @@ void noBaseBuilding::Serialize_noBaseBuilding(SerializedGameData* sgd) const
 {
     Serialize_noRoadNode(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(type));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(type));
     sgd->PushUnsignedChar(nation);
     sgd->PushSignedInt(door_point_x);
     sgd->PushSignedInt(door_point_y);
 }
 
-noBaseBuilding::noBaseBuilding(SerializedGameData* sgd, const unsigned obj_id) : noRoadNode(sgd, obj_id),
+noBaseBuilding::noBaseBuilding(SerializedGameData* sgd, const uint32_t obj_id) : noRoadNode(sgd, obj_id),
     type(BuildingType(sgd->PopUnsignedChar())),
     nation(Nation(sgd->PopUnsignedChar())),
     door_point_x(sgd->PopSignedInt()),
@@ -202,7 +202,7 @@ noBaseBuilding::noBaseBuilding(SerializedGameData* sgd, const unsigned obj_id) :
 {
 }
 
-short noBaseBuilding::GetDoorPointX()
+int16_t noBaseBuilding::GetDoorPointX()
 {
     // Door-Points ausrechnen (Punkte, bis wohin die Menschen gehen, wenn sie ins
     // Gebäude gehen, woa ußerdem der Bauarbeiter baut und wo die Waren liegen
@@ -210,10 +210,10 @@ short noBaseBuilding::GetDoorPointX()
     // Door-Point noch nicht ausgerechnet?
     if(door_point_x == 1000000)
     {
-        int x1 = static_cast<int>(gwg->GetTerrainX(pos));
-        int y1 = static_cast<int>(gwg->GetTerrainY(pos));
-        int x2 = static_cast<int>(gwg->GetTerrainX(gwg->GetNeighbour(pos, 4)));
-        int y2 = static_cast<int>(gwg->GetTerrainY(gwg->GetNeighbour(pos, 4)));
+        int32_t x1 = static_cast<int32_t>(gwg->GetTerrainX(pos));
+        int32_t y1 = static_cast<int32_t>(gwg->GetTerrainY(pos));
+        int32_t x2 = static_cast<int32_t>(gwg->GetTerrainX(gwg->GetNeighbour(pos, 4)));
+        int32_t y2 = static_cast<int32_t>(gwg->GetTerrainY(gwg->GetNeighbour(pos, 4)));
 
         // Gehen wir über einen Kartenrand (horizontale Richung?)
         if(std::abs(x1 - x2) >= gwg->GetWidth() * TR_W / 2)
@@ -237,7 +237,7 @@ short noBaseBuilding::GetDoorPointX()
         door_point_x = (DOOR_CONSTS[GAMECLIENT.GetPlayer(player)->nation][type] * (x1 - x2)) / (y1 - y2);
     }
 
-    return (short)(door_point_x & 0xFFFF);
+    return (int16_t)(door_point_x & 0xFFFF);
 }
 
 noFlag* noBaseBuilding::GetFlag() const
@@ -276,7 +276,7 @@ void noBaseBuilding::DestroyBuildingExtensions()
     if(GetSize() == BQ_CASTLE || GetSize() == BQ_HARBOR)
     {
 
-        for(unsigned i = 0; i < 3; ++i)
+        for(uint32_t i = 0; i < 3; ++i)
         {
             MapPoint nb = gwg->GetNeighbour(pos, i);
 

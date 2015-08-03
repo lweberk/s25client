@@ -84,8 +84,8 @@ void iwMilitary::TransmitSettings()
     if(settings_changed)
     {
         // Einstellungen speichern
-        for(unsigned char i = 0; i < MILITARY_SETTINGS_COUNT; ++i)
-            GAMECLIENT.visual_settings.military_settings[i] = (unsigned char)GetCtrl<ctrlProgress>(i)->GetPosition();
+        for(uint8_t i = 0; i < MILITARY_SETTINGS_COUNT; ++i)
+            GAMECLIENT.visual_settings.military_settings[i] = (uint8_t)GetCtrl<ctrlProgress>(i)->GetPosition();
 
         GAMECLIENT.AddGC(new gc::ChangeMilitary(GAMECLIENT.visual_settings.military_settings));
         settings_changed = false;
@@ -93,7 +93,7 @@ void iwMilitary::TransmitSettings()
 }
 
 
-void iwMilitary::Msg_Timer(const unsigned int ctrl_id)
+void iwMilitary::Msg_Timer(const uint32_t ctrl_id)
 {
     if(GAMECLIENT.IsReplayModeOn())
         // Im Replay aktualisieren wir die Werte
@@ -103,7 +103,7 @@ void iwMilitary::Msg_Timer(const unsigned int ctrl_id)
         TransmitSettings();
 }
 
-void iwMilitary::Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position)
+void iwMilitary::Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position)
 {
 
     // Einstellungen wurden geändert
@@ -113,11 +113,11 @@ void iwMilitary::Msg_ProgressChange(const unsigned int ctrl_id, const unsigned s
 void iwMilitary::UpdateSettings()
 {
     // Einstellungen festlegen
-    for(unsigned i = 0; i < MILITARY_SETTINGS_COUNT; ++i)
+    for(uint32_t i = 0; i < MILITARY_SETTINGS_COUNT; ++i)
         GetCtrl<ctrlProgress>(i)->SetPosition(GAMECLIENT.visual_settings.military_settings[i]);
 }
 
-void iwMilitary::Msg_ButtonClick(const unsigned ctrl_id)
+void iwMilitary::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

@@ -27,7 +27,7 @@ class iwMissionStatement : public IngameWindow
 {
     public:
         iwMissionStatement(const std::string& title, const std::string& content);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 #endif // !iwMISSIONSTATEMENT_H_INCLUDED

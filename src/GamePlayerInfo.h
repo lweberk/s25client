@@ -20,6 +20,8 @@
 #ifndef GAMEPLAYERINFO_H_INCLUDED
 #define GAMEPLAYERINFO_H_INCLUDED
 
+#include <cstdint>
+
 #include "GameProtocol.h"
 #include "Socket.h"
 #include "gameData/GameConsts.h"
@@ -63,9 +65,9 @@ namespace AI
 class GamePlayerInfo
 {
     public:
-        GamePlayerInfo(const unsigned playerid);
+        GamePlayerInfo(const uint32_t playerid);
         /// Deserialisierungskonstruktor
-        GamePlayerInfo(const unsigned playerid, Serializer* ser);
+        GamePlayerInfo(const uint32_t playerid, Serializer* ser);
 
         virtual ~GamePlayerInfo();
 
@@ -80,7 +82,7 @@ class GamePlayerInfo
         /// serialisiert die Daten.
         void serialize(Serializer* ser) const;
 
-        unsigned getPlayerID() const { return playerid; }
+        uint32_t getPlayerID() const { return playerid; }
 
     protected:
         /// Wechselt Spieler
@@ -88,7 +90,7 @@ class GamePlayerInfo
 
     protected:
         /// Player-ID
-        unsigned playerid;
+        uint32_t playerid;
         /// Besiegt?
         bool defeated;
 
@@ -107,14 +109,14 @@ class GamePlayerInfo
 
         Nation nation;
         Team team;
-        unsigned char color;
+        uint8_t color;
 
-        unsigned ping;
-        unsigned int rating;
+        uint32_t ping;
+        uint32_t rating;
 
-        int checksum;
-        unsigned obj_cnt;
-        unsigned obj_id_cnt;
+        int32_t checksum;
+        uint32_t obj_cnt;
+        uint32_t obj_id_cnt;
         bool ready;
 };
 

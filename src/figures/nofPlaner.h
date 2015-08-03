@@ -51,12 +51,12 @@ class nofPlaner : public noFigure
         void GoalReached();
         void Walked();
         void AbrogateWorkplace();
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
     public:
 
-        nofPlaner(const MapPoint pt, const unsigned char player, noBuildingSite* building_site);
-        nofPlaner(SerializedGameData* sgd, const unsigned obj_id);
+        nofPlaner(const MapPoint pt, const uint8_t player, noBuildingSite* building_site);
+        nofPlaner(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Serialisierungsfunktionen
     protected:  void Serialize_nofPlaner(SerializedGameData* sgd) const;
@@ -64,7 +64,7 @@ class nofPlaner : public noFigure
 
         GO_Type GetGOT() const { return GOT_NOF_PLANER; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Wird von der Baustelle aus aufgerufen, um den Bauarbeiter zu sagen, dass er gehen kann
         void LostWork();

@@ -41,11 +41,11 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlList::ctrlList(Window* parent,
-                   unsigned int id,
-                   unsigned short x,
-                   unsigned short y,
-                   unsigned short width,
-                   unsigned short height,
+                   uint32_t id,
+                   uint16_t x,
+                   uint16_t y,
+                   uint16_t width,
+                   uint16_t height,
                    TextureColor tc,
                    glArchivItem_Font* font)
     : Window(x, y, id, parent, width, height),
@@ -230,10 +230,10 @@ bool ctrlList::Draw_(void)
     DrawControls();
 
     // Wieviele Linien anzeigen?
-    unsigned show_lines = (pagesize > lines.size() ? unsigned(lines.size()) : pagesize);
+    uint32_t show_lines = (pagesize > lines.size() ? unsigned(lines.size()) : pagesize);
 
     // Listeneinträge zeichnen
-    for(unsigned short i = 0; i < show_lines; ++i)
+    for(uint16_t i = 0; i < show_lines; ++i)
     {
         // Schwarze Markierung, wenn die Maus drauf ist
         if(i == mouseover)
@@ -257,7 +257,7 @@ void ctrlList::AddString(const std::string& text)
     // lines-Array ggf vergrößern
     lines.push_back(text);
 
-    GetCtrl<ctrlScrollBar>(0)->SetRange(static_cast<unsigned short>(lines.size()));
+    GetCtrl<ctrlScrollBar>(0)->SetRange(static_cast<uint16_t>(lines.size()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -266,7 +266,7 @@ void ctrlList::AddString(const std::string& text)
  *
  *  @author OLiver
  */
-void ctrlList::SetString(const std::string& text, const unsigned id)
+void ctrlList::SetString(const std::string& text, const uint32_t id)
 {
     lines[id] = text;
 }
@@ -293,7 +293,7 @@ void ctrlList::DeleteAllItems()
  *
  *  @author OLiver
  */
-const std::string& ctrlList::GetItemText(unsigned short line) const
+const std::string& ctrlList::GetItemText(uint16_t line) const
 {
     if(line < lines.size())
         return lines.at(line);
@@ -310,7 +310,7 @@ const std::string& ctrlList::GetItemText(unsigned short line) const
  *
  *  @author OLiver
  */
-void ctrlList::Resize_(unsigned short width, unsigned short height)
+void ctrlList::Resize_(uint16_t width, uint16_t height)
 {
     ctrlScrollBar* scrollbar = GetCtrl<ctrlScrollBar>(0);
     scrollbar->Move(width - 20, 0);
@@ -335,7 +335,7 @@ void ctrlList::Resize_(unsigned short width, unsigned short height)
  *
  *  @author OLiver
  */
-void ctrlList::Swap(unsigned short first, unsigned short second)
+void ctrlList::Swap(uint16_t first, uint16_t second)
 {
     // Evtl Selection auf das jeweilige Element beibehalten?
     if(first == selection)
@@ -353,7 +353,7 @@ void ctrlList::Swap(unsigned short first, unsigned short second)
  *
  *  @author OLiver
  */
-void ctrlList::Remove(const unsigned short index)
+void ctrlList::Remove(const uint16_t index)
 {
     if(index < lines.size())
     {

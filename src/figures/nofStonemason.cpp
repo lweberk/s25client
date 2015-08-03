@@ -39,19 +39,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofStonemason::nofStonemason(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofStonemason::nofStonemason(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofFarmhand(JOB_STONEMASON, pos, player, workplace)
 {
 }
 
-nofStonemason::nofStonemason(SerializedGameData* sgd, const unsigned obj_id) : nofFarmhand(sgd, obj_id)
+nofStonemason::nofStonemason(SerializedGameData* sgd, const uint32_t obj_id) : nofFarmhand(sgd, obj_id)
 {
 }
 
 /// Malt den Arbeiter beim Arbeiten
-void nofStonemason::DrawWorking(int x, int y)
+void nofStonemason::DrawWorking(int32_t x, int32_t y)
 {
-    unsigned now_id;
+    uint32_t now_id;
 
     // Stein hauen
     LOADER.GetImageN("rom_bobs", 40 + (now_id = GAMECLIENT.Interpolate(64, current_ev)) % 8)
@@ -66,7 +66,7 @@ void nofStonemason::DrawWorking(int x, int y)
 }
 
 /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-unsigned short nofStonemason::GetCarryID() const
+uint16_t nofStonemason::GetCarryID() const
 {
     return 63;
 }

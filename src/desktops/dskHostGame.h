@@ -42,58 +42,58 @@ class dskHostGame :
         dskHostGame(bool single_player = false);
 
         /// Größe ändern-Reaktionen die nicht vom Skaling-Mechanismus erfasst werden.
-        void Resize_(unsigned short width, unsigned short height);
+        void Resize_(uint16_t width, uint16_t height);
     private:
 
-        void TogglePlayerReady(unsigned char player, bool ready);
+        void TogglePlayerReady(uint8_t player, bool ready);
         // GGS von den Controls auslesen
         void UpdateGGS();
         /// Aktualisiert eine Spielerreihe (löscht Controls und legt neue an)
-        void UpdatePlayerRow(const unsigned row);
+        void UpdatePlayerRow(const uint32_t row);
 
         /// Füllt die Felder einer Reihe aus
-        void ChangeTeam(const unsigned i, const unsigned char nr);
-        void ChangeReady(const unsigned i, const bool ready);
-        void ChangeNation(const unsigned i, const Nation nation);
-        void ChangePing(const unsigned i);
-        void ChangeColor(const unsigned i, const unsigned char color);
+        void ChangeTeam(const uint32_t i, const uint8_t nr);
+        void ChangeReady(const uint32_t i, const bool ready);
+        void ChangeNation(const uint32_t i, const Nation nation);
+        void ChangePing(const uint32_t i);
+        void ChangeColor(const uint32_t i, const uint8_t color);
 
         void Msg_PaintBefore();
-        void Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id);
-        void Msg_Group_CheckboxChange(const unsigned int group_id, const unsigned int ctrl_id, const bool checked);
-        void Msg_Group_ComboSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_EditEnter(const unsigned int ctrl_id);
-        void Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr);
-        void Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_CheckboxChange(const unsigned int ctrl_id, const bool checked);
+        void Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id);
+        void Msg_Group_CheckboxChange(const uint32_t group_id, const uint32_t ctrl_id, const bool checked);
+        void Msg_Group_ComboSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_EditEnter(const uint32_t ctrl_id);
+        void Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr);
+        void Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_CheckboxChange(const uint32_t ctrl_id, const bool checked);
 
         void LC_RankingInfo(const LobbyPlayerInfo& player);
 
         void CI_Error(const ClientError ce);
 
-        void CI_NewPlayer(const unsigned player_id);
-        void CI_PlayerLeft(const unsigned player_id);
+        void CI_NewPlayer(const uint32_t player_id);
+        void CI_PlayerLeft(const uint32_t player_id);
 
         void CI_GameStarted(GameWorldViewer* gwv);
 
-        void CI_PSChanged(const unsigned player_id, const PlayerState ps);
-        void CI_NationChanged(const unsigned player_id, const Nation nation);
-        void CI_TeamChanged(const unsigned player_id, const unsigned char team);
-        void CI_PingChanged(const unsigned player_id, const unsigned short ping);
-        void CI_ColorChanged(const unsigned player_id, const unsigned char color);
-        void CI_ReadyChanged(const unsigned player_id, const bool ready);
-        void CI_PlayersSwapped(const unsigned player1, const unsigned player2);
+        void CI_PSChanged(const uint32_t player_id, const PlayerState ps);
+        void CI_NationChanged(const uint32_t player_id, const Nation nation);
+        void CI_TeamChanged(const uint32_t player_id, const uint8_t team);
+        void CI_PingChanged(const uint32_t player_id, const uint16_t ping);
+        void CI_ColorChanged(const uint32_t player_id, const uint8_t color);
+        void CI_ReadyChanged(const uint32_t player_id, const bool ready);
+        void CI_PlayersSwapped(const uint32_t player1, const uint32_t player2);
         void CI_GGSChanged(const GlobalGameSettings& ggs);
 
-        void CI_Chat(const unsigned player_id, const ChatDestination cd, const std::string& msg);
-        void CI_Countdown(int countdown);
+        void CI_Chat(const uint32_t player_id, const ChatDestination cd, const std::string& msg);
+        void CI_Countdown(int32_t countdown);
         void CI_CancelCountdown();
 
         void LC_Status_Error(const std::string& error);
 
     private:
-        int temppunkte; // TODO - wegmachen und durch korrekte punkte ersetzen!
+        int32_t temppunkte; // TODO - wegmachen und durch korrekte punkte ersetzen!
         glArchivItem_Bitmap_Raw preview;
         GlobalGameSettings ggs;
         bool has_countdown;

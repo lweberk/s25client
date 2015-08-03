@@ -86,7 +86,7 @@ glArchivItem_Map::~glArchivItem_Map()
  *
  *  @author FloSoft
  */
-int glArchivItem_Map::load(FILE* file, bool only_header)
+int32_t glArchivItem_Map::load(FILE* file, bool only_header)
 {
     if(loadHelper(file, only_header) != 0)
         return 1;
@@ -100,7 +100,7 @@ int glArchivItem_Map::load(FILE* file, bool only_header)
         return 0;
 
     // Noch nicht am Ende der Datei?
-    unsigned i = 0, j = 0;
+    uint32_t i = 0, j = 0;
     //if(!feof(file))
     //{
     //  // Gucken, wieviel noch danach kommt
@@ -110,7 +110,7 @@ int glArchivItem_Map::load(FILE* file, bool only_header)
     //  fseek(file, i, SEEK_SET);
     //}
 
-    if((unsigned int)(j - i) > (unsigned int)(header->getWidth() * header->getHeight() * 2))
+    if((uint32_t)(j - i) > (uint32_t)(header->getWidth() * header->getHeight() * 2))
     {
         // Wenn noch Platz ist, restliches Zeug noch auslesen
         libsiedler2::ArchivItem_Raw* reservations = dynamic_cast<libsiedler2::ArchivItem_Raw*>(glAllocator(libsiedler2::BOBTYPE_RAW, 0, NULL));
@@ -143,7 +143,7 @@ int glArchivItem_Map::load(FILE* file, bool only_header)
  *
  *  @author FloSoft
  */
-const unsigned char* glArchivItem_Map::GetLayer(MapLayer type) const
+const uint8_t* glArchivItem_Map::GetLayer(MapLayer type) const
 {
     const libsiedler2::ArchivItem_Raw* item = dynamic_cast<const libsiedler2::ArchivItem_Raw*>(get(type));
     assert(item);
@@ -158,7 +158,7 @@ const unsigned char* glArchivItem_Map::GetLayer(MapLayer type) const
  *
  *  @author FloSoft
  */
-unsigned char* glArchivItem_Map::GetLayer(MapLayer type)
+uint8_t* glArchivItem_Map::GetLayer(MapLayer type)
 {
     libsiedler2::ArchivItem_Raw* item = dynamic_cast<libsiedler2::ArchivItem_Raw*>(get(type));
     assert(item);
@@ -174,9 +174,9 @@ unsigned char* glArchivItem_Map::GetLayer(MapLayer type)
  *
  *  @author FloSoft
  */
-unsigned char glArchivItem_Map::GetMapDataAt(MapLayer type, unsigned int pos) const
+uint8_t glArchivItem_Map::GetMapDataAt(MapLayer type, uint32_t pos) const
 {
-    const unsigned char* data = GetLayer(type);
+    const uint8_t* data = GetLayer(type);
     assert(data);
 
     return data[pos];
@@ -192,9 +192,9 @@ unsigned char glArchivItem_Map::GetMapDataAt(MapLayer type, unsigned int pos) co
  *
  *  @author FloSoft
  */
-void glArchivItem_Map::SetMapDataAt(MapLayer type, unsigned int pos, unsigned char value)
+void glArchivItem_Map::SetMapDataAt(MapLayer type, uint32_t pos, uint8_t value)
 {
-    unsigned char* data = GetLayer(type);
+    uint8_t* data = GetLayer(type);
     assert(data);
 
     data[pos] = value;
@@ -210,7 +210,7 @@ void glArchivItem_Map::SetMapDataAt(MapLayer type, unsigned int pos, unsigned ch
  *
  *  @author FloSoft
  */
-unsigned char glArchivItem_Map::GetMapDataAt(MapLayer type, unsigned short x, unsigned short y) const
+uint8_t glArchivItem_Map::GetMapDataAt(MapLayer type, uint16_t x, uint16_t y) const
 {
     return GetMapDataAt(type, y * header->getWidth() + x);
 }
@@ -226,7 +226,7 @@ unsigned char glArchivItem_Map::GetMapDataAt(MapLayer type, unsigned short x, un
  *
  *  @author FloSoft
  */
-void glArchivItem_Map::SetMapDataAt(MapLayer type, unsigned short x, unsigned short y, unsigned char value)
+void glArchivItem_Map::SetMapDataAt(MapLayer type, uint16_t x, uint16_t y, uint8_t value)
 {
     SetMapDataAt(type, y * header->getWidth() + x, value);
 }

@@ -42,7 +42,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author OLiver
  */
-iwRoadWindow::iwRoadWindow(dskGameInterface* const GameInterface, bool flagpossible, int mouse_x, int mouse_y)
+iwRoadWindow::iwRoadWindow(dskGameInterface* const GameInterface, bool flagpossible, int32_t mouse_x, int32_t mouse_y)
     : IngameWindow(CGI_ROADWINDOW, mouse_x, mouse_y, 200, 100, _("Activity window"), LOADER.GetImageN("io", 1)),
       GameInterface(GameInterface), last_x(mouse_x), last_y(mouse_y)
 {
@@ -70,7 +70,7 @@ iwRoadWindow::~iwRoadWindow()
     GameInterface->RoadWindowClosed();
 }
 
-void iwRoadWindow::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwRoadWindow::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

@@ -52,7 +52,7 @@ class GameMessage_Ping : public GameMessage
 {
     public:
         GameMessage_Ping(void) : GameMessage(NMS_PING) {}
-        GameMessage_Ping(const unsigned char player) : GameMessage(NMS_PING, player) {}
+        GameMessage_Ping(const uint8_t player) : GameMessage(NMS_PING, player) {}
 
         void Run(MessageInterface* callback)
         {
@@ -67,7 +67,7 @@ class GameMessage_Pong : public GameMessage
 {
     public:
         GameMessage_Pong(void) : GameMessage(NMS_PONG) { }
-        GameMessage_Pong(const unsigned char player) : GameMessage(NMS_PONG, player)
+        GameMessage_Pong(const uint8_t player) : GameMessage(NMS_PONG, player)
         {
             //LOG.write(">>> NMS_PONG\n");
         }
@@ -83,12 +83,12 @@ class GameMessage_Pong : public GameMessage
 class GameMessage_Server_Type: public GameMessage
 {
     public:
-        unsigned short type;
+        uint16_t type;
         std::string version;
 
     public:
         GameMessage_Server_Type(void) : GameMessage(NMS_SERVER_TYPE) { }
-        GameMessage_Server_Type(const unsigned short type,
+        GameMessage_Server_Type(const uint16_t type,
                                 const std::string& version) : GameMessage(NMS_SERVER_TYPE, 0xFF)
         {
             LOG.write(">>> NMS_SERVER_Type(%d, %s)\n", type, version.c_str());
@@ -96,7 +96,7 @@ class GameMessage_Server_Type: public GameMessage
             PushUnsignedShort(type);
             PushString(version);
         }
-        GameMessage_Server_Type(const unsigned short& type)
+        GameMessage_Server_Type(const uint16_t& type)
             : GameMessage(NMS_SERVER_TYPE, 0xFF)
         {
             LOG.write(">>> NMS_SERVER_Type(%s)\n", (type == 1 ? "true" : "false"));
@@ -106,7 +106,7 @@ class GameMessage_Server_Type: public GameMessage
         {
             type = PopUnsignedShort();
 
-            if(GetLength() > sizeof(unsigned short))
+            if(GetLength() > sizeof(uint16_t))
             {
                 version = PopString();
 
@@ -126,11 +126,11 @@ class GameMessage_Server_TypeOK: public GameMessage
 {
     public:
         /// Vom Server akzeptiert?
-        unsigned err_code;
+        uint32_t err_code;
 
     public:
         GameMessage_Server_TypeOK(void) : GameMessage(NMS_SERVER_TYPEOK) { }
-        GameMessage_Server_TypeOK(const unsigned err_code)
+        GameMessage_Server_TypeOK(const uint32_t err_code)
             : GameMessage(NMS_SERVER_TYPEOK, 0xFF), err_code(err_code)
         {
             PushUnsignedInt(err_code);
@@ -199,13 +199,13 @@ class GameMessage_Server_Name : public GameMessage
 class GameMessage_Server_Start : public GameMessage
 {
     public:
-        unsigned int random_init;
-        unsigned int nwf_length;
+        uint32_t random_init;
+        uint32_t nwf_length;
 
     public:
         GameMessage_Server_Start(void) : GameMessage(NMS_SERVER_START) { }
-        GameMessage_Server_Start(const unsigned random_init,
-                                 const unsigned nwf_length) : GameMessage(NMS_SERVER_START, 0xFF)
+        GameMessage_Server_Start(const uint32_t random_init,
+                                 const uint32_t nwf_length) : GameMessage(NMS_SERVER_START, 0xFF)
         {
             LOG.write(">>> NMS_SERVER_START(%d, %d)\n", random_init, nwf_length);
 
@@ -227,11 +227,11 @@ class GameMessage_Server_Start : public GameMessage
 class GameMessage_Server_Countdown : public GameMessage
 {
     public:
-        int countdown;
+        int32_t countdown;
 
     public:
         GameMessage_Server_Countdown(void) : GameMessage(NMS_SERVER_COUNTDOWN) { }
-        GameMessage_Server_Countdown(int countdown) : GameMessage(NMS_SERVER_COUNTDOWN, 0xFF)
+        GameMessage_Server_Countdown(int32_t countdown) : GameMessage(NMS_SERVER_COUNTDOWN, 0xFF)
         {
             PushUnsignedInt(countdown);
 
@@ -273,12 +273,12 @@ class GameMessage_Server_Chat : public GameMessage
 
     public:
         GameMessage_Server_Chat(void) : GameMessage(NMS_SERVER_CHAT) { }
-        GameMessage_Server_Chat(const unsigned char player,
+        GameMessage_Server_Chat(const uint8_t player,
                                 const ChatDestination destination, const std::string& text) : GameMessage(NMS_SERVER_CHAT, player)
         {
             LOG.write(">>> NMS_SERVER_CHAT(%d, %s)\n", destination, text.c_str());
 
-            PushUnsignedChar(static_cast<unsigned char>(destination));
+            PushUnsignedChar(static_cast<uint8_t>(destination));
             PushString(text);
         }
 
@@ -297,24 +297,24 @@ class GameMessage_Server_Chat : public GameMessage
 class GameMessage_Server_Async : public GameMessage
 {
     public:
-        std::vector<int> checksums;
+        std::vector<int32_t> checksums;
 
     public:
         GameMessage_Server_Async(void) : GameMessage(NMS_SERVER_ASYNC) { }
-        GameMessage_Server_Async(const std::vector<int>& checksums)
+        GameMessage_Server_Async(const std::vector<int32_t>& checksums)
             : GameMessage(NMS_SERVER_ASYNC, 0xFF)
         {
             LOG.write(">>> NMS_SERVER_ASYNC(%d)\n", checksums.size());
 
             PushUnsignedInt(unsigned(checksums.size()));
-            for(unsigned int i = 0; i < checksums.size(); ++i)
+            for(uint32_t i = 0; i < checksums.size(); ++i)
                 PushSignedInt(checksums.at(i));
         }
         void Run(MessageInterface* callback)
         {
-            unsigned size = PopUnsignedInt();
+            uint32_t size = PopUnsignedInt();
             checksums.resize(size);
-            for(unsigned int i = 0; i < size; ++i)
+            for(uint32_t i = 0; i < size; ++i)
                 checksums[i] = PopSignedInt();
 
             LOG.write("<<< NMS_SERVER_ASYNC(%d)\n", checksums.size());
@@ -327,11 +327,11 @@ class GameMessage_Server_Async : public GameMessage
 class GameMessage_Player_Id : public GameMessage
 {
     public:
-        unsigned int playerid;
+        uint32_t playerid;
 
     public:
         GameMessage_Player_Id(void) : GameMessage(NMS_PLAYER_ID) { }
-        GameMessage_Player_Id(const unsigned int playerid)
+        GameMessage_Player_Id(const uint32_t playerid)
             : GameMessage(NMS_PLAYER_ID, 0xFF)
         {
             LOG.write(">>> NMS_PLAYER_ID(%d)\n", playerid);
@@ -394,7 +394,7 @@ class GameMessage_Player_List : public GameMessage
             gpl.deserialize(this);
 
             LOG.write("<<< NMS_PLAYER_LIST(%d)\n", gpl.getCount());
-            for(unsigned int i = 0; i < gpl.getCount(); ++i)
+            for(uint32_t i = 0; i < gpl.getCount(); ++i)
             {
                 const GamePlayerInfo* player = gpl.getElement(i);
                 LOG.write("    %d: %s %d %d %d %d %d %d %s\n", i, player->name.c_str(), player->ps, player->rating, player->ping, player->nation, player->color, player->team, (player->ready ? "true" : "false") );
@@ -409,7 +409,7 @@ class GameMessage_Player_Toggle_State : public GameMessage
 {
     public:
         GameMessage_Player_Toggle_State(void) : GameMessage(NMS_PLAYER_TOGGLESTATE) { }
-        GameMessage_Player_Toggle_State(const unsigned char player)
+        GameMessage_Player_Toggle_State(const uint8_t player)
             : GameMessage(NMS_PLAYER_TOGGLESTATE, player)
         {
             LOG.write(">>> NMS_PLAYER_TOGGLESTATE(%d)\n", player);
@@ -431,10 +431,10 @@ class GameMessage_Player_Toggle_Nation : public GameMessage
 
     public:
         GameMessage_Player_Toggle_Nation(void) : GameMessage(NMS_PLAYER_TOGGLENATION) { }
-        GameMessage_Player_Toggle_Nation(const unsigned char player, const Nation nation)
+        GameMessage_Player_Toggle_Nation(const uint8_t player, const Nation nation)
             : GameMessage(NMS_PLAYER_TOGGLENATION, player), nation(nation)
         {
-            PushUnsignedChar(static_cast<unsigned char>(nation));
+            PushUnsignedChar(static_cast<uint8_t>(nation));
             LOG.write(">>> NMS_PLAYER_TOGGLENATION\n");
         }
         void Run(MessageInterface* callback)
@@ -455,10 +455,10 @@ class GameMessage_Player_Toggle_Team : public GameMessage
         Team team;
     public:
         GameMessage_Player_Toggle_Team(void) : GameMessage(NMS_PLAYER_TOGGLETEAM) { }
-        GameMessage_Player_Toggle_Team(const unsigned char player, const Team team)
+        GameMessage_Player_Toggle_Team(const uint8_t player, const Team team)
             : GameMessage(NMS_PLAYER_TOGGLETEAM, player), team(team)
         {
-            PushUnsignedChar(static_cast<unsigned char>(team));
+            PushUnsignedChar(static_cast<uint8_t>(team));
             LOG.write(">>> NMS_PLAYER_TOGGLETEAM\n");
         }
         void Run(MessageInterface* callback)
@@ -476,10 +476,10 @@ class GameMessage_Player_Toggle_Color : public GameMessage
 {
     public:
         /// Das zu setzende Team
-        unsigned char color;
+        uint8_t color;
     public:
         GameMessage_Player_Toggle_Color(void) : GameMessage(NMS_PLAYER_TOGGLECOLOR) { }
-        GameMessage_Player_Toggle_Color(const unsigned char player, const unsigned char color)
+        GameMessage_Player_Toggle_Color(const uint8_t player, const uint8_t color)
             : GameMessage(NMS_PLAYER_TOGGLECOLOR, player), color(color)
         {
             PushUnsignedChar(color);
@@ -500,12 +500,12 @@ class GameMessage_Player_Toggle_Color : public GameMessage
 class GameMessage_Player_Kicked : public GameMessage
 {
     public:
-        unsigned char cause;
-        unsigned short param;
+        uint8_t cause;
+        uint16_t param;
 
     public:
         GameMessage_Player_Kicked(void) : GameMessage(NMS_PLAYER_KICKED) { }
-        GameMessage_Player_Kicked(const unsigned char player, const unsigned char cause, const unsigned short param)
+        GameMessage_Player_Kicked(const uint8_t player, const uint8_t cause, const uint16_t param)
             : GameMessage(NMS_PLAYER_KICKED, player),
               cause(cause), param(param)
         {
@@ -528,10 +528,10 @@ class GameMessage_Player_Kicked : public GameMessage
 class GameMessage_Player_Ping : public GameMessage
 {
     public:
-        unsigned short ping;
+        uint16_t ping;
     public:
         GameMessage_Player_Ping(void) : GameMessage(NMS_PLAYER_PING) { }
-        GameMessage_Player_Ping(const unsigned char player, const unsigned short ping)
+        GameMessage_Player_Ping(const uint8_t player, const uint16_t ping)
             : GameMessage(NMS_PLAYER_PING, player), ping(ping)
         {
             PushUnsignedShort(ping);
@@ -554,7 +554,7 @@ class GameMessage_Player_New : public GameMessage
         std::string name;
     public:
         GameMessage_Player_New(void) : GameMessage(NMS_PLAYER_NEW) { }
-        GameMessage_Player_New(const unsigned char player, const std::string& name)
+        GameMessage_Player_New(const uint8_t player, const std::string& name)
             : GameMessage(NMS_PLAYER_NEW, player)
         {
             PushString(name);
@@ -578,7 +578,7 @@ class GameMessage_Player_Ready : public GameMessage
         bool ready;
     public:
         GameMessage_Player_Ready(void) : GameMessage(NMS_PLAYER_READY) { }
-        GameMessage_Player_Ready(const unsigned char player, const bool ready)
+        GameMessage_Player_Ready(const uint8_t player, const bool ready)
             : GameMessage(NMS_PLAYER_READY, player), ready(ready)
         {
             PushBool(ready);
@@ -598,10 +598,10 @@ class GameMessage_Player_Swap : public GameMessage
 {
     public:
         /// Die beiden Spieler-IDs, die miteinander vertauscht werden sollen
-        unsigned char player2;
+        uint8_t player2;
     public:
         GameMessage_Player_Swap(void) : GameMessage(NMS_PLAYER_SWAP) { }
-        GameMessage_Player_Swap(const unsigned char player, const unsigned char player2)
+        GameMessage_Player_Swap(const uint8_t player, const uint8_t player2)
             : GameMessage(NMS_PLAYER_SWAP, player),  player2(player2)
         {
             PushUnsignedChar(player2);
@@ -625,23 +625,23 @@ class GameMessage_Map_Info : public GameMessage
         /// Kartentyp (alte Karte neue Karte, Savegame usw.)
         MapType mt;
         /// Anzahl der Teile, in die der Mapblock zerteilt wurde
-        unsigned partcount;
+        uint32_t partcount;
         /// Größe der Zip-komprimierten Date
-        unsigned ziplength;
+        uint32_t ziplength;
         /// Größe der dekomprimierten Daten
-        unsigned normal_length;
+        uint32_t normal_length;
         /// LUA script
         std::string script;
 
     public:
         GameMessage_Map_Info(void) : GameMessage(NMS_MAP_INFO) { }
-        GameMessage_Map_Info(const std::string& map_name, const MapType mt, const unsigned partcount,
-                             const unsigned ziplength, const unsigned normal_length, const std::string& script)
+        GameMessage_Map_Info(const std::string& map_name, const MapType mt, const uint32_t partcount,
+                             const uint32_t ziplength, const uint32_t normal_length, const std::string& script)
             : GameMessage(NMS_MAP_INFO, 0xFF), map_name(map_name),  mt(mt), partcount(partcount), ziplength(ziplength),
               normal_length(normal_length), script(script)
         {
             PushString(map_name);
-            PushUnsignedChar(static_cast<unsigned char>(mt));
+            PushUnsignedChar(static_cast<uint8_t>(mt));
             PushUnsignedInt(partcount);
             PushUnsignedInt(ziplength);
             PushUnsignedInt(normal_length);
@@ -667,11 +667,11 @@ class GameMessage_Map_Data : public GameMessage
 {
     public:
         /// Kartendaten
-        unsigned char* map_data;
+        uint8_t* map_data;
 
     public:
         GameMessage_Map_Data(void) : GameMessage(NMS_MAP_DATA) { }
-        GameMessage_Map_Data(const unsigned char* const map_data, const unsigned length)
+        GameMessage_Map_Data(const uint8_t* const map_data, const uint32_t length)
             : GameMessage(NMS_MAP_DATA, 0xFF)
         {
             PushRawData(map_data, length);
@@ -691,11 +691,11 @@ class GameMessage_Map_Checksum : public GameMessage
 {
     public:
         /// Checksumme, die vom Client berechnt wurde
-        unsigned checksum;
+        uint32_t checksum;
 
     public:
         GameMessage_Map_Checksum(void) : GameMessage(NMS_MAP_CHECKSUM) { }
-        GameMessage_Map_Checksum(const unsigned checksum)
+        GameMessage_Map_Checksum(const uint32_t checksum)
             : GameMessage(NMS_MAP_CHECKSUM, 0xFF)
         {
             PushUnsignedInt(checksum);
@@ -762,16 +762,16 @@ class GameMessage_GameCommand : public GameMessage
 {
     public:
         /// Checksumme, die der Spieler übermittelt
-        unsigned checksum;
-        unsigned obj_cnt;
-        unsigned obj_id_cnt;
+        uint32_t checksum;
+        uint32_t obj_cnt;
+        uint32_t obj_id_cnt;
         /// Die einzelnen GameCommands
         std::vector<gc::GameCommand*> gcs;
 
     public:
 
         GameMessage_GameCommand(void) : GameMessage(NMS_GAMECOMMANDS) { }
-        GameMessage_GameCommand(const unsigned char player, const unsigned checksum,
+        GameMessage_GameCommand(const uint8_t player, const uint32_t checksum,
                                 const std::vector<gc::GameCommand*>& gcs)
             : GameMessage(NMS_GAMECOMMANDS, player)
         {
@@ -780,7 +780,7 @@ class GameMessage_GameCommand : public GameMessage
             PushUnsignedInt(GameObject::GetObjIDCounter());
             PushUnsignedInt(gcs.size());
 
-            for(unsigned i = 0; i < gcs.size(); ++i)
+            for(uint32_t i = 0; i < gcs.size(); ++i)
             {
                 PushUnsignedChar(gcs[i]->GetType());
                 gcs[i]->Serialize(this);
@@ -788,14 +788,14 @@ class GameMessage_GameCommand : public GameMessage
 
         }
 
-        GameMessage_GameCommand(const unsigned char* const data, const unsigned length)
+        GameMessage_GameCommand(const uint8_t* const data, const uint32_t length)
             : GameMessage(NMS_GAMECOMMANDS, data, length),
               checksum(PopUnsignedInt()),
               obj_cnt(PopUnsignedInt()),
               obj_id_cnt(PopUnsignedInt()),
               gcs(PopUnsignedInt())
         {
-            for(unsigned i = 0; i < gcs.size(); ++i)
+            for(uint32_t i = 0; i < gcs.size(); ++i)
             {
                 gc::Type type = gc::Type(PopUnsignedChar());
                 gcs[i] = gc::GameCommand::CreateGameCommand(type, this);
@@ -817,7 +817,7 @@ class GameMessage_GameCommand : public GameMessage
             obj_cnt = PopUnsignedInt();
             obj_id_cnt = PopUnsignedInt();
             gcs.resize(PopUnsignedInt());
-            for(unsigned i = 0; i < gcs.size(); ++i)
+            for(uint32_t i = 0; i < gcs.size(); ++i)
             {
                 gc::Type type = gc::Type(PopUnsignedChar());
                 gcs[i] = gc::GameCommand::CreateGameCommand(type, this);
@@ -830,11 +830,11 @@ class GameMessage_GameCommand : public GameMessage
 class GameMessage_Server_Speed : public GameMessage
 {
     public:
-        unsigned int gf_length; // new speed
+        uint32_t gf_length; // new speed
 
     public:
         GameMessage_Server_Speed(void) : GameMessage(NMS_SERVER_SPEED) { }
-        GameMessage_Server_Speed(const unsigned int gf_length) : GameMessage(NMS_SERVER_SPEED, player)
+        GameMessage_Server_Speed(const uint32_t gf_length) : GameMessage(NMS_SERVER_SPEED, player)
         {
             PushUnsignedInt(gf_length);
             LOG.write(">>> NMS_SERVER_SPEED(%d)\n", gf_length);
@@ -852,13 +852,13 @@ class GameMessage_Server_Speed : public GameMessage
 class GameMessage_Server_NWFDone : public GameMessage
 {
     public:
-        unsigned int nr; // GF
-        unsigned int gf_length; // new speed
+        uint32_t nr; // GF
+        uint32_t gf_length; // new speed
         bool first;
 
     public:
         GameMessage_Server_NWFDone(void) : GameMessage(NMS_SERVER_NWF_DONE) { }
-        GameMessage_Server_NWFDone(const unsigned char player, const unsigned int nr, const unsigned int gf_length, const bool first = false) : GameMessage(NMS_SERVER_NWF_DONE, player)
+        GameMessage_Server_NWFDone(const uint8_t player, const uint32_t nr, const uint32_t gf_length, const bool first = false) : GameMessage(NMS_SERVER_NWF_DONE, player)
         {
             PushUnsignedInt(nr);
             PushUnsignedInt(gf_length);
@@ -881,12 +881,12 @@ class GameMessage_Pause : public GameMessage
 {
     public:
         /// Pausiert?
-		unsigned int nr; // GF
+		uint32_t nr; // GF
         bool paused;
 
     public:
         GameMessage_Pause(void) : GameMessage(NMS_PAUSE) { }
-        GameMessage_Pause(const bool paused, const unsigned nr)
+        GameMessage_Pause(const bool paused, const uint32_t nr)
             : GameMessage(NMS_PAUSE, 0xFF)
         {
             PushBool(paused);
@@ -909,7 +909,7 @@ class GameMessage_GetAsyncLog : public GameMessage
 {
     public:
         GameMessage_GetAsyncLog() : GameMessage(NMS_GET_ASYNC_LOG) {}
-        GameMessage_GetAsyncLog(const unsigned char player) : GameMessage(NMS_GET_ASYNC_LOG, player)
+        GameMessage_GetAsyncLog(const uint8_t player) : GameMessage(NMS_GET_ASYNC_LOG, player)
         {
             LOG.write(">>> NMS_GET_ASYNC_LOG\n");
         }
@@ -949,13 +949,13 @@ class GameMessage_SendAsyncLog : public GameMessage
         void Run(MessageInterface* callback)
         {
             bool last =  PopBool();
-            unsigned int cnt = PopUnsignedInt();
-            unsigned counter;
-            int max;
-            int value;
+            uint32_t cnt = PopUnsignedInt();
+            uint32_t counter;
+            int32_t max;
+            int32_t value;
             char* src_name;
-            unsigned int src_line;
-            unsigned obj_id;
+            uint32_t src_line;
+            uint32_t obj_id;
 
             LOG.write("<<< NMS_SEND_ASYNC_LOG: %u [%s]\n", cnt, last ? "last" : "non-last");
 

@@ -54,7 +54,7 @@ void iwLobbyRanking::UpdateRankings(bool first)
 
         if(rankinglist->getCount() > 0)
         {
-            for(unsigned int i = 0; i < rankinglist->getCount() && i < 10; ++i)
+            for(uint32_t i = 0; i < rankinglist->getCount() && i < 10; ++i)
             {
                 //const LobbyPlayerInfo *player = rankinglist->getElement(i);
                 char gewonnen[128], verloren[128], punkte[128];
@@ -86,7 +86,7 @@ iwLobbyRanking::iwLobbyRanking(void)
     AddTextButton(3, 20, 370, 400, 20, TC_RED1, _("Back"), NormalFont);
 }
 
-void iwLobbyRanking::Msg_Timer(const unsigned int ctrl_id)
+void iwLobbyRanking::Msg_Timer(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -101,7 +101,7 @@ void iwLobbyRanking::Msg_Timer(const unsigned int ctrl_id)
     }
 }
 
-void iwLobbyRanking::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwLobbyRanking::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

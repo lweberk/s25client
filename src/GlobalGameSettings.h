@@ -52,7 +52,7 @@ class GlobalGameSettings
         /// clears the addon memory.
         void reset(bool recreate = true);
 
-        const Addon* getAddon(unsigned int nr, unsigned int& status) const
+        const Addon* getAddon(uint32_t nr, uint32_t& status) const
         {
             if(nr >= addons.size())
                 return NULL;
@@ -66,7 +66,7 @@ class GlobalGameSettings
             return i->addon;
         }
 
-        unsigned int getCount() const { return addons.size(); }
+        uint32_t getCount() const { return addons.size(); }
 
         bool isEnabled(AddonId id) const
         {
@@ -76,7 +76,7 @@ class GlobalGameSettings
             return true;
         }
 
-        unsigned int getSelection(AddonId id) const
+        uint32_t getSelection(AddonId id) const
         {
             std::vector<item>::const_iterator it = std::find(addons.begin(), addons.end(), id);
             if(it == addons.end())
@@ -84,7 +84,7 @@ class GlobalGameSettings
             return it->status;
         }
 
-        void setSelection(AddonId id, unsigned int selection);
+        void setSelection(AddonId id, uint32_t selection);
 
         /// loads the saved addon configuration from the SETTINGS.
         void LoadSettings();
@@ -109,7 +109,7 @@ class GlobalGameSettings
             item(Addon* addon) : addon(addon), status(addon->getDefaultStatus()) {}
 
             Addon* addon;
-            unsigned int status;
+            uint32_t status;
 
             bool operator==(const AddonId& o) const { return (addon ? addon->getId() == o : false); }
             bool operator<(const item& o) const { return (addon->getName().compare(o.addon->getName()) < 0); }

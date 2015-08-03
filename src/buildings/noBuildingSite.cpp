@@ -50,16 +50,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-noBuildingSite::noBuildingSite(const BuildingType type, const MapPoint pos, const unsigned char player)
+noBuildingSite::noBuildingSite(const BuildingType type, const MapPoint pos, const uint8_t player)
     : noBaseBuilding(NOP_BUILDINGSITE, type, pos, player), state(STATE_BUILDING), planer(0), builder(0), boards(0), stones(0), used_boards(0), used_stones(0), build_progress(0)
 {
     // Überprüfen, ob die Baustelle erst noch planiert werden muss (nur bei mittleren/großen Gebäuden)
     if(GetSize() == BQ_HOUSE || GetSize() == BQ_CASTLE || GetSize() == BQ_HARBOR)
     {
         // Höhe auf dem Punkt, wo die Baustelle steht
-        int altitude = gwg->GetNode(pos).altitude;
+        int32_t altitude = gwg->GetNode(pos).altitude;
 
-        for(unsigned i = 0; i < 6; ++i)
+        for(uint32_t i = 0; i < 6; ++i)
         {
             // Richtung 4 wird nicht planiert (Flagge)
             if(i != 4)
@@ -82,7 +82,7 @@ noBuildingSite::noBuildingSite(const BuildingType type, const MapPoint pos, cons
 }
 
 /// Konstruktor für Hafenbaustellen vom Schiff aus
-noBuildingSite::noBuildingSite(const MapPoint pos, const unsigned char player)
+noBuildingSite::noBuildingSite(const MapPoint pos, const uint8_t player)
     : noBaseBuilding(NOP_BUILDINGSITE, BLD_HARBORBUILDING, pos, player),
       state(STATE_BUILDING),
       planer(0),
@@ -158,7 +158,7 @@ void noBuildingSite::Serialize_noBuildingSite(SerializedGameData* sgd) const
 {
     Serialize_noBaseBuilding(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushObject(planer, true);
     sgd->PushObject(builder, true);
     sgd->PushUnsignedChar(boards);
@@ -170,7 +170,7 @@ void noBuildingSite::Serialize_noBuildingSite(SerializedGameData* sgd) const
     sgd->PushObjectList(ordered_stones, true);
 }
 
-noBuildingSite::noBuildingSite(SerializedGameData* sgd, const unsigned obj_id) : noBaseBuilding(sgd, obj_id),
+noBuildingSite::noBuildingSite(SerializedGameData* sgd, const uint32_t obj_id) : noBaseBuilding(sgd, obj_id),
     state(static_cast<State>(sgd->PopUnsignedChar())),
     planer(sgd->PopObject<nofPlaner>(GOT_NOF_PLANER)),
     builder(sgd->PopObject<nofBuilder>(GOT_NOF_BUILDER)),
@@ -192,20 +192,20 @@ void noBuildingSite::OrderConstructionMaterial()
 
     // Bretter
     Ware* w;
-    for(unsigned char i = used_boards + boards + ordered_boards.size(); i < BUILDING_COSTS[gwg->GetPlayer(player)->nation][type].boards; ++i)
+    for(uint8_t i = used_boards + boards + ordered_boards.size(); i < BUILDING_COSTS[gwg->GetPlayer(player)->nation][type].boards; ++i)
     {
         if( (w = gwg->GetPlayer(player)->OrderWare(GD_BOARDS, this)) )
             ordered_boards.push_front(w);
     }
     // Steine
-    for(unsigned char i = used_stones + stones + ordered_stones.size(); i < BUILDING_COSTS[gwg->GetPlayer(player)->nation][type].stones; ++i)
+    for(uint8_t i = used_stones + stones + ordered_stones.size(); i < BUILDING_COSTS[gwg->GetPlayer(player)->nation][type].stones; ++i)
     {
         if( (w = gwg->GetPlayer(player)->OrderWare(GD_STONES, this)) )
             ordered_stones.push_back(w);
     }
 }
 
-void noBuildingSite::Draw(int x, int y)
+void noBuildingSite::Draw(int32_t x, int32_t y)
 {
     if(state == STATE_PLANING)
     {
@@ -223,10 +223,10 @@ void noBuildingSite::Draw(int x, int y)
         // Waren auf der Baustelle
 
         // Bretter
-        for(unsigned char i = 0; i < boards; ++i)
+        for(uint8_t i = 0; i < boards; ++i)
             LOADER.GetMapImageN(2200 + GD_BOARDS)->Draw(x + GetDoorPointX() - 5, y + GetDoorPointY() - 10 - i * 4, 0, 0, 0, 0, 0, 0);
         // Steine
-        for(unsigned char i = 0; i < stones; ++i)
+        for(uint8_t i = 0; i < stones; ++i)
             LOADER.GetMapImageN(2200 + GD_STONES)->Draw(x + GetDoorPointX() + 8, y + GetDoorPointY() - 12 - i * 4, 0, 0, 0, 0, 0, 0);
 
         // bis dahin gebautes Haus zeichnen
@@ -234,18 +234,18 @@ void noBuildingSite::Draw(int x, int y)
         // Rohbau
 
         // ausrechnen, wie weit er ist
-        unsigned int p1 = 0, p2 = 0;
+        uint32_t p1 = 0, p2 = 0;
 
         if(BUILDING_COSTS[nation][GetBuildingType()].stones)
         {
             // Haus besteht aus Steinen und Brettern
-            p1 = min<unsigned int>(build_progress, BUILDING_COSTS[nation][GetBuildingType()].boards * 8);
+            p1 = min<uint32_t>(build_progress, BUILDING_COSTS[nation][GetBuildingType()].boards * 8);
             p2 = BUILDING_COSTS[nation][GetBuildingType()].boards * 8;
         }
         else
         {
             // Haus besteht nur aus Brettern, dann 50:50
-            p1 = min<unsigned int>(build_progress, BUILDING_COSTS[nation][GetBuildingType()].boards * 4);
+            p1 = min<uint32_t>(build_progress, BUILDING_COSTS[nation][GetBuildingType()].boards * 4);
             p2 = BUILDING_COSTS[nation][GetBuildingType()].boards * 4;
         }
 
@@ -303,7 +303,7 @@ void noBuildingSite::Abrogate()
     gwg->GetPlayer(player)->AddJobWanted((state == STATE_PLANING) ? JOB_PLANER : JOB_BUILDER, this);
 }
 
-unsigned noBuildingSite::CalcDistributionPoints(noRoadNode* start, const GoodType goodtype)
+uint32_t noBuildingSite::CalcDistributionPoints(noRoadNode* start, const GoodType goodtype)
 {
     // Beim Planieren brauchen wir noch gar nichts
     if(state == STATE_PLANING)
@@ -315,7 +315,7 @@ unsigned noBuildingSite::CalcDistributionPoints(noRoadNode* start, const GoodTyp
         return 0;
 
     // 10000 als Basis wählen, damit man auch noch was abziehen kann
-    unsigned points = 10000;
+    uint32_t points = 10000;
 
     // Baumaterial mit einberechnen (wer noch am wenigsten braucht, soll mehr Punkte kriegen, da ja möglichst
     // zuerst Gebäude fertiggestellt werden sollten)
@@ -387,15 +387,15 @@ bool noBuildingSite::IsBuildingComplete()
     return (build_progress == BUILDING_COSTS[nation][type].boards * 8 + BUILDING_COSTS[nation][type].stones * 8);
 }
 
-unsigned char noBuildingSite::GetBuildProgress(bool percent) const
+uint8_t noBuildingSite::GetBuildProgress(bool percent) const
 {
     if(!percent)
         return build_progress;
 
-    unsigned costs = BUILDING_COSTS[nation][type].boards * 8 + BUILDING_COSTS[nation][type].stones * 8;
-    unsigned progress = (((unsigned) build_progress) * 100) / costs;
+    uint32_t costs = BUILDING_COSTS[nation][type].boards * 8 + BUILDING_COSTS[nation][type].stones * 8;
+    uint32_t progress = (((uint32_t) build_progress) * 100) / costs;
 
-    return (unsigned char)progress;
+    return (uint8_t)progress;
 }
 
 /// Aufgerufen, wenn Planierung beendet wurde

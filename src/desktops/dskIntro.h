@@ -32,7 +32,7 @@ class dskIntro : public Desktop
 
     private:
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 #endif // !dskINTRO_H_INCLUDED

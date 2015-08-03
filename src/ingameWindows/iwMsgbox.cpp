@@ -41,7 +41,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author OLiver
  */
-iwMsgbox::iwMsgbox(const std::string& title, const std::string& text, Window* parent, MsgboxButton button, unsigned short icon, unsigned int msgboxid)
+iwMsgbox::iwMsgbox(const std::string& title, const std::string& text, Window* parent, MsgboxButton button, uint16_t icon, uint32_t msgboxid)
     : IngameWindow(CGI_MSGBOX, 0xFFFF, 0xFFFF, 420, 140, title, LOADER.GetImageN("resource", 41), true), parent(parent), button(button), msgboxid(msgboxid), text(text)
 {
     AddImage(0, 42, 42, LOADER.GetImageN("io", icon));
@@ -104,7 +104,7 @@ const MsgboxResult RET_IDS[4][3] =
     {MSR_YES, MSR_NO,      MSR_CANCEL}
 };
 
-void iwMsgbox::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwMsgbox::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     if(parent)
         parent->Msg_MsgBoxResult(msgboxid, RET_IDS[button][ctrl_id - 2]);
@@ -114,11 +114,11 @@ void iwMsgbox::Msg_ButtonClick(const unsigned int ctrl_id)
 void iwMsgbox::Msg_PaintAfter()
 {
     // Text zeichnen
-    for(unsigned i = 0; i < lines_count; ++i)
+    for(uint32_t i = 0; i < lines_count; ++i)
         NormalFont->Draw(GetX() + 80, GetY() + 30 + NormalFont->getHeight()*i, strings[i], glArchivItem_Font::DF_LEFT, 0xFFFFFF00);
 }
 
-void iwMsgbox::AddButton(unsigned short id, int x, const std::string& text, const TextureColor tc)
+void iwMsgbox::AddButton(uint16_t id, int32_t x, const std::string& text, const TextureColor tc)
 {
     Window::AddTextButton(2 + id, x, 100, 90, 20, tc, text, NormalFont);
 }

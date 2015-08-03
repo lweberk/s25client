@@ -31,36 +31,36 @@ class ctrlTab : public Window
 {
     public:
         /// Konstruktor von @p ctrlTab.
-        ctrlTab(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width);
+        ctrlTab(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width);
 
         /// fügt eine Tab hinzu.
-        ctrlGroup* AddTab(glArchivItem_Bitmap* image, std::string tooltip, const unsigned int id);
+        ctrlGroup* AddTab(glArchivItem_Bitmap* image, std::string tooltip, const uint32_t id);
         /// löscht alle Tabs.
         void DeleteAllTabs(void);
         /// aktiviert eine bestimmte Tabseite.
-        void SetSelection(unsigned short nr, bool notify = false);
+        void SetSelection(uint16_t nr, bool notify = false);
         /// Gibt ID des aktuell gewählten Tabs zurück
-        unsigned int GetCurrentTab(void) const { return tabs[tab_selection]; }
+        uint32_t GetCurrentTab(void) const { return tabs[tab_selection]; }
         /// Gibt Tab-Group zurück, über die die Steuerelemente der Tab angesprochen werden können
-        ctrlGroup* GetGroup(const unsigned int tab_id);
+        ctrlGroup* GetGroup(const uint32_t tab_id);
         /// Gibt aktuell ausgewählte Tab-Gruppe zürck
         ctrlGroup* GetCurrentGroup() { return GetGroup(GetCurrentTab()); }
 
-        virtual void Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_EditEnter(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_EditChange(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_TabChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short tab_id);
-        virtual void Msg_Group_ListSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_ComboSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_CheckboxChange(const unsigned int group_id, const unsigned int ctrl_id, const bool checked);
-        virtual void Msg_Group_ProgressChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short position);
-        virtual void Msg_Group_ScrollShow(const unsigned int group_id, const unsigned int ctrl_id, const bool visible);
-        virtual void Msg_Group_OptionGroupChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_Timer(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_TableSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_TableRightButton(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_TableLeftButton(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_ButtonClick(const unsigned int ctrl_id);
+        virtual void Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_EditEnter(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_EditChange(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_TabChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t tab_id);
+        virtual void Msg_Group_ListSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_ComboSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_CheckboxChange(const uint32_t group_id, const uint32_t ctrl_id, const bool checked);
+        virtual void Msg_Group_ProgressChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t position);
+        virtual void Msg_Group_ScrollShow(const uint32_t group_id, const uint32_t ctrl_id, const bool visible);
+        virtual void Msg_Group_OptionGroupChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_Timer(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_TableSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_TableRightButton(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_TableLeftButton(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_ButtonClick(const uint32_t ctrl_id);
         virtual bool Msg_LeftDown(const MouseCoords& mc);
         virtual bool Msg_LeftUp(const MouseCoords& mc);
         virtual bool Msg_WheelUp(const MouseCoords& mc);
@@ -71,10 +71,10 @@ class ctrlTab : public Window
         virtual bool Draw_(void);
 
     private:
-        unsigned short tab_count;
-        unsigned short tab_selection;
+        uint16_t tab_count;
+        uint16_t tab_selection;
 
-        unsigned int tabs[MAX_TAB_COUNT];
+        uint32_t tabs[MAX_TAB_COUNT];
 };
 
 #endif // !CTRLTAB_H_INCLUDED

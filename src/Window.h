@@ -73,25 +73,25 @@ class Window
         /// Konstruktor von @p Window.
         Window(void);
         /// Konstruktor von @p Window mit Parametern.
-        Window(unsigned short x, unsigned short y, unsigned int id, Window* parent, unsigned short width = 0, unsigned short height = 0, const std::string& tooltip = "");
+        Window(uint16_t x, uint16_t y, uint32_t id, Window* parent, uint16_t width = 0, uint16_t height = 0, const std::string& tooltip = "");
         /// virtueller Destruktor von @p Window.
         virtual ~Window(void);
         /// zeichnet das Fenster.
         bool Draw(void);
         /// liefert die X-Koordinate.
-        unsigned short GetX(bool absolute = true) const;
+        uint16_t GetX(bool absolute = true) const;
         /// liefert die Y-Koordinate.
-        unsigned short GetY(bool absolute = true) const;
+        uint16_t GetY(bool absolute = true) const;
         /// liefert die Breite des Fensters.
-        unsigned short GetWidth(const bool scale = false) const { return (scale) ? ScaleX(width) : width; }
+        uint16_t GetWidth(const bool scale = false) const { return (scale) ? ScaleX(width) : width; }
         /// liefert die Höhe des Fensters.
-        unsigned short GetHeight(const bool scale = false) const { return (scale) ? ScaleY(height) : height; }
+        uint16_t GetHeight(const bool scale = false) const { return (scale) ? ScaleY(height) : height; }
         /// setzt die Größe des Fensters
-        void Resize(unsigned short width, unsigned short height) { Resize_(width, height); this->width = width; this->height = height; }
+        void Resize(uint16_t width, uint16_t height) { Resize_(width, height); this->width = width; this->height = height; }
         /// setzt die Breite des Fensters
-        void SetWidth(unsigned short width)   { Resize(width, this->height); }
+        void SetWidth(uint16_t width)   { Resize(width, this->height); }
         /// setzt die Höhe des Fensters
-        void SetHeight(unsigned short height) { Resize(this->width, height); }
+        void SetHeight(uint16_t height) { Resize(this->width, height); }
         /// Sendet eine Tastaturnachricht an die Steuerelemente.
         bool RelayKeyboardMessage(bool (Window::*msg)(const KeyEvent&), const KeyEvent& ke);
         /// Sendet eine Mausnachricht weiter an alle Steuerelemente
@@ -109,7 +109,7 @@ class Window
         /// setzt das Parentfenster.
         void SetParent(Window* parent) { this->parent = parent; }
         /// verschiebt das Fenster.
-        void Move(short x, short y, bool absolute = true) { this->x = (absolute ? x : this->x + x); this->y = (absolute ? y : this->y + y); }
+        void Move(int16_t x, int16_t y, bool absolute = true) { this->x = (absolute ? x : this->x + x); this->y = (absolute ? y : this->y + y); }
 
         // macht das Fenster sichtbar oder blendet es aus
         virtual void SetVisible(bool visible) { this->visible = visible; }
@@ -119,12 +119,12 @@ class Window
         bool GetActive() const { return active; }
         /// liefert das übergeordnete Fenster
         Window* GetParent() const { return parent; }
-        const unsigned int GetID(void) const { return id; }
+        const uint32_t GetID(void) const { return id; }
 
         template<typename T>
-        T* GetCtrl(unsigned int id)
+        T* GetCtrl(uint32_t id)
         {
-            std::map<unsigned int, Window*>::iterator it = idmap.find(id);
+            std::map<uint32_t, Window*>::iterator it = idmap.find(id);
             if(it == idmap.end())
                 return NULL;
 
@@ -132,18 +132,18 @@ class Window
         }
 
         template<typename T>
-        const T* GetCtrl(unsigned int id) const
+        const T* GetCtrl(uint32_t id) const
         {
-            std::map<unsigned int, Window*>::const_iterator it = idmap.find(id);
+            std::map<uint32_t, Window*>::const_iterator it = idmap.find(id);
             if(it == idmap.end())
                 return NULL;
 
             return dynamic_cast<T*>( it->second );
         }
 
-        void DeleteCtrl(unsigned int id)
+        void DeleteCtrl(uint32_t id)
         {
-            std::map<unsigned int, Window*>::iterator it = idmap.find(id);
+            std::map<uint32_t, Window*>::iterator it = idmap.find(id);
 
             if(it == idmap.end())
                 return;
@@ -154,72 +154,72 @@ class Window
         }
 
         /// fügt ein BuildingIcon hinzu.
-        ctrlBuildingIcon* AddBuildingIcon(unsigned int id, unsigned short x, unsigned short y, BuildingType type, const Nation nation, unsigned short size = 36, const std::string& tooltip = "");
+        ctrlBuildingIcon* AddBuildingIcon(uint32_t id, uint16_t x, uint16_t y, BuildingType type, const Nation nation, uint16_t size = 36, const std::string& tooltip = "");
         /// fügt einen Text-ButtonCtrl hinzu.
-        ctrlTextButton* AddTextButton(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, const TextureColor tc, const std::string& text,  glArchivItem_Font* font, const std::string& tooltip = "");
+        ctrlTextButton* AddTextButton(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, const TextureColor tc, const std::string& text,  glArchivItem_Font* font, const std::string& tooltip = "");
         /// fügt einen Color-ButtonCtrl hinzu.
-        ctrlColorButton* AddColorButton(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, const TextureColor tc, const unsigned int fillColor, const std::string& tooltip = "");
+        ctrlColorButton* AddColorButton(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, const TextureColor tc, const uint32_t fillColor, const std::string& tooltip = "");
         /// fügt einen Image-ButtonCtrl hinzu.
-        ctrlImageButton* AddImageButton(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, const TextureColor tc, glArchivItem_Bitmap* const image, const std::string& tooltip = "");
+        ctrlImageButton* AddImageButton(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, const TextureColor tc, glArchivItem_Bitmap* const image, const std::string& tooltip = "");
 
-        //ctrlButton *AddButton(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, bool type, const char *text, const char *tooltip, glArchivItem_Font *font, glArchivItem_Bitmap *image = NULL, bool border = true);
+        //ctrlButton *AddButton(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, bool type, const char *text, const char *tooltip, glArchivItem_Font *font, glArchivItem_Bitmap *image = NULL, bool border = true);
         /// fügt ein ChatCtrl hinzu.
-        ctrlChat* AddChatCtrl(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font);
+        ctrlChat* AddChatCtrl(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font);
         /// fügt ein CheckBoxCtrl hinzu.
-        ctrlCheck* AddCheckBox(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, const std::string& text, glArchivItem_Font* font, bool readonly = false);
+        ctrlCheck* AddCheckBox(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, const std::string& text, glArchivItem_Font* font, bool readonly = false);
         /// fügt eine ComboBox hinzu.
-        ctrlComboBox* AddComboBox(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font, unsigned short max_list_height, bool readonly = false);
+        ctrlComboBox* AddComboBox(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font, uint16_t max_list_height, bool readonly = false);
         /// fügt ein vertieftes TextCtrl hinzu.
-        ctrlDeepening* AddDeepening(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, const std::string& text, glArchivItem_Font* font, unsigned int color);
+        ctrlDeepening* AddDeepening(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, const std::string& text, glArchivItem_Font* font, uint32_t color);
         /// Deepening fille with a color
-        ctrlColorDeepening* AddColorDeepening(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, unsigned int fillColor);
+        ctrlColorDeepening* AddColorDeepening(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, uint32_t fillColor);
         /// fügt ein EditCtrl hinzu.
-        ctrlEdit* AddEdit(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font, unsigned short maxlength = 0, bool password = false, bool disabled = false, bool notify = false);
+        ctrlEdit* AddEdit(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font, uint16_t maxlength = 0, bool password = false, bool disabled = false, bool notify = false);
         /// fügt eine Gruppe hinzu.
-        ctrlGroup* AddGroup(unsigned int id, bool scale = false);
+        ctrlGroup* AddGroup(uint32_t id, bool scale = false);
         /// fügt ein ImageCtrl hinzu.
-        ctrlImage* AddImage(unsigned int id, unsigned short x, unsigned short y, glArchivItem_Bitmap* image, const std::string& tooltip = "");
+        ctrlImage* AddImage(uint32_t id, uint16_t x, uint16_t y, glArchivItem_Bitmap* image, const std::string& tooltip = "");
         /// fügt eine ListenCtrl hinzu.
-        ctrlList* AddList(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font);
+        ctrlList* AddList(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font);
         /// fügt ein mehrzeilen EditCtrl hinzu.
-        ctrlMultiline* AddMultiline(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font, unsigned int format = 0);
+        ctrlMultiline* AddMultiline(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font, uint32_t format = 0);
         /// fügt eine OptionenGruppe hinzu.
-        ctrlOptionGroup* AddOptionGroup(unsigned int id, int select_type, bool scale = false);
+        ctrlOptionGroup* AddOptionGroup(uint32_t id, int32_t select_type, bool scale = false);
         /// fügt eine MultiSelectGruppe hinzu.
-        ctrlMultiSelectGroup* AddMultiSelectGroup(unsigned int id, int select_type, bool scale = false);
+        ctrlMultiSelectGroup* AddMultiSelectGroup(uint32_t id, int32_t select_type, bool scale = false);
         /// fügt eine prozentuale ProgressBar hinzu.
-        ctrlPercent* AddPercent(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, unsigned int text_color, glArchivItem_Font* font, const unsigned short* percentage);
+        ctrlPercent* AddPercent(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, uint32_t text_color, glArchivItem_Font* font, const uint16_t* percentage);
         /// fügt eine ProgressBar hinzu.
-        ctrlProgress* AddProgress(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, unsigned short button_minus, unsigned short button_plus, unsigned short maximum,
-                                  const std::string& tooltip  = "", unsigned short x_padding = 0, unsigned short y_padding = 0, unsigned int force_color = 0, const std::string& button_minus_tooltip = "", const std::string& button_plus_tooltip = "");
+        ctrlProgress* AddProgress(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, uint16_t button_minus, uint16_t button_plus, uint16_t maximum,
+                                  const std::string& tooltip  = "", uint16_t x_padding = 0, uint16_t y_padding = 0, uint32_t force_color = 0, const std::string& button_minus_tooltip = "", const std::string& button_plus_tooltip = "");
         /// fügt eine Scrollbar hinzu.
-        ctrlScrollBar* AddScrollBar(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, unsigned short button_height, TextureColor tc, unsigned short page_size);
+        ctrlScrollBar* AddScrollBar(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t button_height, TextureColor tc, uint16_t page_size);
         /// fügt ein TabCtrl hinzu.
-        ctrlTab* AddTabCtrl(unsigned int id, unsigned short x, unsigned short y, unsigned short width);
+        ctrlTab* AddTabCtrl(uint32_t id, uint16_t x, uint16_t y, uint16_t width);
         /// fügt eine Tabelle hinzu.
-        ctrlTable* AddTable(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, glArchivItem_Font* font, unsigned int columns, ...);
+        ctrlTable* AddTable(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, glArchivItem_Font* font, uint32_t columns, ...);
         /// fügt ein TextCtrl hinzu.
-        ctrlText* AddText(unsigned int id, unsigned short x, unsigned short y, const std::string& text, unsigned int color, unsigned int format, glArchivItem_Font* font);
+        ctrlText* AddText(uint32_t id, uint16_t x, uint16_t y, const std::string& text, uint32_t color, uint32_t format, glArchivItem_Font* font);
         /// fügt einen Timer hinzu.
-        ctrlTimer* AddTimer(unsigned int id, unsigned int timeout);
+        ctrlTimer* AddTimer(uint32_t id, uint32_t timeout);
         /// fügt ein vertieftes variables TextCtrl hinzu.
-        ctrlVarDeepening* AddVarDeepening(unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, const std::string& formatstr, glArchivItem_Font* font, unsigned int color, unsigned int parameters, ...);
+        ctrlVarDeepening* AddVarDeepening(uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, const std::string& formatstr, glArchivItem_Font* font, uint32_t color, uint32_t parameters, ...);
         /// fügt ein variables TextCtrl hinzu.
-        ctrlVarText* AddVarText(unsigned int id, unsigned short x, unsigned short y,  const std::string& formatstr, unsigned int color, unsigned int format, glArchivItem_Font* font, unsigned int parameters, ...);
+        ctrlVarText* AddVarText(uint32_t id, uint16_t x, uint16_t y,  const std::string& formatstr, uint32_t color, uint32_t format, glArchivItem_Font* font, uint32_t parameters, ...);
         /// Fügt eine MapPreview hinzu
-        ctrlPreviewMinimap* AddPreviewMinimap(const unsigned id,
-                                              unsigned short x,
-                                              unsigned short y,
-                                              unsigned short width,
-                                              unsigned short height,
+        ctrlPreviewMinimap* AddPreviewMinimap(const uint32_t id,
+                                              uint16_t x,
+                                              uint16_t y,
+                                              uint16_t width,
+                                              uint16_t height,
                                               glArchivItem_Map* const map);
 
         /// Zeichnet einen 3D-Rahmen.
-        static void Draw3D(const unsigned short x, const unsigned short y, const unsigned short width, unsigned short height, const TextureColor tc, const unsigned short type, const bool illuminated = false, const bool draw_content = true);
+        static void Draw3D(const uint16_t x, const uint16_t y, const uint16_t width, uint16_t height, const TextureColor tc, const uint16_t type, const bool illuminated = false, const bool draw_content = true);
         /// Zeichnet ein Rechteck
-        static void DrawRectangle(unsigned short x, unsigned short y, unsigned short width, unsigned short height, unsigned int color);
+        static void DrawRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color);
         /// Zeichnet eine Linie
-        static void DrawLine(unsigned short ax, unsigned short ay, unsigned short bx, unsigned short by, unsigned short width, unsigned int color);
+        static void DrawLine(uint16_t ax, uint16_t ay, uint16_t bx, uint16_t by, uint16_t width, uint32_t color);
 
         // GUI-Notify-Messages
 
@@ -241,50 +241,50 @@ class Window
         virtual void Msg_ScreenResize(const ScreenResizeEvent& sr);
 
         // Nachrichten, die von unten (Controls) nach oben (Fenster) gereicht werden
-        virtual void Msg_ButtonClick(const unsigned int ctrl_id);
-        virtual void Msg_EditEnter(const unsigned int ctrl_id);
-        virtual void Msg_EditChange(const unsigned int ctrl_id);
-        virtual void Msg_TabChange(const unsigned int ctrl_id, const unsigned short tab_id);
-        virtual void Msg_ListSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_ListChooseItem(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_CheckboxChange(const unsigned int ctrl_id, const bool checked);
-        virtual void Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position);
-        virtual void Msg_ScrollChange(const unsigned int ctrl_id, const unsigned short position);
-        virtual void Msg_ScrollShow(const unsigned int ctrl_id, const bool visible);
-        virtual void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Timer(const unsigned int ctrl_id);
-        virtual void Msg_TableSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_TableChooseItem(const unsigned ctrl_id, const unsigned short selection);
-        virtual void Msg_TableRightButton(const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_TableLeftButton(const unsigned int ctrl_id, const unsigned short selection);
+        virtual void Msg_ButtonClick(const uint32_t ctrl_id);
+        virtual void Msg_EditEnter(const uint32_t ctrl_id);
+        virtual void Msg_EditChange(const uint32_t ctrl_id);
+        virtual void Msg_TabChange(const uint32_t ctrl_id, const uint16_t tab_id);
+        virtual void Msg_ListSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_ListChooseItem(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_CheckboxChange(const uint32_t ctrl_id, const bool checked);
+        virtual void Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position);
+        virtual void Msg_ScrollChange(const uint32_t ctrl_id, const uint16_t position);
+        virtual void Msg_ScrollShow(const uint32_t ctrl_id, const bool visible);
+        virtual void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Timer(const uint32_t ctrl_id);
+        virtual void Msg_TableSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_TableChooseItem(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_TableRightButton(const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_TableLeftButton(const uint32_t ctrl_id, const uint16_t selection);
 
         // Sonstiges
-        virtual void Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr);
+        virtual void Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr);
 
         // Nachrichten, die von Controls von ctrlGroup weitergeleitet werden
-        virtual void Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_EditEnter(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_EditChange(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_TabChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short tab_id);
-        virtual void Msg_Group_ListSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_ComboSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_CheckboxChange(const unsigned int group_id, const unsigned int ctrl_id, const bool checked);
-        virtual void Msg_Group_ProgressChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short position);
-        virtual void Msg_Group_ScrollShow(const unsigned int group_id, const unsigned int ctrl_id, const bool visible);
-        virtual void Msg_Group_OptionGroupChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_Timer(const unsigned int group_id, const unsigned int ctrl_id);
-        virtual void Msg_Group_TableSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_TableRightButton(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
-        virtual void Msg_Group_TableLeftButton(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection);
+        virtual void Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_EditEnter(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_EditChange(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_TabChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t tab_id);
+        virtual void Msg_Group_ListSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_ComboSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_CheckboxChange(const uint32_t group_id, const uint32_t ctrl_id, const bool checked);
+        virtual void Msg_Group_ProgressChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t position);
+        virtual void Msg_Group_ScrollShow(const uint32_t group_id, const uint32_t ctrl_id, const bool visible);
+        virtual void Msg_Group_OptionGroupChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_Timer(const uint32_t group_id, const uint32_t ctrl_id);
+        virtual void Msg_Group_TableSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_TableRightButton(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
+        virtual void Msg_Group_TableLeftButton(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection);
 
     protected:
 
         /// gets the extent of the window
         Rect GetRect() const { return Rect(x, y, GetWidth(), GetHeight()); }
         /// scales X- und Y values to fit the screen
-        unsigned short ScaleX(const unsigned short val) const;
-        unsigned short ScaleY(const unsigned short val) const;
+        uint16_t ScaleX(const uint16_t val) const;
+        uint16_t ScaleY(const uint16_t val) const;
         /// setzt Scale-Wert, ob neue Controls skaliert werden sollen oder nicht.
         void SetScale(bool scale = true) { this->scale = scale; }
         /// zeichnet die Steuerelemente.
@@ -296,10 +296,10 @@ class Window
         /// Weiterleitung von Nachrichten von abgeleiteten Klassen erlaubt oder nicht?
         virtual bool IsMessageRelayAllowed() const;
         /// Auf Größe verändern evtl. auch individuell reagieren?
-        virtual void Resize_(unsigned short width, unsigned short height) {}
+        virtual void Resize_(uint16_t width, uint16_t height) {}
 
         template <typename T>
-        T* AddCtrl(unsigned int id, T* ctrl)
+        T* AddCtrl(uint32_t id, T* ctrl)
         {
             assert(idmap.find(id) == idmap.end());
             // ID auf control mappen
@@ -323,11 +323,11 @@ class Window
             BUTTON_UNKNOWN = 0xFF
         };
 
-        unsigned short x;         ///< X-Position des Fensters.
-        unsigned short y;         ///< Y-Position des Fensters.
-        unsigned short width;     ///< Breite des Fensters.
-        unsigned short height;    ///< Höhe des Fensters.
-        unsigned int id;          ///< ID des Fensters.
+        uint16_t x;         ///< X-Position des Fensters.
+        uint16_t y;         ///< Y-Position des Fensters.
+        uint16_t width;     ///< Breite des Fensters.
+        uint16_t height;    ///< Höhe des Fensters.
+        uint32_t id;          ///< ID des Fensters.
         Window* parent;           ///< Handle auf das Parentfenster.
         bool active;              ///< Fenster aktiv?
         bool visible;             ///< Fenster sichtbar?
@@ -335,7 +335,7 @@ class Window
         std::string tooltip;      ///< Tooltip des Fensters (nur bei Controls benutzt)
 
         std::map<Window*, Rect> locked_areas;       ///< gesperrte Regionen des Fensters.
-        std::map<unsigned int, Window*> idmap; ///< Die Steuerelemente des Fensters.
+        std::map<uint32_t, Window*> idmap; ///< Die Steuerelemente des Fensters.
 };
 
 #endif // !WINDOW_H_INCLUDED

@@ -26,7 +26,7 @@
 class ctrlCheck : public Window
 {
     public:
-        ctrlCheck(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, const std::string& text, glArchivItem_Font* font, bool readonly);
+        ctrlCheck(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, const std::string& text, glArchivItem_Font* font, bool readonly);
 
         void SetCheck(bool check) { this->check = check; }
         bool GetCheck() const { return check; }

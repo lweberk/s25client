@@ -57,7 +57,7 @@ iwMissionStatement::iwMissionStatement(const std::string& title, const std::stri
 {
     ctrlMultiline* text = AddMultiline(0, 10, 20, width - 20, 450, TC_GREEN2, NormalFont, glArchivItem_Font::DF_LEFT | glArchivItem_Font::DF_TOP);
 
-    unsigned short max_line_width = 0;
+    uint16_t max_line_width = 0;
     
     std::stringstream ss(content);
     std::string line;
@@ -65,7 +65,7 @@ iwMissionStatement::iwMissionStatement(const std::string& title, const std::stri
     while (std::getline(ss, line, '\n'))
     {
         text->AddString(line.c_str(), COLOR_YELLOW, false); // add this line to the window contents
-        unsigned short current_line_width = NormalFont->getWidth(line); // get the width of line in normal font
+        uint16_t current_line_width = NormalFont->getWidth(line); // get the width of line in normal font
         if (current_line_width > max_line_width) // if wider than max, re-set max
         {
             max_line_width = current_line_width;
@@ -78,7 +78,7 @@ iwMissionStatement::iwMissionStatement(const std::string& title, const std::stri
     AddTextButton(1, width / 2 - 100, 435, 200, 22, TC_GREEN2, _("Continue"), NormalFont);
 }
 
-void iwMissionStatement::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwMissionStatement::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     Close();
 }

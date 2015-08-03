@@ -27,8 +27,8 @@
 /// Struktur zur Weitergabe der Spiel-Eröffnungsdaten
 struct CreateServerInfo
 {
-    unsigned char type;    ///< Typ des Servers.
-    unsigned short port;   ///< Port des Servers
+    uint8_t type;    ///< Typ des Servers.
+    uint16_t port;   ///< Port des Servers
     std::string gamename;  ///< Name des Servers.
     std::string password;  ///< Passwort des Servers.
     bool ipv6;             ///< Soll IPv6 verwendet werden?
@@ -38,21 +38,21 @@ struct CreateServerInfo
 class iwDirectIPCreate : public IngameWindow, public LobbyInterface
 {
     public:
-        iwDirectIPCreate(unsigned int server_type);
+        iwDirectIPCreate(uint32_t server_type);
 
         void LC_Status_Error(std::string error);
 
     protected:
-        void Msg_EditChange(const unsigned int ctrl_id);
-        void Msg_EditEnter(const unsigned int ctrl_id);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
+        void Msg_EditChange(const uint32_t ctrl_id);
+        void Msg_EditEnter(const uint32_t ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
 
     private:
-        void SetText(const std::string& text, unsigned int color, bool button);
+        void SetText(const std::string& text, uint32_t color, bool button);
 
     private:
-        unsigned int server_type;
+        uint32_t server_type;
 };
 
 #endif // !iwDIRECTIPCREATE_H_INCLUDED

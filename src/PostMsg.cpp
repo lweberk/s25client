@@ -105,7 +105,7 @@ const char* const PACT_TITLES[PACTS_COUNT] =
 };
 
 /// Akzeptieren
-DiplomacyPostQuestion::DiplomacyPostQuestion(const unsigned id, const unsigned char player, const PactType pt, const unsigned duration)
+DiplomacyPostQuestion::DiplomacyPostQuestion(const uint32_t id, const uint8_t player, const PactType pt, const uint32_t duration)
     : PostMsg("", PMC_DIPLOMACY), dp_type(ACCEPT), id(id), player(player), pt(pt)
 {
     type = PMT_DIPLOMACYQUESTION;
@@ -124,7 +124,7 @@ DiplomacyPostQuestion::DiplomacyPostQuestion(const unsigned id, const unsigned c
 }
 
 /// Vertrag auflösen
-DiplomacyPostQuestion::DiplomacyPostQuestion(const unsigned id, const unsigned char player, const PactType pt)
+DiplomacyPostQuestion::DiplomacyPostQuestion(const uint32_t id, const uint8_t player, const PactType pt)
     : PostMsg("", PMC_DIPLOMACY), dp_type(CANCEL), id(id), player(player), pt(pt)
 {
     type = PMT_DIPLOMACYQUESTION;
@@ -147,7 +147,7 @@ void DiplomacyPostQuestion::Serialize(SerializedGameData* sgd)
 }
 
 
-DiplomacyPostInfo::DiplomacyPostInfo(const unsigned char other_player, const Type type, const PactType pt)
+DiplomacyPostInfo::DiplomacyPostInfo(const uint8_t other_player, const Type type, const PactType pt)
     : PostMsg("", PMC_DIPLOMACY)
 {
     this->type = PMT_DIPLOMACYINFO;

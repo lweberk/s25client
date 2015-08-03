@@ -63,9 +63,9 @@ enum GoodType
 	/* 35 */GD_NOTHING      // Nichts
 };
 // Anzahl an unterschiedlichen Warentypen
-const unsigned WARE_TYPES_COUNT = GD_NOTHING;
+const uint32_t WARE_TYPES_COUNT = GD_NOTHING;
 // qx:tools
-const unsigned TOOL_COUNT = 12;
+const uint32_t TOOL_COUNT = 12;
 
 const std::string WARE_NAMES[36] =
 {
@@ -110,8 +110,8 @@ const std::string WARE_NAMES[36] =
 /// Waren- und Berufsstruktur ( für HQs, Lagerhäüser usw )
 struct Goods
 {
-	unsigned int goods[WARE_TYPES_COUNT];
-	unsigned int people[JOB_TYPES_COUNT];
+	uint32_t goods[WARE_TYPES_COUNT];
+	uint32_t people[JOB_TYPES_COUNT];
 
 	void clear()
 	{

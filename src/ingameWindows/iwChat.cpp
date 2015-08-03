@@ -36,7 +36,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-unsigned char iwChat::chat_dest = 0;
+uint8_t iwChat::chat_dest = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -67,13 +67,13 @@ void iwChat::Msg_PaintBefore()
     GetCtrl<ctrlEdit>(0)->SetFocus();
 }
 
-void iwChat::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void iwChat::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
-    chat_dest = static_cast<unsigned char>(selection);
+    chat_dest = static_cast<uint8_t>(selection);
     GetCtrl<ctrlEdit>(0)->SetFocus();
 }
 
-void iwChat::Msg_EditEnter(const unsigned int ctrl_id)
+void iwChat::Msg_EditEnter(const uint32_t ctrl_id)
 {
     Close();
 

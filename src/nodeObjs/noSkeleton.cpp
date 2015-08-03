@@ -67,19 +67,19 @@ void noSkeleton::Serialize_noSkeleton(SerializedGameData* sgd) const
     sgd->PushObject(current_event, true);
 }
 
-noSkeleton::noSkeleton(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noSkeleton::noSkeleton(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     type(sgd->PopUnsignedChar()),
     current_event(sgd->PopObject<EventManager::Event>(GOT_EVENT))
 {
 
 }
 
-void noSkeleton::Draw(int x, int y)
+void noSkeleton::Draw(int32_t x, int32_t y)
 {
     LOADER.GetMapImageN(547 + type)->Draw(x, y, 0, 0, 0, 0, 0, 0);
 }
 
-void noSkeleton::HandleEvent(const unsigned int id)
+void noSkeleton::HandleEvent(const uint32_t id)
 {
     if(!type)
     {

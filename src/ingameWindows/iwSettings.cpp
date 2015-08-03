@@ -73,7 +73,7 @@ iwSettings::iwSettings(dskGameInterface* gameDesktop)
     AddComboBox(0, 200, 35, 150, 22, TC_GREY, NormalFont, 110);
 
     // Und zu der Combobox hinzufügen
-    for(unsigned i = 0; i < video_modes.size(); ++i)
+    for(uint32_t i = 0; i < video_modes.size(); ++i)
     {
         // >=800x600, alles andere macht keinen Sinn
         if(video_modes[i].width >= 800 && video_modes[i].height >= 600)
@@ -145,7 +145,7 @@ iwSettings::~iwSettings()
  *
  *  @author NastX
  */
-void iwSettings::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void iwSettings::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -169,7 +169,7 @@ void iwSettings::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigne
  *
  *  @author NastX
  */
-void iwSettings::Msg_CheckboxChange(const unsigned int ctrl_id, const bool checked)
+void iwSettings::Msg_CheckboxChange(const uint32_t ctrl_id, const bool checked)
 {
     switch(ctrl_id)
     {

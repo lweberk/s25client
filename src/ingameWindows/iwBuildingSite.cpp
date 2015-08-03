@@ -71,7 +71,7 @@ iwBuildingSite::iwBuildingSite(GameWorldViewer* const gwv, const noBuildingSite*
  *
  *  @author OLiver
  */
-void iwBuildingSite::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwBuildingSite::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -106,11 +106,11 @@ void iwBuildingSite::Msg_PaintBefore()
 void iwBuildingSite::Msg_PaintAfter()
 {
     // Baukosten zeichnen
-    for(unsigned char i = 0; i < 2; ++i)
+    for(uint8_t i = 0; i < 2; ++i)
     {
-        unsigned int wares_count = 0;
-        unsigned int wares_delivered = 0;
-        unsigned int wares_used = 0;
+        uint32_t wares_count = 0;
+        uint32_t wares_delivered = 0;
+        uint32_t wares_used = 0;
 
         if(i == 0)
         {
@@ -132,7 +132,7 @@ void iwBuildingSite::Msg_PaintAfter()
         DrawRectangle(GetX() + width / 2 - 24 * wares_count / 2, GetY() + 60 + i * 29, 24 * wares_count, 24, 0x80000000);
 
         // Die Waren
-        for(unsigned char z = 0; z < wares_count; ++z)
+        for(uint8_t z = 0; z < wares_count; ++z)
         {
             glArchivItem_Bitmap* bitmap = LOADER.GetMapImageN(2250 + (i == 0 ? GD_BOARDS : GD_STONES));
             bitmap->Draw(GetX() + width / 2 - 24 * wares_count / 2 + 24 * z + 12, GetY() + 72 + i * 28, 0, 0, 0, 0, 0, 0, (z < wares_delivered ? 0xFFFFFFFF : 0xFF404040) );

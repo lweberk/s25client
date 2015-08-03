@@ -27,24 +27,24 @@
 
 
 /// (maximale) Größe des Minimapfensters normal
-const unsigned short MINIMAP_WINDOW_WIDTH = 200;
-const unsigned short MINIMAP_WINDOW_HEIGHT = 200;
+const uint16_t MINIMAP_WINDOW_WIDTH = 200;
+const uint16_t MINIMAP_WINDOW_HEIGHT = 200;
 /// (maximale) Größe des Minimapfensters groß
-const unsigned short MINIMAP_WINDOW_BIG_WIDTH = 400;
-const unsigned short MINIMAP_WINDOW_BIG_HEIGHT = 400;
+const uint16_t MINIMAP_WINDOW_BIG_WIDTH = 400;
+const uint16_t MINIMAP_WINDOW_BIG_HEIGHT = 400;
 
 /// Abstand der Kartenränder zum Fensterrand
-const unsigned short WINDOW_MAP_SPACE = 5;
+const uint16_t WINDOW_MAP_SPACE = 5;
 /// Minimale Fensterbreite
-const unsigned short MIN_WINDOW_WIDTH = 200;
+const uint16_t MIN_WINDOW_WIDTH = 200;
 /// Breite der unteren Buttons
-const unsigned short BUTTON_WIDTH = 36;
+const uint16_t BUTTON_WIDTH = 36;
 /// Höhe der unteren Buttons
-const unsigned short BUTTON_HEIGHT = 36;
+const uint16_t BUTTON_HEIGHT = 36;
 /// Abstand zwischen Buttons und Karte (Y)
-const unsigned short BUTTON_MAP_SPACE = 3;
+const uint16_t BUTTON_MAP_SPACE = 3;
 /// Abstand zwischen Buttons und unteren Fensterrand
-const unsigned short BUTTON_WINDOW_SPACE = 5;
+const uint16_t BUTTON_WINDOW_SPACE = 5;
 
 
 
@@ -58,7 +58,7 @@ iwMinimap::iwMinimap(IngameMinimap* minimap, GameWorldViewer& gwv)
 
 
     // Land, Häuser, Straßen an/aus
-    for(unsigned i = 0; i < 3; ++i)
+    for(uint32_t i = 0; i < 3; ++i)
         AddImageButton(i + 1, 10 + WINDOW_MAP_SPACE + BUTTON_WIDTH * i, 0, BUTTON_WIDTH, BUTTON_HEIGHT, TC_GREY, LOADER.GetImageN("io", 85 + i));
 
     // Fenster vergrößern/verkleinern
@@ -69,7 +69,7 @@ iwMinimap::iwMinimap(IngameMinimap* minimap, GameWorldViewer& gwv)
 }
 
 /// Verändert die Größe des Fensters und positioniert alle Controls etc. neu
-void iwMinimap::ChangeWindowSize(const unsigned short width, const unsigned short height)
+void iwMinimap::ChangeWindowSize(const uint16_t width, const uint16_t height)
 {
     ctrlIngameMinimap* im = GetCtrl<ctrlIngameMinimap>(0);
 
@@ -87,7 +87,7 @@ void iwMinimap::ChangeWindowSize(const unsigned short width, const unsigned shor
 
 
     // Buttonpositionen anpassen, nach unten verschieben
-    for(unsigned i = 1; i < 4; ++i)
+    for(uint32_t i = 1; i < 4; ++i)
         GetCtrl<ctrlImageButton>(i)->Move(GetCtrl<ctrlImageButton>(i)->GetX(false), GetHeight() - 10 - BUTTON_HEIGHT - BUTTON_WINDOW_SPACE);
 
     // Vergrößern/Verkleinern-Button nach unten rechts verschieben
@@ -97,7 +97,7 @@ void iwMinimap::ChangeWindowSize(const unsigned short width, const unsigned shor
     GetCtrl<ctrlImageButton>(4)->SetImage(LOADER.GetImageN("io", extended ? 108 : 109));
 }
 
-void iwMinimap::Msg_ButtonClick(const unsigned ctrl_id)
+void iwMinimap::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

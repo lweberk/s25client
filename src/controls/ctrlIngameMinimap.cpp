@@ -39,13 +39,13 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlIngameMinimap::ctrlIngameMinimap( Window* parent,
-                                      const unsigned int id,
-                                      const unsigned short x,
-                                      const unsigned short y,
-                                      const unsigned short width,
-                                      const unsigned short height,
-                                      const unsigned short padding_x,
-                                      const unsigned short padding_y,
+                                      const uint32_t id,
+                                      const uint16_t x,
+                                      const uint16_t y,
+                                      const uint16_t width,
+                                      const uint16_t height,
+                                      const uint16_t padding_x,
+                                      const uint16_t padding_y,
                                       IngameMinimap* minimap,
                                       GameWorldViewer& gwv)
     : ctrlMinimap(parent, id, x, y, width, height, padding_x, padding_y, minimap->GetMapWidth(),
@@ -64,8 +64,8 @@ bool ctrlIngameMinimap::Draw_()
     DrawMap(*minimap);
 
     // Mittleren Punkt berechnen und dort hinscrollen
-    int middle_x = (gwv.GetLastPt().x + gwv.GetFirstPt().x) / 2;
-    int middle_y = (gwv.GetLastPt().y + gwv.GetFirstPt().y) / 2;
+    int32_t middle_x = (gwv.GetLastPt().x + gwv.GetFirstPt().x) / 2;
+    int32_t middle_y = (gwv.GetLastPt().y + gwv.GetFirstPt().y) / 2;
 
     // Koordinaten korrigieren
     MapPoint middle_corrected = gwv.ConvertCoords(middle_x, middle_y);
@@ -74,13 +74,13 @@ bool ctrlIngameMinimap::Draw_()
     glArchivItem_Bitmap* image = LOADER.GetMapImageN(23);
 
     // Position (relativ zum angezeigten Anfang der Karte) berechnen
-    short xpos = middle_corrected.x * width_show / minimap->GetMapWidth() + 2;
-    short ypos = middle_corrected.y * height_show / minimap->GetMapHeight() + 2;
+    int16_t xpos = middle_corrected.x * width_show / minimap->GetMapWidth() + 2;
+    int16_t ypos = middle_corrected.y * height_show / minimap->GetMapHeight() + 2;
 
     // Scroll-Auswahl-Bild an den Rändern verkleinern, damit es nicht über die Karte "überlappt"
-    short src_x = 0, src_y = 0;
-    short draw_width = image->getWidth();
-    short draw_height = image->getHeight();
+    int16_t src_x = 0, src_y = 0;
+    int16_t draw_width = image->getWidth();
+    int16_t draw_height = image->getHeight();
 
     // überlappung am linken Rand?
     if(xpos - image->getNx() < 0)
@@ -134,8 +134,8 @@ bool ctrlIngameMinimap::Msg_MouseMove(const MouseCoords& mc)
         if(Coll(mc.x, mc.y, GetX() + GetLeft(), GetY() + GetTop(), width_show, height_show))
         {
             // Koordinate feststellen
-            unsigned short map_x = (mc.x - (GetX() + GetLeft())) * minimap->GetMapWidth() / width_show;
-            unsigned short map_y = (mc.y - (GetY() + GetTop())) * minimap->GetMapHeight() / height_show;
+            uint16_t map_x = (mc.x - (GetX() + GetLeft())) * minimap->GetMapWidth() / width_show;
+            uint16_t map_y = (mc.y - (GetY() + GetTop())) * minimap->GetMapHeight() / height_show;
 
             gwv.MoveToMapObject(MapPoint(map_x, map_y));
 
@@ -152,7 +152,7 @@ bool ctrlIngameMinimap::Msg_MouseMove(const MouseCoords& mc)
  *
  *  @author OLiver
  */
-void ctrlIngameMinimap::SetDisplaySize(const unsigned short width, const unsigned short height)
+void ctrlIngameMinimap::SetDisplaySize(const uint16_t width, const uint16_t height)
 {
     ctrlMinimap::SetDisplaySize(width, height, minimap->GetMapWidth(), minimap->GetMapHeight());
 }

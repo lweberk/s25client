@@ -35,18 +35,18 @@ static char THIS_FILE[] = __FILE__;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool Coll(const int x, const int y, const Rect& rect)
+bool Coll(const int32_t x, const int32_t y, const Rect& rect)
 {
     return ( x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom );
 }
 
-bool Coll(const int x, const int y, const int rx, const int ry, const int rwidth, const int rheight)
+bool Coll(const int32_t x, const int32_t y, const int32_t rx, const int32_t ry, const int32_t rwidth, const int32_t rheight)
 {
     return ( x >= rx && x < (rx + rwidth) && y >= ry && y < (ry + rheight));
 }
 
 
-bool Coll(const int left1, const int right1, const int left2, const int right2)
+bool Coll(const int32_t left1, const int32_t right1, const int32_t left2, const int32_t right2)
 {
     return( (left1 >= left2 && left1 <= right2) || (right1 >= left2 && right1 <= right2) || (left2 >= left1 && left2 <= right1) || (right2 >= left1 && right2 <= right1) );
 }
@@ -65,22 +65,22 @@ bool CollEdges(const Rect& rect1, const Rect& rect2)
 bool Coll(const Rect& rect1, const Rect& rect2)
 {
     // Radius berechnen
-    int Radius1X = (rect1.right - rect1.left) / 2;
-    int Radius1Y = (rect1.bottom - rect1.top) / 2;
+    int32_t Radius1X = (rect1.right - rect1.left) / 2;
+    int32_t Radius1Y = (rect1.bottom - rect1.top) / 2;
 
-    int Radius2X = (rect2.right - rect2.left) / 2;
-    int Radius2Y = (rect2.bottom - rect2.top) / 2;
+    int32_t Radius2X = (rect2.right - rect2.left) / 2;
+    int32_t Radius2Y = (rect2.bottom - rect2.top) / 2;
 
     // die Mitte der Bounding Box berechnen
-    int Center1X = rect1.left + Radius1X;
-    int Center1Y = rect1.top + Radius1Y;
+    int32_t Center1X = rect1.left + Radius1X;
+    int32_t Center1Y = rect1.top + Radius1Y;
 
-    int Center2X = rect2.left + Radius2X;
-    int Center2Y = rect2.top + Radius2Y;
+    int32_t Center2X = rect2.left + Radius2X;
+    int32_t Center2Y = rect2.top + Radius2Y;
 
     // Abstand berechnen
-    int OffsetX = std::abs(Center1X - Center2X);
-    int OffsetY = std::abs(Center1Y - Center2Y);
+    int32_t OffsetX = std::abs(Center1X - Center2X);
+    int32_t OffsetY = std::abs(Center1Y - Center2Y);
 
     return CollEdges(rect1, rect2) || (OffsetX < Radius1X + Radius2X && OffsetY < Radius1Y + Radius2Y);
 }

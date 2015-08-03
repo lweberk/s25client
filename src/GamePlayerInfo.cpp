@@ -36,7 +36,7 @@ static char THIS_FILE[] = __FILE__;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Konstruktor
-GamePlayerInfo::GamePlayerInfo(const unsigned playerid) :
+GamePlayerInfo::GamePlayerInfo(const uint32_t playerid) :
     playerid(playerid),
     defeated(false),
     ps(PS_FREE),
@@ -54,7 +54,7 @@ GamePlayerInfo::GamePlayerInfo(const unsigned playerid) :
 }
 
 /// Deserialisierungskonstruktor
-GamePlayerInfo::GamePlayerInfo(const unsigned playerid, Serializer* ser) :
+GamePlayerInfo::GamePlayerInfo(const uint32_t playerid, Serializer* ser) :
     playerid(playerid),
     ps(PlayerState(ser->PopUnsignedChar())),
     aiInfo(),
@@ -93,11 +93,11 @@ void GamePlayerInfo::clear(void)
 /// serialisiert die Daten.
 void GamePlayerInfo::serialize(Serializer* ser) const
 {
-    ser->PushUnsignedChar(static_cast<unsigned char>(ps));
+    ser->PushUnsignedChar(static_cast<uint8_t>(ps));
     ser->PushString(name);
     ser->PushString(origin_name);
     ser->PushBool(is_host);
-    ser->PushUnsignedChar(static_cast<unsigned char>(nation));
+    ser->PushUnsignedChar(static_cast<uint8_t>(nation));
     ser->PushUnsignedChar(team);
     ser->PushUnsignedChar(color);
     ser->PushUnsignedInt(ping);

@@ -53,22 +53,22 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 noFlag::noFlag(const MapPoint pos,
-               const unsigned char player, const unsigned char dis_dir)
+               const uint8_t player, const uint8_t dis_dir)
     : noRoadNode(NOP_FLAG, pos, player),
       ani_offset(rand() % 20000), flagtype(FT_NORMAL)
 {
-    for(unsigned char i = 0; i < 8; ++i)
+    for(uint8_t i = 0; i < 8; ++i)
         wares[i] = NULL;
 
     // BWUs nullen
-    for(unsigned char i = 0; i < MAX_BWU; ++i)
+    for(uint8_t i = 0; i < MAX_BWU; ++i)
     {
         bwus[i].id = 0xFFFFFFFF;
         bwus[i].last_gf = 0;
     }
 
     // Gucken, ob die Flagge auf einen bereits bestehenden Weg gesetzt wurde
-    unsigned char dir;
+    uint8_t dir;
     noFlag* flag = gwg->GetRoadFlag(pos, dir, dis_dir);
 
     if(flag)
@@ -80,7 +80,7 @@ noFlag::noFlag(const MapPoint pos,
     }
 
     // auf Wasseranteile prüfen
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         if(gwg->GetTerrainAround(pos, i) == 14)
             flagtype = FT_WATER;
@@ -93,15 +93,15 @@ noFlag::noFlag(const MapPoint pos,
  *
  *  @author OLiver
  */
-noFlag::noFlag(SerializedGameData* sgd, const unsigned int obj_id)
+noFlag::noFlag(SerializedGameData* sgd, const uint32_t obj_id)
     : noRoadNode(sgd, obj_id),
       ani_offset(rand() % 20000), flagtype(FlagType(sgd->PopUnsignedChar()))
 {
-    for(unsigned char i = 0; i < 8; ++i)
+    for(uint8_t i = 0; i < 8; ++i)
         wares[i] = sgd->PopObject<Ware>(GOT_WARE);
 
     // BWUs laden
-    for(unsigned char i = 0; i < MAX_BWU; ++i)
+    for(uint8_t i = 0; i < MAX_BWU; ++i)
     {
         bwus[i].id = sgd->PopUnsignedInt();
         bwus[i].last_gf = sgd->PopUnsignedInt();
@@ -117,7 +117,7 @@ noFlag::noFlag(SerializedGameData* sgd, const unsigned int obj_id)
 noFlag::~noFlag()
 {
     // Waren vernichten
-    for(unsigned char i = 0; i < 8; ++i)
+    for(uint8_t i = 0; i < 8; ++i)
         delete wares[i];
 }
 
@@ -133,7 +133,7 @@ void noFlag::Destroy_noFlag()
     gwg->SetNO(0, pos);
 
     // Waren vernichten
-    for(unsigned i = 0; i < 8; ++i)
+    for(uint32_t i = 0; i < 8; ++i)
     {
         if(wares[i])
         {
@@ -160,12 +160,12 @@ void noFlag::Serialize_noFlag(SerializedGameData* sgd) const
 {
     Serialize_noRoadNode(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(flagtype));
-    for(unsigned char i = 0; i < 8; ++i)
+    sgd->PushUnsignedChar(static_cast<uint8_t>(flagtype));
+    for(uint8_t i = 0; i < 8; ++i)
         sgd->PushObject(wares[i], true);
 
     // BWUs speichern
-    for(unsigned char i = 0; i < MAX_BWU; ++i)
+    for(uint8_t i = 0; i < MAX_BWU; ++i)
     {
         sgd->PushUnsignedInt(bwus[i].id);
         sgd->PushUnsignedInt(bwus[i].last_gf);
@@ -178,10 +178,10 @@ void noFlag::Serialize_noFlag(SerializedGameData* sgd) const
  *
  *  @author OLiver
  */
-void noFlag::Draw(int x, int y)
+void noFlag::Draw(int32_t x, int32_t y)
 {
     // Positionen der Waren an der Flagge relativ zur Flagge
-    static const signed char WARES_POS[8][2] =
+    static const int8_t WARES_POS[8][2] =
     {
         {  0,  0},
         { -4,  0},
@@ -193,12 +193,12 @@ void noFlag::Draw(int x, int y)
         { -13, -5}
     };
 
-    unsigned ani_step = GAMECLIENT.GetGlobalAnimation(8, 2, 1, ani_offset);
+    uint32_t ani_step = GAMECLIENT.GetGlobalAnimation(8, 2, 1, ani_offset);
 
     Loader::flag_cache[gwg->GetPlayer(player)->nation][flagtype][ani_step].draw(x, y, 0xFFFFFFFF, COLORS[gwg->GetPlayer(player)->color]);
 
     // Waren (von hinten anfangen zu zeichnen)
-    for(unsigned i = 8; i; --i)
+    for(uint32_t i = 8; i; --i)
     {
         if(wares[i - 1])
             LOADER.GetMapImageN(2200 + wares[i - 1]->type)->Draw(x + WARES_POS[i - 1][0], y + WARES_POS[i - 1][1], 0, 0, 0, 0, 0, 0);
@@ -225,7 +225,7 @@ FOWObject* noFlag::CreateFOWObject() const
  */
 void noFlag::AddWare(Ware* ware)
 {
-    for(unsigned char i = 0; i < 8; ++i)
+    for(uint8_t i = 0; i < 8; ++i)
     {
         if(!wares[i])
         {
@@ -246,10 +246,10 @@ void noFlag::AddWare(Ware* ware)
  *
  *  @author OLiver
  */
-unsigned noFlag::GetWareCount() const
+uint32_t noFlag::GetWareCount() const
 {
-    unsigned count = 0;
-    for(unsigned char i = 0; i < 8; ++i)
+    uint32_t count = 0;
+    for(uint8_t i = 0; i < 8; ++i)
         if(wares[i])
             ++count;
 
@@ -266,15 +266,15 @@ unsigned noFlag::GetWareCount() const
  *
  *  @author OLiver
  */
-Ware* noFlag::SelectWare(const unsigned char dir, const bool swap_wares, const noFigure* const carrier)
+Ware* noFlag::SelectWare(const uint8_t dir, const bool swap_wares, const noFigure* const carrier)
 {
     Ware* best_ware = NULL;
 
     // Index merken, damit wir die enstprechende Ware dann entfernen können
-    unsigned best_ware_index = 0xFF;
+    uint32_t best_ware_index = 0xFF;
 
     // Die mit der niedrigsten, d.h. höchsten Priorität wird als erstes transportiert
-    for(unsigned char i = 0; i < 8; ++i)
+    for(uint8_t i = 0; i < 8; ++i)
     {
         if(wares[i])
         {
@@ -308,7 +308,7 @@ Ware* noFlag::SelectWare(const unsigned char dir, const bool swap_wares, const n
     {
         // Wenn nun wieder ein Platz frei ist, allen Wegen rundrum sowie evtl Warenhäusern
         // Bescheid sagen, die evtl waren, dass sie wieder was ablegen können
-        for(unsigned char i = 0; i < 6; ++i)
+        for(uint8_t i = 0; i < 6; ++i)
         {
             if(routes[i])
             {
@@ -325,7 +325,7 @@ Ware* noFlag::SelectWare(const unsigned char dir, const bool swap_wares, const n
                 else
                 {
                     // Richtiger Weg --> Träger Bescheid sagen
-                    for(unsigned char c = 0; c < 2; ++c)
+                    for(uint8_t c = 0; c < 2; ++c)
                     {
                         if(routes[i]->hasCarrier(c))
                         {
@@ -352,10 +352,10 @@ Ware* noFlag::SelectWare(const unsigned char dir, const bool swap_wares, const n
  *
  *  @author OLiver
  */
-unsigned short noFlag::GetPunishmentPoints(const unsigned char dir) const
+uint16_t noFlag::GetPunishmentPoints(const uint8_t dir) const
 {
     // Waren zählen, die in diese Richtung transportiert werden müssen
-    unsigned short points = GetWaresCountForRoad(dir) << 1;
+    uint16_t points = GetWaresCountForRoad(dir) << 1;
 
     // Wenn kein Träger auf der Straße ist, gibts nochmal extra satte Strafpunkte
     if(!routes[dir]->isOccupied())
@@ -401,17 +401,17 @@ void noFlag::Upgrade()
  *
  *  @author OLiver
  */
-void noFlag::Capture(const unsigned char new_owner)
+void noFlag::Capture(const uint8_t new_owner)
 {
     // Alle Straßen um mich herum zerstören bis auf die zum Gebäude (also Nr. 1)
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         if(i != 1)
             DestroyRoad(i);
     }
 
     // Waren vernichten
-    for(unsigned char i = 0; i < 8; ++i)
+    for(uint8_t i = 0; i < 8; ++i)
     {
         if(wares[i])
         {
@@ -430,13 +430,13 @@ void noFlag::Capture(const unsigned char new_owner)
  *
  *  @author OLiver
  */
-bool noFlag::IsImpossibleForBWU(const unsigned bwu_id) const
+bool noFlag::IsImpossibleForBWU(const uint32_t bwu_id) const
 {
     // Zeitintervall, in der die Zugänglichkeit der Flaggen von einer bestimmten BWU überprüft wird
-    const unsigned int MAX_BWU_INTERVAL = 2000;
+    const uint32_t MAX_BWU_INTERVAL = 2000;
 
     // BWU-ID erstmal suchen
-    for(unsigned char i = 0; i < MAX_BWU; ++i)
+    for(uint8_t i = 0; i < MAX_BWU; ++i)
     {
         if(bwus[i].id == bwu_id)
         {
@@ -459,10 +459,10 @@ bool noFlag::IsImpossibleForBWU(const unsigned bwu_id) const
  *
  *  @author OLiver
  */
-void noFlag::ImpossibleForBWU(const unsigned bwu_id)
+void noFlag::ImpossibleForBWU(const uint32_t bwu_id)
 {
     // Evtl gibts BWU schon --> Dann einfach GF-Zahl aktualisieren
-    for(unsigned char i = 0; i < MAX_BWU; ++i)
+    for(uint8_t i = 0; i < MAX_BWU; ++i)
     {
         if(bwus[i].id == bwu_id)
         {
@@ -472,10 +472,10 @@ void noFlag::ImpossibleForBWU(const unsigned bwu_id)
     }
 
     // Gibts noch nicht, dann den ältesten BWU-Account raussuchen und den überschreiben
-    unsigned oldest_gf = 0xFFFFFFFF;
-    unsigned oldest_account_id = 0;
+    uint32_t oldest_gf = 0xFFFFFFFF;
+    uint32_t oldest_account_id = 0;
 
-    for(unsigned char i = 0; i < MAX_BWU; ++i)
+    for(uint8_t i = 0; i < MAX_BWU; ++i)
     {
         if(bwus[i].last_gf < oldest_gf)
         {

@@ -26,41 +26,41 @@
 class ctrlScrollBar : public Window
 {
     public:
-        ctrlScrollBar(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, unsigned short button_height, TextureColor tc, unsigned short pagesize);
-        void SetPos(unsigned short scroll_pos);
-        void SetRange(unsigned short scroll_range);
-        void SetPageSize(unsigned short pagesize);
+        ctrlScrollBar(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t button_height, TextureColor tc, uint16_t pagesize);
+        void SetPos(uint16_t scroll_pos);
+        void SetRange(uint16_t scroll_range);
+        void SetPageSize(uint16_t pagesize);
 
-        unsigned short GetPageSize() const { return pagesize; }
-        unsigned short GetPos() const { return scroll_pos; }
+        uint16_t GetPageSize() const { return pagesize; }
+        uint16_t GetPos() const { return scroll_pos; }
 
         virtual bool Msg_LeftUp(const MouseCoords& mc);
         virtual bool Msg_LeftDown(const MouseCoords& mc);
         virtual bool Msg_MouseMove(const MouseCoords& mc);
-        virtual void Msg_ButtonClick(const unsigned int ctrl_id);
+        virtual void Msg_ButtonClick(const uint32_t ctrl_id);
 
     protected:
         virtual bool Draw_(void);
 
-        void Resize_(unsigned short width, unsigned short height);
+        void Resize_(uint16_t width, uint16_t height);
 
     private:
         void CalculatePosition() { scroll_pos = (scrollbar_pos * scroll_range / scroll_height); }
-        void CalculateScrollBar(unsigned short height = 0);
+        void CalculateScrollBar(uint16_t height = 0);
 
     private:
-        unsigned short button_height;
+        uint16_t button_height;
         TextureColor tc;
-        unsigned short pagesize;
+        uint16_t pagesize;
 
         bool move;
-        unsigned short scroll_range;
-        unsigned short scroll_pos;
-        unsigned short scroll_height;
-        unsigned short scrollbar_height;
-        unsigned short scrollbar_pos;
+        uint16_t scroll_range;
+        uint16_t scroll_pos;
+        uint16_t scroll_height;
+        uint16_t scrollbar_height;
+        uint16_t scrollbar_pos;
 
-        int last_y;
+        int32_t last_y;
 };
 
 #endif // !CTRLSCROLLBAR_H_INCLUDED

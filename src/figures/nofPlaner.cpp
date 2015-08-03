@@ -41,7 +41,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofPlaner::nofPlaner(const MapPoint pos, const unsigned char player, noBuildingSite* building_site)
+nofPlaner::nofPlaner(const MapPoint pos, const uint8_t player, noBuildingSite* building_site)
     : noFigure(JOB_PLANER, pos, player, building_site), state(STATE_FIGUREWORK), building_site(building_site), pd(PD_NOTWORKING)
 {
 }
@@ -50,12 +50,12 @@ void nofPlaner::Serialize_nofPlaner(SerializedGameData* sgd) const
 {
     Serialize_noFigure(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushObject(building_site, true);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(pd));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(pd));
 }
 
-nofPlaner::nofPlaner(SerializedGameData* sgd, const unsigned obj_id) : noFigure(sgd, obj_id),
+nofPlaner::nofPlaner(SerializedGameData* sgd, const uint32_t obj_id) : noFigure(sgd, obj_id),
     state(PlanerState(sgd->PopUnsignedChar())),
     building_site(sgd->PopObject<noBuildingSite>(GOT_BUILDINGSITE)),
     pd(PlaningDir(sgd->PopUnsignedChar()))
@@ -135,7 +135,7 @@ void nofPlaner::LostWork()
     }
 }
 
-void nofPlaner::Draw(int x, int y)
+void nofPlaner::Draw(int32_t x, int32_t y)
 {
     switch(state)
     {
@@ -150,10 +150,10 @@ void nofPlaner::Draw(int x, int y)
             // 41
 
             /// Animation des Planierers
-            unsigned now_id = GAMECLIENT.Interpolate(69, current_ev);
+            uint32_t now_id = GAMECLIENT.Interpolate(69, current_ev);
 
             // spezielle Animation am Ende
-            const unsigned ANIMATION[21] =
+            const uint32_t ANIMATION[21] =
             {
                 273,
                 273,
@@ -202,7 +202,7 @@ void nofPlaner::Draw(int x, int y)
 }
 
 
-void nofPlaner::HandleDerivedEvent(const unsigned int id)
+void nofPlaner::HandleDerivedEvent(const uint32_t id)
 {
     if(id == 1)
     {

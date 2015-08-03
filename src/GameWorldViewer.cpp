@@ -46,7 +46,7 @@ GameWorldViewer::GameWorldViewer() : scroll(false), sx(0), sy(0), view(GameWorld
     MoveTo(0, 0);
 }
 
-unsigned GameWorldViewer::GetAvailableSoldiersForAttack(const unsigned char player_attacker, const MapPoint pt)
+uint32_t GameWorldViewer::GetAvailableSoldiersForAttack(const uint8_t player_attacker, const MapPoint pt)
 {
     // Ist das angegriffenne ein normales Gebäude?
     nobBaseMilitary* attacked_building = GetSpecObj<nobBaseMilitary>(pt);
@@ -59,7 +59,7 @@ unsigned GameWorldViewer::GetAvailableSoldiersForAttack(const unsigned char play
     }
 
     // Militärgebäude in der Nähe finden
-    unsigned total_count = 0;
+    uint32_t total_count = 0;
 
     nobBaseMilitarySet buildings = LookForMilitaryBuildings(pt, 3);
     for(nobBaseMilitarySet::iterator it = buildings.begin(); it != buildings.end(); ++it)
@@ -150,7 +150,7 @@ void GameWorldViewer::RecalcAllColors()
 }
 
 /// liefert sichtbare Straße, im FoW entsprechend die FoW-Straße
-unsigned char GameWorldViewer::GetVisibleRoad(const MapPoint pt, unsigned char dir, const Visibility visibility) const
+uint8_t GameWorldViewer::GetVisibleRoad(const MapPoint pt, uint8_t dir, const Visibility visibility) const
 {
     if(visibility == VIS_VISIBLE)
         // Normal die sichtbaren Straßen zurückliefern
@@ -167,11 +167,11 @@ unsigned char GameWorldViewer::GetVisibleRoad(const MapPoint pt, unsigned char d
 
 
 /// Return a ship at this position owned by the given player. Prefers ships that need instructions.
-noShip* GameWorldViewer::GetShip(const MapPoint pt, const unsigned char player) const
+noShip* GameWorldViewer::GetShip(const MapPoint pt, const uint8_t player) const
 {
     noShip* ship = NULL;
 
-    for (unsigned i = 0; i < 7; ++i)
+    for (uint32_t i = 0; i < 7; ++i)
     {
         MapPoint pa;
 
@@ -211,7 +211,7 @@ noShip* GameWorldViewer::GetShip(const MapPoint pt, const unsigned char player) 
 }
 
 /// Gibt die verfügbar Anzahl der Angreifer für einen Seeangriff zurück
-unsigned GameWorldViewer::GetAvailableSoldiersForSeaAttackCount(const unsigned char player_attacker,
+uint32_t GameWorldViewer::GetAvailableSoldiersForSeaAttackCount(const uint8_t player_attacker,
         const MapPoint pt) const
 {
     if(GAMECLIENT.GetGGS().getSelection(ADDON_SEA_ATTACK) == 2) //deactivated by addon?
@@ -230,17 +230,17 @@ const FOWObject* GameWorldViewer::GetYoungestFOWObject(const MapPoint pos) const
 
 /// Gets the youngest fow node of all visible objects of all players who are connected
 /// with the local player via team view
-unsigned char GameWorldViewer::GetYoungestFOWNodePlayer(const MapPoint pos) const
+uint8_t GameWorldViewer::GetYoungestFOWNodePlayer(const MapPoint pos) const
 {
-    unsigned char local_player = GAMECLIENT.GetPlayerID();
-    unsigned char youngest_player = local_player;
-    unsigned youngest_time = GetNode(pos).fow[local_player].last_update_time;
+    uint8_t local_player = GAMECLIENT.GetPlayerID();
+    uint8_t youngest_player = local_player;
+    uint32_t youngest_time = GetNode(pos).fow[local_player].last_update_time;
 
     // Shared team view enabled?
     if(GAMECLIENT.GetGGS().team_view)
     {
         // Then check if team members have a better (="younger", see our economy) fow object
-        for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+        for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
         {
             if(GAMECLIENT.GetPlayer(i)->IsAlly(local_player))
             {

@@ -57,7 +57,7 @@ iwAIDebug::iwAIDebug(GameWorldViewer* const gwv)
     }
 
     // Erstmal die AIs einsammeln
-    for (unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for (uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         AIPlayerJH* ai = dynamic_cast<AIPlayerJH*>(GAMESERVER.GetAIPlayer(i));
         if (ai)
@@ -104,7 +104,7 @@ iwAIDebug::iwAIDebug(GameWorldViewer* const gwv)
     text = AddText(2, 15, 120, "", COLOR_YELLOW,
                    glArchivItem_Font::DF_LEFT | glArchivItem_Font::DF_TOP, LOADER.GetFontN("resource", 0));
 
-    //for(unsigned char i = 0; i < 31; ++i)
+    //for(uint8_t i = 0; i < 31; ++i)
     //  list->AddString(_(BUILDING_NAMES[GAMECLIENT.visual_settings.build_order[i]]));
     //list->SetSelection(0);
 }
@@ -115,7 +115,7 @@ iwAIDebug::iwAIDebug(GameWorldViewer* const gwv)
  *
  *  @author jh
  */
-void iwAIDebug::Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short select)
+void iwAIDebug::Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t select)
 {
     switch(ctrl_id)
     {

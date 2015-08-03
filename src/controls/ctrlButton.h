@@ -31,7 +31,7 @@
 class ctrlButton : public Window
 {
     public:
-        ctrlButton(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height,
+        ctrlButton(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height,
                    const TextureColor tc, const std::string& tooltip);
         virtual ~ctrlButton();
 
@@ -84,8 +84,8 @@ class ctrlTextButton : public ctrlButton, public ctrlBaseText
 {
     public:
 
-        ctrlTextButton(Window* parent, unsigned int id, unsigned short x, unsigned short y,
-                       unsigned short width, unsigned short height, const TextureColor tc,
+        ctrlTextButton(Window* parent, uint32_t id, uint16_t x, uint16_t y,
+                       uint16_t width, uint16_t height, const TextureColor tc,
                        const std::string& text,  glArchivItem_Font* font, const std::string& tooltip);
 
     protected:
@@ -100,8 +100,8 @@ class ctrlImageButton : public ctrlButton
 {
     public:
 
-        ctrlImageButton(Window* parent, unsigned int id, unsigned short x, unsigned short y,
-                        unsigned short width, unsigned short height, const TextureColor tc,
+        ctrlImageButton(Window* parent, uint32_t id, uint16_t x, uint16_t y,
+                        uint16_t width, uint16_t height, const TextureColor tc,
                         glArchivItem_Bitmap* const image, const std::string& tooltip);
 
     public:
@@ -113,7 +113,7 @@ class ctrlImageButton : public ctrlButton
         /// Gibt Bild zurück
         glArchivItem_Bitmap* GetButtonImage() const { return image; }
         /// Ändert Farbfilter, mit dem dieses Bild gezeichnet werden soll
-        void SetModulationColor(const unsigned modulation_color)
+        void SetModulationColor(const uint32_t modulation_color)
         { this->modulation_color = modulation_color; }
 
 
@@ -127,7 +127,7 @@ class ctrlImageButton : public ctrlButton
         /// Bild
         glArchivItem_Bitmap* image;
         /// Farbe mit der das Bild gezeichnet werden soll
-        unsigned modulation_color;
+        uint32_t modulation_color;
 };
 
 /// Button mit Farbe
@@ -135,14 +135,14 @@ class ctrlColorButton : public ctrlButton, public ColorControlInterface
 {
     public:
 
-        ctrlColorButton(Window* parent, unsigned int id, unsigned short x, unsigned short y,
-                        unsigned short width, unsigned short height, const TextureColor tc,
-                        unsigned int fillColor, const std::string& tooltip);
+        ctrlColorButton(Window* parent, uint32_t id, uint16_t x, uint16_t y,
+                        uint16_t width, uint16_t height, const TextureColor tc,
+                        uint32_t fillColor, const std::string& tooltip);
 
     public:
 
         /// Setzt die Farbe des Controls
-        virtual void SetColor(const unsigned int fill_color);
+        virtual void SetColor(const uint32_t fill_color);
 
     protected:
 
@@ -151,7 +151,7 @@ class ctrlColorButton : public ctrlButton, public ColorControlInterface
 
     protected:
 
-        unsigned int fillColor;
+        uint32_t fillColor;
 };
 
 

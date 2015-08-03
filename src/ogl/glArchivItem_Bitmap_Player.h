@@ -34,7 +34,7 @@ class glArchivItem_Bitmap_Player : public libsiedler2::baseArchivItem_Bitmap_Pla
         /// Kopierkonstruktor von @p ArchivItem_Bitmap_Player.
         glArchivItem_Bitmap_Player(const glArchivItem_Bitmap_Player* item) : baseArchivItem_Bitmap(item), baseArchivItem_Bitmap_Player(item), glArchivItem_Bitmap(item) {}
 
-        void Draw(short dst_x, short dst_y, short dst_w , short dst_h , short src_x , short src_y , short src_w , short src_h , const unsigned int color , const unsigned int player_color );
+        void Draw(int16_t dst_x, int16_t dst_y, int16_t dst_w , int16_t dst_h , int16_t src_x , int16_t src_y , int16_t src_w , int16_t src_h , const uint32_t color , const uint32_t player_color );
 
     protected:
         void GenerateTexture();

@@ -44,30 +44,30 @@ class AIConstruction
 
 
         AIJH::Job* GetBuildJob();
-        unsigned GetBuildJobNum() const { return buildJobs.size(); }
-		unsigned GetConnectJobNum() const {return connectJobs.size();}
+        uint32_t GetBuildJobNum() const { return buildJobs.size(); }
+		uint32_t GetConnectJobNum() const {return connectJobs.size();}
 
         void AddConnectFlagJob(const noFlag* flag); // todo aijh als param suckt
 
         bool BuildJobAvailable() const { return buildJobs.size() > 0;}
 
         /// Finds flags in the area around pt
-        void FindFlags(std::vector<const noFlag*>& flags, const MapPoint pt, unsigned short radius, bool clear = true);
+        void FindFlags(std::vector<const noFlag*>& flags, const MapPoint pt, uint16_t radius, bool clear = true);
 
-        void FindFlags(std::vector<const noFlag*>& flags, const MapPoint pt, unsigned short radius,
-                       MapPoint real, unsigned short real_radius, bool clear = true);
+        void FindFlags(std::vector<const noFlag*>& flags, const MapPoint pt, uint16_t radius,
+                       MapPoint real, uint16_t real_radius, bool clear = true);
 		
 		/// returns true if the military building should be connected to the roadsystem
-		bool MilitaryBuildingWantsRoad(nobMilitary* milbld, unsigned listpos);
+		bool MilitaryBuildingWantsRoad(nobMilitary* milbld, uint32_t listpos);
 
         /// Connects a specific flag to a roadsystem nearby and returns true if succesful. Also returns the route of the future road.
-        bool ConnectFlagToRoadSytem(const noFlag* flag, std::vector<unsigned char>& route, unsigned int maxSearchRadius = 14);
+        bool ConnectFlagToRoadSytem(const noFlag* flag, std::vector<uint8_t>& route, uint32_t maxSearchRadius = 14);
 
         /// Builds a street between two roadnodes and sets flags on it, if route is empty, it will be calculated
-        bool BuildRoad(const noRoadNode* start, const noRoadNode* target, std::vector<unsigned char> &route);
+        bool BuildRoad(const noRoadNode* start, const noRoadNode* target, std::vector<uint8_t> &route);
 
         /// whenever a given route contains 2 segment alternatives these get tested for their buildquality and the one with the lower bq is picked for the final path
-        bool MinorRoadImprovements(const noRoadNode* start, const noRoadNode* target, std::vector<unsigned char> &route);
+        bool MinorRoadImprovements(const noRoadNode* start, const noRoadNode* target, std::vector<uint8_t> &route);
 
         /// Checks whether a flag is connected to the road system or not (connected = has path to HQ)
         bool IsConnectedToRoadSystem(const noFlag* flag);
@@ -76,10 +76,10 @@ class AIConstruction
         BuildingType ChooseMilitaryBuilding(const MapPoint pt);
 		
         /// Returns the number of buildings and buildingsites of a specific type (refresh with RefreshBuildingCount())
-        unsigned GetBuildingCount(BuildingType type);
+        uint32_t GetBuildingCount(BuildingType type);
 
         /// Returns the number of buildingsites of a specific type (refresh with RefreshBuildingCount())
-        unsigned GetBuildingSitesCount(BuildingType type);
+        uint32_t GetBuildingSitesCount(BuildingType type);
 
         /// Refreshes the number of buildings by asking the GameClientPlayer and recalcs some wanted buildings
         void RefreshBuildingCount();
@@ -96,14 +96,14 @@ class AIConstruction
 
         /// Update BQ and farming ground around new building site + road
         /// HIer oder in AIPlayerJH?
-        //void RecalcGround(const MapPoint buildingPos, std::vector<unsigned char> &route_road);
+        //void RecalcGround(const MapPoint buildingPos, std::vector<uint8_t> &route_road);
 
         /// Tries to build a second road to a flag, which is in any way better than the first one
-        bool BuildAlternativeRoad(const noFlag* flag, std::vector<unsigned char> &route);
+        bool BuildAlternativeRoad(const noFlag* flag, std::vector<uint8_t> &route);
 
-        bool OtherStoreInRadius(MapPoint pt, unsigned radius);
+        bool OtherStoreInRadius(MapPoint pt, uint32_t radius);
 
-		bool OtherUsualBuildingInRadius(MapPoint pt, unsigned radius, BuildingType bt);
+		bool OtherUsualBuildingInRadius(MapPoint pt, uint32_t radius, BuildingType bt);
 
 
         noFlag* FindTargetStoreHouseFlag(const MapPoint pt);
@@ -115,13 +115,13 @@ class AIConstruction
 		std::deque<MapPoint> constructionlocations;
 
 		//contains the type and amount of buildings ordered since the last nwf
-		std::vector<unsigned char> constructionorders;
+		std::vector<uint8_t> constructionorders;
 
-		void ExecuteJobs(unsigned limit);
+		void ExecuteJobs(uint32_t limit);
 
     private:
         /// Contains how many buildings of every type is wanted
-        std::vector<unsigned> buildingsWanted;
+        std::vector<uint32_t> buildingsWanted;
 
         /// The current job the AI is working on
         AIJH::Job* currentJob;
@@ -138,7 +138,7 @@ class AIConstruction
 
         //std::list<AIJH::Coords> storeHouses;
 
-        unsigned char playerID;
+        uint8_t playerID;
 };
 
 #endif //! AICONSTRUCTION_H_INCLUDED

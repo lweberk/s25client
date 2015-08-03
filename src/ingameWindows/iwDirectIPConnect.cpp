@@ -45,7 +45,7 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  *  @author FloSoft
  */
-iwDirectIPConnect::iwDirectIPConnect(unsigned int server_type)
+iwDirectIPConnect::iwDirectIPConnect(uint32_t server_type)
     : IngameWindow(CGI_DIRECTIPCONNECT, 0xFFFF, 0xFFFF, 300, 285, _("Join Game"), LOADER.GetImageN("resource", 41), true),
       server_type(server_type)
 {
@@ -94,7 +94,7 @@ iwDirectIPConnect::iwDirectIPConnect(unsigned int server_type)
  *
  *  @author FloSoft
  */
-void iwDirectIPConnect::Msg_EditChange(const unsigned int ctrl_id)
+void iwDirectIPConnect::Msg_EditChange(const uint32_t ctrl_id)
 {
     // Statustext resetten
     SetText(EMPTY_STRING, COLOR_RED, true);
@@ -106,7 +106,7 @@ void iwDirectIPConnect::Msg_EditChange(const unsigned int ctrl_id)
  *
  *  @author FloSoft
  */
-void iwDirectIPConnect::Msg_EditEnter(const unsigned int ctrl_id)
+void iwDirectIPConnect::Msg_EditEnter(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -141,7 +141,7 @@ void iwDirectIPConnect::Msg_EditEnter(const unsigned int ctrl_id)
  *
  *  @author FloSoft
  */
-void iwDirectIPConnect::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwDirectIPConnect::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -167,7 +167,7 @@ void iwDirectIPConnect::Msg_ButtonClick(const unsigned int ctrl_id)
             SetText( _("Connecting with Host..."), COLOR_RED, false);
 
             GAMECLIENT.Stop();
-            if(!GAMECLIENT.Connect(host->GetText(), pass->GetText(), server_type, (unsigned short)atoi(port->GetText().c_str()), false, SETTINGS.server.ipv6))
+            if(!GAMECLIENT.Connect(host->GetText(), pass->GetText(), server_type, (uint16_t)atoi(port->GetText().c_str()), false, SETTINGS.server.ipv6))
             {
                 // Text auf "Verbindung fehlgeschlagen" setzen und Button aktivieren
                 SetText( _("Connection failed!"), COLOR_RED, true);
@@ -187,7 +187,7 @@ void iwDirectIPConnect::Msg_ButtonClick(const unsigned int ctrl_id)
  *
  *  @author FloSoft
  */
-void iwDirectIPConnect::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void iwDirectIPConnect::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -205,7 +205,7 @@ void iwDirectIPConnect::Msg_OptionGroupChange(const unsigned int ctrl_id, const 
  *
  *  @author FloSoft
  */
-void iwDirectIPConnect::SetText(const std::string& text, unsigned int color, bool button)
+void iwDirectIPConnect::SetText(const std::string& text, uint32_t color, bool button)
 {
     // Text setzen
     GetCtrl<ctrlText>(6)->SetColor(color);
@@ -236,7 +236,7 @@ void iwDirectIPConnect::SetHost(const char* text)
  *
  *  @author FloSoft
  */
-void iwDirectIPConnect::SetPort(unsigned short port)
+void iwDirectIPConnect::SetPort(uint16_t port)
 {
     static char p[256];
     snprintf(p, 256, "%d", port);
@@ -259,7 +259,7 @@ void iwDirectIPConnect::CI_Error(const ClientError ce)
         case CE_WRONGPW:           SetText(_("Wrong Password!"), COLOR_RED, true); break;
         case CE_WRONGVERSION:      SetText(_("Wrong client version"), COLOR_RED, true); break;
         case CE_CONNECTIONLOST:    SetText(_("Connection to Host closed!"), COLOR_RED, true); break;
-        case CE_INCOMPLETEMESSAGE: SetText(_("Too short Message received!"), COLOR_RED, true); break;
+        case CE_INCOMPLETEMESSAGE: SetText(_("Too int16_t Message received!"), COLOR_RED, true); break;
         case CE_INVALIDSERVERTYPE: SetText(_("Wrong Server Type!"), COLOR_RED, true); break;
         case CE_WRONGMAP:          SetText("", COLOR_RED, true); break;
         default:                   break;

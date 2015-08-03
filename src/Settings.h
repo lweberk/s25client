@@ -45,18 +45,18 @@ class Settings : public Singleton<Settings>
     public:
         struct
         {
-            unsigned int submit_debug_data;
-            unsigned int use_upnp;
+            uint32_t submit_debug_data;
+            uint32_t use_upnp;
         } global;
 
         struct
         {
-            unsigned short fullscreen_width;
-            unsigned short fullscreen_height;
-            unsigned short windowed_width;
-            unsigned short windowed_height;
+            uint16_t fullscreen_width;
+            uint16_t fullscreen_height;
+            uint16_t windowed_width;
+            uint16_t windowed_height;
             bool fullscreen;
-            unsigned short vsync;
+            uint16_t vsync;
             bool vbo;
             bool shared_textures;
         } video;
@@ -75,9 +75,9 @@ class Settings : public Singleton<Settings>
         struct
         {
             bool musik;
-            unsigned char musik_volume;
+            uint8_t musik_volume;
             bool effekte;
-            unsigned char effekte_volume;
+            uint8_t effekte_volume;
             std::string playlist; ///< musicplayer playlist name
         } sound;
 
@@ -98,13 +98,13 @@ class Settings : public Singleton<Settings>
         struct
         {
             std::string proxy; ///< Serveradresse / Hostname
-            unsigned int port; ///< Port
-            unsigned char typ; ///< Socks 4 oder 5
+            uint32_t port; ///< Port
+            uint8_t typ; ///< Socks 4 oder 5
         } proxy;
 
         struct
         {
-            unsigned int autosave_interval;
+            uint32_t autosave_interval;
             bool revert_mouse;
         } interface;
 
@@ -115,15 +115,15 @@ class Settings : public Singleton<Settings>
 
         struct
         {
-            std::map<unsigned int, unsigned int> configuration;
+            std::map<uint32_t, uint32_t> configuration;
         } addons;
 
-        static const unsigned char SCREEN_REFRESH_RATES_COUNT;
-        static const unsigned short SCREEN_REFRESH_RATES[];
+        static const uint8_t SCREEN_REFRESH_RATES_COUNT;
+        static const uint16_t SCREEN_REFRESH_RATES[];
 
     private:
-        static const unsigned int SETTINGS_VERSION;
-        static const unsigned int SETTINGS_SECTIONS;
+        static const uint32_t SETTINGS_VERSION;
+        static const uint32_t SETTINGS_SECTIONS;
         static const std::string SETTINGS_SECTION_NAMES[];
 };
 

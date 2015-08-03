@@ -228,13 +228,13 @@ void GameWorldBase::Unload()
 {
     // Straßen sammeln und alle dann vernichten
     std::set<RoadSegment*> roadsegments;
-    for(unsigned i = 0; i < map_size; ++i)
+    for(uint32_t i = 0; i < map_size; ++i)
     {
         if(!nodes[i].obj)
             continue;
         if(nodes[i].obj->GetGOT() != GOT_FLAG)
             continue;
-        for(unsigned r = 0; r < 6; ++r)
+        for(uint32_t r = 0; r < 6; ++r)
         {
             if(static_cast<noFlag*>(nodes[i].obj)->routes[r])
             {
@@ -248,7 +248,7 @@ void GameWorldBase::Unload()
 
 
     // Objekte vernichten
-    for(unsigned i = 0; i < map_size; ++i)
+    for(uint32_t i = 0; i < map_size; ++i)
     {
         if(nodes[i].obj)
         {
@@ -256,7 +256,7 @@ void GameWorldBase::Unload()
             nodes[i].obj = NULL;
         }
 
-        for(unsigned z = 0; z < GAMECLIENT.GetPlayerCount(); ++z)
+        for(uint32_t z = 0; z < GAMECLIENT.GetPlayerCount(); ++z)
         {
             if(nodes[i].fow[z].object)
             {
@@ -267,7 +267,7 @@ void GameWorldBase::Unload()
     }
 
     // Figuren vernichten
-    for(unsigned i = 0; i < map_size; ++i)
+    for(uint32_t i = 0; i < map_size; ++i)
     {
         if(!nodes[i].figures.empty())
         {
@@ -305,7 +305,7 @@ const noBase* GameWorldBase::GetNO(const MapPoint pt) const
         return &nothing;
 }
 
-const FOWObject* GameWorldBase::GetFOWObject(const MapPoint pt, const unsigned spectator_player) const
+const FOWObject* GameWorldBase::GetFOWObject(const MapPoint pt, const uint32_t spectator_player) const
 {
     if(GetNode(pt).fow[spectator_player].object)
         return GetNode(pt).fow[spectator_player].object;
@@ -323,7 +323,7 @@ GO_Type GameWorldBase::GetGOT(const MapPoint pt) const
         return GOT_NOTHING;
 }
 
-MapPoint GameWorldBase::ConvertCoords(int x, int y) const
+MapPoint GameWorldBase::ConvertCoords(int32_t x, int32_t y) const
 {
     while(x < 0)
         x += width;
@@ -340,7 +340,7 @@ MapPoint GameWorldBase::ConvertCoords(int x, int y) const
 
 MapCoord GameWorldBase::CalcDistanceAroundBorderX(const MapCoord x1, const MapCoord x2) const
 {
-    int diff = int(x2) - int(x1);
+    int32_t diff = int(x2) - int(x1);
 
     if(diff >= 0)
         // Differenz positiv --> nicht über den Rand, d.h. normale Distanz
@@ -355,7 +355,7 @@ MapCoord GameWorldBase::CalcDistanceAroundBorderX(const MapCoord x1, const MapCo
 
 MapCoord GameWorldBase::CalcDistanceAroundBorderY(const MapCoord y1, const MapCoord y2) const
 {
-    int diff = int(y2) - int(y1);
+    int32_t diff = int(y2) - int(y1);
 
     if(diff >= 0)
         // Differenz positiv --> nicht über den Rand, d.h. normale Distanz
@@ -368,11 +368,11 @@ MapCoord GameWorldBase::CalcDistanceAroundBorderY(const MapCoord y1, const MapCo
 }
 
 /// Ermittelt Abstand zwischen 2 Punkten auf der Map unter Berücksichtigung der Kartengrenzüberquerung
-unsigned GameWorldBase::CalcDistance(const int x1, const int y1, 
-                                     const int x2, const int y2) const
+uint32_t GameWorldBase::CalcDistance(const int32_t x1, const int32_t y1, 
+                                     const int32_t x2, const int32_t y2) const
 {
-    int dx = ((x1 - x2) << 1) + (y1 & 1) - (y2 & 1);
-    int dy = ((y1 > y2) ? (y1 - y2) : (y2 - y1)) << 1;
+    int32_t dx = ((x1 - x2) << 1) + (y1 & 1) - (y2 & 1);
+    int32_t dy = ((y1 > y2) ? (y1 - y2) : (y2 - y1)) << 1;
 
     if (dx < 0)
         dx = -dx;
@@ -399,18 +399,18 @@ unsigned GameWorldBase::CalcDistance(const int x1, const int y1,
  *
  *  @author OLiver
  */
-unsigned char GameWorldBase::GetRoad(const MapPoint pt, unsigned char dir, bool all) const
+uint8_t GameWorldBase::GetRoad(const MapPoint pt, uint8_t dir, bool all) const
 {
     assert(pt.x < width && pt.y < height);
 
-    unsigned pos = GetIdx(pt);
+    uint32_t pos = GetIdx(pt);
 
     if(dir >= 3)
     	throw std::out_of_range("Dir");
 
     // Entweder muss es eine richtige Straße sein oder es müssen auch visuelle Straßen erlaubt sein
-	if(nodes[pos].roads_real[(unsigned)dir] || all)
-		return nodes[pos].roads[(unsigned)dir];
+	if(nodes[pos].roads_real[(uint32_t)dir] || all)
+		return nodes[pos].roads[(uint32_t)dir];
 
     return 0;
 }
@@ -421,7 +421,7 @@ unsigned char GameWorldBase::GetRoad(const MapPoint pt, unsigned char dir, bool 
  *
  *  @author OLiver
  */
-unsigned char GameWorldBase::GetPointRoad(const MapPoint pt, unsigned char dir, bool all) const
+uint8_t GameWorldBase::GetPointRoad(const MapPoint pt, uint8_t dir, bool all) const
 {
     assert(dir < 6);
 
@@ -431,7 +431,7 @@ unsigned char GameWorldBase::GetPointRoad(const MapPoint pt, unsigned char dir, 
         return GetRoad(GetNeighbour(pt, dir), dir, all);
 }
 
-unsigned char GameWorldBase::GetPointFOWRoad(MapPoint pt, unsigned char dir, const unsigned char viewing_player) const
+uint8_t GameWorldBase::GetPointFOWRoad(MapPoint pt, uint8_t dir, const uint8_t viewing_player) const
 {
     if(dir >= 3)
         dir = dir - 3;
@@ -445,10 +445,10 @@ unsigned char GameWorldBase::GetPointFOWRoad(MapPoint pt, unsigned char dir, con
 
 bool GameWorldBase::IsPlayerTerritory(const MapPoint pt) const
 {
-    unsigned char owner = GetNode(pt).owner;
+    uint8_t owner = GetNode(pt).owner;
 
     // Umliegende Punkte dürfen keinem anderen gehören
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(GetNodeAround(pt, i).owner != owner)
             return false;
@@ -457,7 +457,7 @@ bool GameWorldBase::IsPlayerTerritory(const MapPoint pt) const
     return true;
 }
 
-bool GameWorldBase::RoadAvailable(const bool boat_road, const MapPoint pt, unsigned char to_dir, const bool visual) const
+bool GameWorldBase::RoadAvailable(const bool boat_road, const MapPoint pt, uint8_t to_dir, const bool visual) const
 {
     // Hindernisse
     if(GetNode(pt).obj)
@@ -471,7 +471,7 @@ bool GameWorldBase::RoadAvailable(const bool boat_road, const MapPoint pt, unsig
     if(GetNode(pt).boundary_stones[0])
         return false;
 
-    for(unsigned char z = 0; z < 6; ++z)
+    for(uint8_t z = 0; z < 6; ++z)
     {
         // Roads around charburner piles are not possible
         if(GetNO(GetNeighbour(pt, z))->GetBM() == noBase::BM_CHARBURNERPILE)
@@ -485,7 +485,7 @@ bool GameWorldBase::RoadAvailable(const bool boat_road, const MapPoint pt, unsig
         }
     }
 
-    for(unsigned char i = 3; i < 6; ++i)
+    for(uint8_t i = 3; i < 6; ++i)
     {
         if(GetNO(GetNeighbour(pt, i))->GetBM() == noBase::BM_CASTLE)
             return false;
@@ -494,10 +494,10 @@ bool GameWorldBase::RoadAvailable(const bool boat_road, const MapPoint pt, unsig
     // Terrain (unterscheiden, ob Wasser und Landweg)
     if(!boat_road)
     {
-        unsigned flag_hits = 0;
-        unsigned char t;
+        uint32_t flag_hits = 0;
+        uint8_t t;
 
-        for(unsigned char i = 0; i < 6; ++i)
+        for(uint8_t i = 0; i < 6; ++i)
         {
             t = GetTerrainAround(pt, i);
             if(TERRAIN_BQ[t] == BQ_CASTLE || TERRAIN_BQ[t] == BQ_CASTLE || TERRAIN_BQ[t] == BQ_MINE || TERRAIN_BQ[t] == BQ_FLAG) ++flag_hits;
@@ -525,7 +525,7 @@ bool GameWorldBase::RoadAvailable(const bool boat_road, const MapPoint pt, unsig
     else
     {
         // Beim Wasserweg muss um den Punkt herum Wasser sein
-        for(unsigned i = 0; i < 6; ++i)
+        for(uint32_t i = 0; i < 6; ++i)
             if(GetTerrainAround(pt, i) != 14)
                 return false;
     }
@@ -533,10 +533,10 @@ bool GameWorldBase::RoadAvailable(const bool boat_road, const MapPoint pt, unsig
     return true;
 }
 
-bool GameWorldBase::RoadAlreadyBuilt(const bool boat_road, const MapPoint start, const std::vector<unsigned char>& route)
+bool GameWorldBase::RoadAlreadyBuilt(const bool boat_road, const MapPoint start, const std::vector<uint8_t>& route)
 {
     MapPoint tmp(start);
-    for(unsigned i = 0; i < route.size() - 1; ++i)
+    for(uint32_t i = 0; i < route.size() - 1; ++i)
     {
         // Richtiger Weg auf diesem Punkt?
         if(!GetPointRoad(tmp, route[i]))
@@ -550,7 +550,7 @@ bool GameWorldBase::RoadAlreadyBuilt(const bool boat_road, const MapPoint start,
 
 bool GameWorldBase::FlagNear(const MapPoint pt) const
 {
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         if(GetNO(GetNeighbour(pt, i))->GetType() == NOP_FLAG)
             return 1;
@@ -558,27 +558,27 @@ bool GameWorldBase::FlagNear(const MapPoint pt) const
     return 0;
 }
 
-void GameWorldBase::CalcRoad(const MapPoint pt, const unsigned char player)
+void GameWorldBase::CalcRoad(const MapPoint pt, const uint8_t player)
 {
     SetBQ(pt, GAMECLIENT.GetPlayerID());
 
-    for(unsigned i = 3; i < 6; ++i)
+    for(uint32_t i = 3; i < 6; ++i)
         SetBQ(GetNeighbour(pt, i), GAMECLIENT.GetPlayerID());
 }
 
-bool GameWorldBase::IsMilitaryBuildingNearNode(const MapPoint nPt, const unsigned char player) const
+bool GameWorldBase::IsMilitaryBuildingNearNode(const MapPoint nPt, const uint8_t player) const
 {
     // Im Umkreis von 4 Punkten ein Militärgebäude suchen
     MapPoint pt(nPt);
 
-    for(int r = 1; r <= 4; ++r)
+    for(int32_t r = 1; r <= 4; ++r)
     {
         // Eins weiter nach links gehen
         pt = GetNeighbour(pt, 0);
 
-        for(unsigned dir = 0; dir < 6; ++dir)
+        for(uint32_t dir = 0; dir < 6; ++dir)
         {
-            for(unsigned short i = 0; i < r; ++i)
+            for(uint16_t i = 0; i < r; ++i)
             {
                 if(IsMilitaryBuilding(pt) && (GetNode(pt).owner == player + 1))
                     return true;
@@ -598,11 +598,11 @@ bool GameWorldBase::IsMilitaryBuildingNearNode(const MapPoint nPt, const unsigne
  *
  *  @author OLiver
  */
-void GameWorldBase::SetVirtualRoad(const MapPoint pt, unsigned char dir, unsigned char type)
+void GameWorldBase::SetVirtualRoad(const MapPoint pt, uint8_t dir, uint8_t type)
 {
     assert(dir < 3);
 
-    unsigned pos = width * unsigned(pt.y) + unsigned(pt.x);
+    uint32_t pos = width * unsigned(pt.y) + unsigned(pt.x);
 
     nodes[pos].roads[dir] = type;
 }
@@ -613,7 +613,7 @@ void GameWorldBase::SetVirtualRoad(const MapPoint pt, unsigned char dir, unsigne
  *
  *  @author OLiver
  */
-void GameWorldBase::SetPointVirtualRoad(const MapPoint pt, unsigned char dir, unsigned char type)
+void GameWorldBase::SetPointVirtualRoad(const MapPoint pt, uint8_t dir, uint8_t type)
 {
     assert(dir < 6);
 
@@ -641,22 +641,22 @@ bool GameWorldBase::IsMilitaryBuilding(const MapPoint pt) const
     return false;
 }
 
-nobBaseMilitarySet GameWorldBase::LookForMilitaryBuildings(const MapPoint pt, unsigned short radius) const
+nobBaseMilitarySet GameWorldBase::LookForMilitaryBuildings(const MapPoint pt, uint16_t radius) const
 {
     // Radius auf Anzahl der Militärquadrate begrenzen, sonst gibt es Überlappungen
     radius = std::min<MapCoord>(width / MILITARY_SQUARE_SIZE + 1, radius);
 
     // in Militärquadrat-Koordinaten umwandeln-
-    int first_x = pt.x / MILITARY_SQUARE_SIZE;
-    int first_y = pt.y / MILITARY_SQUARE_SIZE;
+    int32_t first_x = pt.x / MILITARY_SQUARE_SIZE;
+    int32_t first_y = pt.y / MILITARY_SQUARE_SIZE;
 
     // linkes, oberes Quadrat ermitteln, dabei aufpassen dass wir nicht unter 0 geraden
     first_x -= radius;
     first_y -= radius;
 
     // in Militärquadrat-Koordinaten umwandeln
-    unsigned short last_x = pt.x / MILITARY_SQUARE_SIZE;
-    unsigned short last_y = pt.y / MILITARY_SQUARE_SIZE;
+    uint16_t last_x = pt.x / MILITARY_SQUARE_SIZE;
+    uint16_t last_y = pt.y / MILITARY_SQUARE_SIZE;
 
     // rechtes unteres Quadrat ermitteln, dabei nicht über die Karte hinausgehen
     last_x += radius;
@@ -665,13 +665,13 @@ nobBaseMilitarySet GameWorldBase::LookForMilitaryBuildings(const MapPoint pt, un
     nobBaseMilitarySet buildings;
 
     // Liste erzeugen
-    for(int cy = first_y; cy <= last_y; ++cy)
+    for(int32_t cy = first_y; cy <= last_y; ++cy)
     {
         MapCoord ty;
         if(cy < 0) ty = (cy + 2 * (height / MILITARY_SQUARE_SIZE + 1)) % (height / MILITARY_SQUARE_SIZE + 1);
         else if(cy >= height / MILITARY_SQUARE_SIZE + 1) ty = cy % (height / MILITARY_SQUARE_SIZE + 1);
         else ty = cy;
-        for(int cx = first_x; cx <= last_x; ++cx)
+        for(int32_t cx = first_x; cx <= last_x; ++cx)
         {
             MapCoord tx;
             if(cx < 0) tx = cx + width / MILITARY_SQUARE_SIZE + 1;
@@ -692,11 +692,11 @@ nobBaseMilitarySet GameWorldBase::LookForMilitaryBuildings(const MapPoint pt, un
 
 
 /// Baut eine (bisher noch visuell gebaute) Straße wieder zurück
-void GameWorldBase::RemoveVisualRoad(const MapPoint start, const std::vector<unsigned char>& route)
+void GameWorldBase::RemoveVisualRoad(const MapPoint start, const std::vector<uint8_t>& route)
 {
     MapPoint pt(start);
     // Wieder zurückbauen
-    for(unsigned z = 0; z < route.size(); ++z)
+    for(uint32_t z = 0; z < route.size(); ++z)
     {
         if (!GetPointRoad(pt, route[z], false))
         {
@@ -708,7 +708,7 @@ void GameWorldBase::RemoveVisualRoad(const MapPoint start, const std::vector<uns
     }
 }
 
-BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char player, const bool flagonly, const bool visual, const bool ignore_player) const
+BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const uint8_t player, const bool flagonly, const bool visual, const bool ignore_player) const
 {
 
     ///////////////////////
@@ -718,14 +718,14 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
     if(!ignore_player && (GetNode(pt).owner - 1 != player  || !IsPlayerTerritory(pt)))
         return BQ_NOTHING;
 
-    unsigned building_hits = 0;
-    unsigned mine_hits = 0;
-    unsigned flag_hits = 0;
+    uint32_t building_hits = 0;
+    uint32_t mine_hits = 0;
+    uint32_t flag_hits = 0;
     BuildingQuality val = BQ_CASTLE;
-    unsigned char t;
+    uint8_t t;
 
     // bebaubar?
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         t = GetTerrainAround(pt, i);
         if(TERRAIN_BQ[t] == BQ_CASTLE) ++building_hits;
@@ -751,7 +751,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
     //////////////////////////////////////
     // 2. nach Terrain
 
-    unsigned char ph = GetNode(pt).altitude, th;
+    uint8_t ph = GetNode(pt).altitude, th;
 
     // Bergwerke anders handhaben
     if(val == BQ_CASTLE && val != BQ_FLAG)
@@ -764,7 +764,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
         }
 
         // 2. Außenschale prüfen ( keine Hütten werden ab Steigung 3 )
-        for(unsigned i = 0; i < 12; ++i)
+        for(uint32_t i = 0; i < 12; ++i)
         {
             if( (th = GetNode(GetNeighbour2(pt, i)).altitude ) > ph)
             {
@@ -786,7 +786,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
         }
 
         // 1. Auäcnschale ( käcnen Flaggen werden ab Steigung 4)
-        for(unsigned i = 0; i < 6; ++i)
+        for(uint32_t i = 0; i < 6; ++i)
         {
             if((th = GetNodeAround(pt, i).altitude) > ph)
             {
@@ -819,7 +819,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
         return BQ_NOTHING;
 
     // Don't build anything around charburner piles
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(GetNO(GetNeighbour(pt, i))->GetBM() == noBase::BM_CHARBURNERPILE)
             return BQ_NOTHING;
@@ -827,7 +827,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
 
     if(val > 2 && val != BQ_MINE)
     {
-        for(unsigned i = 0; i < 6; ++i)
+        for(uint32_t i = 0; i < 6; ++i)
         {
             // Baum --> rundrum Hütte
             if(GetNO(GetNeighbour(pt, i))->GetType() == NOP_TREE)
@@ -851,7 +851,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
     }
 
     // Stein, Feuer und Getreidefeld --> rundrum Flagge
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         const noBase* nob = GetNO(GetNeighbour(pt, i));
         if(nob->GetBM() == noBase::BM_GRANITE)
@@ -864,7 +864,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
     // Flagge
     if(val == BQ_CASTLE)
     {
-        for(unsigned char i = 0; i < 3; ++i)
+        for(uint8_t i = 0; i < 3; ++i)
         {
             if(GetNodeAround(pt, i).obj)
             {
@@ -882,7 +882,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
     // Gebäude
     if(val == BQ_CASTLE)
     {
-        for(unsigned i = 0; i < 12; ++i)
+        for(uint32_t i = 0; i < 12; ++i)
         {
             noBase::BlockingManner bm = GetNO(GetNeighbour2(pt, i))->GetBM();
 
@@ -891,11 +891,11 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
         }
     }
 
-    for(unsigned i = 0; i < 3; ++i)
+    for(uint32_t i = 0; i < 3; ++i)
     {
         if(val == BQ_CASTLE)
         {
-            for(unsigned char c = 0; c < 6; ++c)
+            for(uint8_t c = 0; c < 6; ++c)
             {
                 if(GetPointRoad(GetNeighbour(pt, i), c, visual))
                 {
@@ -906,7 +906,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
         }
     }
 
-    for(unsigned char c = 0; c < 6; ++c)
+    for(uint8_t c = 0; c < 6; ++c)
     {
         if(GetPointRoad(pt, c, visual))
         {
@@ -917,7 +917,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
 
     if(val == BQ_FLAG)
     {
-        for(unsigned char i = 0; i < 6; ++i)
+        for(uint8_t i = 0; i < 6; ++i)
         {
             if(GetNO(GetNeighbour(pt, i))->GetBM() == noBase::BM_FLAG)
                 return BQ_NOTHING;
@@ -930,7 +930,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
 
     if(val == BQ_FLAG)
     {
-        for(unsigned char i = 0; i < 3; ++i)
+        for(uint8_t i = 0; i < 3; ++i)
             if(GetNO(GetNeighbour(pt, i))->GetBM() == noBase::BM_FLAG)
                 return BQ_NOTHING;
     }
@@ -953,7 +953,7 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
         else
         {
 
-            for(unsigned char i = 0; i < 3; ++i)
+            for(uint8_t i = 0; i < 3; ++i)
                 if(GetNO(GetNeighbour(pt, i))->GetBM() == noBase::BM_FLAG)
                     return BQ_NOTHING;
             return BQ_FLAG;
@@ -964,15 +964,15 @@ BuildingQuality GameWorldBase::CalcBQ(const MapPoint pt, const unsigned char pla
     return val;
 }
 
-bool GameWorldBase::IsNodeToNodeForFigure(const MapPoint pt, const unsigned dir) const
+bool GameWorldBase::IsNodeToNodeForFigure(const MapPoint pt, const uint32_t dir) const
 {
     // Nicht über Wasser, Lava, Sümpfe gehen
     // Als Boot dürfen wir das natürlich
-    unsigned char t1 = GetWalkingTerrain1(pt, dir), 
+    uint8_t t1 = GetWalkingTerrain1(pt, dir), 
                   t2 = GetWalkingTerrain2(pt, dir);
 
     // Wenn ein Weg da drüber geht, dürfen wir das sowieso, aber kein Wasserweg!
-    unsigned char road = GetPointRoad(pt, dir);
+    uint8_t road = GetPointRoad(pt, dir);
     if(road && road != RoadSegment::RT_BOAT + 1)
         return true;
 
@@ -983,9 +983,9 @@ bool GameWorldBase::IsNodeToNodeForFigure(const MapPoint pt, const unsigned dir)
         return true;
 }
 
-noFlag* GameWorldBase::GetRoadFlag(MapPoint pt, unsigned char& dir, unsigned last_i)
+noFlag* GameWorldBase::GetRoadFlag(MapPoint pt, uint8_t& dir, uint32_t last_i)
 {
-    unsigned char i = 0;
+    uint8_t i = 0;
 
     while(true)
     {
@@ -1011,17 +1011,17 @@ noFlag* GameWorldBase::GetRoadFlag(MapPoint pt, unsigned char& dir, unsigned las
     }
 }
 
-MapCoord GameWorldBase::GetXA(const MapCoord x, const MapCoord y, unsigned dir) const
+MapCoord GameWorldBase::GetXA(const MapCoord x, const MapCoord y, uint32_t dir) const
 {
     return GetNeighbour(MapPoint(x, y), dir).x;
 }
 
-MapCoord GameWorldBase::GetYA(const MapCoord x, const MapCoord y, unsigned dir) const
+MapCoord GameWorldBase::GetYA(const MapCoord x, const MapCoord y, uint32_t dir) const
 {
     return GetNeighbour(MapPoint(x, y), dir).y;
 }
 
-MapPoint GameWorldBase::GetNeighbour(const MapPoint pt, unsigned dir) const
+MapPoint GameWorldBase::GetNeighbour(const MapPoint pt, uint32_t dir) const
 {
     MapPoint res;
     
@@ -1058,15 +1058,15 @@ MapPoint GameWorldBase::GetNeighbour(const MapPoint pt, unsigned dir) const
     return res;
 }
 
-MapPoint GameWorldBase::GetNeighbour2(const MapPoint pt, unsigned dir) const
+MapPoint GameWorldBase::GetNeighbour2(const MapPoint pt, uint32_t dir) const
 {
     if(dir >= 12)
         throw std::logic_error("Invalid direction!");
 
-    static const int ADD_Y[12] =
+    static const int32_t ADD_Y[12] =
     { 0, -1, -2, -2, -2, -1, 0, 1, 2, 2, 2, 1 };
 
-    int tx;
+    int32_t tx;
     switch(dir)
     {
         default: throw std::logic_error("Invalid direction!");
@@ -1094,7 +1094,7 @@ MapPoint GameWorldBase::GetNeighbour2(const MapPoint pt, unsigned dir) const
  *  @author OLiver
  *  @author FloSoft
  */
-unsigned char GameWorldBase::GetTerrainAround(const MapPoint pt, unsigned char dir)  const
+uint8_t GameWorldBase::GetTerrainAround(const MapPoint pt, uint8_t dir)  const
 {
     assert(dir < 6);
 
@@ -1119,7 +1119,7 @@ unsigned char GameWorldBase::GetTerrainAround(const MapPoint pt, unsigned char d
  *
  *  @author OLiver
  */
-unsigned char GameWorldBase::GetWalkingTerrain1(const MapPoint pt, unsigned char dir)  const
+uint8_t GameWorldBase::GetWalkingTerrain1(const MapPoint pt, uint8_t dir)  const
 {
     assert(dir < 6);
 
@@ -1143,7 +1143,7 @@ unsigned char GameWorldBase::GetWalkingTerrain1(const MapPoint pt, unsigned char
  *
  *  @author OLiver
  */
-unsigned char GameWorldBase::GetWalkingTerrain2(const MapPoint pt, unsigned char dir)  const
+uint8_t GameWorldBase::GetWalkingTerrain2(const MapPoint pt, uint8_t dir)  const
 {
     assert(dir < 6);
 
@@ -1163,7 +1163,7 @@ unsigned char GameWorldBase::GetWalkingTerrain2(const MapPoint pt, unsigned char
 /// Gibt zurück, ob ein Punkt vollständig von Wasser umgeben ist
 bool GameWorldBase::IsSeaPoint(const MapPoint pt) const
 {
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(GetTerrainAround(pt, i) != TT_WATER)
             return false;
@@ -1173,22 +1173,22 @@ bool GameWorldBase::IsSeaPoint(const MapPoint pt) const
 }
 
 /// Verändert die Höhe eines Punktes und die damit verbundenen Schatten
-void GameWorldBase::ChangeAltitude(const MapPoint pt, const unsigned char altitude)
+void GameWorldBase::ChangeAltitude(const MapPoint pt, const uint8_t altitude)
 {
     // Höhe verändern
     GetNode(pt).altitude = altitude;
 
     // Schattierung neu berechnen von diesem Punkt und den Punkten drumherum
     RecalcShadow(pt);
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
         RecalcShadow(GetNeighbour(pt, i));
 
     // Baumöglichkeiten neu berechnen
     // Direkt drumherum
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
         SetBQ(GetNeighbour(pt, i), GAMECLIENT.GetPlayerID());
     // noch eine Schale weiter außen
-    for(unsigned i = 0; i < 12; ++i)
+    for(uint32_t i = 0; i < 12; ++i)
         SetBQ(GetNeighbour2(pt, i), GAMECLIENT.GetPlayerID());
 
     // Abgeleiteter Klasse Bescheid sagen
@@ -1197,10 +1197,10 @@ void GameWorldBase::ChangeAltitude(const MapPoint pt, const unsigned char altitu
 
 void GameWorldBase::RecalcShadow(const MapPoint pt)
 {
-    const int SHADOW_COEFFICIENT = 6;
+    const int32_t SHADOW_COEFFICIENT = 6;
 
     // Normale Ausleuchtung
-    int shadow = 0x40;
+    int32_t shadow = 0x40;
 
     // Höhendifferenz zu den Punkten darum betrachten, auf der einen Seite entsprechend heller, wenn höher, sonst dunkler
     shadow += (SHADOW_COEFFICIENT * (GetNode(pt).altitude - GetNodeAround(pt, 0).altitude));
@@ -1218,10 +1218,10 @@ void GameWorldBase::RecalcShadow(const MapPoint pt)
     else if(shadow > 0x60)
         shadow = 0x60;
 
-    GetNode(pt).shadow = static_cast<unsigned char>(shadow);
+    GetNode(pt).shadow = static_cast<uint8_t>(shadow);
 }
 
-Visibility GameWorldBase::CalcWithAllyVisiblity(const MapPoint pt, const unsigned char player) const
+Visibility GameWorldBase::CalcWithAllyVisiblity(const MapPoint pt, const uint8_t player) const
 {
     Visibility best_visibility = GetNode(pt).fow[player].visibility;
 
@@ -1232,7 +1232,7 @@ Visibility GameWorldBase::CalcWithAllyVisiblity(const MapPoint pt, const unsigne
     if(GAMECLIENT.GetGGS().team_view)
     {
         // Dann prüfen, ob Teammitglieder evtl. eine bessere Sicht auf diesen Punkt haben
-        for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+        for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
         {
             if(GAMECLIENT.GetPlayer(i)->IsAlly(player))
             {
@@ -1247,16 +1247,16 @@ Visibility GameWorldBase::CalcWithAllyVisiblity(const MapPoint pt, const unsigne
 
 
 /// Ermittelt, ob ein Punkt Küstenpunkt ist, d.h. Zugang zu einem schiffbaren Meer hat
-unsigned short GameWorldBase::IsCoastalPoint(const MapPoint pt) const
+uint16_t GameWorldBase::IsCoastalPoint(const MapPoint pt) const
 {
     // Punkt muss selbst zu keinem Meer gehören
     if(GetNode(pt).sea_id)
         return 0;
 
     // Um den Punkt herum muss ein gültiger Meeres Punkt sein
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
-        if(unsigned short sea_id = GetNodeAround(pt, i).sea_id)
+        if(uint16_t sea_id = GetNodeAround(pt, i).sea_id)
         {
             // Dieses Meer schiffbar (todo: andere Kritierien wie Hafenplätze etc.)?
             if(seas[GetNodeAround(pt, i).sea_id].nodes_count > 20)
@@ -1267,12 +1267,12 @@ unsigned short GameWorldBase::IsCoastalPoint(const MapPoint pt) const
     return false;
 }
 
-unsigned short GameWorldBase::IsCoastalPointToSeaWithHarbor(const MapPoint pt) const
+uint16_t GameWorldBase::IsCoastalPointToSeaWithHarbor(const MapPoint pt) const
 {
-    short sea = IsCoastalPoint(pt);
+    int16_t sea = IsCoastalPoint(pt);
     if(sea)
     {
-        for(unsigned i = 1; i < harbor_pos.size(); i++)
+        for(uint32_t i = 1; i < harbor_pos.size(); i++)
         {
             if(IsAtThisSea(i, sea))
                 return sea;
@@ -1294,7 +1294,7 @@ std::vector<noBase*> GameWorldBase::GetDynamicObjectsFrom(const MapPoint pt) con
         MapPoint(GetNeighbour(pt, 2))
     };
 
-    for(unsigned i = 0; i < 3; ++i)
+    for(uint32_t i = 0; i < 3; ++i)
     {
         const std::list<noBase*>& figures = GetFigures(coords[i]);
         for(std::list<noBase*>::const_iterator it = figures.begin(); it != figures.end(); ++it)
@@ -1315,9 +1315,9 @@ std::vector<noBase*> GameWorldBase::GetDynamicObjectsFrom(const MapPoint pt) con
 
 
 /// Grenzt der Hafen an ein bestimmtes Meer an?
-bool GameWorldBase::IsAtThisSea(const unsigned harbor_id, const unsigned short sea_id) const
+bool GameWorldBase::IsAtThisSea(const uint32_t harbor_id, const uint16_t sea_id) const
 {
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(sea_id == harbor_pos[harbor_id].cps[i].sea_id)
             return true;
@@ -1326,7 +1326,7 @@ bool GameWorldBase::IsAtThisSea(const unsigned harbor_id, const unsigned short s
 }
 
 /// Gibt die Koordinaten eines bestimmten Hafenpunktes zurück
-MapPoint GameWorldBase::GetHarborPoint(const unsigned harbor_id) const
+MapPoint GameWorldBase::GetHarborPoint(const uint32_t harbor_id) const
 {
     assert(harbor_id);
 
@@ -1334,11 +1334,11 @@ MapPoint GameWorldBase::GetHarborPoint(const unsigned harbor_id) const
 }
 
 /// Gibt den Punkt eines bestimmtes Meeres um den Hafen herum an, sodass Schiffe diesen anfahren können
-MapPoint GameWorldBase::GetCoastalPoint(const unsigned harbor_id, const unsigned short sea_id) const
+MapPoint GameWorldBase::GetCoastalPoint(const uint32_t harbor_id, const uint16_t sea_id) const
 {
     assert(harbor_id);
 
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(harbor_pos[harbor_id].cps[i].sea_id == sea_id)
         {
@@ -1352,18 +1352,18 @@ MapPoint GameWorldBase::GetCoastalPoint(const unsigned harbor_id, const unsigned
 
 
 /// Gibt nächsten Hafenpunkt in einer bestimmten Richtung zurück, bzw. 0, jwenn es keinen gibt
-unsigned GameWorldBase::GetNextHarborPoint(const MapPoint pt, 
-        const unsigned origin_harbor_id, const unsigned char dir, 
-        const unsigned char player, 
-        bool (GameWorldBase::*IsPointOK)(const unsigned, const unsigned char, const unsigned short) const) const
+uint32_t GameWorldBase::GetNextHarborPoint(const MapPoint pt, 
+        const uint32_t origin_harbor_id, const uint8_t dir, 
+        const uint8_t player, 
+        bool (GameWorldBase::*IsPointOK)(const uint32_t, const uint8_t, const uint16_t) const) const
 {
 
-    //unsigned char group_id = harbor_pos[origin_harbor_id-1].cps[
+    //uint8_t group_id = harbor_pos[origin_harbor_id-1].cps[
 
     // Herausfinden, in welcher Richtung sich dieser Punkt vom Ausgangspuknt unterscheidet
-    unsigned char coastal_point_dir = 0xFF;
+    uint8_t coastal_point_dir = 0xFF;
 
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         if(GetNeighbour(harbor_pos[origin_harbor_id].pos, i) == pt)
         {
@@ -1374,10 +1374,10 @@ unsigned GameWorldBase::GetNextHarborPoint(const MapPoint pt,
 
     assert(coastal_point_dir != 0xff);
 
-    unsigned short sea_id = harbor_pos[origin_harbor_id].cps[coastal_point_dir].sea_id;
+    uint16_t sea_id = harbor_pos[origin_harbor_id].cps[coastal_point_dir].sea_id;
 
 
-    for(unsigned i = 0; i < harbor_pos[origin_harbor_id].neighbors[dir].size(); ++i)
+    for(uint32_t i = 0; i < harbor_pos[origin_harbor_id].neighbors[dir].size(); ++i)
     {
         // Entspricht der Punkt meinen Erwartungen?
         if((this->*IsPointOK)(harbor_pos[origin_harbor_id].neighbors[dir][i].id, player, sea_id))
@@ -1393,13 +1393,13 @@ unsigned GameWorldBase::GetNextHarborPoint(const MapPoint pt,
 }
 
 /// Ist es an dieser Stelle für einen Spieler möglich einen Hafen zu bauen
-bool GameWorldBase::IsHarborPointFree(const unsigned harbor_id, const unsigned char player, const unsigned short sea_id) const
+bool GameWorldBase::IsHarborPointFree(const uint32_t harbor_id, const uint8_t player, const uint16_t sea_id) const
 {
     MapPoint coords(GetHarborPoint(harbor_id));
 
     // Befindet sich der Hafenpunkt auch an dem erforderlichen Meer?
     bool at_sea = false;
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(harbor_pos[harbor_id].cps[i].sea_id == sea_id)
         {
@@ -1418,11 +1418,11 @@ bool GameWorldBase::IsHarborPointFree(const unsigned harbor_id, const unsigned c
         for(MapCoord tx = GetXA(coords.x, coords.y, 0), r = 1; r <= 4; tx = GetXA(tx, coords.y, 0), ++r)
         {
             MapPoint t2(tx, coords.y);
-            for(unsigned i = 2; i < 8; ++i)
+            for(uint32_t i = 2; i < 8; ++i)
             {
                 for(MapCoord r2 = 0; r2 < r; t2 = GetNeighbour(t2, i % 6), ++r2)
                 {
-                    unsigned char owner = GetNode(t2).owner;
+                    uint8_t owner = GetNode(t2).owner;
                     if(owner != 0 && owner != player + 1)
                         return false;
                 }
@@ -1434,30 +1434,30 @@ bool GameWorldBase::IsHarborPointFree(const unsigned harbor_id, const unsigned c
 }
 
 /// Sucht freie Hafenpunkte, also wo noch ein Hafen gebaut werden kann
-unsigned GameWorldBase::GetNextFreeHarborPoint(const MapPoint pt, const unsigned origin_harbor_id, const unsigned char dir, 
-        const unsigned char player) const
+uint32_t GameWorldBase::GetNextFreeHarborPoint(const MapPoint pt, const uint32_t origin_harbor_id, const uint8_t dir, 
+        const uint8_t player) const
 {
     return GetNextHarborPoint(pt, origin_harbor_id, dir, player, &GameWorldBase::IsHarborPointFree);
 }
 
 /// Gibt die angrenzenden Sea-IDs eines Hafenpunktes zurück
-void GameWorldBase::GetSeaIDs(const unsigned harbor_id, unsigned short* sea_ids) const
+void GameWorldBase::GetSeaIDs(const uint32_t harbor_id, uint16_t* sea_ids) const
 {
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         sea_ids[i] = harbor_pos[harbor_id].cps[i].sea_id;
     }
 }
 
 /// Berechnet die Entfernung zwischen 2 Hafenpunkten
-unsigned GameWorldBase::CalcHarborDistance(const unsigned habor_id1, const unsigned harbor_id2) const
+uint32_t GameWorldBase::CalcHarborDistance(const uint32_t habor_id1, const uint32_t harbor_id2) const
 {
     if (habor_id1 == harbor_id2) //special case: distance to self
         return 0;
     const HarborPos& hp = harbor_pos[habor_id1];
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
-        for(unsigned z = 0; z < hp.neighbors[i].size(); ++z)
+        for(uint32_t z = 0; z < hp.neighbors[i].size(); ++z)
         {
             const HarborPos::Neighbor& n = hp.neighbors[i][z];
             if(n.id == harbor_id2)
@@ -1469,10 +1469,10 @@ unsigned GameWorldBase::CalcHarborDistance(const unsigned habor_id1, const unsig
 }
 
 /// Bestimmt für einen beliebigen Punkt auf der Karte die Entfernung zum nächsten Hafenpunkt
-unsigned GameWorldBase::CalcDistanceToNearestHarbor(const MapPoint pos) const
+uint32_t GameWorldBase::CalcDistanceToNearestHarbor(const MapPoint pos) const
 {
-    unsigned min_distance = 0xffffffff;
-    for(unsigned i = 1; i < harbor_pos.size(); ++i) //poc: harbor dummy at spot 0 ask Oliverr why
+    uint32_t min_distance = 0xffffffff;
+    for(uint32_t i = 1; i < harbor_pos.size(); ++i) //poc: harbor dummy at spot 0 ask Oliverr why
         min_distance = std::min(min_distance, this->CalcDistance(pos, harbor_pos[i].pos));
 
     return min_distance;
@@ -1481,7 +1481,7 @@ unsigned GameWorldBase::CalcDistanceToNearestHarbor(const MapPoint pos) const
 /// returns true when a harborpoint is in SEAATTACK_DISTANCE for figures!
 bool GameWorldBase::IsAHarborInSeaAttackDistance(const MapPoint pos) const
 {
-    for(unsigned i = 1; i < harbor_pos.size(); ++i) //poc: harbor dummy at spot 0 ask Oliverr why
+    for(uint32_t i = 1; i < harbor_pos.size(); ++i) //poc: harbor dummy at spot 0 ask Oliverr why
     {
         if(CalcDistance(pos, harbor_pos[i].pos) < SEAATTACK_DISTANCE)
         {
@@ -1513,12 +1513,12 @@ bool GameWorldBase::PotentialSeaAttacker::operator<(const GameWorldBase::Potenti
 }
 
 /// returns all sea_ids found in the given vector from which a given building can be attacked by sea
-void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttackCompare(const MapPoint pt, std::vector<unsigned short> * use_seas, const unsigned char player_attacker)const
+void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttackCompare(const MapPoint pt, std::vector<uint16_t> * use_seas, const uint8_t player_attacker)const
 {
 	// Nach Hafenpunkten in der Nähe des angegriffenen Gebäudes suchen
 	// Alle unsere Häfen durchgehen
-	std::vector<unsigned short> confirmedseaids;
-	for(unsigned i = 1;i<harbor_pos.size();++i)
+	std::vector<uint16_t> confirmedseaids;
+	for(uint32_t i = 1;i<harbor_pos.size();++i)
 
 	{
 		MapPoint harborPt = harbor_pos[i].pos;
@@ -1536,9 +1536,9 @@ void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttackCompare(const M
 				// Ist Ziel der Hafenspot? -> add sea_ids
 				if(pt == harborPt)
 				{
-					unsigned short sea_ids[6];
+					uint16_t sea_ids[6];
 					GetSeaIDs(i, sea_ids);
-					for(unsigned z = 0;z<6;++z)
+					for(uint32_t z = 0;z<6;++z)
 					{
 						if(!sea_ids[z])
                             continue;
@@ -1546,7 +1546,7 @@ void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttackCompare(const M
 						if(std::find(use_seas->begin(), use_seas->end(), sea_ids[z])!=use_seas->end() && !(std::find(confirmedseaids.begin(), confirmedseaids.end(), sea_ids[z])!=confirmedseaids.end()))
 						{
 							bool previouslytested=false;
-							for(unsigned k=0;k<z;k++)
+							for(uint32_t k=0;k<z;k++)
 							{	
 								if(sea_ids[z]==sea_ids[k])
 								{
@@ -1572,9 +1572,9 @@ void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttackCompare(const M
 				//so our target building is in range of a free or allied harbor pos but not the harborspot - now lets see if we can findhumanpath
 				else //if(FindHumanPath(x, y, harbor_x, harbor_y, SEAATTACK_DISTANCE) != 0xff)				
 				{
-					unsigned short sea_ids[6];
+					uint16_t sea_ids[6];
 					GetSeaIDs(i, sea_ids);
-					for(unsigned z = 0;z<6;++z)
+					for(uint32_t z = 0;z<6;++z)
 					{
 						if(!sea_ids[z])
                             continue;
@@ -1582,7 +1582,7 @@ void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttackCompare(const M
 						if(std::find(use_seas->begin(), use_seas->end(), sea_ids[z])!=use_seas->end() && !(std::find(confirmedseaids.begin(), confirmedseaids.end(), sea_ids[z])!=confirmedseaids.end()))
 						{
 							bool previouslytested=false;
-							for(unsigned k=0;k<z;k++) //checks previously tested sea ids to skip pathfinding
+							for(uint32_t k=0;k<z;k++) //checks previously tested sea ids to skip pathfinding
 							{
 								if(sea_ids[z]==sea_ids[k])
 								{
@@ -1613,12 +1613,12 @@ void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttackCompare(const M
 }
 	
 /// returns all sea_ids from which a given building can be attacked by sea
-void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttack(const MapPoint pt, std::vector<bool> * use_seas, const unsigned char player_attacker, std::vector<unsigned>*harbor_points) const
+void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttack(const MapPoint pt, std::vector<bool> * use_seas, const uint8_t player_attacker, std::vector<uint32_t>*harbor_points) const
 {
 	assert(use_seas);
 	// Nach Hafenpunkten in der Nähe des angegriffenen Gebäudes suchen
 	// Alle unsere Häfen durchgehen
-	for(unsigned i = 1;i<harbor_pos.size();++i)
+	for(uint32_t i = 1;i<harbor_pos.size();++i)
 
 	{
 		MapPoint harborPt = harbor_pos[i].pos;
@@ -1638,15 +1638,15 @@ void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttack(const MapPoint
 			if(pt == harborPt)
 			{
 				bool harborinlist=false;					
-				unsigned short sea_ids[6];
+				uint16_t sea_ids[6];
 				GetSeaIDs(i, sea_ids);
-				for(unsigned z = 0;z<6;++z)
+				for(uint32_t z = 0;z<6;++z)
 				{
 					if(sea_ids[z] ) //there is a sea id in the given direction?
 					{
 						//already tested the path from this coastal point to the goal (pathfinding takes a while so avoid as much as possible)
 						bool previouslytested=false;
-						for(unsigned k=0;k<z;k++)
+						for(uint32_t k=0;k<z;k++)
 						{
 							if(sea_ids[z]==sea_ids[k])
 							{
@@ -1675,14 +1675,14 @@ void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttack(const MapPoint
 			else //if(FindHumanPath(x, y, harbor_x, harbor_y, SEAATTACK_DISTANCE) != 0xff)				
 			{	//first get sea ids around currently tested harbor, then for each sea id try to find a human path between the coastal point and the goal
 				bool harborinlist=false;
-				unsigned short sea_ids[6];
+				uint16_t sea_ids[6];
 				GetSeaIDs(i, sea_ids);
-				for(unsigned z = 0;z<6;++z) //for all directions check the sea ids
+				for(uint32_t z = 0;z<6;++z) //for all directions check the sea ids
 				{
 					if(sea_ids[z]) //sea id not 0 = any sea
 					{
 						bool previouslytested=false;
-						for(unsigned k=0;k<z;k++) //checks previously tested sea ids to skip pathfinding
+						for(uint32_t k=0;k<z;k++) //checks previously tested sea ids to skip pathfinding
 						{
 							if(sea_ids[z]==sea_ids[k])
 							{
@@ -1712,14 +1712,14 @@ void GameWorldBase::GetValidSeaIDsAroundMilitaryBuildingForAttack(const MapPoint
 }
 
 /// Liefert Hafenpunkte im Umkreis von einem bestimmten Militärgebäude
-void GameWorldBase::GetHarborPointsAroundMilitaryBuilding(const MapPoint pt, std::vector<unsigned> * harbor_points) const
+void GameWorldBase::GetHarborPointsAroundMilitaryBuilding(const MapPoint pt, std::vector<uint32_t> * harbor_points) const
 {
     assert(harbor_points);
 
 
     // Nach Hafenpunkten in der Nähe des angegriffenen Gebäudes suchen
     // Alle unsere Häfen durchgehen
-    for(unsigned i = 1; i < harbor_pos.size(); ++i)
+    for(uint32_t i = 1; i < harbor_pos.size(); ++i)
 
     {
         MapPoint harborPt = harbor_pos[i].pos;
@@ -1736,11 +1736,11 @@ void GameWorldBase::GetHarborPointsAroundMilitaryBuilding(const MapPoint pt, std
 }
 
 /// Gibt Anzahl oder geschätzte Stärke(rang summe + anzahl) der verfügbaren Soldaten die zu einem Schiffsangriff starten können von einer bestimmten sea id aus
-unsigned int GameWorldBase::GetAvailableSoldiersForSeaAttackAtSea(const unsigned char player_attacker, unsigned short seaid, bool count)const
+uint32_t GameWorldBase::GetAvailableSoldiersForSeaAttackAtSea(const uint8_t player_attacker, uint16_t seaid, bool count)const
 {
     // Liste alle Militärgebäude des Angreifers, die Soldaten liefern
     std::vector<nobHarborBuilding::SeaAttackerBuilding> buildings;
-    unsigned int attackercount = 0;
+    uint32_t attackercount = 0;
     // Angrenzende Häfen des Angreifers an den entsprechenden Meeren herausfinden
     for(std::list<nobHarborBuilding*>::const_iterator it = players->getElement(player_attacker)->GetHarbors()
             .begin(); it != players->getElement(player_attacker)->GetHarbors().end(); ++it)
@@ -1748,9 +1748,9 @@ unsigned int GameWorldBase::GetAvailableSoldiersForSeaAttackAtSea(const unsigned
         // Bestimmen, ob Hafen an einem der Meere liegt, über die sich auch die gegnerischen
         // Hafenpunkte erreichen lassen
         bool is_at_sea = false;
-        unsigned short sea_ids[6];
+        uint16_t sea_ids[6];
         GetSeaIDs((*it)->GetHarborPosID(), sea_ids);
-        for(unsigned i = 0; i < 6; ++i)
+        for(uint32_t i = 0; i < 6; ++i)
         {
             if(sea_ids[i] == seaid)
             {
@@ -1766,7 +1766,7 @@ unsigned int GameWorldBase::GetAvailableSoldiersForSeaAttackAtSea(const unsigned
     }
 
     // Die Soldaten aus allen Militärgebäuden sammeln
-    for(unsigned i = 0; i < buildings.size(); ++i)
+    for(uint32_t i = 0; i < buildings.size(); ++i)
     {
         // Soldaten holen
         std::vector<nofPassiveSoldier*> tmp_soldiers;
@@ -1777,7 +1777,7 @@ unsigned int GameWorldBase::GetAvailableSoldiersForSeaAttackAtSea(const unsigned
             continue;
 
         // Soldaten hinzufügen
-        for(unsigned j = 0; j < tmp_soldiers.size(); ++j)
+        for(uint32_t j = 0; j < tmp_soldiers.size(); ++j)
         {
             if(count)
                 attackercount++;
@@ -1789,7 +1789,7 @@ unsigned int GameWorldBase::GetAvailableSoldiersForSeaAttackAtSea(const unsigned
 }
 
 /// Sucht verfügbare Soldaten, um dieses Militärgebäude mit einem Seeangriff anzugreifen
-void GameWorldBase::GetAvailableSoldiersForSeaAttack(const unsigned char player_attacker, const MapPoint pt, 
+void GameWorldBase::GetAvailableSoldiersForSeaAttack(const uint8_t player_attacker, const MapPoint pt, 
         std::list<GameWorldBase::PotentialSeaAttacker> * attackers) const
 {
     //sea attack abgeschaltet per addon?
@@ -1811,7 +1811,7 @@ void GameWorldBase::GetAvailableSoldiersForSeaAttack(const unsigned char player_
     use_seas.resize(seas.size());
 
     // Mögliche Hafenpunkte in der Nähe des Gebäudes
-    std::vector< unsigned > defender_harbors;
+    std::vector< uint32_t > defender_harbors;
     GetValidSeaIDsAroundMilitaryBuildingForAttack(pt, &use_seas, player_attacker, &defender_harbors);
 
     // Liste alle Militärgebäude des Angreifers, die Soldaten liefern
@@ -1824,9 +1824,9 @@ void GameWorldBase::GetAvailableSoldiersForSeaAttack(const unsigned char player_
         // Bestimmen, ob Hafen an einem der Meere liegt, über die sich auch die gegnerischen
         // Hafenpunkte erreichen lassen
         bool is_at_sea = false;
-        unsigned short sea_ids[6];
+        uint16_t sea_ids[6];
         GetSeaIDs((*it)->GetHarborPosID(), sea_ids);
-        for(unsigned i = 0; i < 6; ++i)
+        for(uint32_t i = 0; i < 6; ++i)
         {
             if(sea_ids[i] && use_seas[sea_ids[i]])
             {
@@ -1842,7 +1842,7 @@ void GameWorldBase::GetAvailableSoldiersForSeaAttack(const unsigned char player_
     }
 
     // Die Soldaten aus allen Militärgebäuden sammeln
-    for(unsigned i = 0; i < buildings.size(); ++i)
+    for(uint32_t i = 0; i < buildings.size(); ++i)
     {
         // Soldaten holen
         std::vector<nofPassiveSoldier*> tmp_soldiers;
@@ -1853,7 +1853,7 @@ void GameWorldBase::GetAvailableSoldiersForSeaAttack(const unsigned char player_
             continue;
 
         // Soldaten hinzufügen
-        for(unsigned j = 0; j < tmp_soldiers.size(); ++j)
+        for(uint32_t j = 0; j < tmp_soldiers.size(); ++j)
         {
             PotentialSeaAttacker pa = { tmp_soldiers[j], buildings[i].harbor, buildings[i].distance };
             attackers->push_back(pa);
@@ -1864,10 +1864,10 @@ void GameWorldBase::GetAvailableSoldiersForSeaAttack(const unsigned char player_
     attackers->sort();
 }
 
-int GameWorldBase::LUA_EnableBuilding(lua_State* L)
+int32_t GameWorldBase::LUA_EnableBuilding(lua_State* L)
 {
 //  GameWorldBase *gw = static_cast<GameWorldBase*>(lua_touserdata(L, lua_upvalueindex(1)));
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
 
     if (argc < 1)
     {
@@ -1877,7 +1877,7 @@ int GameWorldBase::LUA_EnableBuilding(lua_State* L)
     }
 
     // player
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
 
     if (pnr >= GAMECLIENT.GetPlayerCount())
     {
@@ -1890,7 +1890,7 @@ int GameWorldBase::LUA_EnableBuilding(lua_State* L)
 
     if (argc == 1)
     {
-        for (unsigned building_type = 0; building_type < BUILDING_TYPES_COUNT; building_type++)
+        for (uint32_t building_type = 0; building_type < BUILDING_TYPES_COUNT; building_type++)
         {
             player->EnableBuilding(BuildingType(building_type));
         }
@@ -1898,11 +1898,11 @@ int GameWorldBase::LUA_EnableBuilding(lua_State* L)
         return(0);
     }
     
-    int cnt = 2;
+    int32_t cnt = 2;
     while (cnt <= argc)
     {
         // building type
-        unsigned building_type = (unsigned) luaL_checknumber(L, cnt++);
+        uint32_t building_type = (uint32_t) luaL_checknumber(L, cnt++);
 
         if (building_type < BUILDING_TYPES_COUNT)
         {
@@ -1918,10 +1918,10 @@ int GameWorldBase::LUA_EnableBuilding(lua_State* L)
     return(0);
 }
 
-int GameWorldBase::LUA_DisableBuilding(lua_State* L)
+int32_t GameWorldBase::LUA_DisableBuilding(lua_State* L)
 {
 //  GameWorldBase *gw = static_cast<GameWorldBase*>(lua_touserdata(L, lua_upvalueindex(1)));
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
 
     if (argc < 1)
     {
@@ -1931,7 +1931,7 @@ int GameWorldBase::LUA_DisableBuilding(lua_State* L)
     }
 
     // player
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
 
     if (pnr >= GAMECLIENT.GetPlayerCount())
     {
@@ -1944,7 +1944,7 @@ int GameWorldBase::LUA_DisableBuilding(lua_State* L)
     
     if (argc == 1)
     {
-        for (unsigned building_type = 0; building_type < BUILDING_TYPES_COUNT; building_type++)
+        for (uint32_t building_type = 0; building_type < BUILDING_TYPES_COUNT; building_type++)
         {
             player->DisableBuilding(BuildingType(building_type));
         }
@@ -1952,11 +1952,11 @@ int GameWorldBase::LUA_DisableBuilding(lua_State* L)
         return(0);
     }
     
-    int cnt = 2;
+    int32_t cnt = 2;
     while (cnt <= argc)
     {
         // building type
-        unsigned building_type = (unsigned) luaL_checknumber(L, cnt++);
+        uint32_t building_type = (uint32_t) luaL_checknumber(L, cnt++);
 
         if (building_type < BUILDING_TYPES_COUNT)
         {
@@ -1972,10 +1972,10 @@ int GameWorldBase::LUA_DisableBuilding(lua_State* L)
 }
 
 
-int GameWorldBase::LUA_SetRestrictedArea(lua_State* L)
+int32_t GameWorldBase::LUA_SetRestrictedArea(lua_State* L)
 {
 //  GameWorldBase *gw = static_cast<GameWorldBase*>(lua_touserdata(L, lua_upvalueindex(1)));
-    int argc = lua_gettop(L) - 1;
+    int32_t argc = lua_gettop(L) - 1;
 
     if ((argc < 0) || (argc % 2 == 1))
     {
@@ -1985,7 +1985,7 @@ int GameWorldBase::LUA_SetRestrictedArea(lua_State* L)
     }
 
     // player
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
 
     if (pnr >= GAMECLIENT.GetPlayerCount())
     {
@@ -2000,7 +2000,7 @@ int GameWorldBase::LUA_SetRestrictedArea(lua_State* L)
 
     restricted_area.clear();
 
-    unsigned cnt = 2;
+    uint32_t cnt = 2;
     for (argc >>= 1; argc > 0; --argc)
     {
         MapCoord x = (MapCoord) luaL_checknumber(L, cnt++);
@@ -2013,11 +2013,11 @@ int GameWorldBase::LUA_SetRestrictedArea(lua_State* L)
     return(0);
 }
 
-int GameWorldBase::LUA_ClearResources(lua_State *L)
+int32_t GameWorldBase::LUA_ClearResources(lua_State *L)
 {
     if (lua_gettop(L) > 0)
     {
-        unsigned p = (unsigned) luaL_checknumber(L, 1);
+        uint32_t p = (uint32_t) luaL_checknumber(L, 1);
 
         if (p >= GAMECLIENT.GetPlayerCount())
         {
@@ -2034,7 +2034,7 @@ int GameWorldBase::LUA_ClearResources(lua_State *L)
         }
     } else
     {
-        for (unsigned p = 0; p < GAMECLIENT.GetPlayerCount(); p++)
+        for (uint32_t p = 0; p < GAMECLIENT.GetPlayerCount(); p++)
         {
             const std::list<nobBaseWarehouse*> warehouses = GAMECLIENT.GetPlayer(p)->GetStorehouses();
             
@@ -2048,10 +2048,10 @@ int GameWorldBase::LUA_ClearResources(lua_State *L)
     return(0);
 }
 
-int GameWorldBase::LUA_AddWares(lua_State* L)
+int32_t GameWorldBase::LUA_AddWares(lua_State* L)
 {
 //  GameWorldBase *gw = static_cast<GameWorldBase*>(lua_touserdata(L, lua_upvalueindex(1)));
-    int argc = lua_gettop(L) - 1;
+    int32_t argc = lua_gettop(L) - 1;
 
     if ((argc < 0) || (argc % 2 == 1))
     {
@@ -2061,7 +2061,7 @@ int GameWorldBase::LUA_AddWares(lua_State* L)
     }
 
     // player
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
 
     if (pnr >= GAMECLIENT.GetPlayerCount())
     {
@@ -2082,11 +2082,11 @@ int GameWorldBase::LUA_AddWares(lua_State* L)
 
     Goods goods;
 
-    unsigned cnt = 2;
+    uint32_t cnt = 2;
     for (argc >>= 1; argc > 0; --argc)
     {
-        unsigned type = (unsigned) luaL_checknumber(L, cnt++);
-        unsigned count = (unsigned) luaL_checknumber(L, cnt++);
+        uint32_t type = (uint32_t) luaL_checknumber(L, cnt++);
+        uint32_t count = (uint32_t) luaL_checknumber(L, cnt++);
 
         if (type < WARE_TYPES_COUNT)
         {
@@ -2101,10 +2101,10 @@ int GameWorldBase::LUA_AddWares(lua_State* L)
     return(1);
 }
 
-int GameWorldBase::LUA_AddPeople(lua_State* L)
+int32_t GameWorldBase::LUA_AddPeople(lua_State* L)
 {
 //  GameWorldBase *gw = static_cast<GameWorldBase*>(lua_touserdata(L, lua_upvalueindex(1)));
-    int argc = lua_gettop(L) - 1;
+    int32_t argc = lua_gettop(L) - 1;
 
     if ((argc < 0) || (argc % 2 == 1))
     {
@@ -2114,7 +2114,7 @@ int GameWorldBase::LUA_AddPeople(lua_State* L)
     }
 
     // player
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
 
     if (pnr >= GAMECLIENT.GetPlayerCount())
     {
@@ -2135,11 +2135,11 @@ int GameWorldBase::LUA_AddPeople(lua_State* L)
 
     Goods goods;
 
-    unsigned cnt = 2;
+    uint32_t cnt = 2;
     for (argc >>= 1; argc > 0; --argc)
     {
-        unsigned type = (unsigned) luaL_checknumber(L, cnt++);
-        unsigned count = (unsigned) luaL_checknumber(L, cnt++);
+        uint32_t type = (uint32_t) luaL_checknumber(L, cnt++);
+        uint32_t count = (uint32_t) luaL_checknumber(L, cnt++);
 
         if (type < JOB_TYPES_COUNT)
         {
@@ -2155,19 +2155,19 @@ int GameWorldBase::LUA_AddPeople(lua_State* L)
     return(1);
 }
 
-int GameWorldBase::LUA_GetGF(lua_State *L)
+int32_t GameWorldBase::LUA_GetGF(lua_State *L)
 {
     lua_pushnumber(L, GAMECLIENT.GetGFNumber());
     return(1);
 }
 
-int GameWorldBase::LUA_GetPlayerCount(lua_State *L)
+int32_t GameWorldBase::LUA_GetPlayerCount(lua_State *L)
 {
     lua_pushnumber(L, GAMECLIENT.GetPlayerCount());
     return(1);
 }
 
-int GameWorldBase::LUA_GetBuildingCount(lua_State *L)
+int32_t GameWorldBase::LUA_GetBuildingCount(lua_State *L)
 {
     if (lua_gettop(L) < 2)
     {
@@ -2176,7 +2176,7 @@ int GameWorldBase::LUA_GetBuildingCount(lua_State *L)
         return(0);
     }
     
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
     
     if (pnr >= GAMECLIENT.GetPlayerCount())
     {
@@ -2185,7 +2185,7 @@ int GameWorldBase::LUA_GetBuildingCount(lua_State *L)
         return(0);
     }
     
-    unsigned building_type = (unsigned) luaL_checknumber(L, 2);
+    uint32_t building_type = (uint32_t) luaL_checknumber(L, 2);
     
     if (building_type >= BUILDING_TYPES_COUNT)
     {
@@ -2203,7 +2203,7 @@ int GameWorldBase::LUA_GetBuildingCount(lua_State *L)
     return(1);
 }
 
-int GameWorldBase::LUA_GetWareCount(lua_State *L)
+int32_t GameWorldBase::LUA_GetWareCount(lua_State *L)
 {
     if (lua_gettop(L) < 2)
     {
@@ -2212,7 +2212,7 @@ int GameWorldBase::LUA_GetWareCount(lua_State *L)
         return(0);
     }
     
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
     
     if (pnr >= GAMECLIENT.GetPlayerCount())
     {
@@ -2221,7 +2221,7 @@ int GameWorldBase::LUA_GetWareCount(lua_State *L)
         return(0);
     }
     
-    unsigned type = (unsigned) luaL_checknumber(L, 2);
+    uint32_t type = (uint32_t) luaL_checknumber(L, 2);
     
     if (type >= WARE_TYPES_COUNT)
     {
@@ -2237,7 +2237,7 @@ int GameWorldBase::LUA_GetWareCount(lua_State *L)
     return(1);
 }
 
-int GameWorldBase::LUA_GetPeopleCount(lua_State *L)
+int32_t GameWorldBase::LUA_GetPeopleCount(lua_State *L)
 {
     if (lua_gettop(L) < 2)
     {
@@ -2246,7 +2246,7 @@ int GameWorldBase::LUA_GetPeopleCount(lua_State *L)
         return(0);
     }
     
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
     
     if (pnr >= GAMECLIENT.GetPlayerCount())
     {
@@ -2255,7 +2255,7 @@ int GameWorldBase::LUA_GetPeopleCount(lua_State *L)
         return(0);
     }
     
-    unsigned type = (unsigned) luaL_checknumber(L, 2);
+    uint32_t type = (uint32_t) luaL_checknumber(L, 2);
     
     if (type >= JOB_TYPES_COUNT)
     {
@@ -2271,13 +2271,13 @@ int GameWorldBase::LUA_GetPeopleCount(lua_State *L)
     return(1);
 }
 
-int GameWorldBase::LUA_Log(lua_State *L)
+int32_t GameWorldBase::LUA_Log(lua_State *L)
 {
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     std::string message;
     
-    for (int n = 1; n <= argc; n++)
+    for (int32_t n = 1; n <= argc; n++)
     {
         message.append(luaL_checklstring(L, n, NULL));
     }
@@ -2287,9 +2287,9 @@ int GameWorldBase::LUA_Log(lua_State *L)
     return(0);
 }
 
-int GameWorldBase::LUA_Chat(lua_State *L)
+int32_t GameWorldBase::LUA_Chat(lua_State *L)
 {
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     if (argc < 2)
     {
@@ -2298,16 +2298,16 @@ int GameWorldBase::LUA_Chat(lua_State *L)
         return(0);
     }
     
-    unsigned player = (unsigned) luaL_checknumber(L, 1);
+    uint32_t player = (uint32_t) luaL_checknumber(L, 1);
     
-    if ((player != 0xFFFFFFFF) && (unsigned) GAMECLIENT.GetPlayerID() != player)
+    if ((player != 0xFFFFFFFF) && (uint32_t) GAMECLIENT.GetPlayerID() != player)
     {
         return(0);
     }
     
     std::string message;
     
-    for (int n = 2; n <= argc; n++)
+    for (int32_t n = 2; n <= argc; n++)
     {
         message.append(luaL_checklstring(L, n, NULL));
     }
@@ -2317,9 +2317,9 @@ int GameWorldBase::LUA_Chat(lua_State *L)
     return(0);
 }
 
-int GameWorldBase::LUA_MissionStatement(lua_State *L)
+int32_t GameWorldBase::LUA_MissionStatement(lua_State *L)
 {
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     if (argc < 3)
     {
@@ -2328,16 +2328,16 @@ int GameWorldBase::LUA_MissionStatement(lua_State *L)
         return(0);
     }
     
-    unsigned player = (unsigned) luaL_checknumber(L, 1);
+    uint32_t player = (uint32_t) luaL_checknumber(L, 1);
     
-    if ((player != 0xFFFFFFFF) && (unsigned) GAMECLIENT.GetPlayerID() != player)
+    if ((player != 0xFFFFFFFF) && (uint32_t) GAMECLIENT.GetPlayerID() != player)
     {
         return(0);
     }
     
     std::string message;
     
-    for (int n = 3; n <= argc; n++)
+    for (int32_t n = 3; n <= argc; n++)
     {
         message.append(luaL_checklstring(L, n, NULL));
     }
@@ -2347,9 +2347,9 @@ int GameWorldBase::LUA_MissionStatement(lua_State *L)
     return(0);
 }
 
-int GameWorldBase::LUA_PostMessage(lua_State *L)
+int32_t GameWorldBase::LUA_PostMessage(lua_State *L)
 {
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     if (argc < 2)
     {
@@ -2358,14 +2358,14 @@ int GameWorldBase::LUA_PostMessage(lua_State *L)
         return(0);
     }
     
-    if ((unsigned) GAMECLIENT.GetPlayerID() != (unsigned) luaL_checknumber(L, 1))
+    if ((uint32_t) GAMECLIENT.GetPlayerID() != (uint32_t) luaL_checknumber(L, 1))
     {
         return(0);
     }
     
     std::string message;
     
-    for (int n = 2; n <= argc; n++)
+    for (int32_t n = 2; n <= argc; n++)
     {
         message.append(luaL_checklstring(L, n, NULL));
     }
@@ -2375,9 +2375,9 @@ int GameWorldBase::LUA_PostMessage(lua_State *L)
     return(0);
 }
 
-int GameWorldBase::LUA_PostMessageWithLocation(lua_State *L)
+int32_t GameWorldBase::LUA_PostMessageWithLocation(lua_State *L)
 {
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     if (argc < 4)
     {
@@ -2386,7 +2386,7 @@ int GameWorldBase::LUA_PostMessageWithLocation(lua_State *L)
         return(0);
     }
     
-    if ((unsigned) GAMECLIENT.GetPlayerID() != (unsigned) luaL_checknumber(L, 1))
+    if ((uint32_t) GAMECLIENT.GetPlayerID() != (uint32_t) luaL_checknumber(L, 1))
     {
         return(0);
     }
@@ -2396,7 +2396,7 @@ int GameWorldBase::LUA_PostMessageWithLocation(lua_State *L)
     
     std::string message;
     
-    for (int n = 4; n <= argc; n++)
+    for (int32_t n = 4; n <= argc; n++)
     {
         message.append(luaL_checklstring(L, n, NULL));
     }
@@ -2406,9 +2406,9 @@ int GameWorldBase::LUA_PostMessageWithLocation(lua_State *L)
     return(0);
 }
 
-int GameWorldBase::LUA_PostNewBuildings(lua_State *L)
+int32_t GameWorldBase::LUA_PostNewBuildings(lua_State *L)
 {
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     if (argc < 2)
     {
@@ -2417,16 +2417,16 @@ int GameWorldBase::LUA_PostNewBuildings(lua_State *L)
         return(0);
     }
     
-    if ((unsigned) GAMECLIENT.GetPlayerID() != (unsigned) luaL_checknumber(L, 1))
+    if ((uint32_t) GAMECLIENT.GetPlayerID() != (uint32_t) luaL_checknumber(L, 1))
     {
         return(0);
     }
     
-    unsigned pnr = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pnr = (uint32_t) luaL_checknumber(L, 1);
     
-    for (int n = 2; n <= argc; n++)
+    for (int32_t n = 2; n <= argc; n++)
     {
-        unsigned building_type = (unsigned) luaL_checknumber(L, n);
+        uint32_t building_type = (uint32_t) luaL_checknumber(L, n);
         
         if (building_type < BUILDING_TYPES_COUNT)
         {
@@ -2437,7 +2437,7 @@ int GameWorldBase::LUA_PostNewBuildings(lua_State *L)
     return(0);
 }
 
-int GameWorldBase::LUA_AddStaticObject(lua_State *L)
+int32_t GameWorldBase::LUA_AddStaticObject(lua_State *L)
 {
     GameWorldGame *gwg = dynamic_cast<GameWorldGame*>((GameWorldBase*) lua_touserdata(L, lua_upvalueindex(1)));
     
@@ -2446,7 +2446,7 @@ int GameWorldBase::LUA_AddStaticObject(lua_State *L)
         return(0);
     }
     
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     if (argc < 3)
     {
@@ -2457,19 +2457,19 @@ int GameWorldBase::LUA_AddStaticObject(lua_State *L)
     
     MapCoord x = (MapCoord) luaL_checknumber(L, 1);
     MapCoord y = (MapCoord) luaL_checknumber(L, 2);
-    unsigned id = (unsigned) luaL_checknumber(L, 3);
+    uint32_t id = (uint32_t) luaL_checknumber(L, 3);
     MapPoint pt(x, y);
     
-    unsigned file = 0xFFFF;
-    unsigned size = 0;
+    uint32_t file = 0xFFFF;
+    uint32_t size = 0;
     
     if (argc > 3)
     {
-        file = (unsigned) luaL_checknumber(L, 4);
+        file = (uint32_t) luaL_checknumber(L, 4);
         
         if (argc > 4)
         {
-            size = (unsigned) luaL_checknumber(L, 5);
+            size = (uint32_t) luaL_checknumber(L, 5);
             
             if (size > 2)
             {
@@ -2493,7 +2493,7 @@ int GameWorldBase::LUA_AddStaticObject(lua_State *L)
     return(1);
 }
 
-int GameWorldBase::LUA_AddEnvObject(lua_State *L)
+int32_t GameWorldBase::LUA_AddEnvObject(lua_State *L)
 {
     GameWorldGame *gwg = dynamic_cast<GameWorldGame*>((GameWorldBase*) lua_touserdata(L, lua_upvalueindex(1)));
     
@@ -2502,7 +2502,7 @@ int GameWorldBase::LUA_AddEnvObject(lua_State *L)
         return(0);
     }
     
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     if (argc < 3)
     {
@@ -2513,14 +2513,14 @@ int GameWorldBase::LUA_AddEnvObject(lua_State *L)
     
     MapCoord x = (MapCoord) luaL_checknumber(L, 1);
     MapCoord y = (MapCoord) luaL_checknumber(L, 2);
-    unsigned id = (unsigned) luaL_checknumber(L, 3);
+    uint32_t id = (uint32_t) luaL_checknumber(L, 3);
     MapPoint pt(x, y);
     
-    unsigned file = 0xFFFF;
+    uint32_t file = 0xFFFF;
     
     if (argc > 3)
     {
-        file = (unsigned) luaL_checknumber(L, 4);
+        file = (uint32_t) luaL_checknumber(L, 4);
     }
     
     if (gwg->GetNode(pt).obj && (gwg->GetNode(pt).obj->GetGOT() != GOT_NOTHING) && (gwg->GetNode(pt).obj->GetGOT() != GOT_STATICOBJECT) && (gwg->GetNode(pt).obj->GetGOT() != GOT_ENVOBJECT))
@@ -2536,7 +2536,7 @@ int GameWorldBase::LUA_AddEnvObject(lua_State *L)
     return(1);
 }
 
-int GameWorldBase::LUA_AIConstructionOrder(lua_State *L)
+int32_t GameWorldBase::LUA_AIConstructionOrder(lua_State *L)
 {
     GameWorldGame *gwg = dynamic_cast<GameWorldGame*>((GameWorldBase*) lua_touserdata(L, lua_upvalueindex(1)));
     
@@ -2545,7 +2545,7 @@ int GameWorldBase::LUA_AIConstructionOrder(lua_State *L)
         return(0);
     }
     
-    int argc = lua_gettop(L);
+    int32_t argc = lua_gettop(L);
     
     if (argc < 4)//player, x, y, buildingtype
     {
@@ -2554,10 +2554,10 @@ int GameWorldBase::LUA_AIConstructionOrder(lua_State *L)
         return(0);
     }
     
-    unsigned pn = (unsigned) luaL_checknumber(L, 1);
+    uint32_t pn = (uint32_t) luaL_checknumber(L, 1);
     MapCoord x = (MapCoord) luaL_checknumber(L, 2);
     MapCoord y = (MapCoord) luaL_checknumber(L, 3);
-    unsigned id = (unsigned) luaL_checknumber(L, 4);
+    uint32_t id = (uint32_t) luaL_checknumber(L, 4);
 	BuildingType bt=static_cast<BuildingType>(id);    
     
     GAMECLIENT.SendAIEvent(new AIEvent::Building(AIEvent::LuaConstructionOrder, MapPoint(x, y), bt), pn);  
@@ -2566,7 +2566,7 @@ int GameWorldBase::LUA_AIConstructionOrder(lua_State *L)
     return(1);
 }
 
-void GameWorldBase::LUA_EventExplored(unsigned player, const MapPoint pt)
+void GameWorldBase::LUA_EventExplored(uint32_t player, const MapPoint pt)
 {
     lua_getglobal(lua, "onExplored");
 
@@ -2589,7 +2589,7 @@ void GameWorldBase::LUA_EventExplored(unsigned player, const MapPoint pt)
     }
 }
 
-void GameWorldBase::LUA_EventOccupied(unsigned player, const MapPoint pt)
+void GameWorldBase::LUA_EventOccupied(uint32_t player, const MapPoint pt)
 {
     lua_getglobal(lua, "onOccupied");
 
@@ -2631,7 +2631,7 @@ void GameWorldBase::LUA_EventStart()
     }
 }
 
-void GameWorldBase::LUA_EventGF(unsigned nr)
+void GameWorldBase::LUA_EventGF(uint32_t nr)
 {
     lua_getglobal(lua, "onGameFrame");
 
@@ -2652,7 +2652,7 @@ void GameWorldBase::LUA_EventGF(unsigned nr)
     }
 }
 
-void GameWorldBase::LUA_EventResourceFound(const unsigned char player, const MapPoint pt, const unsigned char type, const unsigned char quantity)
+void GameWorldBase::LUA_EventResourceFound(const uint8_t player, const MapPoint pt, const uint8_t type, const uint8_t quantity)
 {
     lua_getglobal(lua, "onResourceFound");
 

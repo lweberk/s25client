@@ -66,7 +66,7 @@ iwTools::iwTools(void)                      // qx:tools
     if (GAMECLIENT.GetGGS().isEnabled(ADDON_TOOL_ORDERING))
     {
         // qx:tools
-        for (unsigned i = 0; i < TOOL_COUNT; ++i)
+        for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         {
             AddImageButton(100 + i * 2, 174, 25   + i * 28, 20, 13, TC_GREY, LOADER.GetImageN("io",  33), "+1");
             AddImageButton(101 + i * 2, 174, 25 + 13 + i * 28, 20, 13, TC_GREY, LOADER.GetImageN("io",  34), "-1");
@@ -83,7 +83,7 @@ iwTools::iwTools(void)                      // qx:tools
     AddImageButton(13, 118 + (GAMECLIENT.GetGGS().isEnabled(ADDON_TOOL_ORDERING) ? 46 : 0), 384, 30, 32, TC_GREY, LOADER.GetImageN("io", 191), _("Default"));
 
     // Einstellungen festlegen
-    for(unsigned char i = 0; i < 12; ++i)
+    for(uint8_t i = 0; i < 12; ++i)
         GetCtrl<ctrlProgress>(i)->SetPosition(GAMECLIENT.visual_settings.tools_settings[i]);
 
     // Netzwerk-Übertragungs-Timer
@@ -101,9 +101,9 @@ void iwTools::TransmitSettings()
     if(settings_changed)
     {
         // Einstellungen speichern
-        for(unsigned char i = 0; i < 12; ++i)
+        for(uint8_t i = 0; i < 12; ++i)
             GAMECLIENT.visual_settings.tools_settings[i] =
-                (unsigned char)GetCtrl<ctrlProgress>(i)->GetPosition();
+                (uint8_t)GetCtrl<ctrlProgress>(i)->GetPosition();
 
         GAMECLIENT.AddGC(new gc::ChangeTools(GAMECLIENT.visual_settings.tools_settings, GAMECLIENT.GetLocalPlayer()->tools_ordered_delta));
 
@@ -116,7 +116,7 @@ void iwTools::UpdateTexts()
 {
     if (GAMECLIENT.GetGGS().isEnabled(ADDON_TOOL_ORDERING))
     {
-        for (unsigned i = 0; i < TOOL_COUNT; ++i)
+        for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         {
             ctrlDeepening* field = GetCtrl<ctrlDeepening>(200 + i);
             std::stringstream str;
@@ -125,7 +125,7 @@ void iwTools::UpdateTexts()
         }
     }
 }
-unsigned int iwTools::m_UpdateReq = 0;
+uint32_t iwTools::m_UpdateReq = 0;
 void iwTools::UpdateOrders()
 {
     m_UpdateReq = GAMECLIENT.GetGFNumber();
@@ -140,12 +140,12 @@ void iwTools::Msg_PaintBefore()
     }
 }
 
-void iwTools::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwTools::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     // qx:tools
     if ( ctrl_id >= 100 && ctrl_id < (100 + 2 * TOOL_COUNT) )
     {
-        unsigned int tool = (ctrl_id - 100) / 2;
+        uint32_t tool = (ctrl_id - 100) / 2;
         GameClientPlayer* me = GAMECLIENT.GetLocalPlayer();
 
         if (ctrl_id & 0x1)
@@ -185,13 +185,13 @@ void iwTools::Msg_ButtonClick(const unsigned int ctrl_id)
         }
 }
 
-void iwTools::Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position)
+void iwTools::Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position)
 {
     // Einstellungen wurden geändert
     settings_changed = true;
 }
 
-void iwTools::Msg_Timer(const unsigned int ctrl_id)
+void iwTools::Msg_Timer(const uint32_t ctrl_id)
 {
     if(GAMECLIENT.IsReplayModeOn())
         // Im Replay aktualisieren wir die Werte
@@ -204,6 +204,6 @@ void iwTools::Msg_Timer(const unsigned int ctrl_id)
 void iwTools::UpdateSettings()
 {
     // Einstellungen festlegen
-    for(unsigned i = 0; i < 12; ++i)
+    for(uint32_t i = 0; i < 12; ++i)
         GetCtrl<ctrlProgress>(i)->SetPosition(GAMECLIENT.visual_settings.tools_settings[i]);
 }

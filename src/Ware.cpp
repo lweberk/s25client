@@ -66,14 +66,14 @@ void Ware::Serialize_Ware(SerializedGameData* sgd) const
     Serialize_GameObject(sgd);
 
     sgd->PushUnsignedChar(next_dir);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushObject(location, false);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(type));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(type));
     sgd->PushObject(goal, false);
     sgd->PushMapPoint(next_harbor);
 }
 
-Ware::Ware(SerializedGameData* sgd, const unsigned obj_id) : GameObject(sgd, obj_id),
+Ware::Ware(SerializedGameData* sgd, const uint32_t obj_id) : GameObject(sgd, obj_id),
     next_dir(sgd->PopUnsignedChar()),
     state(State(sgd->PopUnsignedChar())),
     location(sgd->PopObject<noRoadNode>(GOT_UNKNOWN)),
@@ -187,7 +187,7 @@ void Ware::GoalDestroyed()
         {
             goal = gwg->GetPlayer(location->GetPlayer())->FindWarehouse(location, FW::Condition_StoreWare, 0, true, &type, true);
 
-            unsigned char last_next_dir = next_dir;
+            uint8_t last_next_dir = next_dir;
             next_dir = gwg->FindPathForWareOnRoads(location, goal, NULL, &next_harbor);
             RemoveWareJobForCurrentDir(last_next_dir);
 
@@ -243,7 +243,7 @@ void Ware::NotifyGoalAboutLostWare()
 }
 
 /// Wenn die Ware vernichtet werden muss
-void Ware::WareLost(const unsigned char player)
+void Ware::WareLost(const uint8_t player)
 {
     // Inventur verringern
     gwg->GetPlayer(player)->DecreaseInventoryWare(type, 1);
@@ -254,7 +254,7 @@ void Ware::WareLost(const unsigned char player)
 }
 
 
-void Ware::RemoveWareJobForCurrentDir(const unsigned char last_next_dir)
+void Ware::RemoveWareJobForCurrentDir(const uint8_t last_next_dir)
 {
     // last_next_dir war die letzte Richtung, in die die Ware eigentlich wollte,
     // aber nun nicht mehr will, deshalb muss dem Träger Bescheid gesagt werden
@@ -321,18 +321,18 @@ void Ware::FindRouteToWarehouse()
 }
 
 ///a lost ware got ordered
-unsigned Ware::CheckNewGoalForLostWare(noBaseBuilding* newgoal)
+uint32_t Ware::CheckNewGoalForLostWare(noBaseBuilding* newgoal)
 {
-	unsigned tlength = 0xFFFFFFFF;
+	uint32_t tlength = 0xFFFFFFFF;
 	if (state!=STATE_WAITATFLAG) //todo: check all special cases for wares being carried right now and where possible allow them to be ordered
 		return 0xFFFFFFFF;
-	unsigned char possibledir=gwg->FindPathForWareOnRoads(location, newgoal,&tlength);
+	uint8_t possibledir=gwg->FindPathForWareOnRoads(location, newgoal,&tlength);
 	if(possibledir!=0xFF) //there is a valid path to the goal? -> ordered!
 	{
 		//in case the ware is right in front of the goal building the ware has to be moved away 1 flag and then back because non-warehouses cannot just carry in new wares they need a helper to do this
 		if(possibledir==1 && newgoal->GetFlag()->GetX()==location->GetX() && newgoal->GetFlag()->GetY()==location->GetY())
 		{
-			for(unsigned i=0;i<6;i++)
+			for(uint32_t i=0;i<6;i++)
 			{
 				if(i!=1 && location->routes[i])
 					{
@@ -353,13 +353,13 @@ unsigned Ware::CheckNewGoalForLostWare(noBaseBuilding* newgoal)
 /// this assumes that the ware is at a flag (todo: handle carried wares) and that there is a valid path to the goal
 void Ware::SetNewGoalForLostWare(noBaseBuilding* newgoal)
 {
-	unsigned char possibledir=gwg->FindPathForWareOnRoads(location, newgoal);
+	uint8_t possibledir=gwg->FindPathForWareOnRoads(location, newgoal);
 	if(possibledir!=0xFF) //there is a valid path to the goal? -> ordered!
 	{
 		//in case the ware is right in front of the goal building the ware has to be moved away 1 flag and then back because non-warehouses cannot just carry in new wares they need a helper to do this
 		if(possibledir==1 && newgoal->GetFlag()->GetX()==location->GetX() && newgoal->GetFlag()->GetY()==location->GetY())
 		{
-			for(unsigned i=0;i<6;i++)
+			for(uint32_t i=0;i<6;i++)
 			{
 				if(i!=1 && location->routes[i])
 					{

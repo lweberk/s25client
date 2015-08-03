@@ -41,23 +41,23 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /// Anzahl der Rausgeh-Etappen
-const unsigned GO_OUT_PHASES = 10;
+const uint32_t GO_OUT_PHASES = 10;
 /// Länge zwischen zwei solchen Phasen
-const unsigned PHASE_LENGTH = 2;
+const uint32_t PHASE_LENGTH = 2;
 
-BurnedWarehouse::BurnedWarehouse(const MapPoint pos, const unsigned char player, const unsigned* people)
+BurnedWarehouse::BurnedWarehouse(const MapPoint pos, const uint8_t player, const uint32_t* people)
     : noCoordBase(NOP_BURNEDWAREHOUSE, pos), player(player), go_out_phase(0)
 {
-    memcpy(this->people, people, 30 * sizeof(unsigned));
+    memcpy(this->people, people, 30 * sizeof(uint32_t));
     // Erstes Event anmelden
     em->AddEvent(this, PHASE_LENGTH, 0);
 }
 
-BurnedWarehouse::BurnedWarehouse(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+BurnedWarehouse::BurnedWarehouse(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     player(sgd->PopUnsignedChar()),
     go_out_phase(sgd->PopUnsignedInt())
 {
-    for(unsigned i = 0; i < 31; ++i)
+    for(uint32_t i = 0; i < 31; ++i)
         people[i] = sgd->PopUnsignedInt();
 }
 
@@ -79,17 +79,17 @@ void BurnedWarehouse::Serialize_BurnedWarehouse(SerializedGameData* sgd) const
     sgd->PushUnsignedChar(player);
     sgd->PushUnsignedInt(go_out_phase);
 
-    for(unsigned i = 0; i < 31; ++i)
+    for(uint32_t i = 0; i < 31; ++i)
         sgd->PushUnsignedInt(people[i]);
 }
 
 
-void BurnedWarehouse::HandleEvent(const unsigned int id)
+void BurnedWarehouse::HandleEvent(const uint32_t id)
 {
-    for(unsigned i = 0; i < 30; ++i)
+    for(uint32_t i = 0; i < 30; ++i)
     {
         // Anzahl ausrechnen, die in dieser Runde rausgeht
-        unsigned count = people[i] / (GO_OUT_PHASES - go_out_phase);
+        uint32_t count = people[i] / (GO_OUT_PHASES - go_out_phase);
 
         // Letzte Runde? Dann den Rest auch noch mit nehmen
         if(go_out_phase == GO_OUT_PHASES)
@@ -100,13 +100,13 @@ void BurnedWarehouse::HandleEvent(const unsigned int id)
 
         // In Alle Richtungen verteilen
         // Startrichtung zufällig bestimmen
-        unsigned char start_dir = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
+        uint8_t start_dir = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
 
         bool possible[6];
-        unsigned possible_count = 0;
+        uint32_t possible_count = 0;
 
         // Mögliche Richtungen zählen und speichern
-        for(unsigned char d = 0; d < 6; ++d)
+        for(uint8_t d = 0; d < 6; ++d)
         {
             if(gwg->IsNodeForFigures(gwg->GetNeighbour(pos, d)))
             {
@@ -123,41 +123,41 @@ void BurnedWarehouse::HandleEvent(const unsigned int id)
             // Das ist traurig, dann muss die Titanic mit allen restlichen an Board leider untergehen
             em->AddToKillList(this);
             // restliche Leute von der Inventur abziehen
-            for(unsigned int i = 0; i < 30; ++i)
+            for(uint32_t i = 0; i < 30; ++i)
                 GAMECLIENT.GetPlayer(player)->DecreaseInventoryJob(Job(i), people[i]);
 
             return;
         }
 
         // Letzte mögliche Richtung bestimmen
-        unsigned char last_dir = 0xFF;
+        uint8_t last_dir = 0xFF;
 
-        for(unsigned char d = 0; d < 6; ++d)
+        for(uint8_t d = 0; d < 6; ++d)
         {
-            unsigned char dir = (start_dir + d) % 6;
+            uint8_t dir = (start_dir + d) % 6;
             if(possible[dir])
                 last_dir = dir;
         }
 
         assert(last_dir < 6);
 
-        for(unsigned char d = 0; d < 6; ++d)
+        for(uint8_t d = 0; d < 6; ++d)
         {
             // Aktuelle Richtung, die jetzt dran ist bestimmen
-            unsigned dir = (start_dir + d) % 6;
+            uint32_t dir = (start_dir + d) % 6;
 
             // Wenn Richtung nicht möglich ist --> weglassen
             if(!possible[dir])
                 continue;
 
             // Anzahl jetzt für diese Richtung ausrechnen
-            unsigned dir_count = count / possible_count;
+            uint32_t dir_count = count / possible_count;
             // Bei letzter Richtung noch den übriggebliebenen Rest dazuaddieren
             if(dir == last_dir)
                 dir_count += count % possible_count;
 
             // Die Figuren schließlich rausschicken
-            for(unsigned z = 0; z < dir_count; ++z)
+            for(uint32_t z = 0; z < dir_count; ++z)
             {
                 // Job erzeugen
                 nofPassiveWorker* figure = new nofPassiveWorker(Job(i), pos, player, NULL);
@@ -182,7 +182,7 @@ void BurnedWarehouse::HandleEvent(const unsigned int id)
         em->AddToKillList(this);
 #ifndef NDEBUG
         // Prüfen, ob alle evakuiert wurden und keiner mehr an Board ist
-        for(unsigned i = 0; i < 30; ++i)
+        for(uint32_t i = 0; i < 30; ++i)
             assert(people[i] == 0);
 #endif
     }

@@ -101,13 +101,13 @@ dskMainMenu::dskMainMenu(void) : Desktop(LOADER.GetImageN("menu", 0))
     //  !\"#$%&'()*+,-./0123456789:;<=>?@abcdefghijklmnopqrstuvwxyz\\_ABCDEFGHIJKLMNOPQRSTUVWXYZÇüéâäàåçêëèïîì©ÄÅôöòûùÖÜáíóúñ
 }
 
-void dskMainMenu::Msg_Timer(const unsigned int ctrl_id)
+void dskMainMenu::Msg_Timer(const uint32_t ctrl_id)
 {
     GetCtrl<ctrlTimer>(ctrl_id)->Stop();
     WINDOWMANAGER.Show( new iwMsgbox(_("Submit debug data?"), _("RttR now supports sending debug data. Would you like to help us improving this game by sending debug data?"), this, MSB_YESNO, MSB_QUESTIONRED, 100) );
 }
 
-void dskMainMenu::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr)
+void dskMainMenu::Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr)
 {
     // Sollen alle Replays gel<F6>scht werden?
     if (msgbox_id == 100)
@@ -132,7 +132,7 @@ void dskMainMenu::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult 
  *  @author OLiver
  *  @author FloSoft
  */
-void dskMainMenu::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskMainMenu::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -171,7 +171,7 @@ void dskMainMenu::Msg_ButtonClick(const unsigned int ctrl_id)
 void dskMainMenu::Msg_PaintAfter()
 {
 
-    /*for(unsigned i = 0;i<100;++i)
+    /*for(uint32_t i = 0;i<100;++i)
     {
         glDisable(GL_TEXTURE_2D);
         glColor4f(1.0f,0.0f,0.0f,1.0f);

@@ -42,19 +42,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofForester::nofForester(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofForester::nofForester(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofFarmhand(JOB_FORESTER, pos, player, workplace)
 {
 }
 
-nofForester::nofForester(SerializedGameData* sgd, const unsigned obj_id) : nofFarmhand(sgd, obj_id)
+nofForester::nofForester(SerializedGameData* sgd, const uint32_t obj_id) : nofFarmhand(sgd, obj_id)
 {
 }
 
 /// Malt den Arbeiter beim Arbeiten
-void nofForester::DrawWorking(int x, int y)
+void nofForester::DrawWorking(int32_t x, int32_t y)
 {
-    unsigned short now_id;
+    uint16_t now_id;
     // Baum pflanzen
     LOADER.GetImageN("rom_bobs", 48 + (now_id = GAMECLIENT.Interpolate(36, current_ev)))
     ->Draw(x, y, 0, 0, 0, 0, 0, 0, COLOR_WHITE, COLORS[gwg->GetPlayer(player)->color]);
@@ -75,7 +75,7 @@ void nofForester::DrawWorking(int x, int y)
 }
 
 /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-unsigned short nofForester::GetCarryID() const
+uint16_t nofForester::GetCarryID() const
 {
     return 0;
 }
@@ -91,7 +91,7 @@ void nofForester::WorkFinished()
     noBase* no = gwg->GetNO(pos);
 
     // Wenn irgendwo ne Straße schon ist, NICHT einsetzen!
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(gwg->GetPointRoad(pos, i))
             return;
@@ -107,11 +107,11 @@ void nofForester::WorkFinished()
         }
 
         // Je nach Landschaft andere Bäume pflanzbar!
-        const unsigned char AVAILABLE_TREES_COUNT[3] =
+        const uint8_t AVAILABLE_TREES_COUNT[3] =
         {
             6, 3, 4
         };
-        const unsigned char AVAILABLE_TREES[3][8] =
+        const uint8_t AVAILABLE_TREES[3][8] =
         {
             {0, 1, 2, 6, 7, 8,   0xFF, 0xFF},
             {0, 1, 7,         0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
@@ -146,23 +146,23 @@ nofFarmhand::PointQuality nofForester::GetPointQuality(const MapPoint pt)
 
 
     // darf außerdem nich auf einer Straße liegen
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         if(gwg->GetPointRoad(pt, i))
             return PQ_NOTPOSSIBLE;
     }
 
     // es dürfen außerdem keine Gebäude rund um den Baum stehen
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         if(gwg->GetNO(gwg->GetNeighbour(pt, i))->GetType() ==  NOP_BUILDING)
             return PQ_NOTPOSSIBLE;
     }
 
     // Terrain untersuchen (nur auf Wiesen und Savanne und Steppe pflanzen
-    unsigned char t, good_terrains = 0;
+    uint8_t t, good_terrains = 0;
 
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         t = gwg->GetTerrainAround(pt, i);
         if(t == 3 || (t >= 8 && t <= 12))

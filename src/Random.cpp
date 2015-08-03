@@ -52,7 +52,7 @@ Random::Random(void)
  *
  *  @author OLiver
  */
-void Random::Init(const unsigned int init)
+void Random::Init(const uint32_t init)
 {
     zahl = init;
     counter = 0;
@@ -69,7 +69,7 @@ void Random::Init(const unsigned int init)
  *
  *  @author OLiver
  */
-int Random::Rand(const char* const src_name, const unsigned src_line, const unsigned obj_id, const int max)
+int32_t Random::Rand(const char* const src_name, const uint32_t src_line, const uint32_t obj_id, const int32_t max)
 {
     zahl = ( (zahl * 997) + 1 + max) & 32767;
 
@@ -87,8 +87,8 @@ std::list<RandomEntry> *Random::GetAsyncLog()
 {
     std::list<RandomEntry> *ret = new std::list<RandomEntry>;
 
-    unsigned int max = (counter > 1024 ? 1024 : counter);
-    for (unsigned int i = 0; i < max; ++i)
+    uint32_t max = (counter > 1024 ? 1024 : counter);
+    for (uint32_t i = 0; i < max; ++i)
     {
         ret->push_back(async_log[(i + counter) % 1024]);
     }
@@ -100,8 +100,8 @@ void Random::SaveLog(const char* const filename)
 {
     FILE* file = fopen(filename, "w");
 
-    unsigned int max = (counter > 1024 ? 1024 : counter);
-    for (unsigned int i = 0; i < max; ++i)
+    uint32_t max = (counter > 1024 ? 1024 : counter);
+    for (uint32_t i = 0; i < max; ++i)
     {
         RandomEntry* it = &(async_log[(i + counter) % 1024]);
         fprintf(file, "%u:R(%d)=%d,z=%d | %s Z: %u|id=%u\n", it->counter, it->max, (it->value * it->max) / 32768, it->value, it->src_name, it->src_line, it->obj_id);

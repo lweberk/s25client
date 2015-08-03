@@ -49,7 +49,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-nofBuilder::nofBuilder(const MapPoint pos, const unsigned char player, noRoadNode* building_site)
+nofBuilder::nofBuilder(const MapPoint pos, const uint8_t player, noRoadNode* building_site)
     : noFigure(JOB_BUILDER, pos, player, building_site), state(STATE_FIGUREWORK), building_site(static_cast<noBuildingSite*>(building_site)), building_steps_available(0)
 {
     // Sind wir schon an unsere Baustelle gleich hingesetzt worden (bei Häfen)?
@@ -65,7 +65,7 @@ void nofBuilder::Serialize_nofBuilder(SerializedGameData* sgd) const
 {
     Serialize_noFigure(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushObject(building_site, true);
     sgd->PushSignedShort(rel_x);
     sgd->PushSignedShort(rel_y);
@@ -74,7 +74,7 @@ void nofBuilder::Serialize_nofBuilder(SerializedGameData* sgd) const
     sgd->PushUnsignedChar(building_steps_available);
 }
 
-nofBuilder::nofBuilder(SerializedGameData* sgd, const unsigned obj_id) : noFigure(sgd, obj_id),
+nofBuilder::nofBuilder(SerializedGameData* sgd, const uint32_t obj_id) : noFigure(sgd, obj_id),
     state(BuilderState(sgd->PopUnsignedChar())),
     building_site(sgd->PopObject<noBuildingSite>(GOT_BUILDINGSITE)),
     rel_x(sgd->PopSignedShort()),
@@ -132,7 +132,7 @@ void nofBuilder::LostWork()
     }
 }
 
-void nofBuilder::HandleDerivedEvent(const unsigned int id)
+void nofBuilder::HandleDerivedEvent(const uint32_t id)
 {
     switch(state)
     {
@@ -246,14 +246,14 @@ void nofBuilder::HandleDerivedEvent(const unsigned int id)
 }
 
 // Länge, die der Bauarbeiter in einem Free-Walk zurücklegt (in Pixeln)
-const short FREEWALK_LENGTH[2] = {22, 11}; // waagerecht
-const short FREEWALK_LENGTH_SLANTWISE[2] = {14, 7}; // schräg
+const int16_t FREEWALK_LENGTH[2] = {22, 11}; // waagerecht
+const int16_t FREEWALK_LENGTH_SLANTWISE[2] = {14, 7}; // schräg
 
 void nofBuilder::StartFreewalk()
 {
-    std::vector<unsigned char> possible_directions;
+    std::vector<uint8_t> possible_directions;
 
-    unsigned char waiting_walk = ((state == STATE_WAITINGFREEWALK) ? 0 : 1);
+    uint8_t waiting_walk = ((state == STATE_WAITINGFREEWALK) ? 0 : 1);
 
     // Wohin kann der Bauarbeiter noch laufen?
 
@@ -298,7 +298,7 @@ void nofBuilder::StartFreewalk()
 }
 
 
-void nofBuilder::Draw(int x, int y)
+void nofBuilder::Draw(int32_t x, int32_t y)
 {
     switch(state)
     {
@@ -322,7 +322,7 @@ void nofBuilder::Draw(int x, int y)
         } break;
         case STATE_BUILD:
         {
-            unsigned index = GAMECLIENT.Interpolate(28, current_ev);
+            uint32_t index = GAMECLIENT.Interpolate(28, current_ev);
 
             // Je nachdem, wie weit der Bauarbeiter links bzw rechts oder in der Mitte steht, so wird auch die Animation angezeigt
             if(rel_x < -5)

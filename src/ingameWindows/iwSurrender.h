@@ -31,7 +31,7 @@ class iwSurrender : public IngameWindow
 
     private:
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 #endif // !iwSURRENDER_H_INCLUDED

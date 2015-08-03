@@ -42,10 +42,10 @@ class dskGameLoader :
         void LC_Status_Error(const std::string& error);
 
     private:
-        void Msg_MsgBoxResult(const unsigned int msgbox_id, const MsgboxResult mbr);
-        void Msg_Timer(const unsigned int ctrl_id);
+        void Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr);
+        void Msg_Timer(const uint32_t ctrl_id);
 
-        unsigned int position;
+        uint32_t position;
         /// Falls ein Savegame geladen wird --> Pointer darauf
         GameWorldViewer* gwv;
 };

@@ -29,11 +29,11 @@ class iwHQ : public iwBaseWarehouse
 {
     public:
         /// Konstruktor von @p iwHQ.
-        iwHQ(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBaseWarehouse* wh,  const char* const title, const unsigned pages_count);
+        iwHQ(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBaseWarehouse* wh,  const char* const title, const uint32_t pages_count);
 
     protected:
 
-        virtual void Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id);
+        virtual void Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id);
 
 };
 

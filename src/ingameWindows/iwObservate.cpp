@@ -44,7 +44,7 @@ static char THIS_FILE[] = __FILE__;
 
 // 260x190, 300x250, 340x310
 
-//IngameWindow::IngameWindow(unsigned int id, const MapPoint pt, unsigned short width, unsigned short height, const std::string& title, glArchivItem_Bitmap *background, bool modal)
+//IngameWindow::IngameWindow(uint32_t id, const MapPoint pt, uint16_t width, uint16_t height, const std::string& title, glArchivItem_Bitmap *background, bool modal)
 iwObservate::iwObservate(GameWorldViewer* const gwv, const MapPoint selectedPt)
     : IngameWindow(gwv->CreateGUIID(selectedPt), 0xFFFE, 0xFFFE, 300, 250, _("Observation window"), NULL),
       view(new GameWorldView(MapPoint(GetX() + 10, GetY() + 15), 300 - 20, 250 - 20)), selectedPt(selectedPt), last_x(-1), last_y(-1), scroll(false)
@@ -64,7 +64,7 @@ iwObservate::iwObservate(GameWorldViewer* const gwv, const MapPoint selectedPt)
 }
 
 
-void iwObservate::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwObservate::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch (ctrl_id)
     {
@@ -79,7 +79,7 @@ void iwObservate::Msg_ButtonClick(const unsigned int ctrl_id)
                 );
             break;
         case 4:
-            int diff = width;
+            int32_t diff = width;
 
             if (width == 260)
             {
@@ -104,7 +104,7 @@ void iwObservate::Msg_ButtonClick(const unsigned int ctrl_id)
 
             view->Resize(width - 20, height - 20);
 
-            for (unsigned i = 1; i <= 4; ++i)
+            for (uint32_t i = 1; i <= 4; ++i)
                 GetCtrl<ctrlImageButton>(i)->Move(GetCtrl<ctrlImageButton>(i)->GetX(false) - diff, GetHeight() - 50);
 
             if (x + width >= VIDEODRIVER.GetScreenWidth())

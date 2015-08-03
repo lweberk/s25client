@@ -29,7 +29,7 @@ class iwPostWindow : public IngameWindow
     public:
         iwPostWindow(GameWorldViewer& gwv);
         void Msg_PaintBefore();
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
         bool Msg_KeyDown(const KeyEvent& ke);
 
     private:
@@ -43,10 +43,10 @@ class iwPostWindow : public IngameWindow
         ctrlImageButton* acceptButton;
         ctrlImageButton* declineButton;
 
-        unsigned currentMessage;
+        uint32_t currentMessage;
 
         /// Liefert Pointer auf die pos-te Nachricht zurück
-        PostMsg* GetPostMsg(unsigned pos) const;
+        PostMsg* GetPostMsg(uint32_t pos) const;
 
         /// Passt Steuerelemente an, setzt Einstellung für diverse Controls passend für die aktuelle PostMessage
         void DisplayPostMessage();
@@ -57,7 +57,7 @@ class iwPostWindow : public IngameWindow
         /// Setzt den Text mehrzeilig in das Postfenster
         void SetMessageText(const std::string& message);
 
-        unsigned lastSize;
+        uint32_t lastSize;
 
 };
 

@@ -34,7 +34,7 @@ class nobHarborBuilding;
 class Ware : public GameObject
 {
         /// Die Richtung von der Fahne auf dem Weg, auf dem die Ware transportiert werden will als nächstes
-        unsigned char next_dir;
+        uint8_t next_dir;
         /// In welchem Status die Ware sich gerade befindet
         enum State
         {
@@ -59,7 +59,7 @@ class Ware : public GameObject
     public:
 
         Ware(const GoodType type, noBaseBuilding* goal, noRoadNode* location);
-        Ware(SerializedGameData* sgd, const unsigned obj_id);
+        Ware(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~Ware();
 
@@ -72,13 +72,13 @@ class Ware : public GameObject
         GO_Type GetGOT() const { return GOT_WARE; }
 
         /// siehe oben
-        inline unsigned char GetNextDir() const { return next_dir; }
+        inline uint8_t GetNextDir() const { return next_dir; }
         /// Gibt nächsten Hafen zurück, falls vorhanden
         MapPoint GetNextHarbor() const { return  next_harbor; }
         /// Berechnet den Weg neu zu ihrem Ziel
         void RecalcRoute();
 		/// set new next dir
-		void SetNextDir(unsigned char newnextdir) {next_dir=newnextdir;}
+		void SetNextDir(uint8_t newnextdir) {next_dir=newnextdir;}
         /// Wird aufgerufen, wenn es das Ziel der Ware nicht mehr gibt und sie wieder "nach Hause" getragen werden muss
         void GoalDestroyed();
         /// Verändert den Status der Ware
@@ -87,19 +87,19 @@ class Ware : public GameObject
         /// Gibt dem Ziel der Ware bekannt, dass diese nicht mehr kommen kann
         void NotifyGoalAboutLostWare();
         /// Wenn die Ware vernichtet werden muss
-        void WareLost(const unsigned char player);
+        void WareLost(const uint8_t player);
         /// Gibt Status der Ware zurück
         bool LieAtFlag() const { return (state == STATE_WAITATFLAG); }
         bool LieInWarehouse() const { return (state == STATE_WAITINWAREHOUSE); }
         bool LieInHarborBuilding() const { return (state == STATE_WAITFORSHIP); }
         /// Sagt dem Träger Bescheid, dass sie in die aktuelle (next_dir) Richtung nicht mehr getragen werden will
-        void RemoveWareJobForCurrentDir(const unsigned char last_next_dir);
+        void RemoveWareJobForCurrentDir(const uint8_t last_next_dir);
         /// Überprüft, ob es noch ein Weg zum Ziel gibt für Waren, die noch im Lagerhaus liegen
         bool FindRouteFromWarehouse();
         /// Sagt der Ware, dass sie sich ein Lagerhaus nochmal suchen soll (für LostWares gedacht, die kein Lagerhaus mehr gefunden haben)
         void FindRouteToWarehouse();
 		///a building is looking for a ware - check if this lost ware can be send to the building and then do it
-		unsigned CheckNewGoalForLostWare(noBaseBuilding* newgoal);
+		uint32_t CheckNewGoalForLostWare(noBaseBuilding* newgoal);
 		void SetNewGoalForLostWare(noBaseBuilding* newgoal);
         /// Gibt Ort der Ware zurück
         noRoadNode* GetLocation() { return location; }

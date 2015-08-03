@@ -28,7 +28,7 @@ class ColorControlInterface
         virtual ~ColorControlInterface(void) { }
 
         /// Setzt die Farbe des Controls
-        virtual void SetColor(const unsigned int fill_color) = 0;
+        virtual void SetColor(const uint32_t fill_color) = 0;
 };
 
 

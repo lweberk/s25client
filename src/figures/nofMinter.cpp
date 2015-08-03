@@ -36,7 +36,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofMinter::nofMinter(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofMinter::nofMinter(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_MINTER, pos, player, workplace)
 {
 }
@@ -46,15 +46,15 @@ void nofMinter::Serialize_nofMinter(SerializedGameData* sgd) const
     Serialize_nofWorkman(sgd);
 }
 
-nofMinter::nofMinter(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id)
+nofMinter::nofMinter(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id)
 {
 }
 
-void nofMinter::DrawWorking(int x, int y)
+void nofMinter::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[NAT_COUNT][2] = { {19, -20}, {19, -11}, {22, -12}, {28, 1}, {16, -12} };
+    int8_t offsets[NAT_COUNT][2] = { {19, -20}, {19, -11}, {22, -12}, {28, 1}, {16, -12} };
 
-    unsigned now_id = GAMECLIENT.Interpolate(136, current_ev);
+    uint32_t now_id = GAMECLIENT.Interpolate(136, current_ev);
 
     if(now_id < 91)
     {

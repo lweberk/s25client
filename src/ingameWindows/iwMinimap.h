@@ -32,9 +32,9 @@ class iwMinimap : public IngameWindow
     private:
 
         /// Verändert die Größe des Fensters und positioniert alle Controls etc. neu
-        void ChangeWindowSize(const unsigned short width, const unsigned short height);
+        void ChangeWindowSize(const uint16_t width, const uint16_t height);
 
-        void Msg_ButtonClick(const unsigned ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 
     public:
         iwMinimap(IngameMinimap* minimap, GameWorldViewer& gwv);

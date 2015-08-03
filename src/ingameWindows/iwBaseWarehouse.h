@@ -38,15 +38,15 @@ class iwBaseWarehouse : public iwWares
 
     public:
         /// Konstruktor von @p iwBaseWarehouse.
-        iwBaseWarehouse(GameWorldViewer* const gwv, dskGameInterface* const gi, const char* const title, unsigned char page_count, nobBaseWarehouse* wh);
+        iwBaseWarehouse(GameWorldViewer* const gwv, dskGameInterface* const gi, const char* const title, uint8_t page_count, nobBaseWarehouse* wh);
 
     protected:
 
         /// Overlay ändern
-        void ChangeOverlay(unsigned int i, unsigned int what);
+        void ChangeOverlay(uint32_t i, uint32_t what);
 
-        void Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 
 
 

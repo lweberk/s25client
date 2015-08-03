@@ -39,10 +39,10 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author FloSoft
  */
-void glArchivItem_Bob::Draw(unsigned int item, unsigned int direction, bool fat, unsigned int animationstep, short x, short y, unsigned int color)
+void glArchivItem_Bob::Draw(uint32_t item, uint32_t direction, bool fat, uint32_t animationstep, int16_t x, int16_t y, uint32_t color)
 {
-    unsigned int good = item * 96 + animationstep * 12 + ( (direction + 3) % 6 ) + fat * 6;
-    unsigned int body = fat * 48 + ( (direction + 3) % 6 ) * 8 + animationstep;
+    uint32_t good = item * 96 + animationstep * 12 + ( (direction + 3) % 6 ) + fat * 6;
+    uint32_t body = fat * 48 + ( (direction + 3) % 6 ) * 8 + animationstep;
     if(links[good] == 92)
     {
         good -= fat * 6;

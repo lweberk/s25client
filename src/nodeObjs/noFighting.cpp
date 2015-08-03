@@ -78,18 +78,18 @@ void noFighting::Serialize_noFighting(SerializedGameData* sgd) const
     sgd->PushObject(current_ev, true);
     sgd->PushUnsignedChar(player_won);
 
-    for(unsigned i = 0; i < 2; ++i)
+    for(uint32_t i = 0; i < 2; ++i)
         sgd->PushObject(soldiers[i], false);
 }
 
-noFighting::noFighting(SerializedGameData* sgd, const unsigned obj_id) : noBase(sgd, obj_id),
+noFighting::noFighting(SerializedGameData* sgd, const uint32_t obj_id) : noBase(sgd, obj_id),
     turn(sgd->PopUnsignedChar()),
     defending_animation(sgd->PopUnsignedChar()),
     current_ev(sgd->PopObject<EventManager::Event>(GOT_EVENT)),
     player_won(sgd->PopUnsignedChar())
 
 {
-    for(unsigned i = 0; i < 2; ++i)
+    for(uint32_t i = 0; i < 2; ++i)
         soldiers[i] = sgd->PopObject<nofActiveSoldier>(GOT_UNKNOWN);
 }
 
@@ -98,14 +98,14 @@ void noFighting::Destroy_noFighting()
     Destroy_noBase();
 }
 
-void noFighting::Draw(int x, int y)
+void noFighting::Draw(int32_t x, int32_t y)
 {
     switch(turn)
     {
         case 3:
         case 4:
         {
-            unsigned animation = GAMECLIENT.Interpolate(16, current_ev);
+            uint32_t animation = GAMECLIENT.Interpolate(16, current_ev);
 
             // Sterben des einen Soldatens (letzte Phase)
 
@@ -128,9 +128,9 @@ void noFighting::Draw(int x, int y)
         case 2:
         {
             // Erste Phase des Kampfes, die Soldaten gehen jeweils nach links bzw. rechts
-            int x_diff = int(GAMECLIENT.Interpolate(12, current_ev));
+            int32_t x_diff = int(GAMECLIENT.Interpolate(12, current_ev));
 
-            for(unsigned i = 0; i < 2; ++i)
+            for(uint32_t i = 0; i < 2; ++i)
             {
                 Loader::bob_jobs_cache[gwg->GetPlayer(soldiers[i]->GetPlayer())->nation][soldiers[i]->GetRank() + JOB_PRIVATE][(i == 0) ? 0 : 3][GAMECLIENT.Interpolate(8, current_ev)].draw(x + ((i == 0) ? (-x_diff) : x_diff), y, COLOR_WHITE, COLORS[gwg->GetPlayer(soldiers[i]->GetPlayer())->color]);
             }
@@ -140,9 +140,9 @@ void noFighting::Draw(int x, int y)
         {
             // Kampf
             // Aktueller Animationsframe
-            unsigned animation = GAMECLIENT.Interpolate(8, current_ev);
+            uint32_t animation = GAMECLIENT.Interpolate(8, current_ev);
 
-            for(unsigned i = 0; i < 2; ++i)
+            for(uint32_t i = 0; i < 2; ++i)
             {
                 // Ist der Soldat mit Angreifen dran?
                 if(turn == i)
@@ -201,7 +201,7 @@ void noFighting::Draw(int x, int y)
 
 }
 
-void noFighting::HandleEvent(const unsigned int id)
+void noFighting::HandleEvent(const uint32_t id)
 {
     // Normales Ablaufevent?
     if(id == 0)
@@ -213,7 +213,7 @@ void noFighting::HandleEvent(const unsigned int id)
                 // Der Kampf hat gerade begonnen
 
                 // "Auslosen", wer als erstes dran ist mit Angreifen
-                turn = static_cast<unsigned char>(RANDOM.Rand(__FILE__, __LINE__, obj_id, 2));
+                turn = static_cast<uint8_t>(RANDOM.Rand(__FILE__, __LINE__, obj_id, 2));
                 // anfangen anzugreifen
                 StartAttack();
             } return;
@@ -256,7 +256,7 @@ void noFighting::HandleEvent(const unsigned int id)
             case 3:
             case 4:
             {
-                unsigned player_lost = turn - 3;
+                uint32_t player_lost = turn - 3;
                 MapPoint pt = soldiers[player_lost]->GetPos();
 
                 // Sounds löschen vom Sterben
@@ -307,8 +307,8 @@ void noFighting::StartAttack()
     // "Auswürfeln", ob der Angreifer (also der, der gerade den Angriff vollzieht) trifft oder ob sich der andere
     // erfolgreich verteidigt
 
-    unsigned char results[2];
-    for(unsigned i = 0; i < 2; ++i)
+    uint8_t results[2];
+    for(uint32_t i = 0; i < 2; ++i)
     {
         switch (GAMECLIENT.GetGGS().getSelection(ADDON_ADJUST_MILITARY_STRENGTH))
         {
@@ -333,7 +333,7 @@ void noFighting::StartAttack()
         defending_animation = 3;
     else
         // Der Verteidiger hat diesen Zug gewonnen, zufällige Verteidigungsanimation
-        defending_animation = static_cast<unsigned char>(RANDOM.Rand(__FILE__, __LINE__, obj_id, 3));
+        defending_animation = static_cast<uint8_t>(RANDOM.Rand(__FILE__, __LINE__, obj_id, 3));
 
     // Entsprechendes Event anmelden
     current_ev = em->AddEvent(this, 15);
@@ -346,7 +346,7 @@ bool noFighting::IsActive() const
     return (turn < 3/* || GAMECLIENT.GetGFNumber()-current_ev->gf < RELEASE_FIGURES_OFFSET*/);
 }
 
-bool noFighting::IsSoldierOfPlayer(const unsigned char player) const
+bool noFighting::IsSoldierOfPlayer(const uint8_t player) const
 {
     // Soldat 1 prüfen
     if(soldiers[0])

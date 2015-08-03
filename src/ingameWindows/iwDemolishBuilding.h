@@ -39,12 +39,12 @@ class iwDemolishBuilding : public IngameWindow
     public:
 
         /// Konstruktor von @p iwBuilding.
-//  iwDemolishBuilding(GameWorldViewer * const gwv,const GO_Type got,const unsigned short building_x, const unsigned short building_y,const BuildingType building, const Nation nation, const unsigned guiid);
+//  iwDemolishBuilding(GameWorldViewer * const gwv,const GO_Type got,const uint16_t building_x, const uint16_t building_y,const BuildingType building, const Nation nation, const uint32_t guiid);
         iwDemolishBuilding(GameWorldViewer* const gwv, const noBaseBuilding* building, const bool flag = false);
 
     private:
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
         void Msg_PaintBefore();
 
 };

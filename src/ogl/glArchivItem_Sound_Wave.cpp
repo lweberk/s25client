@@ -43,7 +43,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author FloSoft
  */
-unsigned int glArchivItem_Sound_Wave::Play(unsigned char volume, bool loop)
+uint32_t glArchivItem_Sound_Wave::Play(uint8_t volume, bool loop)
 {
     if(!SETTINGS.sound.effekte/* || !VIDEODRIVER.audiodriver*/)
         return 0xFFFFFFFF;

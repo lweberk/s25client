@@ -46,9 +46,9 @@ class noTree : public noCoordBase
         friend class AIInterface;
 
         /// Typ des Baumes (also welche Baumart)
-        unsigned char type;
+        uint8_t type;
         /// Größe des Baumes (0-2, 3 = aufgewachsen!)
-        unsigned char size;
+        uint8_t size;
         enum State
         {
             STATE_NOTHING, // Baum steht einfach nur rum
@@ -68,13 +68,13 @@ class noTree : public noCoordBase
         /// Produziert dieser Baum Tiere?
         bool produce_animals;
         /// Zählt Instanzen der Bäume (jeder so und so vielte Baum produziert Tiere)
-        static unsigned INSTANCE_COUNTER;
+        static uint32_t INSTANCE_COUNTER;
         /// Zählt gezeichnete Bäume innerhalb eines Zeichenvorgangs (so und soviel Vogelgezwitscher muss dann abgespielt werden)
-        static unsigned short DRAW_COUNTER;
+        static uint16_t DRAW_COUNTER;
 
         /// Gibt Warte- und Wachsdauer der Bäume an
-        static const unsigned WAIT_LENGTH = 835;
-        static const unsigned GROWING_LENGTH = 15;
+        static const uint32_t WAIT_LENGTH = 835;
+        static const uint32_t GROWING_LENGTH = 15;
 
     private:
 
@@ -87,8 +87,8 @@ class noTree : public noCoordBase
 
     public:
 
-        noTree(const MapPoint pt, const unsigned char type, const unsigned char size);
-        noTree(SerializedGameData* sgd, const unsigned obj_id);
+        noTree(const MapPoint pt, const uint8_t type, const uint8_t size);
+        noTree(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~noTree();
 
@@ -103,9 +103,9 @@ class noTree : public noCoordBase
         GO_Type GetGOT() const { return GOT_TREE; }
 
 
-        void Draw( int x,   int y);
+        void Draw( int32_t x,   int32_t y);
 
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
         BlockingManner GetBM() const { return BM_TREE; }
 
@@ -117,7 +117,7 @@ class noTree : public noCoordBase
         /// Setzt Draw-Counter auf 0
         static void ResetDrawCounter() { DRAW_COUNTER = 0; }
         /// Liest Draw-Counter aus
-        static unsigned short QueryDrawCounter() { return DRAW_COUNTER; }
+        static uint16_t QueryDrawCounter() { return DRAW_COUNTER; }
 };
 
 

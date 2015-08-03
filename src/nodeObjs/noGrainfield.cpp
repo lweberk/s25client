@@ -40,9 +40,9 @@ static char THIS_FILE[] = __FILE__;
 
 
 /// Länge des Wachs-Wartens
-const unsigned GROWING_WAITING_LENGTH = 1100;
+const uint32_t GROWING_WAITING_LENGTH = 1100;
 /// Länge des Wachsens
-const unsigned GROWING_LENGTH = 16;
+const uint32_t GROWING_LENGTH = 16;
 
 noGrainfield::noGrainfield(const MapPoint pos) : noCoordBase(NOP_GRAINFIELD, pos),
     type(RANDOM.Rand(__FILE__, __LINE__, obj_id, 2)), state(STATE_GROWING_WAITING), size(0)
@@ -70,12 +70,12 @@ void noGrainfield::Serialize_noGrainfield(SerializedGameData* sgd) const
     Serialize_noCoordBase(sgd);
 
     sgd->PushUnsignedChar(type);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushUnsignedChar(size);
     sgd->PushObject(event, true);
 }
 
-noGrainfield::noGrainfield(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noGrainfield::noGrainfield(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     type(sgd->PopUnsignedChar()),
     state(State(sgd->PopUnsignedChar())),
     size(sgd->PopUnsignedChar()),
@@ -83,7 +83,7 @@ noGrainfield::noGrainfield(SerializedGameData* sgd, const unsigned obj_id) : noC
 {
 }
 
-void noGrainfield::Draw( int x, int y)
+void noGrainfield::Draw( int32_t x, int32_t y)
 {
     switch(state)
     {
@@ -94,7 +94,7 @@ void noGrainfield::Draw( int x, int y)
         } break;
         case STATE_GROWING:
         {
-            unsigned alpha = GAMECLIENT.Interpolate(0xFF, event);
+            uint32_t alpha = GAMECLIENT.Interpolate(0xFF, event);
 
             // altes Feld ausblenden
             Loader::grainfield_cache[type][size].draw(x, y, SetAlpha(COLOR_WHITE, 0xFF - alpha));
@@ -104,7 +104,7 @@ void noGrainfield::Draw( int x, int y)
         } break;
         case STATE_WITHERING:
         {
-            unsigned alpha = GAMECLIENT.Interpolate(0xFF, event);
+            uint32_t alpha = GAMECLIENT.Interpolate(0xFF, event);
 
             // Feld ausblenden
             Loader::grainfield_cache[type][size].draw(x, y, SetAlpha(COLOR_WHITE, 0xFF - alpha));
@@ -113,7 +113,7 @@ void noGrainfield::Draw( int x, int y)
 
 }
 
-void noGrainfield::HandleEvent(const unsigned int id)
+void noGrainfield::HandleEvent(const uint32_t id)
 {
     switch(state)
     {

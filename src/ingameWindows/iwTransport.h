@@ -44,8 +44,8 @@ class iwTransport : public IngameWindow
         /// Sendet veränderte Einstellungen (an den Client), falls sie verändert wurden
         void TransmitSettings();
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_Timer(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_Timer(const uint32_t ctrl_id);
 };
 
 #endif // !iwTRANSPORT_H_INCLUDED

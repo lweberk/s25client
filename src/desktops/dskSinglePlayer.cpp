@@ -88,7 +88,7 @@ dskSinglePlayer::dskSinglePlayer(void) : Desktop(LOADER.GetImageN("menu", 0))
 
 
 
-void dskSinglePlayer::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskSinglePlayer::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

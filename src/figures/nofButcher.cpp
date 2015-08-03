@@ -37,20 +37,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofButcher::nofButcher(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofButcher::nofButcher(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_BUTCHER, pos, player, workplace)
 {
 }
 
-nofButcher::nofButcher(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id)
+nofButcher::nofButcher(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id)
 {
 }
 
-void nofButcher::DrawWorking(int x, int y)
+void nofButcher::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[NAT_COUNT][2] = { {38, 2}, { -3, 5}, {21, -1}, {26, -5}, { -7, 2} };
+    int8_t offsets[NAT_COUNT][2] = { {38, 2}, { -3, 5}, {21, -1}, {26, -5}, { -7, 2} };
 
-    unsigned now_id;
+    uint32_t now_id;
 
     LOADER.GetImageN("rom_bobs", 160 + (now_id = GAMECLIENT.Interpolate(136, current_ev)) % 6)
     ->Draw(x + offsets[workplace->GetNation()][0], y + offsets[workplace->GetNation()][1], 0, 0, 0, 0, 0, 0, COLOR_WHITE, COLORS[gwg->GetPlayer(workplace->GetPlayer())->color]);

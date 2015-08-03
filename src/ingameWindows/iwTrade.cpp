@@ -56,7 +56,7 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 iwTrade::iwTrade(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBaseWarehouse* const wh)
-    : IngameWindow(wh->CreateGUIID(), (unsigned short) - 2, (unsigned short) - 2, 400, 194, _("Trade"), LOADER.GetImageN("resource", 41)),
+    : IngameWindow(wh->CreateGUIID(), (uint16_t) - 2, (uint16_t) - 2, 400, 194, _("Trade"), LOADER.GetImageN("resource", 41)),
       gwv(gwv), gi(gi), wh(wh)
 {
     // Get title of the player
@@ -66,7 +66,7 @@ iwTrade::iwTrade(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBase
     // Gebäudebild und dessen Schatten
     AddImage( 0, 100, 144, LOADER.GetNationImageN(wh->GetNation(), 250 + 5 * wh->GetBuildingType()));
 
-    const unsigned left_column = 200;
+    const uint32_t left_column = 200;
 
     this->AddComboBox(4, left_column, 84, 160, 18, TC_GREY, NormalFont, 90); // Ware/Figure names
     this->AddText(1, left_column, 30, "Deal in:", COLOR_YELLOW, glArchivItem_Font::DF_LEFT, NormalFont);
@@ -77,7 +77,7 @@ iwTrade::iwTrade(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBase
 
 
     // Create possible wares, figures
-    for(unsigned i = 0; i < WARE_TYPES_COUNT; ++i)
+    for(uint32_t i = 0; i < WARE_TYPES_COUNT; ++i)
     {
         // Avoid strange things:
         if(i == GD_SHIELDVIKINGS || i == GD_SHIELDAFRICANS || i == GD_SHIELDJAPANESE
@@ -85,7 +85,7 @@ iwTrade::iwTrade(GameWorldViewer* const gwv, dskGameInterface* const gi, nobBase
             continue;
         wares.push_back(GoodType(i));
     }
-    for(unsigned i = 0; i < JOB_TYPES_COUNT; ++i)
+    for(uint32_t i = 0; i < JOB_TYPES_COUNT; ++i)
     {
         // Avoid strange things: // no strange things here
         jobs.push_back(Job(i));
@@ -121,10 +121,10 @@ void iwTrade::Msg_PaintAfter()
 }
 
 
-void iwTrade::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwTrade::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     //pressed the send button
-    unsigned short ware_figure_selection = GetCtrl<ctrlComboBox>(4)->GetSelection();
+    uint16_t ware_figure_selection = GetCtrl<ctrlComboBox>(4)->GetSelection();
     bool ware_figure = this->GetCtrl<ctrlComboBox>(2)->GetSelection() == 1;
     GoodType gt = ware_figure ? GD_NOTHING : GoodType(ware_figure_selection);
     Job job = ware_figure ? Job(ware_figure_selection) : JOB_NOTHING;
@@ -140,7 +140,7 @@ void iwTrade::Msg_ButtonClick(const unsigned int ctrl_id)
 }
 
 
-void iwTrade::Msg_ComboSelectItem(const unsigned ctrl_id, const unsigned short selection)
+void iwTrade::Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -152,14 +152,14 @@ void iwTrade::Msg_ComboSelectItem(const unsigned ctrl_id, const unsigned short s
             if(selection == 0)
             {
                 // Add ware names
-                for(unsigned i = 0; i < wares.size(); ++i)
+                for(uint32_t i = 0; i < wares.size(); ++i)
                     names->AddString(_(WARE_NAMES[wares[i]]));
 
             }
             else
             {
                 // Add job names
-                for(unsigned i = 0; i < jobs.size(); ++i)
+                for(uint32_t i = 0; i < jobs.size(); ++i)
                     names->AddString(_(JOB_NAMES[jobs[i]]));
 
             }
@@ -170,7 +170,7 @@ void iwTrade::Msg_ComboSelectItem(const unsigned ctrl_id, const unsigned short s
         case 4:
         {
 
-            unsigned number;
+            uint32_t number;
             if(this->GetCtrl<ctrlComboBox>(2)->GetSelection() == 0)
             {
                 // Wares

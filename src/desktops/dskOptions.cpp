@@ -104,14 +104,14 @@ dskOptions::dskOptions(void) : Desktop(LOADER.GetImageN("setup013", 0))
     combo = groupAllgemein->AddComboBox(33, 280, 125, 190, 20, TC_GREY, NormalFont, 100);
 
     bool selected = false;
-    for(unsigned i = 0 ; i < LANGUAGES.getCount(); ++i)
+    for(uint32_t i = 0 ; i < LANGUAGES.getCount(); ++i)
     {
         const Languages::Language l = LANGUAGES.getLanguage(i);
 
         combo->AddString(_(l.name));
         if(SETTINGS.language.language == l.code )
         {
-            combo->SetSelection(static_cast<unsigned short>(i));
+            combo->SetSelection(static_cast<uint16_t>(i));
             selected = true;
         }
     }
@@ -272,7 +272,7 @@ dskOptions::dskOptions(void) : Desktop(LOADER.GetImageN("setup013", 0))
     VIDEODRIVER.ListVideoModes(video_modes);
 
     // Und zu der Combobox hinzufügen
-    for(unsigned i = 0; i < video_modes.size(); ++i)
+    for(uint32_t i = 0; i < video_modes.size(); ++i)
     {
         // >=800x600, alles andere macht keinen Sinn
         if(video_modes[i].width >= 800 && video_modes[i].height >= 600)
@@ -300,7 +300,7 @@ dskOptions::dskOptions(void) : Desktop(LOADER.GetImageN("setup013", 0))
 
     // "Limit Framerate" füllen
     optiongroup = groupGrafik->GetCtrl<ctrlOptionGroup>(51);
-    for(unsigned char i = 0; i < Settings::SCREEN_REFRESH_RATES_COUNT; ++i)
+    for(uint8_t i = 0; i < Settings::SCREEN_REFRESH_RATES_COUNT; ++i)
     {
         switch(Settings::SCREEN_REFRESH_RATES[i])
         {
@@ -372,18 +372,18 @@ dskOptions::~dskOptions()
  *
  *  @author FloSoft
  */
-void dskOptions::Msg_Group_ProgressChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short position)
+void dskOptions::Msg_Group_ProgressChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t position)
 {
     switch(ctrl_id)
     {
         case 70:
         {
-            SETTINGS.sound.effekte_volume = (unsigned char)position * 255 / 10 + (position < 10 ? 1 : 0);
+            SETTINGS.sound.effekte_volume = (uint8_t)position * 255 / 10 + (position < 10 ? 1 : 0);
             AUDIODRIVER.SetMasterEffectVolume(SETTINGS.sound.effekte_volume);
         } break;
         case 72:
         {
-            SETTINGS.sound.musik_volume = (unsigned char)position * 255 / 10 + (position < 10 ? 1 : 0);
+            SETTINGS.sound.musik_volume = (uint8_t)position * 255 / 10 + (position < 10 ? 1 : 0);
             AUDIODRIVER.SetMasterMusicVolume(SETTINGS.sound.musik_volume);
         } break;
     }
@@ -395,7 +395,7 @@ void dskOptions::Msg_Group_ProgressChange(const unsigned int group_id, const uns
  *
  *  @author FloSoft
  */
-void dskOptions::Msg_Group_ComboSelectItem(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void dskOptions::Msg_Group_ComboSelectItem(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
 {
     ctrlGroup* group = GetCtrl<ctrlGroup>(group_id);
     ctrlComboBox* combo = group->GetCtrl<ctrlComboBox>(ctrl_id);
@@ -476,7 +476,7 @@ void dskOptions::Msg_Group_ComboSelectItem(const unsigned int group_id, const un
  *
  *  @author FloSoft
  */
-void dskOptions::Msg_Group_OptionGroupChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short selection)
+void dskOptions::Msg_Group_OptionGroupChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -558,13 +558,13 @@ void dskOptions::Msg_Group_OptionGroupChange(const unsigned int group_id, const 
  *
  *  @author FloSoft
  */
-void dskOptions::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void dskOptions::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
         case 10: // Optionengruppen anzeigen
         {
-            for(unsigned short i = 21; i < 24; ++i)
+            for(uint16_t i = 21; i < 24; ++i)
                 GetCtrl<ctrlGroup>(i)->SetVisible( (i == selection + 10 ? true : false) );
         } break;
     }
@@ -576,7 +576,7 @@ void dskOptions::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigne
  *
  *  @author FloSoft
  */
-void dskOptions::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskOptions::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -647,7 +647,7 @@ void dskOptions::Msg_ButtonClick(const unsigned int ctrl_id)
  *
  *  @author OLiver
  */
-void dskOptions::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id)
+void dskOptions::Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -670,7 +670,7 @@ void dskOptions::Msg_Group_ButtonClick(const unsigned int group_id, const unsign
  *
  *  @author FloSoft
  */
-void dskOptions::Msg_MsgBoxResult(const unsigned int msgbox_id, const MsgboxResult mbr)
+void dskOptions::Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr)
 {
     switch(msgbox_id)
     {

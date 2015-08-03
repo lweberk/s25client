@@ -39,7 +39,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofMiller::nofMiller(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofMiller::nofMiller(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_MILLER, pos, player, workplace), last_sound(0), next_interval(0)
 {
 }
@@ -49,18 +49,18 @@ void nofMiller::Serialize_nofMiller(SerializedGameData* sgd) const
     Serialize_nofWorkman(sgd);
 }
 
-nofMiller::nofMiller(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id), last_sound(0), next_interval(0)
+nofMiller::nofMiller(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id), last_sound(0), next_interval(0)
 {
 }
 
-void nofMiller::DrawWorking(int x, int y)
+void nofMiller::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[NAT_COUNT][2] = { {20, 8}, {20, 8}, {20, 8}, {20, 8}, {20, 8} };
-    signed char offsets_sitdown[NAT_COUNT][2] = { {23, 8}, {23, 8}, {23, 8}, {23, 8}, {23, 8} };
-    signed char walkoffsets[8][2] = { {8, 8}, {10, 9}, {12, 10}, {14, 11}, {16, 10}, {18, 9}, {20, 8}, {22, 8} };
+    int8_t offsets[NAT_COUNT][2] = { {20, 8}, {20, 8}, {20, 8}, {20, 8}, {20, 8} };
+    int8_t offsets_sitdown[NAT_COUNT][2] = { {23, 8}, {23, 8}, {23, 8}, {23, 8}, {23, 8} };
+    int8_t walkoffsets[8][2] = { {8, 8}, {10, 9}, {12, 10}, {14, 11}, {16, 10}, {18, 9}, {20, 8}, {22, 8} };
 
-    unsigned int max_id = 120;
-    unsigned now_id = GAMECLIENT.Interpolate(max_id, current_ev);
+    uint32_t max_id = 120;
+    uint32_t now_id = GAMECLIENT.Interpolate(max_id, current_ev);
     bool rotate_sails = true;
 
     if(now_id < 4) //hinauslaufen teil 1

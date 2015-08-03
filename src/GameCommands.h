@@ -78,7 +78,7 @@ namespace gc
             virtual void Serialize(Serializer* ser) const = 0;
 
             /// Führt das GameCommand aus
-            virtual void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid) = 0;
+            virtual void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid) = 0;
     };
 
 
@@ -121,7 +121,7 @@ namespace gc
                 : Coords(SETFLAG, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Flagge zerstören
@@ -135,7 +135,7 @@ namespace gc
                 : Coords(DESTROYFLAG, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Straße bauen
@@ -145,16 +145,16 @@ namespace gc
             /// Boot-Straße oder nicht?
             const bool boat_road;
             /// Beschreibung der Straße mittels einem Array aus Richtungen
-            std::vector<unsigned char> route;
+            std::vector<uint8_t> route;
         public:
-            BuildRoad(const MapPoint pt, const bool boat_road, const std::vector<unsigned char>& route)
+            BuildRoad(const MapPoint pt, const bool boat_road, const std::vector<uint8_t>& route)
                 : Coords(BUILDROAD, pt), boat_road(boat_road), route(route) {}
             BuildRoad(Serializer* ser)
                 : Coords(BUILDROAD, ser),
                   boat_road(ser->PopBool()),
                   route(ser->PopUnsignedInt())
             {
-                for(unsigned i = 0; i < route.size(); ++i)
+                for(uint32_t i = 0; i < route.size(); ++i)
                     route[i] = ser->PopUnsignedChar();
             }
 
@@ -164,12 +164,12 @@ namespace gc
 
                 ser->PushBool(boat_road);
                 ser->PushUnsignedInt(route.size());
-                for(unsigned i = 0; i < route.size(); ++i)
+                for(uint32_t i = 0; i < route.size(); ++i)
                     ser->PushUnsignedChar(route[i]);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Straße zerstören
@@ -177,9 +177,9 @@ namespace gc
     {
             friend class GameClient;
             /// Richtung in der von der Flagge an x;y aus gesehen die Straße zerstört werden soll
-            const unsigned char start_dir;
+            const uint8_t start_dir;
         public:
-            DestroyRoad(const MapPoint pt, const unsigned char start_dir)
+            DestroyRoad(const MapPoint pt, const uint8_t start_dir)
                 : Coords(DESTROYROAD, pt), start_dir(start_dir) {}
             DestroyRoad(Serializer* ser)
                 : Coords(DESTROYROAD, ser),
@@ -193,7 +193,7 @@ namespace gc
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Straße aufwerten
@@ -201,9 +201,9 @@ namespace gc
     {
             friend class GameClient;
             /// Richtung in der von der Flagge an x;y aus gesehen die Straße zerstört werden soll
-            const unsigned char start_dir;
+            const uint8_t start_dir;
         public:
-            UpgradeRoad(const MapPoint pt, const unsigned char start_dir)
+            UpgradeRoad(const MapPoint pt, const uint8_t start_dir)
                 : Coords(UPGRADEROAD, pt), start_dir(start_dir) {}
             UpgradeRoad(Serializer* ser)
                 : Coords(UPGRADEROAD, ser), start_dir(ser->PopUnsignedChar()) {}
@@ -215,7 +215,7 @@ namespace gc
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Warenverteilung ändern
@@ -223,27 +223,27 @@ namespace gc
     {
             friend class GameClient;
             /// Größe der Distributionsdaten
-            static const unsigned DATA_SIZE = 23;
+            static const uint32_t DATA_SIZE = 23;
             /// Daten der Distribution (einzelne Prozente der Waren in Gebäuden)
-            std::vector<unsigned char> data;
+            std::vector<uint8_t> data;
         public:
-            ChangeDistribution(const std::vector<unsigned char>& data)
+            ChangeDistribution(const std::vector<uint8_t>& data)
                 : GameCommand(CHANGEDISTRIBUTION), data(data) { assert(data.size() == DATA_SIZE); }
             ChangeDistribution(Serializer* ser)
                 : GameCommand(CHANGEDISTRIBUTION), data(DATA_SIZE)
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     data[i] = ser->PopUnsignedChar();
             }
 
             virtual void Serialize(Serializer* ser) const
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     ser->PushUnsignedChar(data[i]);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Baureihenfolge ändern
@@ -251,30 +251,30 @@ namespace gc
     {
             friend class GameClient;
             /// Größe der BuildOrder-Daten
-            static const unsigned DATA_SIZE = 31;
+            static const uint32_t DATA_SIZE = 31;
             /// Ordnungs-Typ
-            const unsigned char order_type;
+            const uint8_t order_type;
             /// Daten der BuildOrder
-            std::vector<unsigned char> data;
+            std::vector<uint8_t> data;
         public:
-            ChangeBuildOrder(const unsigned char order_type, const std::vector<unsigned char>& data)
+            ChangeBuildOrder(const uint8_t order_type, const std::vector<uint8_t>& data)
                 : GameCommand(CHANGEBUILDORDER), order_type(order_type), data(data) { assert(data.size() == DATA_SIZE); }
             ChangeBuildOrder(Serializer* ser)
                 : GameCommand(CHANGEBUILDORDER), order_type(ser->PopUnsignedChar()), data(DATA_SIZE)
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     data[i] = ser->PopUnsignedChar();
             }
 
             virtual void Serialize(Serializer* ser) const
             {
                 ser->PushUnsignedChar(order_type);
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     ser->PushUnsignedChar(data[i]);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 
@@ -295,11 +295,11 @@ namespace gc
             {
                 Coords::Serialize(ser);
 
-                ser->PushUnsignedChar(static_cast<unsigned char>(bt));
+                ser->PushUnsignedChar(static_cast<uint8_t>(bt));
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Gebäude zerstören
@@ -313,7 +313,7 @@ namespace gc
                 : Coords(DESTROYBUILDING, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Send all highest rank soldiers home (used by ai to upgrade troops instead of changing mil settings all the time)
@@ -327,7 +327,7 @@ namespace gc
                 : Coords(SENDSOLDIERSHOME, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// call for new min rank soldiers (used by ai to upgrade troops instead of changing mil settings all the time)
@@ -341,7 +341,7 @@ namespace gc
                 : Coords(ORDERNEWSOLDIERS, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 
@@ -350,27 +350,27 @@ namespace gc
     {
             friend class GameClient;
             /// Größe der Distributionsdaten
-            static const unsigned DATA_SIZE = 14;
+            static const uint32_t DATA_SIZE = 14;
             /// Daten der Distribution (einzelne Prozente der Waren in Gebäuden)
-            std::vector<unsigned char> data;
+            std::vector<uint8_t> data;
         public:
-            ChangeTransport(const std::vector<unsigned char>& data)
+            ChangeTransport(const std::vector<uint8_t>& data)
                 : GameCommand(CHANGETRANSPORT), data(data) { assert(data.size() == DATA_SIZE); }
             ChangeTransport(Serializer* ser)
                 : GameCommand(CHANGETRANSPORT), data(DATA_SIZE)
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     data[i] = ser->PopUnsignedChar();
             }
 
             virtual void Serialize(Serializer* ser) const
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     ser->PushUnsignedChar(data[i]);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Transportreihenfolge ändern
@@ -378,27 +378,27 @@ namespace gc
     {
             friend class GameClient;
             /// Größe der Distributionsdaten
-            static const unsigned DATA_SIZE = MILITARY_SETTINGS_COUNT;
+            static const uint32_t DATA_SIZE = MILITARY_SETTINGS_COUNT;
             /// Daten der Distribution (einzelne Prozente der Waren in Gebäuden)
-            std::vector<unsigned char> data;
+            std::vector<uint8_t> data;
         public:
-            ChangeMilitary(const std::vector<unsigned char>& data)
+            ChangeMilitary(const std::vector<uint8_t>& data)
                 : GameCommand(CHANGEMILITARY), data(data) { assert(data.size() == DATA_SIZE); }
             ChangeMilitary(Serializer* ser)
                 : GameCommand(CHANGEMILITARY), data(DATA_SIZE)
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     data[i] = ser->PopUnsignedChar();
             }
 
             virtual void Serialize(Serializer* ser) const
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     ser->PushUnsignedChar(data[i]);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Werkzeugeinstellungen ändern
@@ -406,25 +406,25 @@ namespace gc
     {
             friend class GameClient;
             /// Größe der Distributionsdaten
-            static const unsigned DATA_SIZE = 12;
+            static const uint32_t DATA_SIZE = 12;
             /// Daten der Distribution (einzelne Prozente der Waren in Gebäuden)
-            std::vector<unsigned char> data;
+            std::vector<uint8_t> data;
 
-            signed char orders[TOOL_COUNT];
+            int8_t orders[TOOL_COUNT];
         public:
-            ChangeTools(const std::vector<unsigned char>& data, signed char* order_delta = 0)
+            ChangeTools(const std::vector<uint8_t>& data, int8_t* order_delta = 0)
                 : GameCommand(CHANGETOOLS), data(data)
             {
                 assert(data.size() == DATA_SIZE);
 
                 if (order_delta != 0)
                 {
-                    for (unsigned i = 0; i < TOOL_COUNT; ++i)
+                    for (uint32_t i = 0; i < TOOL_COUNT; ++i)
                         orders[i] = order_delta[i];
                 }
                 else
                 {
-                    for (unsigned i = 0; i < TOOL_COUNT; ++i)
+                    for (uint32_t i = 0; i < TOOL_COUNT; ++i)
                         orders[i] = 0;
                 }
             }
@@ -432,24 +432,24 @@ namespace gc
             ChangeTools(Serializer* ser)
                 : GameCommand(CHANGETOOLS), data(DATA_SIZE)
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     data[i] = ser->PopUnsignedChar();
 
-                for (unsigned i = 0; i < TOOL_COUNT; ++i)
-                    orders[i] = (signed char)ser->PopSignedChar();
+                for (uint32_t i = 0; i < TOOL_COUNT; ++i)
+                    orders[i] = (int8_t)ser->PopSignedChar();
             }
 
             virtual void Serialize(Serializer* ser) const
             {
-                for(unsigned i = 0; i < DATA_SIZE; ++i)
+                for(uint32_t i = 0; i < DATA_SIZE; ++i)
                     ser->PushUnsignedChar(data[i]);
 
-                for (unsigned i = 0; i < TOOL_COUNT; ++i)
+                for (uint32_t i = 0; i < TOOL_COUNT; ++i)
                     ser->PushSignedChar(orders[i]);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Geologen rufen
@@ -463,7 +463,7 @@ namespace gc
                 : Coords(CALLGEOLOGIST, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Späher rufen
@@ -476,7 +476,7 @@ namespace gc
                 : Coords(CALLSCOUT, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Basisklasse für beide Angriffstypen
@@ -485,12 +485,12 @@ namespace gc
         protected:
             friend class GameClient;
             /// Anzahl der Soldaten
-            const unsigned soldiers_count;
+            const uint32_t soldiers_count;
             /// Starke Soldaten oder schwache Soldaten?
             const bool strong_soldiers;
 
         public:
-            BaseAttack(const Type gst, const MapPoint pt, const unsigned soldiers_count, const bool strong_soldiers)
+            BaseAttack(const Type gst, const MapPoint pt, const uint32_t soldiers_count, const bool strong_soldiers)
                 : Coords(gst, pt), soldiers_count(soldiers_count), strong_soldiers(strong_soldiers) {}
             BaseAttack(const Type gst, Serializer* ser)
                 : Coords(gst, ser),
@@ -511,26 +511,26 @@ namespace gc
     class Attack : public BaseAttack
     {
         public:
-            Attack(const MapPoint pt, const unsigned soldiers_count, const bool strong_soldiers)
+            Attack(const MapPoint pt, const uint32_t soldiers_count, const bool strong_soldiers)
                 : BaseAttack(ATTACK, pt, soldiers_count, strong_soldiers) {}
             Attack(Serializer* ser)
                 : BaseAttack(ATTACK, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// See-Angriff starten
     class SeaAttack : public BaseAttack
     {
         public:
-            SeaAttack(const MapPoint pt, const unsigned soldiers_count, const bool strong_soldiers)
+            SeaAttack(const MapPoint pt, const uint32_t soldiers_count, const bool strong_soldiers)
                 : BaseAttack(SEAATTACK, pt, soldiers_count, strong_soldiers) {}
             SeaAttack(Serializer* ser)
                 : BaseAttack(SEAATTACK, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Spielerwechsel
@@ -539,10 +539,10 @@ namespace gc
             friend class GameClient;
             friend class GameServer;
             /// ID des Spielers, zu den hingewechselt werden soll
-            const unsigned new_player_id;
+            const uint32_t new_player_id;
 
         public:
-            SwitchPlayer(const unsigned char new_player_id)
+            SwitchPlayer(const uint8_t new_player_id)
                 : GameCommand(SWITCHPLAYER), new_player_id(new_player_id) {}
             SwitchPlayer(Serializer* ser)
                 : GameCommand(SWITCHPLAYER), new_player_id(ser->PopUnsignedChar()) {}
@@ -552,10 +552,10 @@ namespace gc
                 ser->PushUnsignedChar(new_player_id);
             }
 
-            const unsigned int GetNewPlayerId() const { return new_player_id; }
+            const uint32_t GetNewPlayerId() const { return new_player_id; }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Goldzufuhr in einem Gebäude stoppen/erlauben
@@ -569,7 +569,7 @@ namespace gc
                 : Coords(STOPGOLD, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Produktivität in einem Gebäude deaktivieren/aktivieren
@@ -583,7 +583,7 @@ namespace gc
                 : Coords(STOPPRODUCTION, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Produktivität in einem Gebäude deaktivieren/aktivieren
@@ -597,17 +597,17 @@ namespace gc
                 : Coords(NOTIFYALLIESOFLOCATION, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Einlagerungseinstellungen von einem Lagerhaus verändern
     class ChangeInventorySetting : public Coords
     {
             /// Kategorie (Waren, Menschen), Status (Einlagern/Auslagern), type (welche Ware, welcher Mensch)
-            const unsigned char category, state, type;
+            const uint8_t category, state, type;
         public:
-            ChangeInventorySetting(const MapPoint pt, const unsigned char category,
-                                   const unsigned char state, const unsigned char type)
+            ChangeInventorySetting(const MapPoint pt, const uint8_t category,
+                                   const uint8_t state, const uint8_t type)
                 : Coords(CHANGEINVENTORYSETTING, pt), category(category), state(state), type(type) {}
             ChangeInventorySetting(Serializer* ser)
                 : Coords(CHANGEINVENTORYSETTING, ser),
@@ -626,7 +626,7 @@ namespace gc
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Alle Einlagerungseinstellungen (für alle Menschen oder Waren) von einem Lagerhaus verändern
@@ -634,10 +634,10 @@ namespace gc
     {
             friend class GameClient;
             /// Kategorie (Waren, Menschen), Status (Einlagern/Auslagern), type (welche Ware, welcher Mensch)
-            const unsigned char category, state;
+            const uint8_t category, state;
         public:
-            ChangeAllInventorySettings(const MapPoint pt, const unsigned char category,
-                                       const unsigned char state)
+            ChangeAllInventorySettings(const MapPoint pt, const uint8_t category,
+                                       const uint8_t state)
                 : Coords(CHANGEALLINVENTORYSETTINGS, pt), category(category), state(state) {}
             ChangeAllInventorySettings(Serializer* ser)
                 : Coords(CHANGEALLINVENTORYSETTINGS, ser),
@@ -654,7 +654,7 @@ namespace gc
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Verändert die Reserve im HQ auf einen bestimmten Wert
@@ -662,11 +662,11 @@ namespace gc
     {
             friend class GameClient;
             /// Rang des Soldaten, der verändert werden soll
-            const unsigned char rank;
+            const uint8_t rank;
             /// Anzahl der Reserve für diesen Rang
-            const unsigned char count;
+            const uint8_t count;
         public:
-            ChangeReserve(const MapPoint pt, const unsigned char rank, const unsigned char count)
+            ChangeReserve(const MapPoint pt, const uint8_t rank, const uint8_t count)
                 : Coords(CHANGERESERVE, pt), rank(rank), count(count) {}
             ChangeReserve(Serializer* ser)
                 : Coords(CHANGERESERVE, ser),
@@ -683,7 +683,7 @@ namespace gc
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Alle Fahnen zerstören
@@ -700,7 +700,7 @@ namespace gc
             {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Aufgeben
@@ -717,7 +717,7 @@ namespace gc
             {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Alle eigenen Fahnen zerstören
@@ -734,22 +734,22 @@ namespace gc
             {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Unterbreitet anderen Spielern einen Bündnisvertrag
     class SuggestPact : public GameCommand
     {
             /// Spieler, dem das Angebot unterbreitet werden soll
-            const unsigned char player;
+            const uint8_t player;
             /// Art des Vertrages
             const PactType pt;
             /// Dauer des Vertrages
-            const unsigned duration;
+            const uint32_t duration;
 
         public:
 
-            SuggestPact(const unsigned char player, const PactType pt, const unsigned duration) : GameCommand(SUGGESTPACT),
+            SuggestPact(const uint8_t player, const PactType pt, const uint32_t duration) : GameCommand(SUGGESTPACT),
                 player(player), pt(pt), duration(duration) {}
             SuggestPact(Serializer* ser) : GameCommand(SUGGESTPACT),
                 player(ser->PopUnsignedChar()), pt(PactType(ser->PopUnsignedChar())), duration(ser->PopUnsignedInt()) {}
@@ -758,12 +758,12 @@ namespace gc
             virtual void Serialize(Serializer* ser) const
             {
                 ser->PushUnsignedChar(player);
-                ser->PushUnsignedChar(static_cast<unsigned char>(pt));
+                ser->PushUnsignedChar(static_cast<uint8_t>(pt));
                 ser->PushUnsignedInt(duration);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 
@@ -773,15 +773,15 @@ namespace gc
             /// Vertrag angenommen oder abgelehnt?
             bool accepted;
             /// ID des Vertrages
-            const unsigned id;
+            const uint32_t id;
             /// Art des Vertrages
             const PactType pt;
             /// Spieler, der das Angebot unterbreitet hat
-            const unsigned char player;
+            const uint8_t player;
 
         public:
 
-            AcceptPact(const bool accepted, const unsigned id, const PactType pt, const unsigned char player) : GameCommand(ACCEPTPACT),
+            AcceptPact(const bool accepted, const uint32_t id, const PactType pt, const uint8_t player) : GameCommand(ACCEPTPACT),
                 accepted(accepted), id(id), pt(pt), player(player) {}
             AcceptPact(Serializer* ser) : GameCommand(ACCEPTPACT),
                 accepted(ser->PopBool()), id(ser->PopUnsignedInt()), pt(PactType(ser->PopUnsignedChar())), player(ser->PopUnsignedChar()) {}
@@ -791,12 +791,12 @@ namespace gc
             {
                 ser->PushBool(accepted);
                 ser->PushUnsignedInt(id);
-                ser->PushUnsignedChar(static_cast<unsigned char>(pt));
+                ser->PushUnsignedChar(static_cast<uint8_t>(pt));
                 ser->PushUnsignedChar(player);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 
@@ -806,11 +806,11 @@ namespace gc
             /// Vertragsart
             const PactType pt;
             /// Anderen Spieler, den dies noch betrifft
-            const unsigned char player;
+            const uint8_t player;
 
         public:
 
-            CancelPact(const PactType pt, const unsigned char player) : GameCommand(CANCELPACT),
+            CancelPact(const PactType pt, const uint8_t player) : GameCommand(CANCELPACT),
                 pt(pt), player(player) {}
             CancelPact(Serializer* ser) : GameCommand(CANCELPACT),
                 pt(PactType(ser->PopUnsignedChar())), player(ser->PopUnsignedChar()) {}
@@ -818,12 +818,12 @@ namespace gc
 
             virtual void Serialize(Serializer* ser) const
             {
-                ser->PushUnsignedChar(static_cast<unsigned char>(pt));
+                ser->PushUnsignedChar(static_cast<uint8_t>(pt));
                 ser->PushUnsignedChar(player);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Zwischen Boote und Schiffen beim Schiffsbauer hin- und herschalten
@@ -836,7 +836,7 @@ namespace gc
                 : Coords(CHANGESHIPYARDMODE, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Expedition starten
@@ -850,7 +850,7 @@ namespace gc
                 : Coords(STARTEXPEDITION, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Expedition starten
@@ -864,7 +864,7 @@ namespace gc
                 : Coords(STARTEXPLORATIONEXPEDITION, ser) {}
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 /// Wartendes Schiff einer Expedition Befehle geben
@@ -885,7 +885,7 @@ namespace gc
                 NORTHWEST
             };
 
-            ExpeditionCommand(const Action action, const unsigned ship_id)
+            ExpeditionCommand(const Action action, const uint32_t ship_id)
                 : GameCommand(EXPEDITION_COMMAND), action(action), ship_id(ship_id) {}
 
             ExpeditionCommand(Serializer* ser)
@@ -895,18 +895,18 @@ namespace gc
 
             virtual void Serialize(Serializer* ser) const
             {
-                ser->PushUnsignedChar(static_cast<unsigned char>(action));
+                ser->PushUnsignedChar(static_cast<uint8_t>(action));
                 ser->PushUnsignedInt(ship_id);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
 
         private:
             /// Die Aktion, die ausgeführt werden soll
             Action action;
             /// Schiff, welches dieses Command betrifft
-            unsigned ship_id;
+            uint32_t ship_id;
     };
 
 
@@ -919,10 +919,10 @@ namespace gc
             GoodType gt;
             Job job;
             /// Number of wares/figures we want to trade
-            unsigned count;
+            uint32_t count;
 
         public:
-            TradeOverLand(const MapPoint pt, const bool ware_figure, const GoodType gt, const Job job, const unsigned count)
+            TradeOverLand(const MapPoint pt, const bool ware_figure, const GoodType gt, const Job job, const uint32_t count)
                 : Coords(TRADEOVERLAND, pt), ware_figure(ware_figure), gt(gt), job(job), count(count) {}
             TradeOverLand(Serializer* ser)
                 : Coords(TRADEOVERLAND, ser),
@@ -937,13 +937,13 @@ namespace gc
                 Coords::Serialize(ser);
 
                 ser->PushBool(ware_figure);
-                if(!ware_figure) ser->PushUnsignedChar(static_cast<unsigned char>(gt));
-                else ser->PushUnsignedChar(static_cast<unsigned char>(job));
+                if(!ware_figure) ser->PushUnsignedChar(static_cast<uint8_t>(gt));
+                else ser->PushUnsignedChar(static_cast<uint8_t>(job));
                 ser->PushUnsignedInt(count);
             }
 
             /// Führt das GameCommand aus
-            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const unsigned char playerid);
+            void Execute(GameWorldGame& gwg, GameClientPlayer& player, const uint8_t playerid);
     };
 
 

@@ -31,12 +31,12 @@ class Messenger
         struct Msg
         {
             std::string author;
-            unsigned color_author;
+            uint32_t color_author;
             ChatDestination cd;
             std::string msg;
-            unsigned color_msg;
-            unsigned starttime;
-            unsigned short width;
+            uint32_t color_msg;
+            uint32_t starttime;
+            uint16_t width;
         };
 
         std::list<Msg> messages;
@@ -45,7 +45,7 @@ class Messenger
         ~Messenger();
 
         void Draw();
-        void AddMessage(const std::string& author, const unsigned color_author, const ChatDestination cd, const std::string& msg, const unsigned color_msg = COLOR_YELLOW);
+        void AddMessage(const std::string& author, const uint32_t color_author, const ChatDestination cd, const std::string& msg, const uint32_t color_msg = COLOR_YELLOW);
 };
 
 #endif // !MESSENGER_H_INCLUDED

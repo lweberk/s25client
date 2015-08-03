@@ -28,13 +28,13 @@ class nofScout_Free : public nofFlagWorker
         /// Nächster Punkt, wo der Späher hingehen soll
         MapPoint nextPos;
         /// Weg, weit weit er noch laufen soll
-        unsigned rest_way;
+        uint32_t rest_way;
 
     private:
 
         void GoalReached();
         void Walked();
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
         /// Erkundet (quasi ein Umherirren)
         void Scout();
@@ -43,12 +43,12 @@ class nofScout_Free : public nofFlagWorker
         void GoToNewNode();
 
         /// Gibt den Sichtradius dieser Figur zurück (0, falls nicht-spähend)
-        virtual unsigned GetVisualRange() const;
+        virtual uint32_t GetVisualRange() const;
 
     public:
 
-        nofScout_Free(const MapPoint pt, const unsigned char player, noRoadNode* goal);
-        nofScout_Free(SerializedGameData* sgd, const unsigned obj_id);
+        nofScout_Free(const MapPoint pt, const uint8_t player, noRoadNode* goal);
+        nofScout_Free(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Serialisierungsfunktionen
     protected:  void Serialize_nofScout_Free(SerializedGameData* sgd) const;
@@ -56,7 +56,7 @@ class nofScout_Free : public nofFlagWorker
 
         GO_Type GetGOT() const { return GOT_NOF_SCOUT_FREE; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Wird aufgerufen, wenn die Flagge abgerissen wurde
         void LostWork();

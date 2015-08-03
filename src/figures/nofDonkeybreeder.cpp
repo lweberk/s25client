@@ -45,7 +45,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author FloSoft
  */
-nofDonkeybreeder::nofDonkeybreeder(const MapPoint pos, unsigned char player, nobUsual* workplace)
+nofDonkeybreeder::nofDonkeybreeder(const MapPoint pos, uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_DONKEYBREEDER, pos, player, workplace)
 {
 }
@@ -56,7 +56,7 @@ nofDonkeybreeder::nofDonkeybreeder(const MapPoint pos, unsigned char player, nob
  *
  *  @author FloSoft
  */
-nofDonkeybreeder::nofDonkeybreeder(SerializedGameData* sgd, unsigned int obj_id)
+nofDonkeybreeder::nofDonkeybreeder(SerializedGameData* sgd, uint32_t obj_id)
     : nofWorkman(sgd, obj_id)
 {
 }
@@ -67,15 +67,15 @@ nofDonkeybreeder::nofDonkeybreeder(SerializedGameData* sgd, unsigned int obj_id)
  *
  *  @author FloSoft
  */
-void nofDonkeybreeder::DrawWorking(int x, int y)
+void nofDonkeybreeder::DrawWorking(int32_t x, int32_t y)
 {
     /// @todo KA was da gemacht werden muss
     const Nation nation = workplace->GetNation();
-    const signed char walk_start[NAT_COUNT][2] = { {2, 2}, { -6, -6}, { -7, -7}, { -7, -7}, { -6, -6} };
-    const signed char walk_length[NAT_COUNT] = { 22, 19, 19, 23, 19 };
-    const unsigned int color = COLORS[gwg->GetPlayer(player)->color];
+    const int8_t walk_start[NAT_COUNT][2] = { {2, 2}, { -6, -6}, { -7, -7}, { -7, -7}, { -6, -6} };
+    const int8_t walk_length[NAT_COUNT] = { 22, 19, 19, 23, 19 };
+    const uint32_t color = COLORS[gwg->GetPlayer(player)->color];
 
-    unsigned now_id = GAMECLIENT.Interpolate(9600, current_ev);
+    uint32_t now_id = GAMECLIENT.Interpolate(9600, current_ev);
 
     if(now_id < 400)
     {

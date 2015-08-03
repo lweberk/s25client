@@ -119,7 +119,7 @@ void GameWorld::Scan(glArchivItem_Map* map)
             node.altitude = map->GetMapDataAt(MAP_ALTITUDE, pt.x, pt.y);
             // Aufpassen, dass die Terrainindizes im Rahmen liegen, ansonsten 0 nehmen, unbekanntes Terrain (Bsp.
             // Karte "Drachenebene")
-            unsigned char t1 = map->GetMapDataAt(MAP_TERRAIN1, pt.x, pt.y), t2 = map->GetMapDataAt(MAP_TERRAIN2, pt.x, pt.y);
+            uint8_t t1 = map->GetMapDataAt(MAP_TERRAIN1, pt.x, pt.y), t2 = map->GetMapDataAt(MAP_TERRAIN2, pt.x, pt.y);
 
             // Hafenplatz?
             if(t1 >= 0x40 && t1 <= 0x54)
@@ -158,12 +158,12 @@ void GameWorld::Scan(glArchivItem_Map* map)
 
             node.reserved = false;
             node.owner = 0;
-            for(unsigned i = 0; i < 4; ++i)
+            for(uint32_t i = 0; i < 4; ++i)
                 node.boundary_stones[i] = 0;
             node.sea_id = 0;
 
             // FOW-Zeug initialisieren
-            for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+            for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
             {
                 switch(GAMECLIENT.GetGGS().exploration)
                 {
@@ -190,7 +190,7 @@ void GameWorld::Scan(glArchivItem_Map* map)
                 node.fow[i].roads[0] = node.fow[i].roads[1] =
                                            node.fow[i].roads[2] = 0;
                 node.fow[i].owner = 0;
-                for(unsigned z = 0; z < 4; ++z)
+                for(uint32_t z = 0; z < 4; ++z)
                     node.fow[i].boundary_stones[z] = 0;
             }
         }
@@ -203,8 +203,8 @@ void GameWorld::Scan(glArchivItem_Map* map)
     {
         for(pt.x = 0; pt.x < width; ++pt.x)
         {
-            unsigned int pos = GetIdx(pt);
-            unsigned char lc = map->GetMapDataAt(MAP_LANDSCAPE, pt.x, pt.y);
+            uint32_t pos = GetIdx(pt);
+            uint8_t lc = map->GetMapDataAt(MAP_LANDSCAPE, pt.x, pt.y);
 
             switch(map->GetMapDataAt(MAP_TYPE, pt.x, pt.y))
             {
@@ -398,14 +398,14 @@ void GameWorld::Scan(glArchivItem_Map* map)
         ptrdiff_t (*p_myrandom)(ptrdiff_t) = myRandom;
         std::random_shuffle(headquarter_positions.begin(), headquarter_positions.end(), p_myrandom);
 
-        for (unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+        for (uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
         {
             GetPlayer(i)->hqPos = headquarter_positions.at(i);
         }
     }
 
     // HQ setzen
-    for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         // Existiert überhaupt ein HQ?
         if(GetPlayer(i)->hqPos.x != 0xFFFF)
@@ -426,7 +426,7 @@ void GameWorld::Scan(glArchivItem_Map* map)
     {
         for(pt.x = 0; pt.x < width; ++pt.x)
         {
-            unsigned pos = GetIdx(pt);
+            uint32_t pos = GetIdx(pt);
             // Tiere setzen
             Species species;
             switch(map->GetMapDataAt(MAP_ANIMALS, pt.x, pt.y))
@@ -466,7 +466,7 @@ void GameWorld::Scan(glArchivItem_Map* map)
                 // Aber trotzdem Teil eines noch nicht vermessenen Meeres?
                 if(IsSeaPoint(pt))
                 {
-                    unsigned sea_size = MeasureSea(pt, seas.size());
+                    uint32_t sea_size = MeasureSea(pt, seas.size());
                     seas.push_back(Sea(sea_size));
                 }
             }
@@ -474,9 +474,9 @@ void GameWorld::Scan(glArchivItem_Map* map)
     }
 
     /// Die Meere herausfinden, an die die Hafenpunkte grenzen
-    for(unsigned i = 0; i < harbor_pos.size(); ++i)
+    for(uint32_t i = 0; i < harbor_pos.size(); ++i)
     {
-        for(unsigned z = 0; z < 6; ++z)
+        for(uint32_t z = 0; z < 6; ++z)
             harbor_pos[i].cps[z].sea_id = IsCoastalPoint(GetNeighbour(harbor_pos[i].pos, z));
     }
 
@@ -501,7 +501,7 @@ void GameWorld::Scan(glArchivItem_Map* map)
             for(pt.x = 0; pt.x < width; ++pt.x)
             {
                 // Alle Spieler durchgehen
-                for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+                for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
                 {
                     // An der Stelle FOW für diesen Spieler?
                     if(GetNode(pt).fow[i].visibility == VIS_FOW)
@@ -518,7 +518,7 @@ void GameWorld::Serialize(SerializedGameData* sgd) const
     // Headinformationen
     sgd->PushUnsignedShort(width);
     sgd->PushUnsignedShort(height);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(lt));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(lt));
 
     // Obj-ID-Counter reinschreiben
     sgd->PushUnsignedInt(GameObject::GetObjIDCounter());
@@ -527,16 +527,16 @@ void GameWorld::Serialize(SerializedGameData* sgd) const
     // Only if trade is enabled
     if(GAMECLIENT.GetGGS().isEnabled(ADDON_TRADE))
     {
-        sgd->PushUnsignedChar(static_cast<unsigned char>(tgs.size()));
-        for(unsigned i = 0; i < tgs.size(); ++i)
+        sgd->PushUnsignedChar(static_cast<uint8_t>(tgs.size()));
+        for(uint32_t i = 0; i < tgs.size(); ++i)
             tgs[i]->Serialize(sgd);
     }
 
 
     // Alle Weltpunkte serialisieren
-    for(unsigned i = 0; i < map_size; ++i)
+    for(uint32_t i = 0; i < map_size; ++i)
     {
-        for(unsigned z = 0; z < 3; ++z)
+        for(uint32_t z = 0; z < 3; ++z)
         {
             if(nodes[i].roads_real[z])
                 sgd->PushUnsignedChar(nodes[i].roads[z]);
@@ -551,21 +551,21 @@ void GameWorld::Serialize(SerializedGameData* sgd) const
         sgd->PushUnsignedChar(nodes[i].resources);
         sgd->PushBool(nodes[i].reserved);
         sgd->PushUnsignedChar(nodes[i].owner);
-        for(unsigned b = 0; b < 4; ++b)
+        for(uint32_t b = 0; b < 4; ++b)
             sgd->PushUnsignedChar(nodes[i].boundary_stones[b]);
-        sgd->PushUnsignedChar(static_cast<unsigned char>(nodes[i].bq));
-        for(unsigned z = 0; z < GAMECLIENT.GetPlayerCount(); ++z)
+        sgd->PushUnsignedChar(static_cast<uint8_t>(nodes[i].bq));
+        for(uint32_t z = 0; z < GAMECLIENT.GetPlayerCount(); ++z)
         {
-            sgd->PushUnsignedChar(static_cast<unsigned char>(nodes[i].fow[z].visibility));
+            sgd->PushUnsignedChar(static_cast<uint8_t>(nodes[i].fow[z].visibility));
             // Nur im FoW können FOW-Objekte stehen
             if(nodes[i].fow[z].visibility == VIS_FOW)
             {
                 sgd->PushUnsignedInt(nodes[i].fow[z].last_update_time);
                 sgd->PushFOWObject(nodes[i].fow[z].object);
-                for(unsigned r = 0; r < 3; ++r)
+                for(uint32_t r = 0; r < 3; ++r)
                     sgd->PushUnsignedChar(nodes[i].fow[z].roads[r]);
                 sgd->PushUnsignedChar(nodes[i].fow[z].owner);
-                for(unsigned b = 0; b < 4; ++b)
+                for(uint32_t b = 0; b < 4; ++b)
                     sgd->PushUnsignedChar(nodes[i].fow[z].boundary_stones[b]);
             }
         }
@@ -579,22 +579,22 @@ void GameWorld::Serialize(SerializedGameData* sgd) const
     sgd->PushObjectList<CatapultStone>(catapult_stones, true);
     // Meeresinformationen serialisieren
     sgd->PushUnsignedInt(seas.size());
-    for(unsigned i = 0; i < seas.size(); ++i)
+    for(uint32_t i = 0; i < seas.size(); ++i)
     {
         sgd->PushUnsignedInt(seas[i].nodes_count);
     }
     // Hafenpositionen serialisieren
     sgd->PushUnsignedInt(harbor_pos.size());
-    for(unsigned i = 0; i < harbor_pos.size(); ++i)
+    for(uint32_t i = 0; i < harbor_pos.size(); ++i)
     {
         sgd->PushMapPoint(harbor_pos[i].pos);
-        for(unsigned z = 0; z < 6; ++z)
+        for(uint32_t z = 0; z < 6; ++z)
             sgd->PushUnsignedShort(harbor_pos[i].cps[z].sea_id);
-        for(unsigned z = 0; z < 6; ++z)
+        for(uint32_t z = 0; z < 6; ++z)
         {
             sgd->PushUnsignedInt(harbor_pos[i].neighbors[z].size());
 
-            for(unsigned c = 0; c < harbor_pos[i].neighbors[z].size(); ++c)
+            for(uint32_t c = 0; c < harbor_pos[i].neighbors[z].size(); ++c)
             {
                 sgd->PushUnsignedInt(harbor_pos[i].neighbors[z][c].id);
                 sgd->PushUnsignedInt(harbor_pos[i].neighbors[z][c].distance);
@@ -623,14 +623,14 @@ void GameWorld::Deserialize(SerializedGameData* sgd)
     if(GAMECLIENT.GetGGS().isEnabled(ADDON_TRADE))
     {
         tgs.resize(sgd->PopUnsignedChar());
-        for(unsigned i = 0; i < tgs.size(); ++i)
+        for(uint32_t i = 0; i < tgs.size(); ++i)
             tgs[i] = new TradeGraph(sgd, this);
     }
 
     // Alle Weltpunkte serialisieren
-    for(unsigned i = 0; i < map_size; ++i)
+    for(uint32_t i = 0; i < map_size; ++i)
     {
-        for(unsigned z = 0; z < 3; ++z)
+        for(uint32_t z = 0; z < 3; ++z)
         {
             nodes[i].roads[z] = sgd->PopUnsignedChar();
             nodes[i].roads_real[z] = nodes[i].roads[z] ? true : false;
@@ -644,10 +644,10 @@ void GameWorld::Deserialize(SerializedGameData* sgd)
         nodes[i].resources = sgd->PopUnsignedChar();
         nodes[i].reserved = sgd->PopBool();
         nodes[i].owner = sgd->PopUnsignedChar();
-        for(unsigned b = 0; b < 4; ++b)
+        for(uint32_t b = 0; b < 4; ++b)
             nodes[i].boundary_stones[b] = sgd->PopUnsignedChar();
         nodes[i].bq = BuildingQuality(sgd->PopUnsignedChar());
-        for(unsigned z = 0; z < GAMECLIENT.GetPlayerCount(); ++z)
+        for(uint32_t z = 0; z < GAMECLIENT.GetPlayerCount(); ++z)
         {
             nodes[i].fow[z].visibility = Visibility(sgd->PopUnsignedChar());
             // Nur im FoW können FOW-Objekte stehen
@@ -655,20 +655,20 @@ void GameWorld::Deserialize(SerializedGameData* sgd)
             {
                 nodes[i].fow[z].last_update_time = sgd->PopUnsignedInt();
                 nodes[i].fow[z].object = sgd->PopFOWObject();
-                for(unsigned r = 0; r < 3; ++r)
+                for(uint32_t r = 0; r < 3; ++r)
                     nodes[i].fow[z].roads[r] = sgd->PopUnsignedChar();
                 nodes[i].fow[z].owner = sgd->PopUnsignedChar();
-                for(unsigned b = 0; b < 4; ++b)
+                for(uint32_t b = 0; b < 4; ++b)
                     nodes[i].fow[z].boundary_stones[b] = sgd->PopUnsignedChar();
             }
             else
             {
                 nodes[i].fow[z].last_update_time = 0;
                 nodes[i].fow[z].object = NULL;
-                for(unsigned r = 0; r < 3; ++r)
+                for(uint32_t r = 0; r < 3; ++r)
                     nodes[i].fow[z].roads[r] = 0;
                 nodes[i].fow[z].owner = 0;
-                for(unsigned b = 0; b < 4; ++b)
+                for(uint32_t b = 0; b < 4; ++b)
                     nodes[i].fow[z].boundary_stones[b] = 0;
             }
         }
@@ -689,22 +689,22 @@ void GameWorld::Deserialize(SerializedGameData* sgd)
 
     // Meeresinformationen deserialisieren
     seas.resize(sgd->PopUnsignedInt());
-    for(unsigned i = 0; i < seas.size(); ++i)
+    for(uint32_t i = 0; i < seas.size(); ++i)
     {
         seas[i].nodes_count = sgd->PopUnsignedInt();
     }
 
     // Hafenpositionen serialisieren
     harbor_pos.resize(sgd->PopUnsignedInt());
-    for(unsigned i = 0; i < harbor_pos.size(); ++i)
+    for(uint32_t i = 0; i < harbor_pos.size(); ++i)
     {
         harbor_pos[i].pos = sgd->PopMapPoint();
-        for(unsigned z = 0; z < 6; ++z)
+        for(uint32_t z = 0; z < 6; ++z)
             harbor_pos[i].cps[z].sea_id = sgd->PopUnsignedShort();
-        for(unsigned z = 0; z < 6; ++z)
+        for(uint32_t z = 0; z < 6; ++z)
         {
             harbor_pos[i].neighbors[z].resize(sgd->PopUnsignedInt());
-            for(unsigned c = 0; c < harbor_pos[i].neighbors[z].size(); ++c)
+            for(uint32_t c = 0; c < harbor_pos[i].neighbors[z].size(); ++c)
             {
                 harbor_pos[i].neighbors[z][c].id = sgd->PopUnsignedInt();
                 harbor_pos[i].neighbors[z][c].distance = sgd->PopUnsignedInt();
@@ -715,9 +715,9 @@ void GameWorld::Deserialize(SerializedGameData* sgd)
     sgd->PopObjectList<noBuildingSite>(harbor_building_sites_from_sea, GOT_BUILDINGSITE);
 
     // BQ neu berechnen
-    for(unsigned y = 0; y < height; ++y)
+    for(uint32_t y = 0; y < height; ++y)
     {
-        for(unsigned x = 0; x < width; ++x)
+        for(uint32_t x = 0; x < width; ++x)
         {
             SetBQ(MapPoint(x, y), GAMECLIENT.GetPlayerID());
         }
@@ -736,16 +736,16 @@ void GameWorld::ImportantObjectDestroyed(const MapPoint pt)
     WINDOWMANAGER.Close(CreateGUIID(pt));
 }
 
-void GameWorld::MilitaryBuildingCaptured(const MapPoint pt, const unsigned char player)
+void GameWorld::MilitaryBuildingCaptured(const MapPoint pt, const uint8_t player)
 {
     if(player == GAMECLIENT.GetPlayerID())
     {
-        /*  int this_x,this_y = y-3*int(height);
+        /*  int32_t this_x,this_y = y-3*int(height);
 
-            for(unsigned sy = 0;sy<6;++sy,this_y+=int(height))
+            for(uint32_t sy = 0;sy<6;++sy,this_y+=int(height))
             {
                 this_x = x-3*int(width);
-                for(unsigned sx = 0;sx<6;++sx,this_x+=int(width))
+                for(uint32_t sx = 0;sx<6;++sx,this_x+=int(width))
                 {
                     if(this_x > GetFirstX() && this_x < GetLastX()
                         && this_y > GetFirstY() && this_y < GetLastY())*/
@@ -758,7 +758,7 @@ void GameWorld::MilitaryBuildingCaptured(const MapPoint pt, const unsigned char 
 
 /// Vermisst ein neues Weltmeer von einem Punkt aus, indem es alle mit diesem Punkt verbundenen
 /// Wasserpunkte mit der gleichen ID belegt und die Anzahl zurückgibt
-unsigned GameWorld::MeasureSea(const MapPoint pt, const unsigned short sea_id)
+uint32_t GameWorld::MeasureSea(const MapPoint pt, const uint16_t sea_id)
 {
     // Breitensuche von diesem Punkt aus durchführen
     std::vector<bool> visited(width * height, false);
@@ -768,7 +768,7 @@ unsigned GameWorld::MeasureSea(const MapPoint pt, const unsigned short sea_id)
     todo.push(start);
 
     // Knoten zählen (Startknoten schon mit inbegriffen)
-    unsigned count = 0;
+    uint32_t count = 0;
 
     while(!todo.empty())
     {
@@ -780,7 +780,7 @@ unsigned GameWorld::MeasureSea(const MapPoint pt, const unsigned short sea_id)
 
         GetNode(p).sea_id = sea_id;
 
-        for(unsigned i = 0; i < 6; ++i)
+        for(uint32_t i = 0; i < 6; ++i)
         {
             MapPoint pa = GetNeighbour(p, i);
 
@@ -804,11 +804,11 @@ unsigned GameWorld::MeasureSea(const MapPoint pt, const unsigned short sea_id)
 
 //void GameWorld::RecalcAllVisibilities()
 //{
-//  for(unsigned y = 0;y<height;++y)
+//  for(uint32_t y = 0;y<height;++y)
 //  {
-//      for(unsigned x = 0;x<width;++x)
+//      for(uint32_t x = 0;x<width;++x)
 //      {
-//          for(unsigned i = 0;i<GAMECLIENT.GetPlayerCount();++i)
+//          for(uint32_t i = 0;i<GAMECLIENT.GetPlayerCount();++i)
 //              RecalcVisibility(x,y,i,false);
 //      }
 //  }

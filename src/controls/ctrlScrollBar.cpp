@@ -40,14 +40,14 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlScrollBar::ctrlScrollBar(Window* parent,
-                             unsigned int id,
-                             unsigned short x,
-                             unsigned short y,
-                             unsigned short width,
-                             unsigned short height,
-                             unsigned short button_height,
+                             uint32_t id,
+                             uint16_t x,
+                             uint16_t y,
+                             uint16_t width,
+                             uint16_t height,
+                             uint16_t button_height,
                              TextureColor tc,
-                             unsigned short pagesize)
+                             uint16_t pagesize)
     : Window(x, y, id, parent, width, height),
       button_height(button_height), tc(tc), pagesize(pagesize),
       move(false), scroll_range(0), scroll_pos(0), scroll_height(0), scrollbar_height(0), scrollbar_pos(0), last_y(0)
@@ -101,7 +101,7 @@ bool ctrlScrollBar::Msg_LeftDown(const MouseCoords& mc)
     else
     {
         // Maus auf der Leiste
-        unsigned short diff = scrollbar_height / 2;
+        uint16_t diff = scrollbar_height / 2;
 
         if (Coll(mc.x, mc.y, GetX(), GetY() + button_height, width, scrollbar_pos))
         {
@@ -116,7 +116,7 @@ bool ctrlScrollBar::Msg_LeftDown(const MouseCoords& mc)
         }
         else
         {
-            unsigned short sbb = button_height + scrollbar_pos + scrollbar_height;
+            uint16_t sbb = button_height + scrollbar_pos + scrollbar_height;
 
             if (Coll(mc.x, mc.y, GetX(), GetY() + sbb, width, height - (sbb + button_height)))
             {
@@ -166,7 +166,7 @@ bool ctrlScrollBar::Msg_MouseMove(const MouseCoords& mc)
  *
  *  @author OLiver
  */
-void ctrlScrollBar::Msg_ButtonClick(const unsigned int ctrl_id)
+void ctrlScrollBar::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -197,7 +197,7 @@ void ctrlScrollBar::Msg_ButtonClick(const unsigned int ctrl_id)
  *
  *  @author OLiver
  */
-void ctrlScrollBar::SetPos(unsigned short scroll_pos)
+void ctrlScrollBar::SetPos(uint16_t scroll_pos)
 {
     this->scroll_pos = scroll_pos;
     CalculateScrollBar();
@@ -210,7 +210,7 @@ void ctrlScrollBar::SetPos(unsigned short scroll_pos)
  *
  *  @author OLiver
  */
-void ctrlScrollBar::SetRange(unsigned short scroll_range)
+void ctrlScrollBar::SetRange(uint16_t scroll_range)
 {
     this->scroll_range = scroll_range;
     CalculateScrollBar();
@@ -222,7 +222,7 @@ void ctrlScrollBar::SetRange(unsigned short scroll_range)
  *
  *  @author OLiver
  */
-void ctrlScrollBar::SetPageSize(unsigned short pagesize)
+void ctrlScrollBar::SetPageSize(uint16_t pagesize)
 {
     this->pagesize = pagesize;
     CalculateScrollBar();
@@ -234,7 +234,7 @@ void ctrlScrollBar::SetPageSize(unsigned short pagesize)
  *
  *  @author OLiver
  */
-void ctrlScrollBar::Resize_(unsigned short width, unsigned short height)
+void ctrlScrollBar::Resize_(uint16_t width, uint16_t height)
 {
     ctrlButton* button;
 
@@ -283,7 +283,7 @@ bool ctrlScrollBar::Draw_(void)
  *
  *  @author FloSoft
  */
-void ctrlScrollBar::CalculateScrollBar(unsigned short height)
+void ctrlScrollBar::CalculateScrollBar(uint16_t height)
 {
     // Default parameter
     if(height == 0) height = this->height;

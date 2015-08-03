@@ -58,7 +58,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 // Standardbelegung der Transportreihenfolge festlegen
-const unsigned char STD_TRANSPORT[35] =
+const uint8_t STD_TRANSPORT[35] =
 {
     2, 12, 12, 12, 12, 12, 12, 12, 12, 12, 10, 10, 12, 12, 12, 13, 1, 3, 11, 11, 11, 1, 9, 7, 8, 1, 1, 11, 0, 4, 5, 6, 11, 11, 1
 };
@@ -69,14 +69,14 @@ const unsigned char STD_TRANSPORT[35] =
  *
  *  @author OLiver
  */
-GameClientPlayer::GameClientPlayer(const unsigned playerid):
+GameClientPlayer::GameClientPlayer(const uint32_t playerid):
 		GamePlayerInfo(playerid),
 		hqPos(MapPoint::Invalid()),
 		build_order(31),
 		military_settings(MILITARY_SETTINGS_COUNT),
 		tools_settings(12, 0)
 {
-    for (unsigned i = 0; i < BUILDING_TYPES_COUNT; ++i)
+    for (uint32_t i = 0; i < BUILDING_TYPES_COUNT; ++i)
     {
         building_enabled[i] = true;
     }
@@ -91,9 +91,9 @@ GameClientPlayer::GameClientPlayer(const unsigned playerid):
 
 
     // Waren mit mehreren möglichen Zielen erstmal nullen, kann dann im Fenster eingestellt werden
-    for(unsigned char i = 0; i < WARE_TYPES_COUNT; ++i)
+    for(uint8_t i = 0; i < WARE_TYPES_COUNT; ++i)
     {
-        memset(distribution[i].percent_buildings, 0, 40 * sizeof(unsigned char));
+        memset(distribution[i].percent_buildings, 0, 40 * sizeof(uint8_t));
         distribution[i].selected_goal = 0;
     }
 
@@ -133,7 +133,7 @@ GameClientPlayer::GameClientPlayer(const unsigned playerid):
     GAMECLIENT.visual_settings.order_type = order_type = 0;
 
     // Baureihenfolge füllen (0 ist das HQ!)
-    for(unsigned char i = 1, j = 0; i < 40; ++i)
+    for(uint8_t i = 1, j = 0; i < 40; ++i)
     {
         // Diese Ids sind noch nicht besetzt
         if(i == 3 || (i >= 5 && i <= 8) || i == 15 || i == 27 || i == 30)
@@ -144,7 +144,7 @@ GameClientPlayer::GameClientPlayer(const unsigned playerid):
     }
 
     // Transportreihenfolge festlegen
-    memcpy(transport, STD_TRANSPORT, 35 * sizeof(unsigned char));
+    memcpy(transport, STD_TRANSPORT, 35 * sizeof(uint8_t));
 
     GAMECLIENT.visual_settings.transport_order[0] = STD_TRANSPORT[GD_COINS];
     GAMECLIENT.visual_settings.transport_order[1] = STD_TRANSPORT[GD_SWORD];
@@ -174,16 +174,16 @@ GameClientPlayer::GameClientPlayer(const unsigned playerid):
     GAMECLIENT.visual_settings.tools_settings = tools_settings;
 
     // qx:tools
-    for (unsigned i = 0; i < TOOL_COUNT; ++i)
+    for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         tools_ordered[i] = 0;
-    for (unsigned i = 0; i < TOOL_COUNT; ++i)
+    for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         tools_ordered_delta[i] = 0;
 
     // Standardeinstellungen kopieren
     GAMECLIENT.default_settings = GAMECLIENT.visual_settings;
 
     defenders_pos = 0;
-    for(unsigned i = 0; i < 5; ++i)
+    for(uint32_t i = 0; i < 5; ++i)
         defenders[i] = true;
 
     is_lagging = false;
@@ -206,7 +206,7 @@ GameClientPlayer::GameClientPlayer(const unsigned playerid):
 void GameClientPlayer::Serialize(SerializedGameData* sgd)
 {
     // PlayerStatus speichern, ehemalig
-    sgd->PushUnsignedChar(static_cast<unsigned char>(ps));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(ps));
 
     // Nur richtige Spieler serialisieren
     if(!(ps == PS_OCCUPIED || ps == PS_KI))
@@ -225,7 +225,7 @@ void GameClientPlayer::Serialize(SerializedGameData* sgd)
         sgd->PushObject(it->workplace, false);
     }
 
-    for(unsigned i = 0; i < 30; ++i)
+    for(uint32_t i = 0; i < 30; ++i)
         sgd->PushObjectList(buildings[i], true);
 
     sgd->PushObjectList(building_sites, true);
@@ -238,15 +238,15 @@ void GameClientPlayer::Serialize(SerializedGameData* sgd)
 
     sgd->PushObjectVector(ships, true);
 
-    for(unsigned i = 0; i < 5; ++i)
+    for(uint32_t i = 0; i < 5; ++i)
         sgd->PushBool(defenders[i]);
     sgd->PushUnsignedShort(defenders_pos);
 
     sgd->PushMapPoint(hqPos);
 
-    for(unsigned i = 0; i < WARE_TYPES_COUNT; ++i)
+    for(uint32_t i = 0; i < WARE_TYPES_COUNT; ++i)
     {
-        for (unsigned bldType = 0; bldType < BUILDING_TYPES_COUNT; ++bldType)
+        for (uint32_t bldType = 0; bldType < BUILDING_TYPES_COUNT; ++bldType)
         {
             sgd->PushUnsignedChar(distribution[i].percent_buildings[bldType]);
         }
@@ -254,59 +254,59 @@ void GameClientPlayer::Serialize(SerializedGameData* sgd)
         for(std::list<BuildingType>::iterator it = distribution[i].client_buildings.begin(); it != distribution[i].client_buildings.end(); ++it)
             sgd->PushUnsignedChar(*it);
         sgd->PushUnsignedInt(unsigned(distribution[i].goals.size()));
-        for(unsigned z = 0; z < distribution[i].goals.size(); ++z)
+        for(uint32_t z = 0; z < distribution[i].goals.size(); ++z)
             sgd->PushUnsignedChar(distribution[i].goals[z]);
         sgd->PushUnsignedInt(distribution[i].selected_goal);
     }
 
     sgd->PushUnsignedChar(order_type);
 
-    for(unsigned i = 0; i < 31; ++i)
+    for(uint32_t i = 0; i < 31; ++i)
         sgd->PushUnsignedChar(build_order[i]);
 
     sgd->PushRawData(transport, WARE_TYPES_COUNT);
 
-    for(unsigned i = 0; i < MILITARY_SETTINGS_COUNT; ++i)
+    for(uint32_t i = 0; i < MILITARY_SETTINGS_COUNT; ++i)
         sgd->PushUnsignedChar(military_settings[i]);
 
-    for(unsigned i = 0; i < 12; ++i)
+    for(uint32_t i = 0; i < 12; ++i)
         sgd->PushUnsignedChar(tools_settings[i]);
 
     //qx:tools
-    for (unsigned i = 0; i < TOOL_COUNT; ++i)
+    for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         sgd->PushUnsignedChar(tools_ordered[i]);
 
-    for(unsigned i = 0; i < WARE_TYPES_COUNT; ++i)
+    for(uint32_t i = 0; i < WARE_TYPES_COUNT; ++i)
         sgd->PushUnsignedInt(global_inventory.goods[i]);
-    for(unsigned i = 0; i < JOB_TYPES_COUNT; ++i)
+    for(uint32_t i = 0; i < JOB_TYPES_COUNT; ++i)
         sgd->PushUnsignedInt(global_inventory.people[i]);
 
     // für Statistik
-    for (unsigned i = 0; i < STAT_TIME_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_TIME_COUNT; ++i)
     {
         // normale Statistik
-        for (unsigned j = 0; j < STAT_TYPE_COUNT; ++j)
-            for (unsigned k = 0; k < STAT_STEP_COUNT; ++k)
+        for (uint32_t j = 0; j < STAT_TYPE_COUNT; ++j)
+            for (uint32_t k = 0; k < STAT_STEP_COUNT; ++k)
                 sgd->PushUnsignedInt(statistic[i].data[j][k]);
 
         // Warenstatistik
-        for (unsigned j = 0; j < STAT_MERCHANDISE_TYPE_COUNT; ++j)
-            for (unsigned k = 0; k < STAT_STEP_COUNT; ++k)
+        for (uint32_t j = 0; j < STAT_MERCHANDISE_TYPE_COUNT; ++j)
+            for (uint32_t k = 0; k < STAT_STEP_COUNT; ++k)
                 sgd->PushUnsignedShort(statistic[i].merchandiseData[j][k]);
 
         sgd->PushUnsignedShort(statistic[i].currentIndex);
         sgd->PushUnsignedShort(statistic[i].counter);
     }
-    for (unsigned i = 0; i < STAT_TYPE_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_TYPE_COUNT; ++i)
         sgd->PushUnsignedInt(statisticCurrentData[i]);
 
-    for (unsigned i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
         sgd->PushUnsignedShort(statisticCurrentMerchandiseData[i]);
 
     // Serialize Pacts:
-    for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+    for (uint32_t i = 0; i < MAX_PLAYERS; ++i)
     {
-        for (unsigned u = 0; u < PACTS_COUNT; ++u)
+        for (uint32_t u = 0; u < PACTS_COUNT; ++u)
         {
             pacts[i][u].Serialize(sgd);
         }
@@ -329,8 +329,8 @@ void GameClientPlayer::Deserialize(SerializedGameData* sgd)
     //sgd->PopObjectList(unoccupied_roads,GOT_ROADSEGMENT);
     sgd->PopObjectList(roads, GOT_ROADSEGMENT);
 
-    unsigned list_size = sgd->PopUnsignedInt();
-    for(unsigned i = 0; i < list_size; ++i)
+    uint32_t list_size = sgd->PopUnsignedInt();
+    for(uint32_t i = 0; i < list_size; ++i)
     {
         JobNeeded nj;
         nj.job = Job(sgd->PopUnsignedChar());
@@ -340,7 +340,7 @@ void GameClientPlayer::Deserialize(SerializedGameData* sgd)
 
     }
 
-    for(unsigned i = 0; i < 30; ++i)
+    for(uint32_t i = 0; i < 30; ++i)
         sgd->PopObjectList(buildings[i], GOT_NOB_USUAL);
 
     sgd->PopObjectList(building_sites, GOT_BUILDINGSITE);
@@ -353,35 +353,35 @@ void GameClientPlayer::Deserialize(SerializedGameData* sgd)
 
     sgd->PopObjectVector(ships, GOT_SHIP);
 
-    for(unsigned i = 0; i < 5; ++i)
+    for(uint32_t i = 0; i < 5; ++i)
         defenders[i] = sgd->PopBool();
     defenders_pos = sgd->PopUnsignedShort();
 
     hqPos = sgd->PopMapPoint();
 
-    for(unsigned i = 0; i < WARE_TYPES_COUNT; ++i)
+    for(uint32_t i = 0; i < WARE_TYPES_COUNT; ++i)
     {
-        for (unsigned bldType = 0; bldType < BUILDING_TYPES_COUNT; ++bldType)
+        for (uint32_t bldType = 0; bldType < BUILDING_TYPES_COUNT; ++bldType)
         {
             distribution[i].percent_buildings[bldType] = sgd->PopUnsignedChar();
         }
         list_size = sgd->PopUnsignedInt();
-        for(unsigned z = 0; z < list_size; ++z)
+        for(uint32_t z = 0; z < list_size; ++z)
             distribution[i].client_buildings.push_back(BuildingType(sgd->PopUnsignedChar()));
-        unsigned goal_count = sgd->PopUnsignedInt();
+        uint32_t goal_count = sgd->PopUnsignedInt();
         distribution[i].goals.resize(goal_count);
-        for(unsigned z = 0; z < goal_count; ++z)
+        for(uint32_t z = 0; z < goal_count; ++z)
             distribution[i].goals[z] = sgd->PopUnsignedChar();
         distribution[i].selected_goal = sgd->PopUnsignedInt();
     }
 
     order_type = sgd->PopUnsignedChar();
 
-    for(unsigned i = 0; i < 31; ++i)
+    for(uint32_t i = 0; i < 31; ++i)
         build_order[i] = sgd->PopUnsignedChar();
 
     char str[256] = "";
-    for(unsigned char i = 0; i < 31; ++i)
+    for(uint8_t i = 0; i < 31; ++i)
     {
         char tmp[256];
         sprintf(tmp, "%u ", i);
@@ -392,51 +392,51 @@ void GameClientPlayer::Deserialize(SerializedGameData* sgd)
 
     sgd->PopRawData(transport, WARE_TYPES_COUNT);
 
-    for(unsigned i = 0; i < MILITARY_SETTINGS_COUNT; ++i)
+    for(uint32_t i = 0; i < MILITARY_SETTINGS_COUNT; ++i)
         military_settings[i] = sgd->PopUnsignedChar();
 
-    for(unsigned i = 0; i < 12; ++i)
+    for(uint32_t i = 0; i < 12; ++i)
         tools_settings[i] = sgd->PopUnsignedChar();
 
     // qx:tools
-    for (unsigned i = 0; i < TOOL_COUNT; ++i)
+    for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         tools_ordered[i] = sgd->PopUnsignedChar();
-    for (unsigned i = 0; i < TOOL_COUNT; ++i)
+    for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         tools_ordered_delta[i] = 0;
 
-    for(unsigned i = 0; i < WARE_TYPES_COUNT; ++i)
+    for(uint32_t i = 0; i < WARE_TYPES_COUNT; ++i)
         global_inventory.goods[i] = sgd->PopUnsignedInt();
-    for(unsigned i = 0; i < JOB_TYPES_COUNT; ++i)
+    for(uint32_t i = 0; i < JOB_TYPES_COUNT; ++i)
         global_inventory.people[i] = sgd->PopUnsignedInt();
 
     // Visuelle Einstellungen festlegen
 
     // für Statistik
-    for (unsigned i = 0; i < STAT_TIME_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_TIME_COUNT; ++i)
     {
         // normale Statistik
-        for (unsigned j = 0; j < STAT_TYPE_COUNT; ++j)
-            for (unsigned k = 0; k < STAT_STEP_COUNT; ++k)
+        for (uint32_t j = 0; j < STAT_TYPE_COUNT; ++j)
+            for (uint32_t k = 0; k < STAT_STEP_COUNT; ++k)
                 statistic[i].data[j][k] = sgd->PopUnsignedInt();
 
         // Warenstatistik
-        for (unsigned j = 0; j < STAT_MERCHANDISE_TYPE_COUNT; ++j)
-            for (unsigned k = 0; k < STAT_STEP_COUNT; ++k)
+        for (uint32_t j = 0; j < STAT_MERCHANDISE_TYPE_COUNT; ++j)
+            for (uint32_t k = 0; k < STAT_STEP_COUNT; ++k)
                 statistic[i].merchandiseData[j][k] = sgd->PopUnsignedShort();
 
         statistic[i].currentIndex = sgd->PopUnsignedShort();
         statistic[i].counter = sgd->PopUnsignedShort();
     }
-    for (unsigned i = 0; i < STAT_TYPE_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_TYPE_COUNT; ++i)
         statisticCurrentData[i] = sgd->PopUnsignedInt();
 
-    for (unsigned i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
         statisticCurrentMerchandiseData[i] = sgd->PopUnsignedShort();
 
     // Deserialize Pacts:
-    for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+    for (uint32_t i = 0; i < MAX_PLAYERS; ++i)
     {
-        for (unsigned u = 0; u < PACTS_COUNT; ++u)
+        for (uint32_t u = 0; u < PACTS_COUNT; ++u)
         {
             pacts[i][u] = GameClientPlayer::Pact(sgd);
         }
@@ -454,12 +454,12 @@ void GameClientPlayer::SwapPlayer(GameClientPlayer& two)
 }
 
 nobBaseWarehouse* GameClientPlayer::FindWarehouse(const noRoadNode* const start, bool (*IsWarehouseGood)(nobBaseWarehouse*, const void*),
-        const RoadSegment* const forbidden, const bool to_wh, const void* param, const bool use_boat_roads, unsigned* const length)
+        const RoadSegment* const forbidden, const bool to_wh, const void* param, const bool use_boat_roads, uint32_t* const length)
 {
     nobBaseWarehouse* best = 0;
 
-//  unsigned char path = 0xFF, tpath = 0xFF;
-    unsigned tlength = 0xFFFFFFFF, best_length = 0xFFFFFFFF;
+//  uint8_t path = 0xFF, tpath = 0xFF;
+    uint32_t tlength = 0xFFFFFFFF, best_length = 0xFFFFFFFF;
 
     for(std::list<nobBaseWarehouse*>::iterator w = warehouses.begin(); w != warehouses.end(); ++w)
     {
@@ -539,15 +539,15 @@ void GameClientPlayer::RoadDestroyed()
     {
         if((*it)->LieAtFlag()) // Liegt die Flagge an einer Flagge, muss ihr Weg neu berechnet werden
         {
-			unsigned char last_next_dir = (*it)->GetNextDir();
+			uint8_t last_next_dir = (*it)->GetNextDir();
 			(*it)->RecalcRoute();			
 			//special case: ware was lost some time ago and the new goal is at this flag and not a warehouse,hq,harbor and the "flip-route" picked so a carrier would pick up the ware carry it away from goal then back and drop
 			//it off at the goal was just destroyed? -> try to pick another flip route or tell the goal about failure.
 			if((*it)->goal && (*it)->GetNextDir()==1 && (*it)->GetLocation()->GetX()==(*it)->goal->GetFlag()->GetX() && (*it)->GetLocation()->GetY()==(*it)->goal->GetFlag()->GetY() && (((*it)->goal->GetBuildingType()!=BLD_STOREHOUSE && (*it)->goal->GetBuildingType()!=BLD_HEADQUARTERS && (*it)->goal->GetBuildingType()!=BLD_HARBORBUILDING) || (*it)->goal->GetType()==NOP_BUILDINGSITE))
 			{
 				//LOG.lprintf("road destroyed special at %i,%i gf: %u \n", (*it)->GetLocation()->GetX(),(*it)->GetLocation()->GetY(),GAMECLIENT.GetGFNumber());
-				unsigned gotfliproute=1;
-				for(unsigned i=2;i<7;i++)
+				uint32_t gotfliproute=1;
+				for(uint32_t i=2;i<7;i++)
 				{
 					if((*it)->GetLocation()->routes[i%6])
 					{
@@ -622,13 +622,13 @@ void GameClientPlayer::AddHarbor(nobHarborBuilding* hb)
     harbors.push_back(hb);
 
     // Schiff durchgehen und denen Bescheid sagen
-    for(unsigned i = 0; i < ships.size(); ++i)
+    for(uint32_t i = 0; i < ships.size(); ++i)
         ships[i]->NewHarborBuilt(hb);
 }
 
 bool GameClientPlayer::FindCarrierForRoad(RoadSegment* rs)
 {
-    unsigned length[2];
+    uint32_t length[2];
     nobBaseWarehouse* best[2];
 
     // Braucht der ein Boot?
@@ -682,9 +682,9 @@ void GameClientPlayer::RecalcDistributionOfWare(const GoodType ware)
     // Liste von Gebäudetypen, die die Waren wollen
     std::list<BuildingWhichWantWare> bwww_list;
 
-    unsigned goal_count = 0;
+    uint32_t goal_count = 0;
 
-    for(unsigned char i = 0; i < 40; ++i)
+    for(uint8_t i = 0; i < 40; ++i)
     {
         if(distribution[ware].percent_buildings[i])
         {
@@ -704,12 +704,12 @@ void GameClientPlayer::RecalcDistributionOfWare(const GoodType ware)
 
 //  LOG.lprintf("goal_count[%u] = %u\n", ware, goal_count);
 
-    unsigned pos = 0;
+    uint32_t pos = 0;
 
     // just drop them in the list, the distribution will be handled by going through this list using a prime as step (see GameClientPlayer::FindClientForWare)
     for(std::list<BuildingWhichWantWare>::iterator it = bwww_list.begin(); it != bwww_list.end(); ++it)
     {
-        for (unsigned char i = 0; i < it->count; ++i)
+        for (uint8_t i = 0; i < it->count; ++i)
         {
             distribution[ware].goals[pos++] = it->building;
         }
@@ -726,7 +726,7 @@ void GameClientPlayer::RecalcDistributionOfWare(const GoodType ware)
         distribution[ware].selected_goal = 0;
 
         LOG.lprintf("distribution\n");
-        for (unsigned i = 0; i < distribution[ware].goals.size(); i++)
+        for (uint32_t i = 0; i < distribution[ware].goals.size(); i++)
         {
             distribution[ware].selected_goal = (distribution[ware].selected_goal + 907) % unsigned(distribution[ware].goals.size());
 
@@ -751,7 +751,7 @@ void GameClientPlayer::RecalcDistributionOfWare(const GoodType ware)
     //RandomShuffle(distribution[ware].goals,distribution[ware].goal_count);
 
 
-    //for(unsigned char i = 0;i<distribution[ware].goal_count;++i)
+    //for(uint8_t i = 0;i<distribution[ware].goal_count;++i)
     //  LOG.lprintf("%u ",distribution[ware].goals[i]);
     //LOG.lprintf("\n");
 
@@ -863,7 +863,7 @@ Ware* GameClientPlayer::OrderWare(const GoodType ware, noBaseBuilding* goal)
     }	
     else //no warehouse can deliver the ware -> check all our wares for lost wares that might match the order
 	{
-		unsigned tlength = 0xFFFFFFFF, best_length = 0xFFFFFFFF;
+		uint32_t tlength = 0xFFFFFFFF, best_length = 0xFFFFFFFF;
 		Ware* tempbest=0;
 		for(std::list<Ware*>::iterator it = ware_list.begin(); it != ware_list.end(); ++it)
 		{
@@ -887,7 +887,7 @@ Ware* GameClientPlayer::OrderWare(const GoodType ware, noBaseBuilding* goal)
 
 nofCarrier* GameClientPlayer::OrderDonkey(RoadSegment* road)
 {
-    unsigned length[2];
+    uint32_t length[2];
     nobBaseWarehouse* best[2];
 
     // 1. Flagge des Weges
@@ -909,7 +909,7 @@ nofCarrier* GameClientPlayer::OrderDonkey(RoadSegment* road)
 RoadSegment* GameClientPlayer::FindRoadForDonkey(noRoadNode* start, noRoadNode** goal)
 {
     // Bisher höchste Trägerproduktivität und die entsprechende Straße dazu
-    unsigned best_productivity = 0;
+    uint32_t best_productivity = 0;
     RoadSegment* best_road = 0;
     // Beste Flagge dieser Straße
     *goal = 0;
@@ -922,7 +922,7 @@ RoadSegment* GameClientPlayer::FindRoadForDonkey(noRoadNode* start, noRoadNode**
             // Beste Flagge von diesem Weg, und beste Wegstrecke
             noRoadNode* current_best_goal = 0;
             // Weg zu beiden Flaggen berechnen
-            unsigned length1 = 0, length2 = 0;
+            uint32_t length1 = 0, length2 = 0;
             gwg->FindHumanPathOnRoads(start, (*it)->GetF1(), &length1, NULL, *it);
             gwg->FindHumanPathOnRoads(start, (*it)->GetF2(), &length2, NULL, *it);
 
@@ -942,11 +942,11 @@ RoadSegment* GameClientPlayer::FindRoadForDonkey(noRoadNode* start, noRoadNode**
                 continue;
 
             // Jeweiligen Weg bestimmen
-            unsigned current_best_way = ((*it)->GetF1() == current_best_goal) ? length1 : length2;
+            uint32_t current_best_way = ((*it)->GetF1() == current_best_goal) ? length1 : length2;
 
             // Produktivität ausrechnen, *10 die Produktivität + die Wegstrecke, damit die
             // auch noch mit einberechnet wird
-            unsigned current_productivity = 10 * (*it)->getCarrier(0)->GetProductivity() + current_best_way;
+            uint32_t current_productivity = 10 * (*it)->getCarrier(0)->GetProductivity() + current_best_way;
 
             // Besser als der bisher beste?
             if(current_productivity > best_productivity)
@@ -966,10 +966,10 @@ RoadSegment* GameClientPlayer::FindRoadForDonkey(noRoadNode* start, noRoadNode**
 struct ClientForWare
 {
     noBaseBuilding* bb;
-    unsigned estimate;  // points minus half the optimal distance
-    unsigned points;
+    uint32_t estimate;  // points minus half the optimal distance
+    uint32_t points;
 
-    ClientForWare(noBaseBuilding* bb, unsigned estimate, unsigned points) : bb(bb), estimate(estimate), points(points) {}
+    ClientForWare(noBaseBuilding* bb, uint32_t estimate, uint32_t points) : bb(bb), estimate(estimate), points(points) {}
 
     bool operator<(const ClientForWare b) const
     {
@@ -1003,8 +1003,8 @@ noBaseBuilding* GameClientPlayer::FindClientForWare(Ware* ware)
         return FindClientForCoin(ware);
 
     noBaseBuilding* bb = 0;
-    unsigned best_points = 0;
-    unsigned points;
+    uint32_t best_points = 0;
+    uint32_t points;
 
     // Warentyp herausfinden
     GoodType gt = ware->type;
@@ -1088,7 +1088,7 @@ noBaseBuilding* GameClientPlayer::FindClientForWare(Ware* ware)
     noBaseBuilding* last_bb = NULL;
     for (std::vector<ClientForWare>::iterator it = cfw.begin(); it != cfw.end(); ++it)
     {
-        unsigned path_length;
+        uint32_t path_length;
 
         // If our estimate is worse (or equal) best_points, the real value cannot be better.
         // As our list is sorted, further entries cannot be better either, so stop searching.
@@ -1106,7 +1106,7 @@ noBaseBuilding* GameClientPlayer::FindClientForWare(Ware* ware)
         // to conclude that there is no possible path.
         if (gwg->FindPathForWareOnRoads(start, it->bb, &path_length, NULL, (it->points - best_points) * 2 - 1) != 0xFF)
         {
-            unsigned score = it->points - (path_length / 2);
+            uint32_t score = it->points - (path_length / 2);
 
             // As we have limited our pathfinding to take a maximum of (points - best_points) * 2 - 1 steps,
             // path_length / 2 can at most be points - best_points - 1, so the score will be greater than best_points. :)
@@ -1140,12 +1140,12 @@ noBaseBuilding* GameClientPlayer::FindClientForWare(Ware* ware)
 nobBaseMilitary* GameClientPlayer::FindClientForCoin(Ware* ware)
 {
     nobBaseMilitary* bb = 0;
-    unsigned best_points = 0, points;
+    uint32_t best_points = 0, points;
 
     // Militärgebäude durchgehen
     for(std::list<nobMilitary*>::iterator it = military_buildings.begin(); it != military_buildings.end(); ++it)
     {
-        unsigned way_points;
+        uint32_t way_points;
 
         points = (*it)->CalcCoinsPoints();
         // Wenn 0, will er gar keine Münzen (Goldzufuhr gestoppt)
@@ -1231,7 +1231,7 @@ void GameClientPlayer::GetBuildingCount(BuildingCount& bc) const
     memset(&bc, 0, sizeof(bc));
 
     // Normale Gebäude zählen
-    for(unsigned i = 0; i < 30; ++i)
+    for(uint32_t i = 0; i < 30; ++i)
         bc.building_counts[i + 10] = buildings[i].size();
     // Lagerhäuser zählen
     for(std::list<nobBaseWarehouse*>::const_iterator it = warehouses.begin(); it != warehouses.end(); ++it)
@@ -1247,15 +1247,15 @@ void GameClientPlayer::GetBuildingCount(BuildingCount& bc) const
 
 /// Berechnet die durschnittlichen Produktivität eines jeden Gebäudetyps
 /// (erwartet als Argument ein 40-er Array!)
-void GameClientPlayer::CalcProductivities(std::vector<unsigned short>& productivities)
+void GameClientPlayer::CalcProductivities(std::vector<uint16_t>& productivities)
 {
     assert(productivities.size() == 40);
 
-    for(unsigned i = 0; i < 30; ++i)
+    for(uint32_t i = 0; i < 30; ++i)
     {
         // Durschnittliche Produktivität errrechnen, indem man die Produktivitäten aller Gebäude summiert
         // und den Mittelwert bildet
-        unsigned total_productivity = 0;
+        uint32_t total_productivity = 0;
 
         for(std::list<nobUsual*>::iterator it = buildings[i].begin(); it != buildings[i].end(); ++it)
             total_productivity += *(*it)->GetProduktivityPointer();
@@ -1263,16 +1263,16 @@ void GameClientPlayer::CalcProductivities(std::vector<unsigned short>& productiv
         if(!buildings[i].empty())
             total_productivity /= buildings[i].size();
 
-        productivities[i + 10] = static_cast<unsigned short>(total_productivity);
+        productivities[i + 10] = static_cast<uint16_t>(total_productivity);
     }
 }
 
 /// Berechnet die durschnittlichen Produktivität aller Gebäude
-unsigned short GameClientPlayer::CalcAverageProductivitiy()
+uint16_t GameClientPlayer::CalcAverageProductivitiy()
 {
-    unsigned total_productivity = 0;
-    unsigned total_count = 0;
-    for(unsigned i = 0; i < 30; ++i)
+    uint32_t total_productivity = 0;
+    uint32_t total_count = 0;
+    for(uint32_t i = 0; i < 30; ++i)
     {
         // Durschnittliche Produktivität errrechnen, indem man die Produktivitäten aller Gebäude summiert
         // und den Mittelwert bildet
@@ -1289,14 +1289,14 @@ unsigned short GameClientPlayer::CalcAverageProductivitiy()
 }
 
 
-unsigned GameClientPlayer::GetBuidingSitePriority(const noBuildingSite* building_site)
+uint32_t GameClientPlayer::GetBuidingSitePriority(const noBuildingSite* building_site)
 {
     if(order_type)
     {
         // Spezielle Reihenfolge
 
         // Typ in der Reihenfolge suchen und Position als Priorität zurückgeben
-        for(unsigned i = 0; i < 31; ++i)
+        for(uint32_t i = 0; i < 31; ++i)
         {
             if(building_site->GetBuildingType() == static_cast<BuildingType>(build_order[i]))
             {
@@ -1311,7 +1311,7 @@ unsigned GameClientPlayer::GetBuidingSitePriority(const noBuildingSite* building
     else
     {
         // Reihenfolge der Bauaufträge, also was zuerst in Auftrag gegeben wurde, wird zuerst gebaut
-        unsigned i = 0;
+        uint32_t i = 0;
         for(std::list<noBuildingSite*>::iterator it = building_sites.begin(); it != building_sites.end(); ++it, ++i)
         {
             if(building_site == *it)
@@ -1323,16 +1323,16 @@ unsigned GameClientPlayer::GetBuidingSitePriority(const noBuildingSite* building
     return 0xFFFFFFFF;
 }
 
-void GameClientPlayer::ConvertTransportData(const std::vector<unsigned char>& transport_data)
+void GameClientPlayer::ConvertTransportData(const std::vector<uint8_t>& transport_data)
 {
     // Im Replay visulle Einstellungen auf die wirklichen setzen
     if(GAMECLIENT.IsReplayModeOn())
         GAMECLIENT.visual_settings.transport_order = transport_data;
 
     // Mit Hilfe der Standardbelegung lässt sich das recht einfach konvertieren:
-    for(unsigned i = 0; i < 35; ++i)
+    for(uint32_t i = 0; i < 35; ++i)
     {
-        for(unsigned z = 0; z < 14; ++z)
+        for(uint32_t z = 0; z < 14; ++z)
         {
             if(transport_data[z] == STD_TRANSPORT[i])
             {
@@ -1344,7 +1344,7 @@ void GameClientPlayer::ConvertTransportData(const std::vector<unsigned char>& tr
     }
 }
 
-bool GameClientPlayer::IsAlly(const unsigned char player) const
+bool GameClientPlayer::IsAlly(const uint8_t player) const
 {
     // Der Spieler ist ja auch zu sich selber verbündet ;
     if(playerid == player)
@@ -1355,7 +1355,7 @@ bool GameClientPlayer::IsAlly(const unsigned char player) const
 }
 
 /// Darf der andere Spieler von mir angegriffen werden?
-bool GameClientPlayer::IsPlayerAttackable(const unsigned char player) const
+bool GameClientPlayer::IsPlayerAttackable(const uint8_t player) const
 {
     // Verbündete dürfen nicht angegriffen werden
     if(IsAlly(player))
@@ -1366,17 +1366,17 @@ bool GameClientPlayer::IsPlayerAttackable(const unsigned char player) const
 }
 
 
-void GameClientPlayer::OrderTroops(nobMilitary* goal, unsigned count,bool ignoresettingsendweakfirst)
+void GameClientPlayer::OrderTroops(nobMilitary* goal, uint32_t count,bool ignoresettingsendweakfirst)
 {
     // Solange Lagerhäuser nach Soldaten absuchen, bis entweder keins mehr übrig ist oder alle Soldaten bestellt sind
     nobBaseWarehouse* wh;
     do
     {
-        unsigned param_count = 1;
+        uint32_t param_count = 1;
         wh = FindWarehouse(goal, FW::Condition_Troops, 0, false, &param_count, false);
         if(wh)
         {
-            unsigned order_count = std::min(wh->GetSoldiersCount(), count);
+            uint32_t order_count = std::min(wh->GetSoldiersCount(), count);
             count -= order_count;
             wh->OrderTroops(goal, order_count,ignoresettingsendweakfirst);
         }
@@ -1400,7 +1400,7 @@ void GameClientPlayer::RecalcMilitaryFlags()
 
 /// Sucht für EINEN Soldaten ein neues Militärgebäude, als Argument wird Referenz auf die
 /// entsprechende Soldatenanzahl im Lagerhaus verlangt
-void GameClientPlayer::NewSoldierAvailable(const unsigned& soldier_count)
+void GameClientPlayer::NewSoldierAvailable(const uint32_t& soldier_count)
 {
     // solange laufen lassen, bis soldier_count = 0, d.h. der Soldat irgendwohin geschickt wurde
     // Zuerst nach unbesetzten Militärgebäude schauen
@@ -1469,7 +1469,7 @@ void GameClientPlayer::RefreshDefenderList()
 {
     /// Die Verteidigungsliste muss erneuert werden
     memset(defenders, 0, 5);
-    for(unsigned i = 0; i < 5; ++i)
+    for(uint32_t i = 0; i < 5; ++i)
         defenders[i] = (i < military_settings[2] * 5 / MILITARY_SETTINGS_SCALE[2]);
     // und ordentlich schütteln
     RANDOM.Shuffle(defenders, 5);
@@ -1477,13 +1477,13 @@ void GameClientPlayer::RefreshDefenderList()
     defenders_pos = 0;
 }
 
-void GameClientPlayer::ChangeMilitarySettings(const std::vector<unsigned char>& military_settings)
+void GameClientPlayer::ChangeMilitarySettings(const std::vector<uint8_t>& military_settings)
 {
     // Im Replay visulle Einstellungen auf die wirklichen setzen
     if(GAMECLIENT.IsReplayModeOn())
         GAMECLIENT.visual_settings.military_settings = military_settings;
 
-    for(unsigned i = 0; i < military_settings.size(); ++i)
+    for(uint32_t i = 0; i < military_settings.size(); ++i)
     {
         // Sicherstellen, dass im validen Bereich
         assert(military_settings[i] <= MILITARY_SETTINGS_SCALE[i]);
@@ -1496,7 +1496,7 @@ void GameClientPlayer::ChangeMilitarySettings(const std::vector<unsigned char>& 
 }
 
 /// Setzt neue Werkzeugeinstellungen
-void GameClientPlayer::ChangeToolsSettings(const std::vector<unsigned char>& tools_settings)
+void GameClientPlayer::ChangeToolsSettings(const std::vector<uint8_t>& tools_settings)
 {
     // Im Replay visulle Einstellungen auf die wirklichen setzen
     if(GAMECLIENT.IsReplayModeOn())
@@ -1506,7 +1506,7 @@ void GameClientPlayer::ChangeToolsSettings(const std::vector<unsigned char>& too
 }
 
 /// Setzt neue Verteilungseinstellungen
-void GameClientPlayer::ChangeDistribution(const std::vector<unsigned char>& distribution_settings)
+void GameClientPlayer::ChangeDistribution(const std::vector<uint8_t>& distribution_settings)
 {
     // Im Replay visulle Einstellungen auf die wirklichen setzen
     if(GAMECLIENT.IsReplayModeOn())
@@ -1546,7 +1546,7 @@ void GameClientPlayer::ChangeDistribution(const std::vector<unsigned char>& dist
 }
 
 /// Setzt neue Baureihenfolge-Einstellungen
-void GameClientPlayer::ChangeBuildOrder(const unsigned char order_type, const std::vector<unsigned char>& oder_data)
+void GameClientPlayer::ChangeBuildOrder(const uint8_t order_type, const std::vector<uint8_t>& oder_data)
 {
     // Im Replay visulle Einstellungen auf die wirklichen setzen
     if(GAMECLIENT.IsReplayModeOn())
@@ -1556,7 +1556,7 @@ void GameClientPlayer::ChangeBuildOrder(const unsigned char order_type, const st
     }
 
     this->order_type = order_type;
-    for(unsigned i = 0; i < oder_data.size(); ++i)
+    for(uint32_t i = 0; i < oder_data.size(); ++i)
         this->build_order[i] = oder_data[i];
 }
 
@@ -1585,7 +1585,7 @@ void GameClientPlayer::TestDefeat()
     }
 }
 
-//void GameClientPlayer::GetInventory(unsigned int *wares, unsigned int *figures)
+//void GameClientPlayer::GetInventory(uint32_t *wares, uint32_t *figures)
 //{
 //  // todo: waren in richtige reihenfolge bringen...
 //  static GoodType ware_map[31] = {
@@ -1635,12 +1635,12 @@ void GameClientPlayer::Surrender()
     gwg->GetGameInterface()->GI_PlayerDefeated(playerid);
 }
 
-void GameClientPlayer::SetStatisticValue(StatisticType type, unsigned int value)
+void GameClientPlayer::SetStatisticValue(StatisticType type, uint32_t value)
 {
     statisticCurrentData[type] = value;
 }
 
-void GameClientPlayer::ChangeStatisticValue(StatisticType type, int change)
+void GameClientPlayer::ChangeStatisticValue(StatisticType type, int32_t change)
 {
     assert (statisticCurrentData[type] + change >= 0);
     statisticCurrentData[type] += change;
@@ -1679,12 +1679,12 @@ void GameClientPlayer::CalcStatistics()
 {
     // Waren aus der Inventur zählen
     statisticCurrentData[STAT_MERCHANDISE] = 0;
-    for (unsigned int i = 0; i < WARE_TYPES_COUNT; ++i)
+    for (uint32_t i = 0; i < WARE_TYPES_COUNT; ++i)
         statisticCurrentData[STAT_MERCHANDISE] += global_inventory.goods[i];
 
     // Bevölkerung aus der Inventur zählen
     statisticCurrentData[STAT_INHABITANTS] = 0;
-    for (unsigned int i = 0; i < JOB_TYPES_COUNT; ++i)
+    for (uint32_t i = 0; i < JOB_TYPES_COUNT; ++i)
         statisticCurrentData[STAT_INHABITANTS] += global_inventory.people[i];
 
     // Militär aus der Inventur zählen
@@ -1709,11 +1709,11 @@ void GameClientPlayer::StatisticStep()
     CalcStatistics();
 
     // 15-min-Statistik ein Feld weiterschieben
-    for (unsigned int i = 0; i < STAT_TYPE_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_TYPE_COUNT; ++i)
     {
         statistic[STAT_15M].data[i][incrStatIndex(statistic[STAT_15M].currentIndex)] = statisticCurrentData[i];
     }
-    for (unsigned int i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
     {
         statistic[STAT_15M].merchandiseData[i][incrStatIndex(statistic[STAT_15M].currentIndex)] = statisticCurrentMerchandiseData[i];
     }
@@ -1724,18 +1724,18 @@ void GameClientPlayer::StatisticStep()
     // Prüfen ob 4mal 15-min-Statistik weitergeschoben wurde, wenn ja: 1-h-Statistik weiterschieben
     // und aktuellen Wert der 15min-Statistik benutzen
     // gleiches für die 4h und 16h Statistik
-    for (unsigned t = STAT_15M; t < STAT_16H; t++)
+    for (uint32_t t = STAT_15M; t < STAT_16H; t++)
     {
         if (statistic[t].counter == 4)
         {
             statistic[t].counter = 0;
-            for (unsigned int i = 0; i < STAT_TYPE_COUNT; ++i)
+            for (uint32_t i = 0; i < STAT_TYPE_COUNT; ++i)
             {
                 statistic[t + 1].data[i][incrStatIndex(statistic[t + 1].currentIndex)] = statisticCurrentData[i];
             }
 
             // Summe für den Zeitraum berechnen (immer 4 Zeitschritte der jeweils kleineren Statistik)
-            for (unsigned int i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
+            for (uint32_t i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
             {
                 statistic[t + 1].merchandiseData[i][incrStatIndex(statistic[t + 1].currentIndex)] = statisticCurrentMerchandiseData[i]
                         + statistic[t].merchandiseData[i][decrStatIndex(statistic[t].currentIndex, 1)]
@@ -1749,7 +1749,7 @@ void GameClientPlayer::StatisticStep()
     }
 
     // Warenstatistikzähler nullen
-    for (unsigned int i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
+    for (uint32_t i = 0; i < STAT_MERCHANDISE_TYPE_COUNT; ++i)
     {
         statisticCurrentMerchandiseData[i] = 0;
     }
@@ -1768,7 +1768,7 @@ void GameClientPlayer::Pact::Serialize(SerializedGameData* ser)
 }
 
 /// Macht Bündnisvorschlag an diesen Spieler
-void GameClientPlayer::SuggestPact(const unsigned char other_player, const PactType pt, const unsigned duration)
+void GameClientPlayer::SuggestPact(const uint8_t other_player, const PactType pt, const uint32_t duration)
 {
     pacts[other_player][pt].accepted = false;
     pacts[other_player][pt].duration = duration;
@@ -1780,7 +1780,7 @@ void GameClientPlayer::SuggestPact(const unsigned char other_player, const PactT
 }
 
 /// Akzeptiert ein bestimmtes Bündnis, welches an diesen Spieler gemacht wurde
-void GameClientPlayer::AcceptPact(const unsigned id, const PactType pt, const unsigned char other_player)
+void GameClientPlayer::AcceptPact(const uint32_t id, const PactType pt, const uint8_t other_player)
 {
     if(!pacts[other_player][pt].accepted && pacts[other_player][pt].start == id)
     {
@@ -1803,7 +1803,7 @@ void GameClientPlayer::AcceptPact(const unsigned id, const PactType pt, const un
 }
 
 /// Bündnis (real, d.h. spielentscheidend) abschließen
-void GameClientPlayer::MakePact(const PactType pt, const unsigned char other_player, const unsigned duration)
+void GameClientPlayer::MakePact(const PactType pt, const uint8_t other_player, const uint32_t duration)
 {
     pacts[other_player][pt].accepted = true;
     pacts[other_player][pt].start = GAMECLIENT.GetGFNumber();
@@ -1817,7 +1817,7 @@ void GameClientPlayer::MakePact(const PactType pt, const unsigned char other_pla
 }
 
 /// Zeigt an, ob ein Pakt besteht
-GameClientPlayer::PactState GameClientPlayer::GetPactState(const PactType pt, const unsigned char other_player) const
+GameClientPlayer::PactState GameClientPlayer::GetPactState(const PactType pt, const uint8_t other_player) const
 {
     // Prüfen, ob Bündnis in Kraft ist
     if(pacts[other_player][pt].duration)
@@ -1840,9 +1840,9 @@ GameClientPlayer::PactState GameClientPlayer::GetPactState(const PactType pt, co
 }
 
 ///all allied players get a letter with the location
-void GameClientPlayer::NotifyAlliesOfLocation(const MapPoint pt, unsigned char allyplayerid)
+void GameClientPlayer::NotifyAlliesOfLocation(const MapPoint pt, uint8_t allyplayerid)
 {	
-	for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+	for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         GameClientPlayer* p = GAMECLIENT.GetPlayer(i);
 		if(i != allyplayerid && p->IsAlly(allyplayerid+1) && GAMECLIENT.GetPlayerID() == i)
@@ -1853,7 +1853,7 @@ void GameClientPlayer::NotifyAlliesOfLocation(const MapPoint pt, unsigned char a
 }
 
 /// Gibt die verbleibende Dauer zurück, die ein Bündnis noch laufen wird (0xFFFFFFFF = für immer)
-unsigned GameClientPlayer::GetRemainingPactTime(const PactType pt, const unsigned char other_player) const
+uint32_t GameClientPlayer::GetRemainingPactTime(const PactType pt, const uint8_t other_player) const
 {
     if(pacts[other_player][pt].duration)
     {
@@ -1871,7 +1871,7 @@ unsigned GameClientPlayer::GetRemainingPactTime(const PactType pt, const unsigne
 
 /// Gibt Einverständnis, dass dieser Spieler den Pakt auflösen will
 /// Falls dieser Spieler einen Bündnisvorschlag gemacht hat, wird dieser dagegen zurückgenommen
-void GameClientPlayer::CancelPact(const PactType pt, const unsigned char other_player)
+void GameClientPlayer::CancelPact(const PactType pt, const uint8_t other_player)
 {
     // Besteht bereits ein Bündnis?
     if(pacts[other_player][pt].accepted)
@@ -1895,7 +1895,7 @@ void GameClientPlayer::CancelPact(const PactType pt, const unsigned char other_p
             if(GAMECLIENT.GetPlayerID() == playerid || GAMECLIENT.GetPlayerID() == other_player)
             {
                 // Anderen Spieler von sich aus ermitteln
-                unsigned char client_other_player = (GAMECLIENT.GetPlayerID() == playerid) ? other_player : playerid;
+                uint8_t client_other_player = (GAMECLIENT.GetPlayerID() == playerid) ? other_player : playerid;
                 GAMECLIENT.SendPostMessage(new DiplomacyPostInfo(client_other_player, DiplomacyPostInfo::CANCEL, pt));
             }
 
@@ -1921,12 +1921,12 @@ void GameClientPlayer::CancelPact(const PactType pt, const unsigned char other_p
 void GameClientPlayer::MakeStartPacts()
 {
     // Zu den Spielern im selben Team Bündnisse (sowohl Bündnisvertrag als auch Nichtangriffspakt) aufbauen
-    for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         GameClientPlayer* p = GAMECLIENT.GetPlayer(i);
         if(GetFixedTeam(team) == GetFixedTeam(p->team) && GetFixedTeam(team) >= TM_TEAM1 && GetFixedTeam(team) <= TM_TEAM4)
         {
-            for(unsigned z = 0; z < PACTS_COUNT; ++z)
+            for(uint32_t z = 0; z < PACTS_COUNT; ++z)
             {
                 pacts[i][z].accepted = true;
                 pacts[i][z].duration = 0xFFFFFFFF;
@@ -2016,12 +2016,12 @@ bool GameClientPlayer::OrderShip(nobHarborBuilding* hb)
 
     noShip* best_ship = NULL;
     uint32_t best_distance = std::numeric_limits<uint32_t>::max();
-    std::vector<unsigned char> best_route;
+    std::vector<uint8_t> best_route;
 
     for (std::vector<ShipForHarbor>::iterator it = sfh.begin(); it != sfh.end(); ++it)
     {
         uint32_t distance;
-        std::vector<unsigned char> route;
+        std::vector<uint8_t> route;
 
         // the estimate (air-line distance) for this and all other ships in the list is already worse than what we found? disregard the rest
         if ((*it).estimate >= best_distance)
@@ -2080,7 +2080,7 @@ bool GameClientPlayer::OrderShip(nobHarborBuilding* hb)
 /// Meldet das Schiff wieder ab
 void GameClientPlayer::RemoveShip(noShip* ship)
 {
-    for(unsigned i = 0; i < ships.size(); ++i)
+    for(uint32_t i = 0; i < ships.size(); ++i)
     {
         if(ships[i] == ship)
         {
@@ -2095,8 +2095,8 @@ void GameClientPlayer::GetJobForShip(noShip* ship)
 {
     // Evtl. steht irgendwo eine Expedition an und das Schiff kann diese übernehmen
     nobHarborBuilding* best = 0;
-    int best_points = 0;
-    std::vector<unsigned char> best_route;
+    int32_t best_points = 0;
+    std::vector<uint8_t> best_route;
 
     // Beste Weglänge, die ein Schiff zurücklegen muss, welches gerade nichts zu tun hat
     for(std::list<nobHarborBuilding*>::iterator it = harbors.begin(); it != harbors.end(); ++it)
@@ -2106,7 +2106,7 @@ void GameClientPlayer::GetJobForShip(noShip* ship)
             continue;
 
         // Anzahl der Schiffe ermitteln, die diesen Hafen bereits anfahren
-        unsigned ships_coming = GetShipsToHarbor(*it);
+        uint32_t ships_coming = GetShipsToHarbor(*it);
 
         // Evtl. kommen schon genug?
         if((*it)->GetNeededShipsCount() <= ships_coming)
@@ -2125,13 +2125,13 @@ void GameClientPlayer::GetJobForShip(noShip* ship)
                 return;
             }
 
-            unsigned length;
-            std::vector<unsigned char> route;
+            uint32_t length;
+            std::vector<uint8_t> route;
 
             if(gwg->FindShipPath(ship->GetPos(), dest, &route, &length))
             {
                 // Punkte ausrechnen
-                int points = (*it)->GetNeedForShip(ships_coming) - length;
+                int32_t points = (*it)->GetNeedForShip(ships_coming) - length;
                 if(points > best_points || !best)
                 {
                     best = *it;
@@ -2150,9 +2150,9 @@ void GameClientPlayer::GetJobForShip(noShip* ship)
 
 
 /// Gibt die ID eines Schiffes zurück
-unsigned GameClientPlayer::GetShipID(const noShip* const ship) const
+uint32_t GameClientPlayer::GetShipID(const noShip* const ship) const
 {
-    for(unsigned i = 0; i < ships.size(); ++i)
+    for(uint32_t i = 0; i < ships.size(); ++i)
         if(ships[i] == ship)
             return i;
 
@@ -2160,7 +2160,7 @@ unsigned GameClientPlayer::GetShipID(const noShip* const ship) const
 }
 
 /// Gibt ein Schiff anhand der ID zurück bzw. NULL, wenn keines mit der ID existiert
-noShip* GameClientPlayer::GetShipByID(const unsigned ship_id) const
+noShip* GameClientPlayer::GetShipByID(const uint32_t ship_id) const
 {
     if(ship_id >= ships.size())
         return NULL;
@@ -2171,14 +2171,14 @@ noShip* GameClientPlayer::GetShipByID(const unsigned ship_id) const
 
 /// Gibt eine Liste mit allen Häfen dieses Spieler zurück, die an ein bestimmtes Meer angrenzen
 void GameClientPlayer::GetHarborBuildings(std::vector<nobHarborBuilding*>& harbor_buildings,
-        const unsigned short sea_id) const
+        const uint16_t sea_id) const
 {
     for(std::list<nobBaseWarehouse*>::const_iterator it = warehouses.begin(); it != warehouses.end(); ++it)
     {
         if((*it)->GetBuildingType() == BLD_HARBORBUILDING)
         {
             bool existing = false;
-            for(unsigned i = 0; i < harbor_buildings.size(); ++i)
+            for(uint32_t i = 0; i < harbor_buildings.size(); ++i)
             {
                 if(harbor_buildings[i] == *it)
                 {
@@ -2199,10 +2199,10 @@ void GameClientPlayer::GetHarborBuildings(std::vector<nobHarborBuilding*>& harbo
 
 
 /// Gibt die Anzahl der Schiffe, die einen bestimmten Hafen ansteuern, zurück
-unsigned GameClientPlayer::GetShipsToHarbor(nobHarborBuilding* hb) const
+uint32_t GameClientPlayer::GetShipsToHarbor(nobHarborBuilding* hb) const
 {
-    unsigned count = 0;
-    for(unsigned i = 0; i < ships.size(); ++i)
+    uint32_t count = 0;
+    for(uint32_t i = 0; i < ships.size(); ++i)
     {
         if(ships[i]->IsGoingToHarbor(hb))
             ++count;
@@ -2216,18 +2216,18 @@ unsigned GameClientPlayer::GetShipsToHarbor(nobHarborBuilding* hb) const
 void GameClientPlayer::HarborDestroyed(nobHarborBuilding* hb)
 {
     // Schiffen Bescheid sagen
-    for(unsigned i = 0; i < ships.size(); ++i)
+    for(uint32_t i = 0; i < ships.size(); ++i)
         ships[i]->HarborDestroyed(hb);
 }
 
 
 /// Sucht einen Hafen in der Nähe, wo dieses Schiff seine Waren abladen kann
 /// gibt true zurück, falls erfolgreich
-bool GameClientPlayer::FindHarborForUnloading(noShip* ship, const MapPoint start, unsigned* goal_harbor_id,
-        std::vector<unsigned char>* route, nobHarborBuilding* exception)
+bool GameClientPlayer::FindHarborForUnloading(noShip* ship, const MapPoint start, uint32_t* goal_harbor_id,
+        std::vector<uint8_t>* route, nobHarborBuilding* exception)
 {
     nobHarborBuilding* best = NULL;
-    unsigned best_distance = 0xffffffff;
+    uint32_t best_distance = 0xffffffff;
 
     for(std::list<nobHarborBuilding*>::iterator it = harbors.begin(); it != harbors.end(); ++it)
     {
@@ -2241,7 +2241,7 @@ bool GameClientPlayer::FindHarborForUnloading(noShip* ship, const MapPoint start
             continue;
 
         // Distanz ermitteln zwischen Schiff und Hafen, Schiff kann natürlich auch über Kartenränder fahren
-        unsigned distance = gwg->CalcDistance(ship->GetPos(), hb->GetPos());
+        uint32_t distance = gwg->CalcDistance(ship->GetPos(), hb->GetPos());
 
         // Kürzerer Weg als bisher bestes Ziel?
         if(distance < best_distance)
@@ -2275,15 +2275,15 @@ void GameClientPlayer::TestForEmergencyProgramm()
     }
 
     // In Lagern vorhandene Bretter und Steine zählen
-    unsigned boards = 0;
-    unsigned stones = 0;
+    uint32_t boards = 0;
+    uint32_t stones = 0;
     for(std::list<nobBaseWarehouse*>::iterator w = warehouses.begin(); w != warehouses.end(); ++w)
     {
         boards += (*w)->GetInventory()->goods[GD_BOARDS];
         stones += (*w)->GetInventory()->goods[GD_STONES];
 		/*std::list<Ware*> testwares = (*w)->GetDependentWares();
-		unsigned c=0;
-		unsigned bad=-1;
+		uint32_t c=0;
+		uint32_t bad=-1;
 		for(std::list<Ware*>::iterator a = testwares.begin(); a!= testwares.end(); ++a)
 		{
 			c++;
@@ -2295,7 +2295,7 @@ void GameClientPlayer::TestForEmergencyProgramm()
 		}*/
     }
 	/*	
-	unsigned c=0;
+	uint32_t c=0;
 	for(std::list<JobNeeded>::iterator it = jobs_wanted.begin(); it != jobs_wanted.end(); ++it)
 	{
 		c++;
@@ -2308,8 +2308,8 @@ void GameClientPlayer::TestForEmergencyProgramm()
 	}*/
 
     // Holzfäller und Sägewerke zählen, -10 ftw
-    unsigned woodcutter = buildings[BLD_WOODCUTTER - 10].size();
-    unsigned sawmills = buildings[BLD_SAWMILL - 10].size();
+    uint32_t woodcutter = buildings[BLD_WOODCUTTER - 10].size();
+    uint32_t sawmills = buildings[BLD_SAWMILL - 10].size();
 
     // Wenn nötig, Notfallprogramm auslösen
     if ((boards <= 10 || stones <= 10) && (woodcutter == 0 || sawmills == 0) && (!isDefeated()))
@@ -2337,7 +2337,7 @@ void GameClientPlayer::TestForEmergencyProgramm()
 /// Testet die Bündnisse, ob sie nicht schon abgelaufen sind
 void GameClientPlayer::TestPacts()
 {
-    for(unsigned i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
+    for(uint32_t i = 0; i < GAMECLIENT.GetPlayerCount(); ++i)
     {
         // Wenn wir merken, dass der Friedensvertrag abgelaufen ist, berechnen wir die Sichtbarkeiten neu
         if(GetPactState(TREATY_OF_ALLIANCE, i) == NO_PACT && pacts[i][TREATY_OF_ALLIANCE].duration != 0)
@@ -2363,7 +2363,7 @@ bool GameClientPlayer::CanBuildCatapult() const
     BuildingCount bc;
     GetBuildingCount(bc);
 
-    unsigned int max = 0;
+    uint32_t max = 0;
 
     // proportional?
     if(GAMECLIENT.GetGGS().getSelection(ADDON_LIMIT_CATAPULTS) == 1)
@@ -2375,7 +2375,7 @@ bool GameClientPlayer::CanBuildCatapult() const
     }
     else
     {
-        const unsigned int limits[6] = { 0, 3, 5, 10, 20, 30};
+        const uint32_t limits[6] = { 0, 3, 5, 10, 20, 30};
         max = limits[GAMECLIENT.GetGGS().getSelection(ADDON_LIMIT_CATAPULTS) - 2];
     }
 
@@ -2391,7 +2391,7 @@ bool GameClientPlayer::CanBuildCatapult() const
 bool GameClientPlayer::ShipDiscoveredHostileTerritory(const MapPoint location)
 {
     // Prüfen, ob Abstand zu bisherigen Punkten nicht zu klein
-    for(unsigned i = 0; i < enemies_discovered_by_ships.size(); ++i)
+    for(uint32_t i = 0; i < enemies_discovered_by_ships.size(); ++i)
     {
         if(gwg->CalcDistance(enemies_discovered_by_ships[i].x, enemies_discovered_by_ships[i].y, location.x, location.y) < 30)
             return false;
@@ -2416,9 +2416,9 @@ bool GameClientPlayer::CheckDependentFigure(noFigure* fig)
 }
 
 /// Get available wares/figures which can THIS player (usually ally of wh->player) send to warehouse wh
-unsigned GameClientPlayer::GetAvailableWaresForTrading(nobBaseWarehouse* wh, const GoodType gt, const Job job) const
+uint32_t GameClientPlayer::GetAvailableWaresForTrading(nobBaseWarehouse* wh, const GoodType gt, const Job job) const
 {
-    unsigned count = 0;
+    uint32_t count = 0;
 
     for(std::list<nobBaseWarehouse*>::const_iterator it = warehouses.begin(); it != warehouses.end(); ++it)
     {
@@ -2459,8 +2459,8 @@ struct WarehouseDistanceComperator
 
     static bool Compare(nobBaseWarehouse* const wh1, nobBaseWarehouse* const wh2)
     {
-        unsigned dist1 = gwg->CalcDistance(wh1->GetPos(), ref->GetPos());
-        unsigned dist2 = gwg->CalcDistance(wh2->GetPos(), ref->GetPos());
+        uint32_t dist1 = gwg->CalcDistance(wh1->GetPos(), ref->GetPos());
+        uint32_t dist2 = gwg->CalcDistance(wh2->GetPos(), ref->GetPos());
         return (dist1 < dist2 ) || (dist1 == dist2 && wh1->GetObjId() < wh2->GetObjId());
     }
 };
@@ -2469,7 +2469,7 @@ nobBaseWarehouse* WarehouseDistanceComperator::ref;
 GameWorldGame* WarehouseDistanceComperator::gwg;
 
 /// Send wares to warehouse wh
-void GameClientPlayer::Trade(nobBaseWarehouse* wh, const GoodType gt, const Job job, unsigned count) const
+void GameClientPlayer::Trade(nobBaseWarehouse* wh, const GoodType gt, const Job job, uint32_t count) const
 {
     if(count < 1) //block trolling player who wants to send empty tradecaravan, sending packdonkeys is forbidden because it crashes the game
         return;
@@ -2485,7 +2485,7 @@ void GameClientPlayer::Trade(nobBaseWarehouse* wh, const GoodType gt, const Job 
         // Found a path?
         if(tr->IsValid())
         {
-            unsigned available = 0;
+            uint32_t available = 0;
             // Then consider this warehouse
             if(gt != GD_NOTHING)
                 available = (*it)->GetAvailableWaresForTrading(gt);

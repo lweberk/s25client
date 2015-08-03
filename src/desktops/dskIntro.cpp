@@ -57,7 +57,7 @@ dskIntro::dskIntro(void) : Desktop(LOADER.GetImageN("menu", 0))
     AddImage(11, 20, 20, LOADER.GetImageN("logo", 0));
 }
 
-void dskIntro::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskIntro::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

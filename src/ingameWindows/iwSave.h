@@ -29,7 +29,7 @@ class iwSaveLoad : public IngameWindow
 {
     public:
         /// Konstruktor von @p iwSave.
-        iwSaveLoad(const unsigned short add_height, const std::string& window_title);
+        iwSaveLoad(const uint16_t add_height, const std::string& window_title);
 
     protected:
         /// Aktualisiert die Tabelle
@@ -39,9 +39,9 @@ class iwSaveLoad : public IngameWindow
         /// Speichert bzw. läd die angegebene Datei
         virtual void SaveLoad() = 0;
 
-        void Msg_EditEnter(const unsigned int ctrl_id);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_TableSelectItem(const unsigned int ctrl_id, const unsigned short selection);
+        void Msg_EditEnter(const uint32_t ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_TableSelectItem(const uint32_t ctrl_id, const uint16_t selection);
 
         /// Callbackfunktion zum Eintragen eines Spielstandes in die Tabelle
         static void FillSaveTable(const std::string& filename, void* param);
@@ -56,7 +56,7 @@ class iwSave: public iwSaveLoad
         // Speichert Datei
         void SaveLoad();
 
-        void Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short selection);
+        void Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t selection);
 };
 
 
@@ -69,7 +69,7 @@ class iwLoad: public iwSaveLoad
 
     private:
         /// Handle double click on the table
-        void Msg_TableChooseItem(const unsigned ctrl_id, const unsigned short selection);
+        void Msg_TableChooseItem(const uint32_t ctrl_id, const uint16_t selection);
 
         // Läd Datei
         void SaveLoad();

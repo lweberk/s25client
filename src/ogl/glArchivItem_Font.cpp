@@ -40,30 +40,30 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-std::string glArchivItem_Font::Unicode_to_Utf8(unsigned int c) const
+std::string glArchivItem_Font::Unicode_to_Utf8(uint32_t c) const
 {
     std::string text;
     if(c > 0x7F) // unicode?
     {
         if(c >= 0x80 && c <= 0x7FF) // 2 byte utf-8
         {
-            unsigned int cH = ((c & 0x0000FF00) >> 8);
-            unsigned int cL =  (c & 0x000000FF);
+            uint32_t cH = ((c & 0x0000FF00) >> 8);
+            uint32_t cL =  (c & 0x000000FF);
 
-            unsigned char c0 = 0xC0 | ((cL & 0xC0) >> 6) | ((cH & 0x07) << 2); // untere 2 bits und obere 3 bits
-            unsigned char c1 = 0x80 |  (cL & 0x3F); // untere 6 bits
+            uint8_t c0 = 0xC0 | ((cL & 0xC0) >> 6) | ((cH & 0x07) << 2); // untere 2 bits und obere 3 bits
+            uint8_t c1 = 0x80 |  (cL & 0x3F); // untere 6 bits
 
             text.push_back(c0);
             text.push_back(c1);
         }
         else if(c >= 0x800 && c <= 0xFFFF) // 3 byte utf-8
         {
-            unsigned int cH = ((c & 0x0000FF00) >> 8);
-            unsigned int cL =  (c & 0x000000FF);
+            uint32_t cH = ((c & 0x0000FF00) >> 8);
+            uint32_t cL =  (c & 0x000000FF);
 
-            unsigned char c0 = 0xE0 | ((cH & 0xF0) >> 4); // obere 4 bits
-            unsigned char c1 = 0x80 | ((cL & 0xC0) >> 6) | ((cH & 0x0F) << 2); // untere 2 bits und obere 4 bits
-            unsigned char c2 = 0x80 |  (cL & 0x3F); // untere 6 bits
+            uint8_t c0 = 0xE0 | ((cH & 0xF0) >> 4); // obere 4 bits
+            uint8_t c1 = 0x80 | ((cL & 0xC0) >> 6) | ((cH & 0x0F) << 2); // untere 2 bits und obere 4 bits
+            uint8_t c2 = 0x80 |  (cL & 0x3F); // untere 6 bits
 
             text.push_back(c0);
             text.push_back(c1);
@@ -71,15 +71,15 @@ std::string glArchivItem_Font::Unicode_to_Utf8(unsigned int c) const
         }
         else if(c >= 0x10000 && c <= 0x1FFFFF) // 4 byte utf-8
         {
-            //unsigned int cH1 = ((c & 0xFF000000) >> 24);
-            unsigned int cH  = ((c & 0x00FF0000) >> 16);
-            unsigned int cL1 = ((c & 0x0000FF00) >> 8);
-            unsigned int cL2 =  (c & 0x000000FF);
+            //uint32_t cH1 = ((c & 0xFF000000) >> 24);
+            uint32_t cH  = ((c & 0x00FF0000) >> 16);
+            uint32_t cL1 = ((c & 0x0000FF00) >> 8);
+            uint32_t cL2 =  (c & 0x000000FF);
 
-            unsigned char c0 = 0xF0 | ((cH & 0x3C) >> 2); // obere 4 bits xxHHHHhh -> xxxxHHHH
-            unsigned char c1 = 0x80 | ((cL1 & 0xF0) >> 4) | ((cH & 0x03) << 4); // untere1 4 bits und obere 2 bits LLLLllll xxhhhhHH -> xxHHLLLL
-            unsigned char c2 = 0x80 | ((cL2 & 0xC0) >> 6) | ((cL1 & 0x0F) << 2); // untere2 2 bits und untere1 4 bits
-            unsigned char c3 = 0x80 |  (cL2 & 0x3F); // untere2 6 bits
+            uint8_t c0 = 0xF0 | ((cH & 0x3C) >> 2); // obere 4 bits xxHHHHhh -> xxxxHHHH
+            uint8_t c1 = 0x80 | ((cL1 & 0xF0) >> 4) | ((cH & 0x03) << 4); // untere1 4 bits und obere 2 bits LLLLllll xxhhhhHH -> xxHHLLLL
+            uint8_t c2 = 0x80 | ((cL2 & 0xC0) >> 6) | ((cL1 & 0x0F) << 2); // untere2 2 bits und untere1 4 bits
+            uint8_t c3 = 0x80 |  (cL2 & 0x3F); // untere2 6 bits
 
             text.push_back(c0);
             text.push_back(c1);
@@ -99,9 +99,9 @@ std::string glArchivItem_Font::Unicode_to_Utf8(unsigned int c) const
  *
  *  @author FloSoft
  */
-unsigned int glArchivItem_Font::Utf8_to_Unicode(const std::string& text, unsigned int& i) const
+uint32_t glArchivItem_Font::Utf8_to_Unicode(const std::string& text, uint32_t& i) const
 {
-    unsigned int c = (text[i] & 0xFF);
+    uint32_t c = (text[i] & 0xFF);
     // qx: fix für namen in der Kartenübersicht
     if(c == 0xF6 || c == 0xDF)return c; // if we accidentally try to convert an already unicode text including ö (0xF6) this will catch it (todo: find a better way to do this that includes other cases)
     if( (c & 0x80) == 0x80) // 1Xxxxxxx
@@ -116,23 +116,23 @@ unsigned int glArchivItem_Font::Utf8_to_Unicode(const std::string& text, unsigne
         else if( (c & 0xE0) == 0xC0) // 110xxxxx
         {
             // 2 byte sequence 110xxxxx 10xxxxxx
-            unsigned int c2 = (text[++i] & 0xFF);
+            uint32_t c2 = (text[++i] & 0xFF);
             c =  ((c & 0x1F ) << 6) | (c2 & 0x3F);
         }
         else if( (c & 0xF0) == 0xE0) // 1110xxxx
         {
             // 3 byte sequence 1110xxxx 10xxxxxx 10xxxxxx
-            unsigned int c2 = (text[++i] & 0xFF);
-            unsigned int c3 = (text[++i] & 0xFF);
+            uint32_t c2 = (text[++i] & 0xFF);
+            uint32_t c3 = (text[++i] & 0xFF);
 
             c =  ((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F);
         }
         else if( (c & 0xF8) == 0xF0) // 11110xxx
         {
             // 4 byte sequence 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-            unsigned int c2 = (text[++i] & 0xFF);
-            unsigned int c3 = (text[++i] & 0xFF);
-            unsigned int c4 = (text[++i] & 0xFF);
+            uint32_t c2 = (text[++i] & 0xFF);
+            uint32_t c3 = (text[++i] & 0xFF);
+            uint32_t c4 = (text[++i] & 0xFF);
             c =  ((c & 0x0F) << 18) | ((c2 & 0x3F) << 12) | ((c3 & 0x3F) << 6) | (c4 & 0x3F);
         }
         else
@@ -151,15 +151,15 @@ unsigned int glArchivItem_Font::Utf8_to_Unicode(const std::string& text, unsigne
  *  @author Marcus
  */
 inline void glArchivItem_Font::DrawChar(const std::string& text,
-                                        unsigned int& i,
+                                        uint32_t& i,
                                         GL_T2F_V3F_Struct* tmp,
-                                        short& cx,
-                                        short& cy,
+                                        int16_t& cx,
+                                        int16_t& cy,
                                         float tw,
                                         float th,
-                                        unsigned int& idx)
+                                        uint32_t& idx)
 {
-    unsigned int c = Utf8_to_Unicode(text, i);
+    uint32_t c = Utf8_to_Unicode(text, i);
     char_info ci = CharInfo(c);
 
     if(CharExist(ci))
@@ -216,25 +216,25 @@ inline void glArchivItem_Font::DrawChar(const std::string& text,
  *
  *  @author FloSoft
  */
-void glArchivItem_Font::Draw(short x,
-                             short y,
+void glArchivItem_Font::Draw(int16_t x,
+                             int16_t y,
                              const std::wstring& wtext,
-                             unsigned int format,
-                             unsigned int color,
-                             unsigned short length,
-                             unsigned short max,
+                             uint32_t format,
+                             uint32_t color,
+                             uint16_t length,
+                             uint16_t max,
                              const std::wstring& wend,
-                             unsigned short end_length)
+                             uint16_t end_length)
 {
     // etwas dämlich, aber einfach ;)
     // da wir hier erstmal in utf8 konvertieren, und dann im anderen Draw wieder zurück ...
 
     std::string text;
-    for(unsigned int i = 0; i < wtext.length(); ++i)
+    for(uint32_t i = 0; i < wtext.length(); ++i)
         text += Unicode_to_Utf8(wtext[i]);
 
     std::string end;
-    for(unsigned int i = 0; i < wend.length(); ++i)
+    for(uint32_t i = 0; i < wend.length(); ++i)
         end += Unicode_to_Utf8(wend[i]);
 
     Draw(x, y, text, format, color, length, max, end, end_length);
@@ -260,35 +260,35 @@ void glArchivItem_Font::Draw(short x,
  *
  *  @author OLiver
  */
-void glArchivItem_Font::Draw(short x,
-                             short y,
+void glArchivItem_Font::Draw(int16_t x,
+                             int16_t y,
                              const std::string& text,
-                             unsigned int format,
-                             unsigned int color,
-                             unsigned short length,
-                             unsigned short max,
+                             uint32_t format,
+                             uint32_t color,
+                             uint16_t length,
+                             uint16_t max,
                              const std::string& end,
-                             unsigned short end_length)
+                             uint16_t end_length)
 {
     if(!_font)
         initFont();
 
     // Breite bestimmen
     if(length == 0)
-        length = (unsigned short)text.length();
+        length = (uint16_t)text.length();
     if(end_length == 0)
-        end_length = (unsigned short)end.length();
+        end_length = (uint16_t)end.length();
 
     bool enable_end;
 
-    unsigned short text_max = 0;
-    unsigned short text_width = getWidth(text, length, max, &text_max);
+    uint16_t text_max = 0;
+    uint16_t text_width = getWidth(text, length, max, &text_max);
 
     // text_max ist die maximale Indexzahl, nicht mehr die Breite in Pixel!
     if(end.length() && text_max < length)
     {
-        unsigned short end_max = 0;
-        unsigned short end_width = getWidth(end, end_length, max, &end_max);
+        uint16_t end_max = 0;
+        uint16_t end_width = getWidth(end, end_length, max, &end_max);
 
         // Bei Überlauf oder kleiner 0 - nix zeichnen ;)
         if( text_width - end_width > text_width || text_width - end_width <= 0 )
@@ -315,11 +315,11 @@ void glArchivItem_Font::Draw(short x,
     if( (format & 12) == DF_VCENTER)
         y -= dy / 2;
 
-    short cx = x, cy = y;
+    int16_t cx = x, cy = y;
     if( (format & 3) == DF_CENTER)
     {
-        unsigned short line_width = text_width;
-        for(unsigned short j = 0; j < text_max; ++j)
+        uint16_t line_width = text_width;
+        for(uint16_t j = 0; j < text_max; ++j)
         {
             if(text[j] == '\n')
             {
@@ -333,19 +333,19 @@ void glArchivItem_Font::Draw(short x,
     GL_T2F_V3F_Struct* tmp = new GL_T2F_V3F_Struct[(text_max + (enable_end ? end_length : 0)) * 4];
     float tw = _font->GetTexWidth();
     float th = _font->GetTexHeight();
-    unsigned int idx = 0;
+    uint32_t idx = 0;
 
     glColor4ub(GetRed(color), GetGreen(color), GetBlue(color), GetAlpha(color));
 
-    for(unsigned int i = 0; i < text_max; ++i)
+    for(uint32_t i = 0; i < text_max; ++i)
     {
         if(text[i] == '\n')
         {
             cy += dy;
             if( (format & 3) == DF_CENTER)
             {
-                unsigned short line_width = 0;
-                for(unsigned short j = i + 1; j < text_max; ++j)
+                uint16_t line_width = 0;
+                for(uint16_t j = i + 1; j < text_max; ++j)
                 {
                     if(text[j] == '\n')
                     {
@@ -366,7 +366,7 @@ void glArchivItem_Font::Draw(short x,
 
     if(enable_end)
     {
-        for(unsigned int i = 0; i < end_length; ++i)
+        for(uint32_t i = 0; i < end_length; ++i)
         {
             if(end[i] == '\n')
             {
@@ -404,15 +404,15 @@ void glArchivItem_Font::Draw(short x,
  *
  *  @author OLiver
  */
-unsigned short glArchivItem_Font::getWidth(const std::wstring& text, unsigned length, unsigned max_width, unsigned short* max) const
+uint16_t glArchivItem_Font::getWidth(const std::wstring& text, uint32_t length, uint32_t max_width, uint16_t* max) const
 {
     if(length == 0)
         length = unsigned(text.length());
 
-    unsigned short w = 0, wm = 0;
-    for(unsigned int i = 0; i < length; ++i)
+    uint16_t w = 0, wm = 0;
+    for(uint32_t i = 0; i < length; ++i)
     {
-        unsigned short cw = CharWidth(text[i]);
+        uint16_t cw = CharWidth(text[i]);
 
         if(text[i] == '\n')
         {
@@ -441,15 +441,15 @@ unsigned short glArchivItem_Font::getWidth(const std::wstring& text, unsigned le
     return wm;
 }
 
-unsigned short glArchivItem_Font::getWidth(const std::string& text, unsigned length, unsigned max_width, unsigned short* max) const
+uint16_t glArchivItem_Font::getWidth(const std::string& text, uint32_t length, uint32_t max_width, uint16_t* max) const
 {
     if(length == 0)
         length = unsigned(text.length());
 
-    unsigned short w = 0, wm = 0;
-    for(unsigned int i = 0; i < length; ++i)
+    uint16_t w = 0, wm = 0;
+    for(uint32_t i = 0; i < length; ++i)
     {
-        unsigned short cw = CharWidth(Utf8_to_Unicode(text, i));
+        uint16_t cw = CharWidth(Utf8_to_Unicode(text, i));
 
         if(text[i] == '\n')
         {
@@ -489,7 +489,7 @@ void glArchivItem_Font::WrapInfo::CreateSingleStrings(const std::string& origin_
     // Kopie des ursprünglichen Strings erstellen
     std::string copy(origin_text);
 
-    for(unsigned i = 0; i < positions.size(); ++i)
+    for(uint32_t i = 0; i < positions.size(); ++i)
     {
         // Gibts noch weitere Teile danach?
         char temp = 0;
@@ -526,27 +526,27 @@ void glArchivItem_Font::WrapInfo::CreateSingleStrings(const std::string& origin_
  *  @author OLiver
  */
 void glArchivItem_Font::GetWrapInfo(const std::string& text,
-                                    const unsigned short primary_width, const unsigned short secondary_width,
+                                    const uint16_t primary_width, const uint16_t secondary_width,
                                     WrapInfo& wi)
 {
     if(!_font)
         initFont();
 
     // Breite der aktuellen Zeile
-    unsigned short line_width = 0;
+    uint16_t line_width = 0;
     // Breite des aktuellen Wortes
-    unsigned short word_width = 0;
+    uint16_t word_width = 0;
     // Beginn des aktuellen Wortes
-    unsigned word_start = 0;
+    uint32_t word_start = 0;
 
     // Logischerweise fangen wir in der ersten Zeile an
     wi.positions.clear();
     wi.positions.push_back(0);
 
     // Länge des Strings
-    unsigned int length = (unsigned int)text.length();
+    uint32_t length = (uint32_t)text.length();
 
-    for(unsigned i = 0; i <= length; ++i)
+    for(uint32_t i = 0; i <= length; ++i)
     {
         // Leerzeichen, Umbruch oder ende?
         if(text[i] == '\n' || text[i] == ' ' || i == length)
@@ -588,8 +588,8 @@ void glArchivItem_Font::GetWrapInfo(const std::string& text,
                     // ansonsten muss das Wort zwangsläufig auf mehrere Zeilen verteilt werden
                     for(size_t z = 0; text[word_start + z] != ' ' && text[word_start + z]; ++z)
                     {
-                        unsigned int zz = word_start + z;
-                        unsigned short letter_width = CharWidth(Utf8_to_Unicode(text, zz));
+                        uint32_t zz = word_start + z;
+                        uint16_t letter_width = CharWidth(Utf8_to_Unicode(text, zz));
                         z = zz - word_start;
 
                         // passt der neue Buchstabe noch mit drauf?
@@ -629,7 +629,7 @@ void glArchivItem_Font::GetWrapInfo(const std::string& text,
         else
         {
             // Anderes Zeichen --> einfach dessen Breite mit addieren
-            unsigned int c = Utf8_to_Unicode(text, i);
+            uint32_t c = Utf8_to_Unicode(text, i);
             if( CharExist(c) )
                 word_width += CharWidth(c);
         }
@@ -654,25 +654,25 @@ void glArchivItem_Font::initFont()
     //memset(_charwidths, 0, sizeof(_charwidths));
 
     // first, we have to find how much chars we really have, but we can also skip first 32
-    unsigned int chars = 32;
-    for(unsigned int i = 32; i < getCount(); ++i)
+    uint32_t chars = 32;
+    for(uint32_t i = 32; i < getCount(); ++i)
     {
         if(get(i))
             ++chars;
     }
 
-    chars_per_line = (unsigned int)std::sqrt((double)chars);
+    chars_per_line = (uint32_t)std::sqrt((double)chars);
 
-    int w = (dx + 2) * chars_per_line + 2;
-    int h = (dy + 2) * chars_per_line + 2;
-    unsigned int buffersize = w * h * 4; // RGBA Puffer für alle Buchstaben
-    unsigned char* buffer = new unsigned char[buffersize];
+    int32_t w = (dx + 2) * chars_per_line + 2;
+    int32_t h = (dy + 2) * chars_per_line + 2;
+    uint32_t buffersize = w * h * 4; // RGBA Puffer für alle Buchstaben
+    uint8_t* buffer = new uint8_t[buffersize];
     memset(buffer, 0, buffersize);
 
-    int x = 1;
-    int y = 1;
+    int32_t x = 1;
+    int32_t y = 1;
     chars = 0;
-    for(unsigned int i = 32; i < getCount(); ++i)
+    for(uint32_t i = 32; i < getCount(); ++i)
     {
         if( (chars % chars_per_line) == 0 && i != 32 )
         {
@@ -705,7 +705,7 @@ void glArchivItem_Font::initFont()
     x = 1;
     y = 1;
     chars = 0;
-    for(unsigned int i = 32; i < getCount(); ++i)
+    for(uint32_t i = 32; i < getCount(); ++i)
     {
         if( (chars % chars_per_line) == 0 && i != 32 )
         {

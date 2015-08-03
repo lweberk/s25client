@@ -51,25 +51,25 @@ static char THIS_FILE[] = __FILE__;
 // Konstanten
 
 /// Zeitabstand, in dem die Produktivität vom Träger gemessen wird
-const unsigned PRODUCTIVITY_GF = 6000;
+const uint32_t PRODUCTIVITY_GF = 6000;
 /// Ab wieviel Prozent Auslastung in Prozent eines Trägers ein Esel kommen soll
-const unsigned DONKEY_PRODUCTIVITY = 80;
+const uint32_t DONKEY_PRODUCTIVITY = 80;
 
 
 
 /// Abstand zur nächsten Animation (Wert ergibt sich aus NEXT_ANIMATION + rand(NEXT_ANIMATION_RANDOM) )
-const unsigned NEXT_ANIMATION = 200; // fest
-const unsigned NEXT_ANIMATION_RANDOM = 200; // was noch dazu zufälliges addiert wird
+const uint32_t NEXT_ANIMATION = 200; // fest
+const uint32_t NEXT_ANIMATION_RANDOM = 200; // was noch dazu zufälliges addiert wird
 
 
 /// Längen in Frames der Animationenen
-const unsigned ANIMATION_FRAME_LENGTHS[2][4] =
+const uint32_t ANIMATION_FRAME_LENGTHS[2][4] =
 { {11, 10, 35, 20}, {9, 12, 12, 13} };
 /// Dauer in GF eines Frames
-const unsigned FRAME_GF = 3;
+const uint32_t FRAME_GF = 3;
 
 /// Animations-Index (von map.lst)
-const unsigned short ANIMATION[2][4][35] =
+const uint16_t ANIMATION[2][4][35] =
 {
     {
         // dünn
@@ -108,7 +108,7 @@ const unsigned short ANIMATION[2][4][35] =
 const Job JOB_TYPES[3] = { JOB_HELPER, JOB_PACKDONKEY, JOB_BOATCARRIER };
 
 nofCarrier::nofCarrier(const CarrierType ct, const MapPoint pos,
-                       unsigned char player,
+                       uint8_t player,
                        RoadSegment* workplace,
                        noRoadNode* const goal)
     : noFigure(JOB_TYPES[ct], pos, player, goal), ct(ct),
@@ -125,7 +125,7 @@ nofCarrier::nofCarrier(const CarrierType ct, const MapPoint pos,
  *
  *  @author OLiver
  */
-nofCarrier::nofCarrier(SerializedGameData* sgd, unsigned int obj_id)
+nofCarrier::nofCarrier(SerializedGameData* sgd, uint32_t obj_id)
     : noFigure(sgd, obj_id),
       ct( CarrierType(sgd->PopUnsignedChar()) ),
       state( CarrierState(sgd->PopUnsignedChar()) ),
@@ -142,8 +142,8 @@ nofCarrier::nofCarrier(SerializedGameData* sgd, unsigned int obj_id)
 
     if(state == CARRS_BOATCARRIER_WANDERONWATER)
     {
-        shore_path = new std::vector<unsigned char>(sgd->PopUnsignedInt());
-        for(unsigned i = 0; i < shore_path->size(); ++i)
+        shore_path = new std::vector<uint8_t>(sgd->PopUnsignedInt());
+        for(uint32_t i = 0; i < shore_path->size(); ++i)
             shore_path->at(i) = sgd->PopUnsignedChar();
     }
 }
@@ -158,8 +158,8 @@ void nofCarrier::Serialize_nofCarrier(SerializedGameData* sgd) const
 {
     Serialize_noFigure(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(ct));
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(ct));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushBool(fat);
     sgd->PushObject(workplace, true);
     sgd->PushObject(carried_ware, true);
@@ -171,7 +171,7 @@ void nofCarrier::Serialize_nofCarrier(SerializedGameData* sgd) const
     if(state == CARRS_BOATCARRIER_WANDERONWATER)
     {
         sgd->PushUnsignedInt(shore_path->size());
-        for(unsigned i = 0; i < shore_path->size(); ++i)
+        for(uint32_t i = 0; i < shore_path->size(); ++i)
             sgd->PushUnsignedChar(shore_path->at(i));
     }
 }
@@ -217,7 +217,7 @@ void nofCarrier::Destroy_nofCarrier()
  *
  *  @author OLiver
  */
-void nofCarrier::Draw(int x, int y)
+void nofCarrier::Draw(int32_t x, int32_t y)
 {
     // Unterscheiden, um was für eine Art von Träger es sich handelt
     switch(ct)
@@ -229,16 +229,16 @@ void nofCarrier::Draw(int x, int y)
                 bool animation = false;
 
                 // Ist es schon Zeit für eine Animation?
-                unsigned current_gf = GAMECLIENT.GetGFNumber();
+                uint32_t current_gf = GAMECLIENT.GetGFNumber();
 
                 if(current_gf >= next_animation)
                 {
                     // Animationstype bestimmen
-                    unsigned animation_id = next_animation % 4;
+                    uint32_t animation_id = next_animation % 4;
 
 // <Silvesteregg>
                     // day of year, 0-365, accuracy about 1/4 day
-                    int doy = (TIME.CurrentTime() % 31556925) / 86400;
+                    int32_t doy = (TIME.CurrentTime() % 31556925) / 86400;
 
                     // last hours of last or first day of year
                     if ((doy > 364) || (doy < 1))
@@ -337,7 +337,7 @@ void nofCarrier::Draw(int x, int y)
             {
                 // Wenn wir warten auf ein freies Plätzchen, müssen wir den stehend zeichnen!
                 // Wenn event = 0, dann sind wir mittem auf dem Weg angehalten!
-                unsigned ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
+                uint32_t ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
 
                 CalcFigurRelative(x, y);
 
@@ -381,7 +381,7 @@ void nofCarrier::Draw(int x, int y)
             {
                 // Wenn wir warten auf ein freies Plätzchen, müssen wir den (fest)stehend zeichnen!
                 // Wenn event = 0, dann sind wir mittem auf dem Weg angehalten!
-                unsigned ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
+                uint32_t ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
 
                 CalcFigurRelative(x, y);
 
@@ -652,7 +652,7 @@ void nofCarrier::GoalReached()
     StartWorking();
 
     noRoadNode* rn = gwg->GetSpecObj<noRoadNode>(pos);
-    for(unsigned char i = 0; i < 6; ++i)
+    for(uint8_t i = 0; i < 6; ++i)
     {
         //noRoadNode * rn = gwg->GetSpecObj<noRoadNode>(x,y);
         if(rn->routes[i] == workplace)
@@ -700,7 +700,7 @@ void nofCarrier::AbrogateWorkplace()
         productivity_ev = 0;
 
         // anderen Träger herausfinden
-        unsigned other = (ct == CT_DONKEY) ? 0 : 1;
+        uint32_t other = (ct == CT_DONKEY) ? 0 : 1;
 
         // wenn ich in ein Gebäude gegangen bin und dann vom Weg geworfen wurde, muss der andere
         // ggf. die Waren tragen, die ich jetzt nicht mehr tragen kann
@@ -768,13 +768,13 @@ void nofCarrier::LostWork()
             {
 
                 MapPoint t2(tx, tmpPos.y);
-                for(unsigned i = 2; i < 8; ++i)
+                for(uint32_t i = 2; i < 8; ++i)
                 {
                     for(MapCoord r2 = 0; r2 < r; t2 = gwg->GetNeighbour(t2,  i % 6), ++r2)
                     {
                         if(gwg->IsCoastalPoint(t2) && gwg->IsNodeForFigures(t2))
                         {
-                            shore_path = new std::vector<unsigned char>;
+                            shore_path = new std::vector<uint8_t>;
                             if(gwg->FindShipPath(tmpPos, t2, shore_path, NULL))
                             {
                                 // Ok let's paddle to the coast
@@ -867,7 +867,7 @@ void nofCarrier::RoadSplitted(RoadSegment* rs1, RoadSegment* rs2)
  *
  *  @author OLiver
  */
-void nofCarrier::HandleDerivedEvent(const unsigned int id)
+void nofCarrier::HandleDerivedEvent(const uint32_t id)
 {
     switch(id)
     {
@@ -880,7 +880,7 @@ void nofCarrier::HandleDerivedEvent(const unsigned int id)
             if(since_working_gf != 0xFFFFFFFF)
             {
                 // Es wurde bis jetzt nicht mehr gearbeitet, das also noch dazuzählen
-                worked_gf += static_cast<unsigned short>(GAMECLIENT.GetGFNumber() - since_working_gf);
+                worked_gf += static_cast<uint16_t>(GAMECLIENT.GetGFNumber() - since_working_gf);
                 // Zähler zurücksetzen
                 since_working_gf = GAMECLIENT.GetGFNumber();
             }
@@ -1067,7 +1067,7 @@ void nofCarrier::StopWorking()
     // Falls wir vorher nicht gearbeitet haben, diese Zeit merken für die Produktivität
     if(since_working_gf != 0xFFFFFFFF)
     {
-        worked_gf += static_cast<unsigned short>(GAMECLIENT.GetGFNumber() - since_working_gf);
+        worked_gf += static_cast<uint16_t>(GAMECLIENT.GetGFNumber() - since_working_gf);
         since_working_gf = 0xFFFFFFFF;
     }
 }

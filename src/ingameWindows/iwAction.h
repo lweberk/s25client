@@ -60,44 +60,44 @@ class iwAction : public IngameWindow
         GameWorldViewer* const gwv;
 
         MapPoint selectedPt;
-        unsigned short last_x;
-        unsigned short last_y;
+        uint16_t last_x;
+        uint16_t last_y;
 
         /// Anzahl gewählter Soldaten für den Angriff und die Maximalanzahl
-        unsigned int selected_soldiers_count;
-        unsigned int available_soldiers_count;
+        uint32_t selected_soldiers_count;
+        uint32_t available_soldiers_count;
         /// Dasselbe für Schiffsangriffe
-        unsigned selected_soldiers_count_sea;
-        unsigned int available_soldiers_count_sea;
+        uint32_t selected_soldiers_count_sea;
+        uint32_t available_soldiers_count_sea;
         /// Die einzelnen Höhen für die einzelnen Tabs im Bautab
-        unsigned short building_tab_heights[4];
+        uint16_t building_tab_heights[4];
 
     public:
-        iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const Tabs& tabs, MapPoint selectedPt, int mouse_x, int mouse_y, unsigned int params, bool military_buildings);
+        iwAction(dskGameInterface* const gi, GameWorldViewer* const gwv, const Tabs& tabs, MapPoint selectedPt, int32_t mouse_x, int32_t mouse_y, uint32_t params, bool military_buildings);
         ~iwAction();
 
         /// Gibt zurück, auf welchen Punkt es sich bezieht
-        unsigned short GetSelectedX() const { return selectedPt.x; }
-        unsigned short GetSelectedY() const { return selectedPt.y; }
+        uint16_t GetSelectedX() const { return selectedPt.x; }
+        uint16_t GetSelectedY() const { return selectedPt.y; }
 
     private:
 
-        void Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id);
-        void Msg_TabChange(const unsigned int ctrl_id, const unsigned short tab_id);
-        void Msg_Group_TabChange(const unsigned group_id, const unsigned int ctrl_id, const unsigned short tab_id);
+        void Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id);
+        void Msg_TabChange(const uint32_t ctrl_id, const uint16_t tab_id);
+        void Msg_Group_TabChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t tab_id);
         void Msg_PaintAfter();
 
-        inline void Msg_ButtonClick_TabBuild(const unsigned int ctrl_id);
-        inline void Msg_ButtonClick_TabCutRoad(const unsigned int ctrl_id);
-        inline void Msg_ButtonClick_TabFlag(const unsigned int ctrl_id);
-        inline void Msg_ButtonClick_TabAttack(const unsigned int ctrl_id);
-        inline void Msg_ButtonClick_TabSeaAttack(const unsigned int ctrl_id);
-        inline void Msg_ButtonClick_TabSetFlag(const unsigned int ctrl_id);
-        inline void Msg_ButtonClick_TabWatch(const unsigned int ctrl_id);
+        inline void Msg_ButtonClick_TabBuild(const uint32_t ctrl_id);
+        inline void Msg_ButtonClick_TabCutRoad(const uint32_t ctrl_id);
+        inline void Msg_ButtonClick_TabFlag(const uint32_t ctrl_id);
+        inline void Msg_ButtonClick_TabAttack(const uint32_t ctrl_id);
+        inline void Msg_ButtonClick_TabSeaAttack(const uint32_t ctrl_id);
+        inline void Msg_ButtonClick_TabSetFlag(const uint32_t ctrl_id);
+        inline void Msg_ButtonClick_TabWatch(const uint32_t ctrl_id);
 
         /// Fügt Angriffs-Steuerelemente für bestimmte Gruppe hinzu
-        void AddAttackControls(ctrlGroup* group, const unsigned attackers_count);
-        void AddUpgradeRoad(ctrlGroup* group, unsigned int& x, unsigned int& width);
+        void AddAttackControls(ctrlGroup* group, const uint32_t attackers_count);
+        void AddUpgradeRoad(ctrlGroup* group, uint32_t& x, uint32_t& width);
         void DoUpgradeRoad();
 
 };

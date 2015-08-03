@@ -33,17 +33,17 @@ class nofArmorer : public nofWorkman
         bool sword_shield;
 
     private:
-        void DrawWorking(int x, int y);
+        void DrawWorking(int32_t x, int32_t y);
         /// Gibt die ID in JOBS.BOB zurück, wenn der Beruf Waren rausträgt (bzw rein)
-        unsigned short GetCarryID() const;
+        uint16_t GetCarryID() const;
         /// Der Arbeiter erzeugt eine Ware
         GoodType ProduceWare();
-		void HandleDerivedEvent(const unsigned int id);
+		void HandleDerivedEvent(const uint32_t id);
 
     public:
 
-        nofArmorer(const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofArmorer(SerializedGameData* sgd, const unsigned obj_id);
+        nofArmorer(const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofArmorer(SerializedGameData* sgd, const uint32_t obj_id);
 		void TryToWork();
 
         /// Serialisierungsfunktionen

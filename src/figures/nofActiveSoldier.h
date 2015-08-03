@@ -88,7 +88,7 @@ class nofActiveSoldier : public nofSoldier
 
         /// Looks for enemies nearby which want to fight with this soldier
         /// Returns true if it found one
-        bool FindEnemiesNearby(unsigned char excludedOwner=255);
+        bool FindEnemiesNearby(uint8_t excludedOwner=255);
         /// Informs this soldier that another soldier starts meeting him
         void MeetEnemy(nofActiveSoldier* other, const MapPoint figh_spot);
         /// Handle state "meet enemy" after each walking step
@@ -110,18 +110,18 @@ class nofActiveSoldier : public nofSoldier
         void GoalReached(); // ... he reached his "working place" (i.e. his military building)
 
         /// Gets the visual range radius of this soldier
-        virtual unsigned GetVisualRange() const;
+        virtual uint32_t GetVisualRange() const;
 
 
     public:
 
         /// Constructors
-        nofActiveSoldier(const MapPoint pt, const unsigned char player,
-                         nobBaseMilitary* const home, const unsigned char rank, const SoldierState init_state);
+        nofActiveSoldier(const MapPoint pt, const uint8_t player,
+                         nobBaseMilitary* const home, const uint8_t rank, const SoldierState init_state);
         /// (Copy-)Constructor
         nofActiveSoldier(const nofSoldier& other, const SoldierState init_state);
         /// Deserializer
-        nofActiveSoldier(SerializedGameData* sgd, const unsigned obj_id);
+        nofActiveSoldier(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Tidy up
     protected:  void Destroy_nofActiveSoldier() { Destroy_nofSoldier(); }
@@ -132,10 +132,10 @@ class nofActiveSoldier : public nofSoldier
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_nofActiveSoldier(sgd); }
 
         /// Draw soldier (for all types of soldiers done by this base class!)
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Event handling
-        virtual void HandleDerivedEvent(const unsigned int id);
+        virtual void HandleDerivedEvent(const uint32_t id);
 
         /// Informs the different things that we are not coming anymore
         virtual void InformTargetsAboutCancelling() = 0;

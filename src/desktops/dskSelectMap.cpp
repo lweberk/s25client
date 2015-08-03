@@ -160,14 +160,14 @@ dskSelectMap::~dskSelectMap()
  *  @author OLiver
  *  @author FloSoft
  */
-void dskSelectMap::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void dskSelectMap::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
     ctrlTable* table = GetCtrl<ctrlTable>(1);
 
     // Tabelle leeren
     table->DeleteAllItems();
 
-    static const unsigned int ids[] = { 39, 40, 41, 42, 43, 52, 91, 93, 48 };
+    static const uint32_t ids[] = { 39, 40, 41, 42, 43, 52, 91, 93, 48 };
     char path[4096];
 
     // Und wieder füllen lassen
@@ -191,7 +191,7 @@ void dskSelectMap::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsig
  *
  *  @author FloSoft
  */
-void dskSelectMap::Msg_TableSelectItem(const unsigned int ctrl_id, const unsigned short selection)
+void dskSelectMap::Msg_TableSelectItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -234,7 +234,7 @@ void dskSelectMap::Msg_TableSelectItem(const unsigned int ctrl_id, const unsigne
  *
  *  @author OLiver
  */
-void dskSelectMap::Msg_ButtonClick(const unsigned int ctrl_id)
+void dskSelectMap::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {
@@ -262,7 +262,7 @@ void dskSelectMap::Msg_ButtonClick(const unsigned int ctrl_id)
     }
 }
 
-void dskSelectMap::Msg_TableChooseItem(const unsigned ctrl_id, const unsigned short selection)
+void dskSelectMap::Msg_TableChooseItem(const uint32_t ctrl_id, const uint16_t selection)
 {
     // Doppelklick auf bestimmte Map -> weiter
     StartServer();
@@ -272,7 +272,7 @@ void dskSelectMap::Msg_TableChooseItem(const unsigned ctrl_id, const unsigned sh
 void dskSelectMap::StartServer()
 {
     ctrlTable* table = GetCtrl<ctrlTable>(1);
-    unsigned short selection = table->GetSelection();
+    uint16_t selection = table->GetSelection();
 
     // Ist die Auswahl gültig?
     if(selection < table->GetRowCount())
@@ -308,7 +308,7 @@ void dskSelectMap::StartServer()
  *
  *  @author OLiver
  */
-void dskSelectMap::Msg_MsgBoxResult(const unsigned msgbox_id, const MsgboxResult mbr)
+void dskSelectMap::Msg_MsgBoxResult(const uint32_t msgbox_id, const MsgboxResult mbr)
 {
     if(msgbox_id == 0) // Verbindung zu Server verloren?
     {

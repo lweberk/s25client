@@ -64,7 +64,7 @@ dskSplash::~dskSplash()
     GAMEMANAGER.SetCursor();
 }
 
-void dskSplash::Msg_Timer(const unsigned int ctrl_id)
+void dskSplash::Msg_Timer(const uint32_t ctrl_id)
 {
     // Hauptmenü zeigen
     WINDOWMANAGER.Switch(new dskMainMenu);

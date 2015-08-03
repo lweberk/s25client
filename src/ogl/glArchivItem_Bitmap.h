@@ -25,7 +25,7 @@
 #include "../libsiedler2/src/ArchivItem_Bitmap.h"
 
 #ifdef _WIN32
-typedef unsigned long long uint64_t;
+typedef uint64_t int64_t uint64_t;
 #endif
 
 /// Basisklasse für GL-Bitmapitems.
@@ -41,25 +41,25 @@ class glArchivItem_Bitmap : public virtual libsiedler2::baseArchivItem_Bitmap
         virtual ~glArchivItem_Bitmap(void);
 
         /// Erzeugt und zeichnet die Textur.
-        virtual void Draw(short dst_x, short dst_y, short dst_w = 0, short dst_h = 0, short src_x = 0, short src_y = 0, short src_w = 0, short src_h = 0, const unsigned int color = COLOR_WHITE, const unsigned int unused = COLOR_WHITE);
+        virtual void Draw(int16_t dst_x, int16_t dst_y, int16_t dst_w = 0, int16_t dst_h = 0, int16_t src_x = 0, int16_t src_y = 0, int16_t src_w = 0, int16_t src_h = 0, const uint32_t color = COLOR_WHITE, const uint32_t unused = COLOR_WHITE);
 
         /// liefert das GL-Textur-Handle.
-        unsigned int GetTexture();
+        uint32_t GetTexture();
         /// Löscht die GL-Textur (z.B fürs Neuerstellen)
         virtual void DeleteTexture();
         /// Setzt den Texturfilter auf einen bestimmten Wert.
-        virtual void setFilter(unsigned int filter);
+        virtual void setFilter(uint32_t filter);
 
-        unsigned short GetTexWidth() {return(tex_width);}
-        unsigned short GetTexHeight() {return(tex_width);}
+        uint16_t GetTexWidth() {return(tex_width);}
+        uint16_t GetTexHeight() {return(tex_width);}
 
     protected:
         /// Erzeugt die Textur.
         virtual void GenerateTexture();
 
     protected:
-        unsigned int texture; ///< Das GL-Textur-Handle
-        unsigned int filter;  ///< Der aktuell gewählte Texturfilter
+        uint32_t texture; ///< Das GL-Textur-Handle
+        uint32_t filter;  ///< Der aktuell gewählte Texturfilter
 };
 
 #endif // !GLARCHIVITEM_BITMAP_INCLUDED

@@ -21,6 +21,7 @@
 #define NODE_H_
 
 #include <cstring>
+#include <cstdint>
 
 class noRoadNode;
 
@@ -38,7 +39,7 @@ class Node
             memset(next, 0, sizeof(Node*) * 6);
         }
 
-        Node(const int x, const int y, const unsigned way, Node* const prev, const unsigned dir)
+        Node(const int32_t x, const int32_t y, const uint32_t way, Node* const prev, const uint32_t dir)
         {
             this->x = x;
             this->y = y;
@@ -51,9 +52,9 @@ class Node
 
         void Clear();
 
-        int x, y;
-        unsigned way;
-        unsigned char dir;
+        int32_t x, y;
+        uint32_t way;
+        uint8_t dir;
         Node* prev;
         Node* next[6];
 };
@@ -72,7 +73,7 @@ class FlagNode
             memset(next, 0, sizeof(FlagNode*) * 6);
         }
 
-        FlagNode(const noRoadNode* const flag, const unsigned way, FlagNode* const prev, const unsigned dir, const unsigned realway)
+        FlagNode(const noRoadNode* const flag, const uint32_t way, FlagNode* const prev, const uint32_t dir, const uint32_t realway)
         {
             this->flag = flag;
             this->way = way;
@@ -86,8 +87,8 @@ class FlagNode
         void Clear();
 
         const noRoadNode* flag;
-        unsigned way, realway;
-        unsigned char dir;
+        uint32_t way, realway;
+        uint8_t dir;
         FlagNode* prev;
         FlagNode* next[6];
 };

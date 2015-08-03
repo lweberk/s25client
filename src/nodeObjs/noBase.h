@@ -32,10 +32,10 @@ class noBase : public GameObject
         /// Konstruktor von @p noBase.
         noBase(const NodalObjectType nop) : nop(nop) {}
         /// Deserialisierungskonstruktor
-        noBase(SerializedGameData* sgd, const unsigned obj_id);
+        noBase(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// An x,y zeichnen.
-        virtual void Draw(int x, int y) = 0;
+        virtual void Draw(int32_t x, int32_t y) = 0;
 
         /// Type zurückgeben.
         NodalObjectType GetType(void) const { return nop; }

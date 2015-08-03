@@ -39,15 +39,15 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlDeepening::ctrlDeepening(Window* parent,
-                             unsigned int id,
-                             unsigned short x,
-                             unsigned short y,
-                             unsigned short width,
-                             unsigned short height,
+                             uint32_t id,
+                             uint16_t x,
+                             uint16_t y,
+                             uint16_t width,
+                             uint16_t height,
                              TextureColor tc,
                              const std::string& text,
                              glArchivItem_Font* font,
-                             unsigned int color)
+                             uint32_t color)
     : ctrlText(parent, id, x, y, text, color, 0, font),
       tc(tc)
 {
@@ -83,13 +83,13 @@ bool ctrlDeepening::Draw_(void)
  *  @author Divan
  */
 ctrlColorDeepening::ctrlColorDeepening(Window* parent,
-                                       unsigned int id,
-                                       unsigned short x,
-                                       unsigned short y,
-                                       unsigned short width,
-                                       unsigned short height,
+                                       uint32_t id,
+                                       uint16_t x,
+                                       uint16_t y,
+                                       uint16_t width,
+                                       uint16_t height,
                                        TextureColor tc,
-                                       unsigned int fillColor)
+                                       uint32_t fillColor)
     : ctrlDeepening(parent, id, x, y, width, height, tc, "", NormalFont, COLOR_YELLOW),
       width(width),
       height(height),
@@ -98,7 +98,7 @@ ctrlColorDeepening::ctrlColorDeepening(Window* parent,
 }
 
 /// Setzt die Farbe des Controls
-void ctrlColorDeepening::SetColor(const unsigned int fill_color)
+void ctrlColorDeepening::SetColor(const uint32_t fill_color)
 {
     this->fillColor = fill_color;
 }

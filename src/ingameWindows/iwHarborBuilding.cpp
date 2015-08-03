@@ -134,7 +134,7 @@ void iwHarborBuilding::AdjustExplorationExpeditionButton(bool flip)
  *
  *  @author OLiver
  */
-void iwHarborBuilding::Msg_Group_ButtonClick(const unsigned int group_id, const unsigned int ctrl_id)
+void iwHarborBuilding::Msg_Group_ButtonClick(const uint32_t group_id, const uint32_t ctrl_id)
 {
     switch(group_id)
     {

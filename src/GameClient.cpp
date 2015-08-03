@@ -190,7 +190,7 @@ GameClient::~GameClient(void)
  *  @author OLiver
  *  @author FloSoft
  */
-bool GameClient::Connect(const std::string& server, const std::string& password, unsigned char servertyp, unsigned short port, bool host, bool use_ipv6)
+bool GameClient::Connect(const std::string& server, const std::string& password, uint8_t servertyp, uint16_t port, bool host, bool use_ipv6)
 {
     Stop();
     ggs.LoadSettings();
@@ -332,7 +332,7 @@ void GameClient::Stop()
  *
  *  @author OLiver
  */
-void GameClient::StartGame(const unsigned int random_init)
+void GameClient::StartGame(const uint32_t random_init)
 {
     // Daten zurücksetzen
     randcheckinfo.Clear();
@@ -353,7 +353,7 @@ void GameClient::StartGame(const unsigned int random_init)
     gw->SetPlayers(&players);
     em = new EventManager();
     GameObject::SetPointers(gw, em, &players);
-    for(unsigned i = 0; i < players.getCount(); ++i)
+    for(uint32_t i = 0; i < players.getCount(); ++i)
         dynamic_cast<GameClientPlayer*>(players.getElement(i))->SetGameWorldPointer(gw);
 
     if(ci)
@@ -366,18 +366,18 @@ void GameClient::StartGame(const unsigned int random_init)
         savegame->sgd.PrepareDeserialization(em);
         gw->Deserialize(&savegame->sgd);
         em->Deserialize(&savegame->sgd);
-        for(unsigned i = 0; i < players.getCount(); ++i)
+        for(uint32_t i = 0; i < players.getCount(); ++i)
             GetPlayer(i)->Deserialize(&savegame->sgd);
 
         // TODO: schöner machen:
         // Die Fläche, die nur von einem Allierten des Spielers gesehen werden, müssen noch dem TerrainRenderer mitgeteilt werden
         // oder entsprechende Flächen müssen vorher bekannt gemacht werden
         // Die folgende Schleife aktualisiert einfach *alle* Punkt, ist also ziemlich ineffizient
-        unsigned short height = gw->GetHeight();
-        unsigned short width =  gw->GetWidth();
-        for (unsigned short y = 0; y < height; ++y)
+        uint16_t height = gw->GetHeight();
+        uint16_t width =  gw->GetWidth();
+        for (uint16_t y = 0; y < height; ++y)
         {
-            for (unsigned short x = 0; x < width; ++x)
+            for (uint16_t x = 0; x < width; ++x)
             {
                 gw->VisibilityChanged(MapPoint(x, y));
             }
@@ -388,13 +388,13 @@ void GameClient::StartGame(const unsigned int random_init)
     else
     {
         /// Startbündnisse setzen
-        for(unsigned i = 0; i < GetPlayerCount(); ++i)
+        for(uint32_t i = 0; i < GetPlayerCount(); ++i)
             players[i].MakeStartPacts();
 
         gw->LoadMap(clientconfig.mapfilepath);
 
         /// Evtl. Goldvorkommen ändern
-        unsigned char target = 0xFF; // löschen
+        uint8_t target = 0xFF; // löschen
         switch(GAMECLIENT.GetGGS().getSelection(ADDON_CHANGE_GOLD_DEPOSITS))
         {
             case 0: target = 3; break; //in Gold   konvertieren bzw. nichts tun
@@ -477,7 +477,7 @@ void GameClient::ExitGame()
  *
  *  @author FloSoft
  */
-void GameClient::OnNMSDeadMsg(unsigned int id)
+void GameClient::OnNMSDeadMsg(uint32_t id)
 {
     ServerLost();
 }
@@ -525,7 +525,7 @@ void GameClient::OnNMSPlayerId(const GameMessage_Player_Id& msg)
  */
 void GameClient::OnNMSPlayerList(const GameMessage_Player_List& msg)
 {
-    for(unsigned int i = 0; i < players.getCount(); ++i)
+    for(uint32_t i = 0; i < players.getCount(); ++i)
     {
         players[i].ps = msg.gpl[i].ps;
         players[i].name = msg.gpl[i].name;
@@ -965,7 +965,7 @@ void GameClient::OnNMSServerAsync(const GameMessage_Server_Async& msg)
     // Liste mit Namen und Checksummen erzeugen
     std::stringstream checksum_list;
     checksum_list << 23;
-    for(unsigned int i = 0; i < players.getCount(); ++i)
+    for(uint32_t i = 0; i < players.getCount(); ++i)
     {
         checksum_list << players.getElement(i)->name << ": " << msg.checksums.at(i);
         if(i != players.getCount() - 1)
@@ -1068,7 +1068,7 @@ inline void GameClient::OnNMSMapInfo(const GameMessage_Map_Info& msg)
 
     if(mapinfo.zipdata)
         delete[] mapinfo.zipdata;
-    mapinfo.zipdata = new unsigned char[mapinfo.ziplength + 1];
+    mapinfo.zipdata = new uint8_t[mapinfo.ziplength + 1];
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1078,7 +1078,7 @@ inline void GameClient::OnNMSMapData(const GameMessage_Map_Data& msg)
 {
     LOG.write("<<< NMS_MAP_DATA(%u)\n", msg.GetNetLength());
 
-    unsigned char* data = msg.map_data;
+    uint8_t* data = msg.map_data;
 
     memcpy(&mapinfo.zipdata[temp_ul], data, msg.GetNetLength());
     temp_ul += msg.GetNetLength();
@@ -1098,9 +1098,9 @@ inline void GameClient::OnNMSMapData(const GameMessage_Map_Data& msg)
 
         char* map_data = new char[mapinfo.length + 1];
 
-        unsigned int length = mapinfo.length;
+        uint32_t length = mapinfo.length;
 
-        int err = BZ_OK;
+        int32_t err = BZ_OK;
         if( (err = BZ2_bzBuffToBuffDecompress(map_data, &length, (char*)mapinfo.zipdata, mapinfo.ziplength, 0, 0)) != BZ_OK)
         {
             LOG.lprintf("FATAL ERROR: BZ2_bzBuffToBuffDecompress failed with code %d\n", err);
@@ -1110,7 +1110,7 @@ inline void GameClient::OnNMSMapData(const GameMessage_Map_Data& msg)
         if(fwrite(map_data, 1, mapinfo.length, map_f) != mapinfo.length)
             LOG.lprintf("ERROR: fwrite failed\n");
 
-        mapinfo.checksum = CalcChecksumOfBuffer((unsigned char*)map_data, mapinfo.length);
+        mapinfo.checksum = CalcChecksumOfBuffer((uint8_t*)map_data, mapinfo.length);
         delete[] map_data;
 
         fclose(map_f);
@@ -1134,7 +1134,7 @@ inline void GameClient::OnNMSMapData(const GameMessage_Map_Data& msg)
                 assert(header);
 
                 players.clear();
-                for(unsigned i = 0; i < header->getPlayer(); ++i)
+                for(uint32_t i = 0; i < header->getPlayer(); ++i)
                     players.push_back(GameClientPlayer(i));
 
                 mapinfo.title = header->getName();
@@ -1149,7 +1149,7 @@ inline void GameClient::OnNMSMapData(const GameMessage_Map_Data& msg)
                 }
 
                 players.clear();
-                for(unsigned i = 0; i < mapinfo.savegame.player_count; ++i)
+                for(uint32_t i = 0; i < mapinfo.savegame.player_count; ++i)
                     players.push_back(GameClientPlayer(i));
 
                 mapinfo.title = mapinfo.savegame.map_name;
@@ -1218,7 +1218,7 @@ void GameClient::OnNMSServerSpeed(const GameMessage_Server_Speed& msg)
 
 void GameClient::IncreaseSpeed()
 {
-    int gf_length = framesinfo.gf_length;
+    int32_t gf_length = framesinfo.gf_length;
     if(gf_length > 10)
         gf_length -= 10;
 
@@ -1348,7 +1348,7 @@ bool GameClient::IsPlayerLagging()
 {
     bool is_lagging = false;
 
-    for(unsigned char i = 0; i < players.getCount(); ++i)
+    for(uint8_t i = 0; i < players.getCount(); ++i)
     {
         if(players[i].ps == PS_OCCUPIED || players[i].ps == PS_KI)
         {
@@ -1371,7 +1371,7 @@ void GameClient::StatisticStep()
     // Soll alle 750 GFs (30 Sekunden auf 'Schnell') aufgerufen werden
     if ((framesinfo.nr - 1) % 750 == 0)
     {
-        for (unsigned int i = 0; i < players.getCount(); ++i)
+        for (uint32_t i = 0; i < players.getCount(); ++i)
         {
             players[i].StatisticStep();
         }
@@ -1380,17 +1380,17 @@ void GameClient::StatisticStep()
         if (ggs.game_objective != GlobalGameSettings::GO_NONE)
         {
             // check winning condition
-            unsigned int max = 0, sum = 0, best = 0xFFFF, maxteam = 0, teampoints = 0, curteam = 0, bestteam = 0xFFFF;
+            uint32_t max = 0, sum = 0, best = 0xFFFF, maxteam = 0, teampoints = 0, curteam = 0, bestteam = 0xFFFF;
 
             // Find out best player. Since at least 3/4 of the populated land is needed to win, we don't care about ties.
-            for (unsigned int i = 0; i < players.getCount(); ++i)
+            for (uint32_t i = 0; i < players.getCount(); ++i)
             {
                 if(ggs.lock_teams) //in games with locked team settings check for team victory
                 {
                     curteam = 0;
                     teampoints = 0;
                     if(players[i].isDefeated())continue;
-                    for(unsigned int j = 0; j < players.getCount(); ++j)
+                    for(uint32_t j = 0; j < players.getCount(); ++j)
                     {
                         if(i != j && players[j].IsAlly(i) && !players[j].isDefeated())
                         {
@@ -1406,7 +1406,7 @@ void GameClient::StatisticStep()
                         bestteam = curteam;
                     }
                 }
-                unsigned int v = players[i].GetStatisticCurrentValue(STAT_COUNTRY);
+                uint32_t v = players[i].GetStatisticCurrentValue(STAT_COUNTRY);
                 if (v > max)
                 {
                     max = v;
@@ -1463,7 +1463,7 @@ void GameClient::StatisticStep()
 /// testet ob ein Netwerkframe abgelaufen ist und führt dann ggf die Befehle aus
 void GameClient::ExecuteGameFrame(const bool skipping)
 {
-    unsigned int currenttime = VIDEODRIVER.GetTickCount();
+    uint32_t currenttime = VIDEODRIVER.GetTickCount();
 	if(!framesinfo.pause && framesinfo.pause_gf != 0 && framesinfo.nr == framesinfo.pause_gf)
 	{
 		framesinfo.pause_gf = 0;
@@ -1536,7 +1536,7 @@ void GameClient::ExecuteGameFrame(const bool skipping)
                 framesinfo.gf_length = framesinfo.gf_length_new;
 
                 //int oldgfl = framesinfo.gf_length;
-                int oldnwf = framesinfo.nwf_length;
+                int32_t oldnwf = framesinfo.nwf_length;
 
                 if(framesinfo.gf_length == 1)
                     framesinfo.nwf_length = 50;
@@ -1612,7 +1612,7 @@ void GameClient::NextGF()
     //  EventManager Bescheid sagen
     em->NextGF();
     // Notfallprogramm durchlaufen lassen
-    for(unsigned char i = 0; i < players.getCount(); ++i)
+    for(uint8_t i = 0; i < players.getCount(); ++i)
     {
         if(players[i].ps == PS_OCCUPIED || players[i].ps == PS_KI)
             // Auf Notfall testen (Wenige Bretter/Steine und keine Holzindustrie)
@@ -1639,9 +1639,9 @@ void GameClient::NextGF()
 }
 
 
-void GameClient::ExecuteAllGCs(const GameMessage_GameCommand& gcs, unsigned char* player_switch_old_id, unsigned char* player_switch_new_id)
+void GameClient::ExecuteAllGCs(const GameMessage_GameCommand& gcs, uint8_t* player_switch_old_id, uint8_t* player_switch_new_id)
 {
-    for(unsigned char i = 0; i < gcs.gcs.size(); ++i)
+    for(uint8_t i = 0; i < gcs.gcs.size(); ++i)
     {
         // NC ausführen
         gcs.gcs[i]->Execute(*gw, players[gcs.player], gcs.player);
@@ -1662,18 +1662,18 @@ void GameClient::ExecuteAllGCs(const GameMessage_GameCommand& gcs, unsigned char
  *  @author FloSoft
  *  @author OLiver
  */
-void GameClient::SendNothingNC(int checksum)
+void GameClient::SendNothingNC(int32_t checksum)
 {
     if(checksum == -1)
         checksum = RANDOM.GetCurrentRandomValue();
 
     /*GameMessage nfc(NMS_NFC_COMMANDS, 5);
-    *static_cast<int*>(nfc.m_pData) = checksum;*/
+    *static_cast<int32_t*>(nfc.m_pData) = checksum;*/
 
     send_queue.push(new GameMessage_GameCommand(playerid, checksum, std::vector<gc::GameCommand*>()));
 }
 
-void GameClient::WriteReplayHeader(const unsigned random_init)
+void GameClient::WriteReplayHeader(const uint32_t random_init)
 {
     // Dateiname erzeugen
     char filename[256], time[80];
@@ -1698,7 +1698,7 @@ void GameClient::WriteReplayHeader(const unsigned random_init)
     replayinfo.replay.players = new SavedFile::Player[players.getCount()];
 
     // Spielerdaten
-    for(unsigned char i = 0; i < players.getCount(); ++i)
+    for(uint8_t i = 0; i < players.getCount(); ++i)
     {
         replayinfo.replay.players[i].ps = unsigned(players[i].ps);
 
@@ -1747,7 +1747,7 @@ void GameClient::WriteReplayHeader(const unsigned random_init)
         LOG.lprintf("GameClient::WriteReplayHeader: WARNING: File couldn't be opened. Don't use a replayinfo.replay.\n");
 }
 
-unsigned GameClient::StartReplay(const std::string& path, GameWorldViewer*& gwv)
+uint32_t GameClient::StartReplay(const std::string& path, GameWorldViewer*& gwv)
 {
     replayinfo.filename = path;
     replayinfo.replay.savegame = &mapinfo.savegame;
@@ -1761,7 +1761,7 @@ unsigned GameClient::StartReplay(const std::string& path, GameWorldViewer*& gwv)
     //players.resize(replayinfo.replay.players.getCount());
 
     // Spielerdaten
-    for(unsigned char i = 0; i < replayinfo.replay.player_count; ++i)
+    for(uint8_t i = 0; i < replayinfo.replay.player_count; ++i)
     {
         players.push_back(GameClientPlayer(i));
 
@@ -1790,9 +1790,9 @@ unsigned GameClient::StartReplay(const std::string& path, GameWorldViewer*& gwv)
         case MAPTYPE_OLDMAP:
         {
             // Mapdaten auslesen und entpacken
-            unsigned char* real_data = new unsigned char[replayinfo.replay.map_length];
+            uint8_t* real_data = new uint8_t[replayinfo.replay.map_length];
 
-            int err;
+            int32_t err;
             if( (err = BZ2_bzBuffToBuffDecompress((char*)real_data, &replayinfo.replay.map_length, (char*)replayinfo.replay.map_data, replayinfo.replay.map_zip_length, 0, 0)) != BZ_OK)
             {
                 LOG.lprintf("FATAL ERROR: BZ2_bzBuffToBuffDecompress failed with code %d\n", err);
@@ -1837,33 +1837,33 @@ unsigned GameClient::StartReplay(const std::string& path, GameWorldViewer*& gwv)
     return 0;
 }
 //
-//unsigned GameClient::GetGlobalAnimation(8,unsigned time_part_nominator, unsigned time_part_denominator,
-//      unsigned divide_nominator, unsigned divide_denominator, unsigned offset)
+//uint32_t GameClient::GetGlobalAnimation(8,uint32_t time_part_nominator, uint32_t time_part_denominator,
+//      uint32_t divide_nominator, uint32_t divide_denominator, uint32_t offset)
 //{
 //  //return ((networkframe.nr * networkframe.length + networkframe.frame_time+offset) % time_part) / divide;
 //  return ((networkframe.nr * networkframe.length + networkframe.frame_time+offset) % (networkframe.length*time_part_nominator/time_part_denominator)) / (networkframe.length*time_part_nominator/time_part_denominator);
 //}
 
-unsigned int GameClient::GetGlobalAnimation(const unsigned short max, const unsigned char factor_numerator, const unsigned char factor_denumerator, const unsigned int offset)
+uint32_t GameClient::GetGlobalAnimation(const uint16_t max, const uint8_t factor_numerator, const uint8_t factor_denumerator, const uint32_t offset)
 {
     // Unit for animations is 630ms (dividable by 2, 3, 5, 6, 7, 10, 15, ...)
     // But this also means: If framerate drops below approx. 15Hz, you won't see
     // every frame of an 8-part animation anymore.
     // An animation runs fully in (factor_numerator / factor_denumerator) multiples of 630ms
-    const unsigned unit = 630/*ms*/ * factor_numerator / factor_denumerator;
+    const uint32_t unit = 630/*ms*/ * factor_numerator / factor_denumerator;
     // Good approximation of current time in ms
     // (Accuracy of a possibly expensive VideoDriverWrapper::GetTicks() isn't needed here):
-    const unsigned currenttime = framesinfo.lasttime + framesinfo.frame_time;
+    const uint32_t currenttime = framesinfo.lasttime + framesinfo.frame_time;
     return ((currenttime % unit) * max / unit + offset) % max;
 }
 
-unsigned GameClient::Interpolate(unsigned max_val, EventManager::EventPointer ev)
+uint32_t GameClient::Interpolate(uint32_t max_val, EventManager::EventPointer ev)
 {
     assert( ev );
-    return min<unsigned int>(((max_val * ((framesinfo.nr - ev->gf) * framesinfo.gf_length + framesinfo.frame_time)) / (ev->gf_length * framesinfo.gf_length)), max_val - 1);
+    return min<uint32_t>(((max_val * ((framesinfo.nr - ev->gf) * framesinfo.gf_length + framesinfo.frame_time)) / (ev->gf_length * framesinfo.gf_length)), max_val - 1);
 }
 
-int GameClient::Interpolate(int x1, int x2, EventManager::EventPointer ev)
+int32_t GameClient::Interpolate(int32_t x1, int32_t x2, EventManager::EventPointer ev)
 {
     assert( ev );
     return (x1 + ( (x2 - x1) * ((int(framesinfo.nr) - int(ev->gf)) * int(framesinfo.gf_length) + int(framesinfo.frame_time))) / int(ev->gf_length * framesinfo.gf_length));
@@ -1895,12 +1895,12 @@ void GameClient::ServerLost()
  *  @author OLiver
  *  @author FloSoft
  */
-void GameClient::SkipGF(unsigned int gf)
+void GameClient::SkipGF(uint32_t gf)
 {
     if(gf <= framesinfo.nr)
         return;
 
-    unsigned start_ticks = VIDEODRIVER.GetTickCount();
+    uint32_t start_ticks = VIDEODRIVER.GetTickCount();
 
     // Spiel entpausieren
 	if(replay_mode)
@@ -1921,11 +1921,11 @@ void GameClient::SkipGF(unsigned int gf)
 	
 
     // GFs überspringen
-	for(unsigned int i = framesinfo.nr; i < gf;++i)
+	for(uint32_t i = framesinfo.nr; i < gf;++i)
     {
         if(i % 1000 == 0)
         {
-            unsigned int water_percent;
+            uint32_t water_percent;
             RoadsBuilding road;
             char nwf_string[256];
 
@@ -1947,7 +1947,7 @@ void GameClient::SkipGF(unsigned int gf)
     }
 	
     // Spiel pausieren & text ausgabe wie lang das jetzt gedauert hat 
-    unsigned ticks = VIDEODRIVER.GetTickCount() - start_ticks;
+    uint32_t ticks = VIDEODRIVER.GetTickCount() - start_ticks;
 	char text[256];
 	snprintf(text, sizeof(text), _("Jump finished (%.3f seconds)."), (double) ticks / 1000.0);
 	ci->CI_Chat(playerid, CD_SYSTEM, text); 
@@ -1960,7 +1960,7 @@ void GameClient::SystemChat(std::string text)
     ci->CI_Chat(playerid, CD_SYSTEM, text);
 }
 
-unsigned GameClient::WriteSaveHeader(const std::string& filename)
+uint32_t GameClient::WriteSaveHeader(const std::string& filename)
 {
     // Mond malen
     LOADER.GetImageN("resource", 33)->Draw(VIDEODRIVER.GetMouseX(), VIDEODRIVER.GetMouseY() - 40, 0, 0, 0, 0, 0, 0);
@@ -1977,7 +1977,7 @@ unsigned GameClient::WriteSaveHeader(const std::string& filename)
     save.players = new SavedFile::Player[players.getCount()];
 
     // Spielerdaten
-    for(unsigned char i = 0; i < players.getCount(); ++i)
+    for(uint8_t i = 0; i < players.getCount(); ++i)
     {
         save.players[i].ps = unsigned(players[i].ps);
 
@@ -2081,7 +2081,7 @@ void GameClient::GetVisualSettings()
     visual_settings.order_type = player->order_type;
 
     // Baureihenfolge füllen (0 ist das HQ!)
-    for(unsigned char i = 0; i < 31; ++i)
+    for(uint8_t i = 0; i < 31; ++i)
         visual_settings.build_order[i] = player->build_order[i];
 }
 
@@ -2107,10 +2107,10 @@ bool GameClient::AddGC(gc::GameCommand* gc)
 }
 
 /// Erzeugt einen KI-Player, der mit den Daten vom GameClient gefüttert werden muss (zusätzlich noch mit den GameServer)
-AIBase* GameClient::CreateAIPlayer(const unsigned playerid)
+AIBase* GameClient::CreateAIPlayer(const uint32_t playerid)
 {
     /*
-    unsigned int level = AI::MEDIUM;
+    uint32_t level = AI::MEDIUM;
 
     switch(level)
     {
@@ -2144,15 +2144,15 @@ AIBase* GameClient::CreateAIPlayer(const unsigned playerid)
 }
 
 /// Wandelt eine GF-Angabe in eine Zeitangabe um (HH:MM:SS oder MM:SS wenn Stunden = 0)
-std::string GameClient::FormatGFTime(const unsigned gf) const
+std::string GameClient::FormatGFTime(const uint32_t gf) const
 {
     // In Sekunden umrechnen
-    unsigned total_seconds = gf * framesinfo.gf_length / 1000;
+    uint32_t total_seconds = gf * framesinfo.gf_length / 1000;
 
     // Angaben rausfiltern
-    unsigned hours = total_seconds / 3600;
-    unsigned minutes =  total_seconds / 60;
-    unsigned seconds = total_seconds % 60;
+    uint32_t hours = total_seconds / 3600;
+    uint32_t minutes =  total_seconds / 60;
+    uint32_t seconds = total_seconds % 60;
 
     char str[64];
 
@@ -2197,7 +2197,7 @@ void GameClient::DeletePostMessage(PostMsg* msg)
     }
 }
 
-void GameClient::SendAIEvent(AIEvent::Base* ev, unsigned receiver)
+void GameClient::SendAIEvent(AIEvent::Base* ev, uint32_t receiver)
 {
     if (human_ai && playerid == receiver)
     {
@@ -2212,7 +2212,7 @@ void GameClient::SendAIEvent(AIEvent::Base* ev, unsigned receiver)
 }
 
 /// Schreibt ggf. Pathfinding-Results in das Replay, falls erforderlich
-void GameClient::AddPathfindingResult(const unsigned char dir, const unsigned* const length, const MapPoint* const next_harbor)
+void GameClient::AddPathfindingResult(const uint8_t dir, const uint32_t* const length, const MapPoint* const next_harbor)
 {
     // Sind wir im normalem Spiel?
     if(!replay_mode || (replay_mode && !replayinfo.replay.pathfinding_results))
@@ -2241,14 +2241,14 @@ bool GameClient::ArePathfindingResultsAvailable() const
 }
 
 /// Gibt Pathfinding-Results zurück aus einem Replay
-bool GameClient::ReadPathfindingResult(unsigned char* dir, unsigned* length, MapPoint* next_harbor)
+bool GameClient::ReadPathfindingResult(uint8_t* dir, uint32_t* length, MapPoint* next_harbor)
 {
     return replayinfo.replay.ReadPathfindingResult(dir, length, next_harbor);
 }
 
 
 /// Is tournament mode activated (0 if not)? Returns the durations of the tournament mode in gf otherwise
-unsigned GameClient::GetTournamentModeDuration() const
+uint32_t GameClient::GetTournamentModeDuration() const
 {
     if(unsigned(ggs.game_objective) >= OBJECTIVES_COUNT)
         return TOURNAMENT_MODES_DURATION[ggs.game_objective - OBJECTIVES_COUNT] * 60 * 1000 / framesinfo.gf_length;

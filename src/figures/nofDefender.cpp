@@ -42,8 +42,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-nofDefender::nofDefender(const MapPoint pos, const unsigned char player,
-                         nobBaseMilitary* const home, const unsigned char rank, nofAttacker* const attacker)
+nofDefender::nofDefender(const MapPoint pos, const uint8_t player,
+                         nobBaseMilitary* const home, const uint8_t rank, nofAttacker* const attacker)
     : nofActiveSoldier(pos, player, home, rank, STATE_DEFENDING_WALKINGTO), attacker(attacker)
 {
 }
@@ -61,7 +61,7 @@ void nofDefender::Serialize_nofDefender(SerializedGameData* sgd) const
         sgd->PushObject(attacker, true);
 }
 
-nofDefender::nofDefender(SerializedGameData* sgd, const unsigned obj_id) : nofActiveSoldier(sgd, obj_id)
+nofDefender::nofDefender(SerializedGameData* sgd, const uint32_t obj_id) : nofActiveSoldier(sgd, obj_id)
 {
     if(state != STATE_FIGUREWORK)
         attacker = sgd->PopObject<nofAttacker>(GOT_NOF_ATTACKER);

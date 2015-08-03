@@ -38,14 +38,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofSoldier::nofSoldier(const MapPoint pos, const unsigned char player,
-                       nobBaseMilitary* const goal , nobBaseMilitary* const home, const unsigned char rank)
+nofSoldier::nofSoldier(const MapPoint pos, const uint8_t player,
+                       nobBaseMilitary* const goal , nobBaseMilitary* const home, const uint8_t rank)
     : noFigure(static_cast<Job>(JOB_PRIVATE + rank), pos, player, goal), building(home), hitpoints(HITPOINTS[gwg->GetPlayer(player)->nation][rank])
 {
 }
 
-nofSoldier::nofSoldier(const MapPoint pos, const unsigned char player,
-                       nobBaseMilitary* const home, const unsigned char rank)
+nofSoldier::nofSoldier(const MapPoint pos, const uint8_t player,
+                       nobBaseMilitary* const home, const uint8_t rank)
     : noFigure(static_cast<Job>(JOB_PRIVATE + rank), pos, player), building(home), hitpoints(HITPOINTS[gwg->GetPlayer(player)->nation][rank])
 {
 }
@@ -60,7 +60,7 @@ void nofSoldier::Serialize_nofSoldier(SerializedGameData* sgd) const
     sgd->PushUnsignedChar(hitpoints);
 }
 
-nofSoldier::nofSoldier(SerializedGameData* sgd, const unsigned obj_id) : noFigure(sgd, obj_id)
+nofSoldier::nofSoldier(SerializedGameData* sgd, const uint32_t obj_id) : noFigure(sgd, obj_id)
 {
     if(fs != FS_WANDER && fs != FS_GOHOME)
         building = sgd->PopObject<nobBaseMilitary>(GOT_UNKNOWN);
@@ -70,7 +70,7 @@ nofSoldier::nofSoldier(SerializedGameData* sgd, const unsigned obj_id) : noFigur
     hitpoints = sgd->PopUnsignedChar();
 }
 
-void nofSoldier::DrawSoldierWalking(int x, int y, bool waitingsoldier)
+void nofSoldier::DrawSoldierWalking(int32_t x, int32_t y, bool waitingsoldier)
 {
     DrawWalking(x, y, LOADER.GetBobN("jobs"), 30 + NATION_RTTR_TO_S2[gwg->GetPlayer(player)->nation] * 6 + job - JOB_PRIVATE, false, waitingsoldier);
 }

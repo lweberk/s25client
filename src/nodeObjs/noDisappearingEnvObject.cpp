@@ -48,7 +48,7 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 noDisappearingEnvObject::noDisappearingEnvObject(const MapPoint pos,
-        const unsigned living_time, const unsigned add_var_living_time)
+        const uint32_t living_time, const uint32_t add_var_living_time)
     : noCoordBase(NOP_ENVIRONMENT, pos),
       disappearing(false)
 {
@@ -63,18 +63,18 @@ void noDisappearingEnvObject::Serialize_noDisappearingEnvObject(SerializedGameDa
     sgd->PushObject(dead_event, true);
 }
 
-noDisappearingEnvObject::noDisappearingEnvObject(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noDisappearingEnvObject::noDisappearingEnvObject(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     disappearing(sgd->PopBool()),
     dead_event(sgd->PopObject<EventManager::Event>(GOT_EVENT))
 {
 }
 
 /// Gibt Farbe zurück, mit der das Objekt gezeichnet werden soll
-unsigned noDisappearingEnvObject::GetDrawColor() const
+uint32_t noDisappearingEnvObject::GetDrawColor() const
 {
     if(disappearing)
     {
-        unsigned int transparency = 0xFF - GAMECLIENT.Interpolate(0xFF, dead_event);
+        uint32_t transparency = 0xFF - GAMECLIENT.Interpolate(0xFF, dead_event);
         return transparency | (transparency << 8) | (transparency << 16) | (transparency << 24);
     }
     else
@@ -82,11 +82,11 @@ unsigned noDisappearingEnvObject::GetDrawColor() const
 }
 
 /// Gibt Farbe zurück, mit der der Schatten des Objekts gezeichnet werden soll
-unsigned noDisappearingEnvObject::GetDrawShadowColor() const
+uint32_t noDisappearingEnvObject::GetDrawShadowColor() const
 {
     if(disappearing)
     {
-        unsigned int transparency = 0x40 - GAMECLIENT.Interpolate(0x40, dead_event);
+        uint32_t transparency = 0x40 - GAMECLIENT.Interpolate(0x40, dead_event);
         return (transparency << 24);
     }
     else
@@ -100,7 +100,7 @@ unsigned noDisappearingEnvObject::GetDrawShadowColor() const
  *
  *  @author FloSoft
  */
-void noDisappearingEnvObject::HandleEvent_noDisappearingEnvObject(const unsigned int id)
+void noDisappearingEnvObject::HandleEvent_noDisappearingEnvObject(const uint32_t id)
 {
     if(id)
     {

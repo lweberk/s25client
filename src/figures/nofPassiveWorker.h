@@ -34,15 +34,15 @@ class nofPassiveWorker : public noFigure
         void Walked(); // wenn man gelaufen ist
         void GoalReached(); // wenn das Ziel erreicht wurde
         void AbrogateWorkplace();
-        void HandleDerivedEvent(const unsigned int id); /// Für alle restlichen Events, die nicht von noFigure behandelt werden
+        void HandleDerivedEvent(const uint32_t id); /// Für alle restlichen Events, die nicht von noFigure behandelt werden
 
     public:
 
-        nofPassiveWorker(const Job job, const MapPoint pt, const unsigned char player, noRoadNode* goal);
-        nofPassiveWorker(SerializedGameData* sgd, const unsigned obj_id);
+        nofPassiveWorker(const Job job, const MapPoint pt, const uint8_t player, noRoadNode* goal);
+        nofPassiveWorker(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Zeichnen
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         GO_Type GetGOT() const
         {

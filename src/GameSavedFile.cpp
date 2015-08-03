@@ -51,7 +51,7 @@ SavedFile::~SavedFile()
  *
  *  @author OLiver
  */
-void SavedFile::WriteVersion(BinaryFile& file, unsigned int signature_length, const char* signature, unsigned short version)
+void SavedFile::WriteVersion(BinaryFile& file, uint32_t signature_length, const char* signature, uint16_t version)
 {
     // Signatur schreiben
     file.WriteRawData(signature, signature_length);
@@ -68,7 +68,7 @@ void SavedFile::WriteVersion(BinaryFile& file, unsigned int signature_length, co
  *
  *  @author OLiver
  */
-bool SavedFile::ValidateFile(BinaryFile& file, unsigned int signature_length, const char* signature, unsigned short version)
+bool SavedFile::ValidateFile(BinaryFile& file, uint32_t signature_length, const char* signature, uint16_t version)
 {
     char read_signature[32];
 
@@ -86,7 +86,7 @@ bool SavedFile::ValidateFile(BinaryFile& file, unsigned int signature_length, co
     file.Seek(8, SEEK_CUR);
 
     // Version überprüfen
-    unsigned short read_version = file.ReadUnsignedShort();
+    uint16_t read_version = file.ReadUnsignedShort();
     if(read_version != version)
     {
         // anderes Dateiformat --> raus
@@ -105,7 +105,7 @@ bool SavedFile::ValidateFile(BinaryFile& file, unsigned int signature_length, co
 void SavedFile::WritePlayerData(BinaryFile& file)
 {
     // Spielerdaten
-    for(unsigned char i = 0; i < player_count; ++i)
+    for(uint8_t i = 0; i < player_count; ++i)
     {
         file.WriteUnsignedInt(players[i].ps);
 
@@ -130,7 +130,7 @@ void SavedFile::ReadPlayerData(BinaryFile& file)
     delete[] players;
 
     players = new SavedFile::Player[player_count];
-    for(unsigned char i = 0; i < player_count; ++i)
+    for(uint8_t i = 0; i < player_count; ++i)
     {
         players[i].ps = file.ReadUnsignedInt();
 
@@ -167,8 +167,8 @@ void SavedFile::WriteGGS(BinaryFile& file)
  */
 void SavedFile::ReadGGS(BinaryFile& file)
 {
-    unsigned length = file.ReadUnsignedInt();
-    unsigned char* buffer = new unsigned char[length];
+    uint32_t length = file.ReadUnsignedInt();
+    uint8_t* buffer = new uint8_t[length];
 
     file.ReadRawData(buffer, length);
     Serializer ser(buffer, length);

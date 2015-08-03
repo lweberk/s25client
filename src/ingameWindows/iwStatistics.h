@@ -42,11 +42,11 @@ class iwStatistics : public IngameWindow
         ctrlText* minValue;
         std::vector<ctrlText*> timeAnnotations;
         std::vector<bool> activePlayers;
-        unsigned numPlayingPlayers;
+        uint32_t numPlayingPlayers;
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
         void Msg_PaintAfter();
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
         void DrawStatistic(StatisticType type);
         void DrawAxis();
 };

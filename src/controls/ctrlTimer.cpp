@@ -55,8 +55,8 @@ static char THIS_FILE[] = __FILE__;
  *  @author FloSoft
  */
 ctrlTimer::ctrlTimer(Window* parent,
-                     unsigned int id,
-                     unsigned int timeout)
+                     uint32_t id,
+                     uint32_t timeout)
     : Window(0, 0, id, parent)
 {
     Start(timeout);
@@ -68,7 +68,7 @@ ctrlTimer::ctrlTimer(Window* parent,
  *
  *  @author FloSoft
  */
-void ctrlTimer::Start(unsigned int timeout)
+void ctrlTimer::Start(uint32_t timeout)
 {
     this->timeout = timeout;
 

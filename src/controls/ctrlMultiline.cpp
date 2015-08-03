@@ -40,14 +40,14 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlMultiline::ctrlMultiline(Window* parent,
-                             unsigned int id,
-                             unsigned short x,
-                             unsigned short y,
-                             unsigned short width,
-                             unsigned short height,
+                             uint32_t id,
+                             uint16_t x,
+                             uint16_t y,
+                             uint16_t width,
+                             uint16_t height,
                              TextureColor tc,
                              glArchivItem_Font* font,
-                             unsigned int format)
+                             uint32_t format)
     : Window(x, y, id, parent, width, height),
       tc(tc), font(font), format(format), lines_in_control((height - 4) / font->getHeight()), draw_box(true)
 {
@@ -60,7 +60,7 @@ ctrlMultiline::ctrlMultiline(Window* parent,
  *
  *  @author OLiver
  */
-void ctrlMultiline::AddString(const std::string& str, unsigned int color, bool scroll)
+void ctrlMultiline::AddString(const std::string& str, uint32_t color, bool scroll)
 {
     Line line = { str, color };
     lines.push_back(line);
@@ -87,11 +87,11 @@ bool ctrlMultiline::Draw_(void)
 
     DrawControls();
 
-    unsigned show_lines = std::min(lines_in_control, unsigned(lines.size()));
+    uint32_t show_lines = std::min(lines_in_control, unsigned(lines.size()));
 
     ctrlScrollBar* scrollbar = GetCtrl<ctrlScrollBar>(0);
 
-    for(unsigned short i = 0; i < show_lines; ++i)
+    for(uint16_t i = 0; i < show_lines; ++i)
         font->Draw(GetX() + 2, GetY() + 2 + i * font->getHeight(), lines[i + scrollbar->GetPos()].str, format, lines[i + scrollbar->GetPos()].color);
 
     return true;
@@ -179,14 +179,14 @@ bool ctrlMultiline::Msg_MouseMove(const MouseCoords& mc)
 }
 
 
-void ctrlMultiline::Resize_(unsigned short width, unsigned short height)
+void ctrlMultiline::Resize_(uint16_t width, uint16_t height)
 {
     // Position der Scrollbar anpassen
     GetCtrl<ctrlScrollBar>(0)->Move(width - SCROLLBAR_WIDTH, 0);
 }
 
 /// Textzeile ersetzen. Klappt bestimmt nicht mit Scrollbar-Kram
-void ctrlMultiline::SetLine(const unsigned index, const std::string& str, unsigned int color)
+void ctrlMultiline::SetLine(const uint32_t index, const std::string& str, uint32_t color)
 {
     if (index < lines.size())
     {

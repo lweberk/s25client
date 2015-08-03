@@ -35,7 +35,7 @@
  *
  *  @author OLiver
  */
-Minimap::Minimap(const unsigned short map_width, const unsigned short map_height)
+Minimap::Minimap(const uint16_t map_width, const uint16_t map_height)
     : map_width(map_width), map_height(map_height)
 {
 
@@ -54,18 +54,18 @@ void Minimap::CreateMapTexture(const void* param)
         return;
 
     /// Buffer für die Daten erzeugen
-    unsigned char* buffer = new unsigned char[map_width * 2 * map_height * 4];
+    uint8_t* buffer = new uint8_t[map_width * 2 * map_height * 4];
 
     for(MapCoord y = 0; y < map_height; ++y)
     {
         for(MapCoord x = 0; x < map_width; ++x)
         {
             // Die 2. Terraindreiecke durchgehen
-            for(unsigned t = 0; t < 2; ++t)
+            for(uint32_t t = 0; t < 2; ++t)
             {
-                unsigned color = CalcPixelColor(param, MapPoint(x, y), t);
+                uint32_t color = CalcPixelColor(param, MapPoint(x, y), t);
 
-                unsigned pos  = y * map_width * 4 * 2 + (x * 4 * 2 + t * 4 + (y & 1) * 4) % (map_width * 4 * 2);
+                uint32_t pos  = y * map_width * 4 * 2 + (x * 4 * 2 + t * 4 + (y & 1) * 4) % (map_width * 4 * 2);
                 buffer[pos + 2] = GetRed(color);
                 buffer[pos + 1] = GetGreen(color);
                 buffer[pos]   = GetBlue(color);
@@ -86,7 +86,7 @@ void Minimap::CreateMapTexture(const void* param)
  *
  *  @author OLiver
  */
-void Minimap::Draw(const unsigned short x, const unsigned short y, const unsigned short width, const unsigned short height)
+void Minimap::Draw(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height)
 {
     BeforeDrawing();
 
@@ -109,17 +109,17 @@ void Minimap::BeforeDrawing()
  *
  *  @author OLiver
  */
-unsigned Minimap::VaryBrightness(const unsigned color, const int range) const
+uint32_t Minimap::VaryBrightness(const uint32_t color, const int32_t range) const
 {
-    int add = 100 - rand() % (2 * range);
+    int32_t add = 100 - rand() % (2 * range);
 
-    int red = GetRed(color) * add / 100;
+    int32_t red = GetRed(color) * add / 100;
     if(red < 0) red = 0;
     else if(red > 0xFF) red = 0xFF;
-    int green = GetGreen(color) * add / 100;
+    int32_t green = GetGreen(color) * add / 100;
     if(green < 0) green = 0;
     else if(green > 0xFF) green = 0xFF;
-    int blue = GetBlue(color) * add / 100;
+    int32_t blue = GetBlue(color) * add / 100;
     if(blue < 0) blue = 0;
     else if(blue > 0xFF) blue = 0xFF;
 
@@ -156,12 +156,12 @@ void Minimap::SetMap(glArchivItem_Map* s2map)
  *
  *  @author OLiver
  */
-unsigned PreviewMinimap::CalcPixelColor(const void* param, const MapPoint pt, const unsigned t)
+uint32_t PreviewMinimap::CalcPixelColor(const void* param, const MapPoint pt, const uint32_t t)
 {
     const glArchivItem_Map& s2map = *static_cast<const glArchivItem_Map*>(param);
-    unsigned color = 0;
+    uint32_t color = 0;
     // Baum an dieser Stelle?
-    unsigned char landscape_obj = s2map.GetMapDataAt(MAP_TYPE, pt.x, pt.y);
+    uint8_t landscape_obj = s2map.GetMapDataAt(MAP_TYPE, pt.x, pt.y);
     if(landscape_obj >= 0xC4 && landscape_obj <= 0xC6)
         color = VaryBrightness(TREE_COLOR, VARY_TREE_COLOR);
     // Granit an dieser Stelle?
@@ -174,9 +174,9 @@ unsigned PreviewMinimap::CalcPixelColor(const void* param, const MapPoint pt, co
                 [TERRAIN_INDIZES[s2map.GetMapDataAt(MapLayer(MAP_TERRAIN1 + t), pt.x, pt.y)]];
 
         // Schattierung
-        int r = GetRed(color) + s2map.GetMapDataAt(MAP_SHADOWS, pt.x, pt.y) - 0x40;
-        int g = GetGreen(color) + s2map.GetMapDataAt(MAP_SHADOWS, pt.x, pt.y) - 0x40;
-        int b = GetBlue(color) + s2map.GetMapDataAt(MAP_SHADOWS, pt.x, pt.y) - 0x40;
+        int32_t r = GetRed(color) + s2map.GetMapDataAt(MAP_SHADOWS, pt.x, pt.y) - 0x40;
+        int32_t g = GetGreen(color) + s2map.GetMapDataAt(MAP_SHADOWS, pt.x, pt.y) - 0x40;
+        int32_t b = GetBlue(color) + s2map.GetMapDataAt(MAP_SHADOWS, pt.x, pt.y) - 0x40;
 
         if(r < 0) r = 0;
         if(r > 255) r = 255;
@@ -208,14 +208,14 @@ IngameMinimap::IngameMinimap(const GameWorldViewer& gwv) :
  *
  *  @author OLiver
  */
-unsigned IngameMinimap::CalcPixelColor(const void* param, const MapPoint pt, const unsigned t)
+uint32_t IngameMinimap::CalcPixelColor(const void* param, const MapPoint pt, const uint32_t t)
 {
     const GameWorldViewer& gwv = *static_cast<const GameWorldViewer*>(param);
 
-    unsigned color = 0;
+    uint32_t color = 0;
 
     // Beobeachtender Spieler
-    unsigned char viewing_player = GAMECLIENT.GetPlayerID();
+    uint8_t viewing_player = GAMECLIENT.GetPlayerID();
 
     Visibility visibility = gwv.GetVisibility(pt);
 
@@ -231,7 +231,7 @@ unsigned IngameMinimap::CalcPixelColor(const void* param, const MapPoint pt, con
 
         bool fow = (visibility == VIS_FOW);
 
-        unsigned char owner;
+        uint8_t owner;
         if(!fow)
             owner = gwv.GetNode(pt).owner;
         else
@@ -321,15 +321,15 @@ unsigned IngameMinimap::CalcPixelColor(const void* param, const MapPoint pt, con
  *
  *  @author OLiver
  */
-unsigned IngameMinimap::CalcTerrainColor(const MapPoint pt, const unsigned t)
+uint32_t IngameMinimap::CalcTerrainColor(const MapPoint pt, const uint32_t t)
 {
-    unsigned color = TERRAIN_COLORS[gwv.GetLandscapeType()][ (t == 0) ? gwv.GetNode(pt).t1 : gwv.GetNode(pt).t2];
+    uint32_t color = TERRAIN_COLORS[gwv.GetLandscapeType()][ (t == 0) ? gwv.GetNode(pt).t1 : gwv.GetNode(pt).t2];
 
     // Schattierung
-    int shadow = gwv.GetNode(pt).shadow;
-    int r = GetRed(color) + shadow - 0x40;
-    int g = GetGreen(color) + shadow - 0x40;
-    int b = GetBlue(color) + shadow - 0x40;
+    int32_t shadow = gwv.GetNode(pt).shadow;
+    int32_t r = GetRed(color) + shadow - 0x40;
+    int32_t g = GetGreen(color) + shadow - 0x40;
+    int32_t b = GetBlue(color) + shadow - 0x40;
 
     if(r < 0) r = 0;
     else if(r > 255) r = 255;
@@ -349,7 +349,7 @@ unsigned IngameMinimap::CalcTerrainColor(const MapPoint pt, const unsigned t)
  */
 bool IngameMinimap::IsRoad(const MapPoint pt, const Visibility visibility)
 {
-    for(unsigned i = 0; i < 3; ++i)
+    for(uint32_t i = 0; i < 3; ++i)
     {
         if(gwv.GetVisibleRoad(pt, i, visibility))
             return true;
@@ -365,10 +365,10 @@ bool IngameMinimap::IsRoad(const MapPoint pt, const Visibility visibility)
  *
  *  @author OLiver
  */
-unsigned IngameMinimap::CombineWithPlayerColor(const unsigned color, const unsigned char player) const
+uint32_t IngameMinimap::CombineWithPlayerColor(const uint32_t color, const uint8_t player) const
 {
     // Spielerfarbe mit einberechnen
-    unsigned player_color = COLORS[GAMECLIENT.GetPlayer(player - 1)->color];
+    uint32_t player_color = COLORS[GAMECLIENT.GetPlayer(player - 1)->color];
 
     return MakeColor(0xFF, (GetRed(color) + GetRed(player_color)) / 2,
                      (GetGreen(color) + GetGreen(player_color)) / 2,
@@ -399,7 +399,7 @@ void IngameMinimap::UpdateNode(const MapPoint pt)
 void IngameMinimap::BeforeDrawing()
 {
     // Ab welcher Knotenanzahl (Teil der Gesamtknotenanzahl) die Textur komplett neu erstellt werden soll
-    static const unsigned MAX_NODES_UPDATE_DENOMINATOR = 2; // (2 = 1/2, 3 = 1/3 usw.)
+    static const uint32_t MAX_NODES_UPDATE_DENOMINATOR = 2; // (2 = 1/2, 3 = 1/3 usw.)
 
     // überhaupt änderungen nötig?
     if(!nodesToUpdate.empty())
@@ -419,9 +419,9 @@ void IngameMinimap::BeforeDrawing()
             // Entsprechende Pixel updaten
             for(std::vector<MapPoint>::iterator it = nodesToUpdate.begin(); it != nodesToUpdate.end(); ++it)
             {
-                for(unsigned t = 0; t < 2; ++t)
+                for(uint32_t t = 0; t < 2; ++t)
                 {
-                    unsigned color = CalcPixelColor(&gwv, *it, t);
+                    uint32_t color = CalcPixelColor(&gwv, *it, t);
                     map.tex_setPixel((it->x * 2 + t + (it->y & 1)) % (map_width * 2), it->y, GetRed(color), GetGreen(color),
                                      GetBlue(color), GetAlpha(color));
                 }
@@ -461,14 +461,14 @@ void IngameMinimap::UpdateAll(const DrawnObject drawn_object)
         for(MapCoord x = 0; x < map_width; ++x)
         {
             MapPoint pt(x, y);
-            for(unsigned t = 0; t < 2; ++t)
+            for(uint32_t t = 0; t < 2; ++t)
             {
                 if(dos[GetMMIdx(pt)] == drawn_object || // das gewünschte Objekt
                         (drawn_object == DO_PLAYER && // bei DO_PLAYER auf evtl. nicht gezeichnete Häuser und Straßen
                          ((dos[GetMMIdx(pt)] == DO_BUILDING && !houses) || // achten, da dort auch nur das Player-
                           (dos[GetMMIdx(pt)] == DO_ROAD && !roads)))) // Territorium zu sehen ist!
                 {
-                    unsigned color = CalcPixelColor(&gwv, pt, t);
+                    uint32_t color = CalcPixelColor(&gwv, pt, t);
                     map.tex_setPixel((x * 2 + t + (y & 1)) % (map_width * 2), y, GetRed(color), GetGreen(color),
                                      GetBlue(color), GetAlpha(color));
                 }

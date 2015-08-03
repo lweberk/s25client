@@ -38,22 +38,22 @@ class ctrlMultiSelectGroup : public ctrlGroup
 
     public:
         /// Konstruktor von @p ctrlMultiSelectGroup.
-        ctrlMultiSelectGroup(Window* parent, unsigned int id, int select_type, bool scale = false);
+        ctrlMultiSelectGroup(Window* parent, uint32_t id, int32_t select_type, bool scale = false);
 
         /// Selektiert einen neuen Button
-        void AddSelection(unsigned short selection, bool notify = false);
+        void AddSelection(uint16_t selection, bool notify = false);
         /// Entfernt einen selektierten Button aus der Selektion
-        void RemoveSelection(unsigned short selection, bool notify = false);
+        void RemoveSelection(uint16_t selection, bool notify = false);
         /// Wechselt zwischen selektiert/nicht selektiert
-        void ToggleSelection(unsigned short selection, bool notify = false);
+        void ToggleSelection(uint16_t selection, bool notify = false);
         /// Gibt Liste der aktuell selektierten Buttons zurück
-        const std::set<unsigned short> &GetSelection() const { return selection; }
+        const std::set<uint16_t> &GetSelection() const { return selection; }
         /// Prüft ob ein Button ausgewählt ist
-        bool IsSelected(unsigned short selection) const;
+        bool IsSelected(uint16_t selection) const;
         // Gibt einen Button aus der Gruppe zurück zum direkten Bearbeiten
-        ctrlButton* GetButton(unsigned int id) { return GetCtrl<ctrlButton>(id); }
+        ctrlButton* GetButton(uint32_t id) { return GetCtrl<ctrlButton>(id); }
 
-        virtual void Msg_ButtonClick(const unsigned int ctrl_id);
+        virtual void Msg_ButtonClick(const uint32_t ctrl_id);
         virtual bool Msg_LeftDown(const MouseCoords& mc);
         virtual bool Msg_LeftUp(const MouseCoords& mc);
         virtual bool Msg_WheelUp(const MouseCoords& mc);
@@ -65,8 +65,8 @@ class ctrlMultiSelectGroup : public ctrlGroup
         virtual bool Draw_(void);
 
     private:
-        std::set<unsigned short> selection; ///< aktuell ausgewählte Buttons
-        int select_type;         ///< Typ der Selektierung
+        std::set<uint16_t> selection; ///< aktuell ausgewählte Buttons
+        int32_t select_type;         ///< Typ der Selektierung
 };
 
 #endif // !CTRLMULTISELECTGROUP_H_INCLUDED

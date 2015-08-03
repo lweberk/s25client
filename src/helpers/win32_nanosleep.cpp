@@ -32,9 +32,9 @@
 /**
  *  Sleep at least some number of microseconds
  */
-int usleep (useconds_t microseconds)
+int32_t usleep (useconds_t microseconds)
 {
-    int err = 0;
+    int32_t err = 0;
 
     if ( microseconds )
     {
@@ -62,7 +62,7 @@ int usleep (useconds_t microseconds)
 /**
  *  nanosleep replacement for windows.
  */
-int nanosleep(const timespec_t* requested_delay, timespec_t* remaining_delay)
+int32_t nanosleep(const timespec_t* requested_delay, timespec_t* remaining_delay)
 {
     const useconds_t one_second = 1000000;
     const useconds_t nano_per_micro = 1000;

@@ -28,7 +28,7 @@ class GlobalGameSettings;
 class iwAddons : public IngameWindow
 {
         /// Breite der Scrollbar
-        static const unsigned short SCROLLBAR_WIDTH = 20;
+        static const uint16_t SCROLLBAR_WIDTH = 20;
         /// Pointer to the settings we edit in this window
         GlobalGameSettings* ggs;
 
@@ -45,18 +45,18 @@ class iwAddons : public IngameWindow
         ~iwAddons(void);
 
     protected:
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_ScrollChange(const unsigned int ctrl_id, const unsigned short position);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_ScrollChange(const uint32_t ctrl_id, const uint16_t position);
         bool Msg_WheelUp(const MouseCoords& mc);
         bool Msg_WheelDown(const MouseCoords& mc);
 
         /// Aktualisiert die Addons, die angezeigt werden sollen
-        void UpdateView(const unsigned short selection);
+        void UpdateView(const uint16_t selection);
 
     private:
         ChangePolicy policy;
-        unsigned short _inthiscategory;
+        uint16_t _inthiscategory;
 };
 
 #endif // !iwENHANCEMENTS_H_INCLUDED

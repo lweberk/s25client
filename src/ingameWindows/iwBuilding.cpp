@@ -47,8 +47,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /// IDs in der IO_DAT von Boot und Schiffs-Bild für den Umschaltebutton beim Schiffsbauer
-const unsigned IODAT_BOAT_ID = 219;
-const unsigned IODAT_SHIP_ID = 218;
+const uint32_t IODAT_BOAT_ID = 219;
+const uint32_t IODAT_SHIP_ID = 218;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -59,7 +59,7 @@ const unsigned IODAT_SHIP_ID = 218;
  *  @author OLiver
  */
 iwBuilding::iwBuilding(GameWorldViewer* const gwv, dskGameInterface* const gi, nobUsual* const building)
-    : IngameWindow(building->CreateGUIID(), (unsigned short) - 2, (unsigned short) - 2, 226, 194, _(BUILDING_NAMES[building->GetBuildingType()]), LOADER.GetImageN("resource", 41)),
+    : IngameWindow(building->CreateGUIID(), (uint16_t) - 2, (uint16_t) - 2, 226, 194, _(BUILDING_NAMES[building->GetBuildingType()]), LOADER.GetImageN("resource", 41)),
       gwv(gwv), gi(gi), building(building)
 {
     // Arbeitersymbol
@@ -97,7 +97,7 @@ iwBuilding::iwBuilding(GameWorldViewer* const gwv, dskGameInterface* const gi, n
     if(building->GetBuildingType() == BLD_SHIPYARD)
     {
         // Jenachdem Boot oder Schiff anzeigen
-        unsigned io_dat_id = (static_cast<nobShipYard*>(building)->GetMode() == nobShipYard::BOATS)
+        uint32_t io_dat_id = (static_cast<nobShipYard*>(building)->GetMode() == nobShipYard::BOATS)
                              ? IODAT_BOAT_ID : IODAT_SHIP_ID;
         AddImageButton(11, 130, 147, 43, 32, TC_GREY, LOADER.GetImageN("io", io_dat_id));
     }
@@ -141,9 +141,9 @@ void iwBuilding::Msg_PaintAfter()
         // "Schwarzer Rahmen"
         DrawRectangle(GetX() + 40, GetY() + 60, 144, 24, 0x80000000);
 
-        for(unsigned char i = 0; i < 3; ++i)
+        for(uint8_t i = 0; i < 3; ++i)
         {
-            for(unsigned char z = 0; z < 2; ++z)
+            for(uint8_t z = 0; z < 2; ++z)
             {
                 glArchivItem_Bitmap* bitmap = LOADER.GetMapImageN(2250 + USUAL_BUILDING_CONSTS[building->GetBuildingType() - 10].wares_needed[i]);
                 bitmap->Draw(GetX() + 52 + 24 * (i * 2 + z), GetY() + 72, 0, 0, 0, 0, 0, 0, (z < building->GetWares(i) ? 0xFFFFFFFF : 0xFF404040) );
@@ -152,18 +152,18 @@ void iwBuilding::Msg_PaintAfter()
     }
     else
     {
-        for(unsigned char i = 0; i < 2; ++i)
+        for(uint8_t i = 0; i < 2; ++i)
         {
             if(USUAL_BUILDING_CONSTS[building->GetBuildingType() - 10].wares_needed[i] == GD_NOTHING)
                 break;
 
             // 6x Waren, je nachdem ob sie da sind, bei Katapult 4!
-            unsigned wares_count = (building->GetBuildingType() == BLD_CATAPULT) ? 4 : 6;
+            uint32_t wares_count = (building->GetBuildingType() == BLD_CATAPULT) ? 4 : 6;
 
             // "Schwarzer Rahmen"
             DrawRectangle(GetX() + width / 2 - 24 * wares_count / 2, GetY() + 60 + i * 29, 24 * wares_count, 24, 0x80000000);
 
-            for(unsigned char z = 0; z < wares_count; ++z)
+            for(uint8_t z = 0; z < wares_count; ++z)
             {
                 glArchivItem_Bitmap* bitmap = LOADER.GetMapImageN(2250 + USUAL_BUILDING_CONSTS[building->GetBuildingType() - 10].wares_needed[i]);
                 bitmap->Draw(GetX() + width / 2 - 24 * wares_count / 2 + 24 * z + 12, GetY() + 72 + i * 28, 0, 0, 0, 0, 0, 0, (z < building->GetWares(i) ? 0xFFFFFFFF : 0xFF404040) );
@@ -171,14 +171,14 @@ void iwBuilding::Msg_PaintAfter()
             }
 
             std::stringstream text;
-            text << (unsigned int)building->GetWares(i) << "/" << wares_count;
+            text << (uint32_t)building->GetWares(i) << "/" << wares_count;
             NormalFont->Draw(GetX() + width / 2, GetY() + 60 + 12 + i * 29, text.str(), glArchivItem_Font::DF_CENTER | glArchivItem_Font::DF_VCENTER);
         }
     }
 }
 
 
-void iwBuilding::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwBuilding::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

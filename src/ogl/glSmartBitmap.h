@@ -44,19 +44,19 @@ class glBitmapItem
         libsiedler2::baseArchivItem_Bitmap* bmp;
         glBitmapItemType type;
 
-        int nx, ny;
-        int w, h;
-        int x, y;
+        int32_t nx, ny;
+        int32_t w, h;
+        int32_t x, y;
 };
 
 class glSmartBitmap
 {
     private:
-        int w, h;
-        int nx, ny;
+        int32_t w, h;
+        int32_t nx, ny;
 
         bool sharedTexture;
-        unsigned int texture;
+        uint32_t texture;
 
         bool hasPlayer;
 
@@ -80,38 +80,38 @@ class glSmartBitmap
         ~glSmartBitmap();
         void reset();
 
-        inline int getWidth() {return(w);}
-        inline int getHeight() {return(h);}
+        inline int32_t getWidth() {return(w);}
+        inline int32_t getHeight() {return(h);}
 
-        inline int getTexWidth() {return(hasPlayer ? w << 1 : w);}
-        inline int getTexHeight() {return(h);}
+        inline int32_t getTexWidth() {return(hasPlayer ? w << 1 : w);}
+        inline int32_t getTexHeight() {return(h);}
 
         inline bool isGenerated() {return(texture != 0);}
         inline bool isPlayer() {return(hasPlayer);}
 
-        inline void setSharedTexture(unsigned tex) {if (tex != 0) {sharedTexture = true; texture = tex;} else {sharedTexture = false; texture = 0;}}
+        inline void setSharedTexture(uint32_t tex) {if (tex != 0) {sharedTexture = true; texture = tex;} else {sharedTexture = false; texture = 0;}}
 
         void calcDimensions();
 
         void generateTexture();
-        void draw(int x, int y, unsigned color = 0xFFFFFFFF, unsigned player_color = 0x00000000);
-        void drawPercent(int x, int y, unsigned percent, unsigned color = 0xFFFFFFFF, unsigned player_color = 0x00000000);
+        void draw(int32_t x, int32_t y, uint32_t color = 0xFFFFFFFF, uint32_t player_color = 0x00000000);
+        void drawPercent(int32_t x, int32_t y, uint32_t percent, uint32_t color = 0xFFFFFFFF, uint32_t player_color = 0x00000000);
 
-        void drawTo(unsigned char* buffer, unsigned stride, unsigned height, int x_offset = 0, int y_offset = 0);
+        void drawTo(uint8_t* buffer, uint32_t stride, uint32_t height, int32_t x_offset = 0, int32_t y_offset = 0);
 
         void add(libsiedler2::baseArchivItem_Bitmap* bmp) {if (bmp) items.push_back(glBitmapItem(bmp));}
         void add(libsiedler2::baseArchivItem_Bitmap_Player* bmp) {if (bmp) items.push_back(glBitmapItem(bmp));}
         void addShadow(libsiedler2::baseArchivItem_Bitmap* bmp) {if (bmp) items.push_back(glBitmapItem(bmp, true));}
 
-        static unsigned nextPowerOfTwo(unsigned k);
+        static uint32_t nextPowerOfTwo(uint32_t k);
 };
 
 class glSmartTexturePackerNode;
 
 class glSmartTexturePackerNode
 {
-        int x, y;
-        int w, h;
+        int32_t x, y;
+        int32_t w, h;
 
         glSmartBitmap* bmp;
 
@@ -119,16 +119,16 @@ class glSmartTexturePackerNode
 
     public:
         glSmartTexturePackerNode() : x(0), y(0), w(0), h(0), bmp(NULL) {child[0] = child[1] = NULL;}
-        glSmartTexturePackerNode(int w, int h) : x(0), y(0), w(w), h(h), bmp(NULL) {child[0] = child[1] = NULL;}
+        glSmartTexturePackerNode(int32_t w, int32_t h) : x(0), y(0), w(w), h(h), bmp(NULL) {child[0] = child[1] = NULL;}
 
-        bool insert(glSmartBitmap* b, unsigned char* buffer, unsigned gw, unsigned gh, unsigned reserve = 0);
-        void destroy(unsigned reserve = 0);
+        bool insert(glSmartBitmap* b, uint8_t* buffer, uint32_t gw, uint32_t gh, uint32_t reserve = 0);
+        void destroy(uint32_t reserve = 0);
 };
 
 class glSmartTexturePacker
 {
     private:
-        std::vector<unsigned> textures;
+        std::vector<uint32_t> textures;
         std::vector<glSmartBitmap*> items;
 
         bool packHelper(std::vector<glSmartBitmap*> &list);

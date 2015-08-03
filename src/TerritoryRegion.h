@@ -33,17 +33,17 @@ class GameWorldBase;
 class TerritoryRegion
 {
         /// Lage des Ausschnittes in der Karte
-        const int x1, y1, x2, y2;
+        const int32_t x1, y1, x2, y2;
         /// Größe der Karte (wird aus x1,y1...) berechnet
-        const unsigned short width, height;
+        const uint16_t width, height;
 
         /// Beschreibung eines Knotenpunktes
         struct TRNode
         {
             /// Spieler-index (+1, da 0 = besitzlos!)
-            unsigned char owner;
+            uint8_t owner;
             /// Entfernung vom Militärgebäude
-            unsigned char radius;
+            uint8_t radius;
 
             TRNode(): owner(0), radius(0){}
         };
@@ -56,17 +56,17 @@ class TerritoryRegion
         static bool IsPointInPolygon(GameWorldBase* gwb, std::vector< MapPoint > &polygon, const MapPoint pt);
 
         /// Testet einen Punkt, ob der neue Spieler ihn übernehmen kann und übernimmt ihn ggf.
-        void TestNode(MapPoint pt, const unsigned char player, const unsigned char radius, const bool check_barriers);
+        void TestNode(MapPoint pt, const uint8_t player, const uint8_t radius, const bool check_barriers);
 
         /// Unterfunktionen von AdjustBorders, vergleicht 2 Punkte, ob sie von unterschiedlichen Spielern sind und setzt
         /// Punkt ggf. zu gar keinem Spieler, 2. Funktion wird für Punkte im 2er Abstand verwendet, da es dort ein bisschen anders läuft!
-        void AdjustNodes(const unsigned short x1, const unsigned short y1, const unsigned short x2, const unsigned short y2);
-        void AdjustNodes2(const unsigned short x1, const unsigned short y1, const unsigned short x2, const unsigned short y2);
+        void AdjustNodes(const uint16_t x1, const uint16_t y1, const uint16_t x2, const uint16_t y2);
+        void AdjustNodes2(const uint16_t x1, const uint16_t y1, const uint16_t x2, const uint16_t y2);
 
     public:
 
 
-        TerritoryRegion(const int x1, const int y1, const int x2, const int y2, GameWorldBase* const gwb);
+        TerritoryRegion(const int32_t x1, const int32_t y1, const int32_t x2, const int32_t y2, GameWorldBase* const gwb);
         ~TerritoryRegion();
 
         static bool IsPointValid(GameWorldBase* gwb, std::vector< MapPoint > &polygon, const MapPoint pt);
@@ -75,10 +75,10 @@ class TerritoryRegion
         void CalcTerritoryOfBuilding(const noBaseBuilding* const building);
 
         // Liefert den Besitzer eines Punktes (mit absoluten Koordinaten, werden automatisch in relative umgerechnet!)
-        unsigned char GetOwner(const int x, const int y)
+        uint8_t GetOwner(const int32_t x, const int32_t y)
         { return nodes[(y - y1) * (x2 - x1) + (x - x1)].owner; }
         /// Liefert Radius mit dem der Punkt besetzt wurde
-        unsigned char GetRadius(const int x, const int y) const
+        uint8_t GetRadius(const int32_t x, const int32_t y) const
         { return nodes[(y - y1) * (x2 - x1) + (x - x1)].radius; }
 
         // Korrigiert die Grenzen (schneidet vom aktuellen Territorium immer noch die äußeren Punkte ab für die Grenzpfähle)

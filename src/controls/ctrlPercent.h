@@ -27,9 +27,9 @@ class ctrlPercent : public Window
 {
     public:
         /// Konstruktor von @p ctrlPercent.
-        ctrlPercent(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width, unsigned short height, TextureColor tc, unsigned int text_color, glArchivItem_Font* font, const unsigned short* percentage);
+        ctrlPercent(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width, uint16_t height, TextureColor tc, uint32_t text_color, glArchivItem_Font* font, const uint16_t* percentage);
 
-        void SetPercentage(const unsigned short* percentage) { this->percentage = percentage; }
+        void SetPercentage(const uint16_t* percentage) { this->percentage = percentage; }
 
     protected:
         /// Zeichenmethode.
@@ -37,9 +37,9 @@ class ctrlPercent : public Window
 
     private:
         TextureColor tc;
-        unsigned int text_color;
+        uint32_t text_color;
         glArchivItem_Font* font;
-        const unsigned short* percentage;
+        const uint16_t* percentage;
 };
 
 #endif // !CTRLPERCENT_H_INCLUDED

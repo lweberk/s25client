@@ -55,22 +55,22 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-const RoadSegment noFigure::emulated_wanderroad(RoadSegment::RT_NORMAL, 0, 0, std::vector<unsigned char>(0, 0));
+const RoadSegment noFigure::emulated_wanderroad(RoadSegment::RT_NORMAL, 0, 0, std::vector<uint8_t>(0, 0));
 /// Welche Strecke soll minimal und maximal zurückgelegt werden beim Rumirren, bevor eine Flagge gesucht wird
-const unsigned short WANDER_WAY_MIN = 20;
-const unsigned short WANDER_WAY_MAX = 40;
+const uint16_t WANDER_WAY_MIN = 20;
+const uint16_t WANDER_WAY_MAX = 40;
 /// Versuche, eine Flagge zu finden, bis er stirbt beim Rumirren
-const unsigned short WANDER_TRYINGS = 3;
+const uint16_t WANDER_TRYINGS = 3;
 // Größe des Rechtecks um den Punkt, wo er die Flaggen sucht beim Rumirren
-const unsigned short WANDER_RADIUS = 10;
+const uint16_t WANDER_RADIUS = 10;
 /// Dasselbe nochmal für Soldaten
-const unsigned short WANDER_TRYINGS_SOLDIERS = 6;
-const unsigned short WANDER_RADIUS_SOLDIERS = 15;
+const uint16_t WANDER_TRYINGS_SOLDIERS = 6;
+const uint16_t WANDER_RADIUS_SOLDIERS = 15;
 
 
 
 
-noFigure::noFigure(const Job job, const MapPoint pos, const unsigned char player, noRoadNode* const goal)
+noFigure::noFigure(const Job job, const MapPoint pos, const uint8_t player, noRoadNode* const goal)
     :   noMovable(NOP_FIGURE, pos), fs(FS_GOTOGOAL), job(job), player(player), cur_rs(0),
         rs_pos(0), rs_dir(0), on_ship(false), goal(goal), waiting_for_free_node(false),
         flagPos(0xFFFF, 0xFFFF), last_id(0xFFFFFFFF)
@@ -88,7 +88,7 @@ noFigure::noFigure(const Job job, const MapPoint pos, const unsigned char player
 
 }
 
-noFigure::noFigure(const Job job, const MapPoint pos, const unsigned char player)
+noFigure::noFigure(const Job job, const MapPoint pos, const uint8_t player)
     :   noMovable(NOP_FIGURE, pos), fs(FS_JOB), job(job), player(player), cur_rs(0),
         rs_pos(0), rs_dir(0), on_ship(false), goal(0), waiting_for_free_node(false), last_id(0xFFFFFFFF)
 {
@@ -107,8 +107,8 @@ void noFigure::Serialize_noFigure(SerializedGameData* sgd) const
 {
     Serialize_noMovable(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(fs));
-    sgd->PushUnsignedChar(static_cast<unsigned char>(job));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(fs));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(job));
     sgd->PushUnsignedChar(player);
     sgd->PushObject(cur_rs, true);
     sgd->PushUnsignedShort(rs_pos);
@@ -130,7 +130,7 @@ void noFigure::Serialize_noFigure(SerializedGameData* sgd) const
     }
 }
 
-noFigure::noFigure(SerializedGameData* sgd, const unsigned obj_id) : noMovable(sgd, obj_id),
+noFigure::noFigure(SerializedGameData* sgd, const uint32_t obj_id) : noMovable(sgd, obj_id),
     fs(FigureState(sgd->PopUnsignedChar())),
     job(Job(sgd->PopUnsignedChar())),
     player(sgd->PopUnsignedChar()),
@@ -184,25 +184,25 @@ void noFigure::ActAtFirst()
 
 
 /// Gibt den Sichtradius dieser Figur zurück (0, falls nicht-spähend)
-unsigned noFigure::GetVisualRange() const
+uint32_t noFigure::GetVisualRange() const
 {
     return 0;
 }
 
 /// Legt die Anfangsdaten für das Laufen auf Wegen fest
-void noFigure::InitializeRoadWalking(const RoadSegment* const road, const unsigned short rs_pos, const bool rs_dir)
+void noFigure::InitializeRoadWalking(const RoadSegment* const road, const uint16_t rs_pos, const bool rs_dir)
 {
     this->cur_rs = road;
     this->rs_pos = rs_pos;
     this->rs_dir = rs_dir;
 }
 
-bool noFigure::CalcFigurRelative(int& x, int& y)
+bool noFigure::CalcFigurRelative(int32_t& x, int32_t& y)
 {
-    int x1 = static_cast<int>(gwg->GetTerrainX(pos));
-    int y1 = static_cast<int>(gwg->GetTerrainY(pos));
-    int x2 = static_cast<int>(gwg->GetTerrainX(gwg->GetNeighbour(pos, dir)));
-    int y2 = static_cast<int>(gwg->GetTerrainY(gwg->GetNeighbour(pos, dir)));
+    int32_t x1 = static_cast<int32_t>(gwg->GetTerrainX(pos));
+    int32_t y1 = static_cast<int32_t>(gwg->GetTerrainY(pos));
+    int32_t x2 = static_cast<int32_t>(gwg->GetTerrainX(gwg->GetNeighbour(pos, dir)));
+    int32_t y2 = static_cast<int32_t>(gwg->GetTerrainY(gwg->GetNeighbour(pos, dir)));
 
 
     // Gehen wir über einen Kartenrand (horizontale Richung?)
@@ -251,7 +251,7 @@ bool noFigure::CalcFigurRelative(int& x, int& y)
     return 1;
 }
 
-void noFigure::StartWalking(const unsigned char dir)
+void noFigure::StartWalking(const uint8_t dir)
 {
     assert(!(GetGOT() == GOT_NOF_PASSIVESOLDIER && fs == FS_JOB));
 
@@ -286,7 +286,7 @@ void noFigure::StartWalking(const unsigned char dir)
     }
 }
 
-/*void noFigure::StartWalkingFailedTrade(const unsigned char dir)
+/*void noFigure::StartWalkingFailedTrade(const uint8_t dir)
 {
     assert(!(GetGOT() == GOT_NOF_PASSIVESOLDIER && fs == FS_JOB));
 
@@ -323,7 +323,7 @@ void noFigure::StartWalking(const unsigned char dir)
 
 
 
-void noFigure::DrawShadow(const int x, const int y, const unsigned char anistep, unsigned char dir)
+void noFigure::DrawShadow(const int32_t x, const int32_t y, const uint8_t anistep, uint8_t dir)
 {
     glArchivItem_Bitmap* bitmap = LOADER.GetMapImageN(900 + ( (dir + 3) % 6 ) * 8 + anistep);
     if(bitmap)
@@ -405,7 +405,7 @@ void noFigure::WalkToGoal()
         {
             MapPoint next_harbor;
             // Neuen Weg berechnen
-            unsigned char route = gwg->FindHumanPathOnRoads(gwg->GetSpecObj<noRoadNode>(pos), goal, NULL, &next_harbor);
+            uint8_t route = gwg->FindHumanPathOnRoads(gwg->GetSpecObj<noRoadNode>(pos), goal, NULL, &next_harbor);
             // Kein Weg zum Ziel... nächstes Lagerhaus suchen
             if(route == 0xFF)
             {
@@ -487,7 +487,7 @@ void noFigure::WalkToGoal()
     {
         // Ziel erreicht?
         // Bei dem Träger können das beide Flaggen sein!
-        unsigned short goal_x1, goal_y1, goal_x2=0xFFFF, goal_y2=0xFFFF;
+        uint16_t goal_x1, goal_y1, goal_x2=0xFFFF, goal_y2=0xFFFF;
         if(GetGOT() == GOT_NOF_CARRIER && fs == FS_GOTOGOAL)
         {
             goal_x1 = static_cast<nofCarrier*>(this)->GetFirstFlag() ?
@@ -535,7 +535,7 @@ void noFigure::WalkToGoal()
         {
             MapPoint next_harbor;
             // Neuen Weg berechnen
-            unsigned char route = gwg->FindHumanPathOnRoads(gwg->GetSpecObj<noRoadNode>(x,y),goal,NULL,&next_harbor);
+            uint8_t route = gwg->FindHumanPathOnRoads(gwg->GetSpecObj<noRoadNode>(x,y),goal,NULL,&next_harbor);
             // Kein Weg zum Ziel... nächstes Lagerhaus suchen
             if(route == 0xFF)
             {
@@ -604,7 +604,7 @@ void noFigure::WalkToGoal()
 
 
 
-void noFigure::HandleEvent(const unsigned int id)
+void noFigure::HandleEvent(const uint32_t id)
 {
     // Bei ID = 0 ists ein Laufevent, bei allen anderen an abgeleitete Klassen weiterleiten
     if(id)
@@ -617,7 +617,7 @@ void noFigure::HandleEvent(const unsigned int id)
         WalkFigure();
 
         // Alte Richtung und Position für die Berechnung der Sichtbarkeiten merken
-        unsigned char old_dir = dir;
+        uint8_t old_dir = dir;
 
         MapPoint old_pos(pos);
 
@@ -713,7 +713,7 @@ void noFigure::GoHome(noRoadNode* goal)
 
 
 
-void noFigure::StartWandering(const unsigned burned_wh_id)
+void noFigure::StartWandering(const uint32_t burned_wh_id)
 {
     fs = FS_WANDER;
     cur_rs = 0;
@@ -735,7 +735,7 @@ void noFigure::StartWandering(const unsigned burned_wh_id)
     }
 }
 
-/*void noFigure::StartWanderingFailedTrade(const unsigned burned_wh_id)
+/*void noFigure::StartWanderingFailedTrade(const uint32_t burned_wh_id)
 {
     fs = FS_WANDER;
     cur_rs = 0;
@@ -764,15 +764,15 @@ void noFigure::Wander()
     {
         // Soldaten sind härter im Nehmen
         bool is_soldier = (job >= JOB_PRIVATE && job <= JOB_GENERAL);
-        unsigned short wander_radius = is_soldier ? WANDER_RADIUS_SOLDIERS : WANDER_RADIUS;
+        uint16_t wander_radius = is_soldier ? WANDER_RADIUS_SOLDIERS : WANDER_RADIUS;
         // Ist es mal wieder an der Zeit, eine Flagge zu suchen?
         if(!wander_way)
         {
             // Umgebung abscannen, nicht über den Rand gehen
-            unsigned short x1 = (pos.x > wander_radius) ? (pos.x - wander_radius) : 0;
-            unsigned short y1 = (pos.y > wander_radius) ? (pos.y - wander_radius) : 0;
-            unsigned short x2 = (pos.x + wander_radius < gwg->GetWidth()) ? (pos.x + wander_radius) : (gwg->GetWidth() - 1);
-            unsigned short y2 = (pos.y + wander_radius < gwg->GetHeight()) ? (pos.y + wander_radius) : (gwg->GetHeight() - 1);
+            uint16_t x1 = (pos.x > wander_radius) ? (pos.x - wander_radius) : 0;
+            uint16_t y1 = (pos.y > wander_radius) ? (pos.y - wander_radius) : 0;
+            uint16_t x2 = (pos.x + wander_radius < gwg->GetWidth()) ? (pos.x + wander_radius) : (gwg->GetWidth() - 1);
+            uint16_t y2 = (pos.y + wander_radius < gwg->GetHeight()) ? (pos.y + wander_radius) : (gwg->GetHeight() - 1);
 
             // Flaggen sammeln und dann zufällig eine auswählen
             std::vector<noFlag*> flags;
@@ -790,7 +790,7 @@ void noFigure::Wander()
             }
 
 
-            unsigned best_way = 0xFFFFFFFF;
+            uint32_t best_way = 0xFFFFFFFF;
             noFlag* best_flag = 0;
 
             for(std::vector<noFlag*>::iterator it = flags.begin(); it != flags.end(); ++it)
@@ -808,7 +808,7 @@ void noFigure::Wander()
                 }
 
                 // würde die die bisher beste an Weg unterbieten?
-                unsigned way = gwg->CalcDistance(pos, (*it)->GetPos());
+                uint32_t way = gwg->CalcDistance(pos, (*it)->GetPos());
                 if(way < best_way)
                 {
                     // Gibts nen Weg zu dieser Flagge?
@@ -862,10 +862,10 @@ void noFigure::Wander()
 
         // weiter umherirren, einfach in eine zufällige Richtung
         // Müssen dabei natürlich aufpassen, dass wir nur dorthin gehen wo es auch für Figuren möglich ist
-        unsigned char doffset = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
-        for(unsigned char d = 0; d < 6; ++d)
+        uint8_t doffset = RANDOM.Rand(__FILE__, __LINE__, obj_id, 6);
+        for(uint8_t d = 0; d < 6; ++d)
         {
-            unsigned char dir = (d + doffset) % 6;
+            uint8_t dir = (d + doffset) % 6;
 
             // Nicht über den Rand gehen!
             if(pos.x == 0 && (dir == 0 || dir == 1 || dir == 5)) continue;
@@ -902,22 +902,22 @@ void noFigure::WanderFailedTrade()
     {
         // Soldaten sind härter im Nehmen
         bool is_soldier = (job >= JOB_PRIVATE && job <= JOB_GENERAL);
-        unsigned short wander_radius = is_soldier ? WANDER_RADIUS_SOLDIERS : WANDER_RADIUS;
+        uint16_t wander_radius = is_soldier ? WANDER_RADIUS_SOLDIERS : WANDER_RADIUS;
         // Ist es mal wieder an der Zeit, eine Flagge zu suchen?
         if(!wander_way)
         {
             // Umgebung abscannen, nicht über den Rand gehen
-            unsigned short x1 = (x > wander_radius) ? (x-wander_radius) : 0;
-            unsigned short y1 = (y > wander_radius) ? (y-wander_radius) : 0;
-            unsigned short x2 = (x+wander_radius < gwg->GetWidth()) ? (x+wander_radius) : (gwg->GetWidth()-1);
-            unsigned short y2 = (y+wander_radius < gwg->GetHeight()) ? (y+wander_radius) : (gwg->GetHeight()-1);
+            uint16_t x1 = (x > wander_radius) ? (x-wander_radius) : 0;
+            uint16_t y1 = (y > wander_radius) ? (y-wander_radius) : 0;
+            uint16_t x2 = (x+wander_radius < gwg->GetWidth()) ? (x+wander_radius) : (gwg->GetWidth()-1);
+            uint16_t y2 = (y+wander_radius < gwg->GetHeight()) ? (y+wander_radius) : (gwg->GetHeight()-1);
 
             // Flaggen sammeln und dann zufällig eine auswählen
             list<noFlag*> flags;
 
-            for(unsigned short py = y1;py<=y2;++py)
+            for(uint16_t py = y1;py<=y2;++py)
             {
-                for(unsigned short px = x1;px<=x2;++px)
+                for(uint16_t px = x1;px<=x2;++px)
                 {
                     if(gwg->GetNO(px,py)->GetType() == NOP_FLAG)
                     {
@@ -928,7 +928,7 @@ void noFigure::WanderFailedTrade()
             }
 
 
-            unsigned best_way = 0xFFFFFFFF;
+            uint32_t best_way = 0xFFFFFFFF;
             noFlag * best_flag = 0;
 
             for(list<noFlag*>::iterator it = flags.begin();it.valid();++it)
@@ -946,7 +946,7 @@ void noFigure::WanderFailedTrade()
                 }
 
                 // würde die die bisher beste an Weg unterbieten?
-                unsigned way = gwg->CalcDistance(x,y,(*it)->GetPos());
+                uint32_t way = gwg->CalcDistance(x,y,(*it)->GetPos());
                 if(way < best_way)
                 {
                     // Gibts nen Weg zu dieser Flagge?
@@ -1001,10 +1001,10 @@ void noFigure::WanderFailedTrade()
 
         // weiter umherirren, einfach in eine zufällige Richtung
         // Müssen dabei natürlich aufpassen, dass wir nur dorthin gehen wo es auch für Figuren möglich ist
-        unsigned char doffset = RANDOM.Rand(__FILE__,__LINE__,obj_id,6);
-        for(unsigned char d = 0;d<6;++d)
+        uint8_t doffset = RANDOM.Rand(__FILE__,__LINE__,obj_id,6);
+        for(uint8_t d = 0;d<6;++d)
         {
-            unsigned char dir = (d+doffset)%6;
+            uint8_t dir = (d+doffset)%6;
 
             // Nicht über den Rand gehen!
             if(x == 0 && (dir == 0 || dir == 1 || dir == 5)) continue;
@@ -1147,7 +1147,7 @@ void noFigure::WanderToFlag()
 //  if(gwg->GetNO(x,y)->GetType() == NOP_FLAG)
 //  {
 //      // Geht ein Weg zu einem Lagerhaus?
-//      unsigned length;
+//      uint32_t length;
 //      if(nobBaseWarehouse * wh = gwg->GetPlayer(player)->FindWarehouse(gwg->GetSpecObj<noRoadNode>(x,y),GD_NOTHING,JOB_NOTHING,0,1,&length))
 //      {
 //          // ja, dann können wir ja hingehen
@@ -1165,12 +1165,12 @@ void noFigure::WanderToFlag()
 //  }
 //
 //  // Flagge in der Nähe? (Betonung liegt auf "Nähe" :D )
-//  for(unsigned i = 0;i<6;++i)
+//  for(uint32_t i = 0;i<6;++i)
 //  {
 //      if(gwg->GetNO(gwg->GetXA(x,y,i),gwg->GetYA(x,y,i))->GetType() == NOP_FLAG)
 //      {
 //          // ja, eine Flagge in der Nähe, gucken, ob ein Weg zu einem Warenhaus führt
-//          unsigned length;
+//          uint32_t length;
 //          if(gwg->GetPlayer(player)->FindWarehouse(gwg->GetSpecObj<noRoadNode>(gwg->GetXA(x,y,i),gwg->GetYA(x,y,i)),GD_NOTHING,JOB_NOTHING,0,1,&length))
 //          {
 //              // ja, dann gehen wir mal zu der Flagge
@@ -1184,8 +1184,8 @@ void noFigure::WanderToFlag()
 //
 //  // Nix gefunden, dann müssen wir halt weiter umherirren, einfach in eine zufälige Richtung
 //  // Müssen dabei natrlich aufpassen, dass wir nur dorthin gehen wo es auch für Figuren möglich ist
-//  unsigned char doffset = Random(6);
-//  for(unsigned char d = 0;d<6;++d)
+//  uint8_t doffset = Random(6);
+//  for(uint8_t d = 0;d<6;++d)
 //  {
 //      dir = (d+doffset)%6;
 //      if(gwg->IsNodeForFigures(gwg->GetXA(x,y,dir),gwg->GetYA(x,y,dir)))
@@ -1260,10 +1260,10 @@ void noFigure::CorrectSplitData_Derived()
 {
 }
 
-void noFigure::DrawWalkingBobCarrier(int x, int y, unsigned int ware, bool fat)
+void noFigure::DrawWalkingBobCarrier(int32_t x, int32_t y, uint32_t ware, bool fat)
 {
     // Wenn wir warten auf ein freies Plätzchen, müssen wir den stehend zeichnen!
-    unsigned ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
+    uint32_t ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
 
     // Wenn man wartet, stehend zeichnen, es sei denn man wartet mittem auf dem Weg!
     if(!waiting_for_free_node || pause_walked_gf)
@@ -1274,7 +1274,7 @@ void noFigure::DrawWalkingBobCarrier(int x, int y, unsigned int ware, bool fat)
 
 
 
-void noFigure::DrawWalkingBobJobs(int x, int y, unsigned int job)
+void noFigure::DrawWalkingBobJobs(int32_t x, int32_t y, uint32_t job)
 {
     if ((job == JOB_SCOUT) || ((job >= JOB_PRIVATE) && (job <= JOB_GENERAL)))
     {
@@ -1283,7 +1283,7 @@ void noFigure::DrawWalkingBobJobs(int x, int y, unsigned int job)
     }
 
     // Wenn wir warten auf ein freies Plätzchen, müssen wir den stehend zeichnen!
-    unsigned ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
+    uint32_t ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
 
     // Wenn man wartet, stehend zeichnen, es sei denn man wartet mittem auf dem Weg!
     if(!waiting_for_free_node || pause_walked_gf)
@@ -1293,10 +1293,10 @@ void noFigure::DrawWalkingBobJobs(int x, int y, unsigned int job)
 }
 
 
-void noFigure::DrawWalking(int x, int y, glArchivItem_Bob* file, unsigned int id, bool fat, bool waitingsoldier)
+void noFigure::DrawWalking(int32_t x, int32_t y, glArchivItem_Bob* file, uint32_t id, bool fat, bool waitingsoldier)
 {
     // Wenn wir warten auf ein freies Plätzchen, müssen wir den stehend zeichnen!
-    unsigned ani_step = waiting_for_free_node || waitingsoldier ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
+    uint32_t ani_step = waiting_for_free_node || waitingsoldier ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
 
     // Wenn man wartet, stehend zeichnen, es sei denn man wartet mittem auf dem Weg!
     if(!waitingsoldier && (!waiting_for_free_node || pause_walked_gf))
@@ -1311,10 +1311,10 @@ void noFigure::DrawWalking(int x, int y, glArchivItem_Bob* file, unsigned int id
 }
 
 /// Zeichnet standardmäßig die Figur, wenn sie läuft aus einem bestimmten normalen LST Archiv
-void noFigure::DrawWalking(int x, int y, const char* const file, unsigned int id)
+void noFigure::DrawWalking(int32_t x, int32_t y, const char* const file, uint32_t id)
 {
     // Wenn wir warten, ani-step 2 benutzen
-    unsigned ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
+    uint32_t ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
 
     // Wenn man wartet, stehend zeichnen, es sei denn man wartet mittem auf dem Weg!
     if(!waiting_for_free_node || pause_walked_gf)
@@ -1324,7 +1324,7 @@ void noFigure::DrawWalking(int x, int y, const char* const file, unsigned int id
     DrawShadow(x, y, ani_step, dir);
 }
 
-void noFigure::DrawWalking(int x, int y)
+void noFigure::DrawWalking(int32_t x, int32_t y)
 {
     // Figurentyp unterscheiden
     switch(job)
@@ -1332,7 +1332,7 @@ void noFigure::DrawWalking(int x, int y)
         case JOB_PACKDONKEY:
         {
             // Wenn wir warten, ani-step 2 benutzen
-            unsigned ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
+            uint32_t ani_step = waiting_for_free_node ? 2 : GAMECLIENT.Interpolate(ASCENT_ANIMATION_STEPS[ascent], current_ev) % 8;
 
             // Wenn man wartet, stehend zeichnen, es sei denn man wartet mittem auf dem Weg!
             if(!waiting_for_free_node || pause_walked_gf)

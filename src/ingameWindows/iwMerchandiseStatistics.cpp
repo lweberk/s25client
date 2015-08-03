@@ -35,7 +35,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 // Farben für die einzelnen Balken
-const unsigned int iwMerchandiseStatistics::BarColors[14] =
+const uint32_t iwMerchandiseStatistics::BarColors[14] =
 {
     0xFF00D3F7, // türkis
     0xFFFB9E49, // gelb
@@ -102,7 +102,7 @@ iwMerchandiseStatistics::iwMerchandiseStatistics()
 
     // Zeit-Werte an der x-Achse
     timeAnnotations = std::vector<ctrlText*>(7);
-    for (unsigned i = 0; i < 7; ++i)
+    for (uint32_t i = 0; i < 7; ++i)
     {
         timeAnnotations[i] = AddText(32 + i, 211 + i, 125 + i, "", MakeColor(255, 136, 96, 52),
                                      glArchivItem_Font::DF_CENTER | glArchivItem_Font::DF_TOP, LOADER.GetFontN("resource", 0));
@@ -118,7 +118,7 @@ iwMerchandiseStatistics::~iwMerchandiseStatistics()
 
 }
 
-void iwMerchandiseStatistics::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwMerchandiseStatistics::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch (ctrl_id)
     {
@@ -128,10 +128,10 @@ void iwMerchandiseStatistics::Msg_ButtonClick(const unsigned int ctrl_id)
         } break;
         case 17: // Alle abwählen
         {
-            const std::set<unsigned short>& active = GetCtrl<ctrlMultiSelectGroup>(22)->GetSelection();
-            for(std::set<unsigned short>::const_iterator it = active.begin(); it != active.end();)
+            const std::set<uint16_t>& active = GetCtrl<ctrlMultiSelectGroup>(22)->GetSelection();
+            for(std::set<uint16_t>::const_iterator it = active.begin(); it != active.end();)
             {
-                std::set<unsigned short>::const_iterator next_it = it;
+                std::set<uint16_t>::const_iterator next_it = it;
                 next_it++;
                 GetCtrl<ctrlMultiSelectGroup>(22)->RemoveSelection(*it);
                 it = next_it;
@@ -140,7 +140,7 @@ void iwMerchandiseStatistics::Msg_ButtonClick(const unsigned int ctrl_id)
     }
 }
 
-void iwMerchandiseStatistics::Msg_OptionGroupChange(const unsigned int ctrl_id, const unsigned short selection)
+void iwMerchandiseStatistics::Msg_OptionGroupChange(const uint32_t ctrl_id, const uint16_t selection)
 {
     switch(ctrl_id)
     {
@@ -176,24 +176,24 @@ void iwMerchandiseStatistics::Msg_PaintAfter()
 void iwMerchandiseStatistics::DrawStatistic()
 {
     // Ein paar benötigte Werte...
-    const int sizeX = 180;
-    const int sizeY = 80;
-    const int topLeftX = this->x + 34;
-    const int topLeftY = this->y + 64;
-    const int stepX = sizeX / STAT_STEP_COUNT; // 6
+    const int32_t sizeX = 180;
+    const int32_t sizeY = 80;
+    const int32_t topLeftX = this->x + 34;
+    const int32_t topLeftY = this->y + 64;
+    const int32_t stepX = sizeX / STAT_STEP_COUNT; // 6
 
     // Aktive Buttons holen (Achtung ID == BarColor + 1)
-    const std::set<unsigned short>& active = GetCtrl<ctrlMultiSelectGroup>(22)->GetSelection();
+    const std::set<uint16_t>& active = GetCtrl<ctrlMultiSelectGroup>(22)->GetSelection();
 
     // Statistik holen
     const GameClientPlayer::Statistic stat = GAMECLIENT.GetLocalPlayer()->GetStatistic(currentTime);
 
 
     // Maximalwert suchen
-    unsigned short max = 1;
-    for(std::set<unsigned short>::const_iterator it = active.begin(); it != active.end(); it++)
+    uint16_t max = 1;
+    for(std::set<uint16_t>::const_iterator it = active.begin(); it != active.end(); it++)
     {
-        for (unsigned int i = 0; i < STAT_STEP_COUNT; ++i)
+        for (uint32_t i = 0; i < STAT_STEP_COUNT; ++i)
         {
             if (max < stat.merchandiseData[(*it) - 1][i])
             {
@@ -207,17 +207,17 @@ void iwMerchandiseStatistics::DrawStatistic()
     ss << max;
     maxValue->SetText(ss.str());
 
-    unsigned short previousX = 0;
-    unsigned short previousY = 0;
-    unsigned short currentIndex = stat.currentIndex;
+    uint16_t previousX = 0;
+    uint16_t previousY = 0;
+    uint16_t currentIndex = stat.currentIndex;
 
-    for(std::set<unsigned short>::const_iterator it = active.begin(); it != active.end(); it++)
+    for(std::set<uint16_t>::const_iterator it = active.begin(); it != active.end(); it++)
     {
         // Testing only:
         //DrawLine(topLeftX, topLeftY + 3 * (*it), topLeftX + sizeX, topLeftY + 3 * (*it), 2, BarColors[(*it) - 1]);
 
 
-        for (unsigned int i = 0; i < STAT_STEP_COUNT; ++i)
+        for (uint32_t i = 0; i < STAT_STEP_COUNT; ++i)
         {
             if (i != 0)
             {
@@ -238,15 +238,15 @@ void iwMerchandiseStatistics::DrawStatistic()
 void iwMerchandiseStatistics::DrawRectangles()
 {
 
-    const unsigned sizeX = 30;
-    const unsigned sizeY = 4;
-    const unsigned stepX = 31;
-    const unsigned stepY = 35;
+    const uint32_t sizeX = 30;
+    const uint32_t sizeY = 4;
+    const uint32_t stepX = 31;
+    const uint32_t stepY = 35;
 
-    unsigned posX = 17;
-    unsigned posY = 187;
+    uint32_t posX = 17;
+    uint32_t posY = 187;
 
-    for (unsigned i = 0; i < 14; ++i)
+    for (uint32_t i = 0; i < 14; ++i)
     {
         DrawRectangle(this->x + posX, this->y + posY, sizeX, sizeY, BarColors[i]);
         posX += stepX;
@@ -261,12 +261,12 @@ void iwMerchandiseStatistics::DrawRectangles()
 void iwMerchandiseStatistics::DrawAxis()
 {
     // Ein paar benötigte Werte...
-    const int sizeX = 180;
-    const int sizeY = 80;
-    const int topLeftX = this->x + 34;
-    const int topLeftY = this->y + 64;
-    const int topLeftXrel = 37;
-    const int topLeftYrel = 64;
+    const int32_t sizeX = 180;
+    const int32_t sizeY = 80;
+    const int32_t topLeftX = this->x + 34;
+    const int32_t topLeftY = this->y + 64;
+    const int32_t topLeftXrel = 37;
+    const int32_t topLeftYrel = 64;
 
     // X-Achse, horizontal, war irgendwie zu lang links :S
     DrawLine(topLeftX + 6, topLeftY + sizeY + 2, // bisschen tiefer, damit man nulllinien noch sieht

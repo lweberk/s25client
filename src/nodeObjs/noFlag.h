@@ -27,8 +27,8 @@
 class noFlag : public noRoadNode
 {
     public:
-        noFlag(const MapPoint pt, const unsigned char player, const unsigned char dis_dir = 0xFF);
-        noFlag(SerializedGameData* sgd, const unsigned int obj_id);
+        noFlag(const MapPoint pt, const uint8_t player, const uint8_t dis_dir = 0xFF);
+        noFlag(SerializedGameData* sgd, const uint32_t obj_id);
         ~noFlag();
 
         void Destroy()  {   Destroy_noFlag();   }
@@ -39,7 +39,7 @@ class noFlag : public noRoadNode
         /// Gibt Auskunft darüber, ob noch Platz für eine Ware an der Flagge ist.
         inline bool IsSpaceForWare() const { return (GetWareCount() < 8); }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         BlockingManner GetBM() const { return BM_FLAG; }
 
@@ -48,13 +48,13 @@ class noFlag : public noRoadNode
         /// Legt eine Ware an der Flagge ab.
         void AddWare(Ware* ware);
         /// Gibt die Anzahl der Waren zurück, die an der Flagge liegen.
-        unsigned GetWareCount() const;
+        uint32_t GetWareCount() const;
         /// Wählt eine Ware von einer Flagge aus (anhand der Transportreihenfolge), entfernt sie von der Flagge und gibt sie zurück.
-        Ware* SelectWare(const unsigned char dir, const bool swap_wares, const noFigure* const carrier);
+        Ware* SelectWare(const uint8_t dir, const bool swap_wares, const noFigure* const carrier);
         /// Prüft, ob es Waren gibt, die auf den Weg in Richtung dir getragen werden müssen.
-        inline unsigned short GetWaresCountForRoad(const unsigned char dir) const
+        inline uint16_t GetWaresCountForRoad(const uint8_t dir) const
         {
-            unsigned short ret = 0;
+            uint16_t ret = 0;
 
             if (wares[0] && (wares[0]->GetNextDir() == dir))
                 ret++;
@@ -76,24 +76,24 @@ class noFlag : public noRoadNode
             return(ret);
         }
         /// Gibt Wegstrafpunkte für das Pathfinden für Waren, die in eine bestimmte Richtung noch transportiert werden müssen.
-        unsigned short GetPunishmentPoints(const unsigned char dir) const;
+        uint16_t GetPunishmentPoints(const uint8_t dir) const;
         /// Zerstört evtl. vorhandenes Gebäude bzw. Baustelle vor der Flagge.
         void DestroyAttachedBuilding();
         /// Baut normale Flaggen zu "gloriösen" aus bei Eselstraßen.
         void Upgrade();
         /// Feind übernimmt die Flagge.
-        void Capture(const unsigned char new_owner);
+        void Capture(const uint8_t new_owner);
         /// Ist diese Flagge für eine bestimmte Lagerhausflüchtlingsgruppe (BWU) nicht zugänglich?
-        bool IsImpossibleForBWU(const unsigned int bwu_id) const;
+        bool IsImpossibleForBWU(const uint32_t bwu_id) const;
         /// Hinzufügen, dass diese Flagge für eine bestimmte Lagerhausgruppe nicht zugänglich ist.
-        void ImpossibleForBWU(const unsigned int bwu_id);
+        void ImpossibleForBWU(const uint32_t bwu_id);
 
     protected:
         void Destroy_noFlag();
         void Serialize_noFlag(SerializedGameData* sgd) const;
 
     private:
-        unsigned short ani_offset;
+        uint16_t ani_offset;
         FlagType flagtype;
 
         /// Die Waren, die an dieser Flagge liegen
@@ -101,13 +101,13 @@ class noFlag : public noRoadNode
 
         /// Wieviele BWU-Teile es maximal geben soll, also wieviele abgebrannte Lagerhausgruppen
         /// gleichzeitig die Flagge als nicht begehbar deklarieren können.
-        static const unsigned int MAX_BWU = 4;
+        static const uint32_t MAX_BWU = 4;
 
         /// Nicht erreichbar für Massenflüchtlinge
         struct BurnedWarehouseUnit
         {
-            unsigned int id;        ///< ID der Gruppe
-            unsigned int last_gf;   ///< letzter TÜV, ob man auch nicht hinkommt, in GF
+            uint32_t id;        ///< ID der Gruppe
+            uint32_t last_gf;   ///< letzter TÜV, ob man auch nicht hinkommt, in GF
         } bwus[MAX_BWU];
 };
 

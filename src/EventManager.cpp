@@ -41,7 +41,7 @@ static char THIS_FILE[] = __FILE__;
 
 EventManager::~EventManager()
 {
-    for(std::map<unsigned, std::list<Event*> >::iterator it = eis.begin(); it != eis.end(); ++it)
+    for(std::map<uint32_t, std::list<Event*> >::iterator it = eis.begin(); it != eis.end(); ++it)
     {
         for(std::list<Event*>::iterator e_it = it->second.begin(); e_it != it->second.end(); ++e_it)
             delete (*e_it);
@@ -60,7 +60,7 @@ EventManager::~EventManager()
  *
  *  @author OLiver
  */
-EventManager::EventPointer EventManager::AddEvent(GameObject* obj, const unsigned int gf_length, const unsigned int id)
+EventManager::EventPointer EventManager::AddEvent(GameObject* obj, const uint32_t gf_length, const uint32_t id)
 {
     assert(obj);
     assert(gf_length);
@@ -78,7 +78,7 @@ EventManager::EventPointer EventManager::AddEvent(GameObject* obj, const unsigne
     return event;
 }
 
-EventManager::EventPointer EventManager::AddEvent(SerializedGameData* sgd, const unsigned obj_id)
+EventManager::EventPointer EventManager::AddEvent(SerializedGameData* sgd, const uint32_t obj_id)
 {
     Event* event = new Event(sgd, obj_id);
     eis[event->gf_next].push_back(event);
@@ -86,7 +86,7 @@ EventManager::EventPointer EventManager::AddEvent(SerializedGameData* sgd, const
     return event;
 }
 
-EventManager::EventPointer EventManager::AddEvent(GameObject* obj, const unsigned int gf_length, const unsigned int id, const unsigned gf_elapsed)
+EventManager::EventPointer EventManager::AddEvent(GameObject* obj, const uint32_t gf_length, const uint32_t id, const uint32_t gf_elapsed)
 {
     assert(gf_length >= gf_elapsed);
 
@@ -110,12 +110,12 @@ EventManager::EventPointer EventManager::AddEvent(GameObject* obj, const unsigne
  */
 void EventManager::NextGF()
 {
-    unsigned int gfnr = GAMECLIENT.GetGFNumber();
+    uint32_t gfnr = GAMECLIENT.GetGFNumber();
 
     assert( (eis.size() ? eis.begin()->first >= gfnr : true) );
 
     // Events abfragen
-    std::map<unsigned, std::list<Event*> >::iterator it = eis.find(gfnr);
+    std::map<uint32_t, std::list<Event*> >::iterator it = eis.find(gfnr);
     if(it != eis.end())
     {
         for(std::list<Event*>::iterator e_it = it->second.begin(); e_it != it->second.end(); ++e_it)
@@ -160,7 +160,7 @@ void EventManager::Event::Serialize_Event(SerializedGameData* sgd) const
     sgd->PushUnsignedInt(id);
 }
 
-EventManager::Event::Event(SerializedGameData* sgd, const unsigned obj_id) : GameObject(sgd, obj_id),
+EventManager::Event::Event(SerializedGameData* sgd, const uint32_t obj_id) : GameObject(sgd, obj_id),
     obj(sgd->PopObject<GameObject>(GOT_UNKNOWN)),
     gf(sgd->PopUnsignedInt()),
     gf_length(sgd->PopUnsignedInt()),
@@ -177,7 +177,7 @@ void EventManager::Serialize(SerializedGameData* sgd) const
 
     std::list<const Event*> save_events;
     // Nur Events speichern, die noch nicth vorher von anderen Objekten gespeichert wurden!
-    for(std::map< unsigned, std::list<Event*> >::const_iterator it = eis.begin(); it != eis.end(); ++it)
+    for(std::map< uint32_t, std::list<Event*> >::const_iterator it = eis.begin(); it != eis.end(); ++it)
     {
         for(std::list<Event*>::const_iterator e_it = it->second.begin(); e_it != it->second.end(); ++e_it)
         {
@@ -193,16 +193,16 @@ void EventManager::Deserialize(SerializedGameData* sgd)
 {
     // Events laden
     // Nicht zur Eventliste hinzufügen, da dies ohnehin schon in Create_GameObject geschieht!!
-    unsigned size = sgd->PopUnsignedInt();
+    uint32_t size = sgd->PopUnsignedInt();
     // einzelne Objekte
-    for(unsigned i = 0; i < size; ++i)
+    for(uint32_t i = 0; i < size; ++i)
         sgd->PopObject<Event>(GOT_EVENT);
 }
 
 /// Ist ein Event mit bestimmter id für ein bestimmtes Objekt bereits vorhanden?
-bool EventManager::IsEventActive(const GameObject* const obj, const unsigned id) const
+bool EventManager::IsEventActive(const GameObject* const obj, const uint32_t id) const
 {
-    for(std::map< unsigned, std::list<Event*> >::const_iterator it = eis.begin(); it != eis.end(); ++it)
+    for(std::map< uint32_t, std::list<Event*> >::const_iterator it = eis.begin(); it != eis.end(); ++it)
     {
         for(std::list<Event*>::const_iterator e_it = it->second.begin(); e_it != it->second.end(); ++e_it)
         {
@@ -219,7 +219,7 @@ bool EventManager::IsEventActive(const GameObject* const obj, const unsigned id)
 // only used for debugging purposes
 void EventManager::RemoveAllEventsOfObject(GameObject* obj)
 {
-    for(std::map< unsigned, std::list<Event*> >::iterator it = eis.begin(); it != eis.end(); ++it)
+    for(std::map< uint32_t, std::list<Event*> >::iterator it = eis.begin(); it != eis.end(); ++it)
     {
         for(std::list<Event*>::iterator e_it = it->second.begin(); e_it != it->second.end();)
         {
@@ -242,7 +242,7 @@ void EventManager::RemoveEvent(EventPointer ep)
         return;
     }
 
-    std::map<unsigned, std::list<Event*> >::iterator it = eis.find(ep->gf_next);
+    std::map<uint32_t, std::list<Event*> >::iterator it = eis.find(ep->gf_next);
     if(it != eis.end())
     {
         std::list<Event*>::iterator e_it = std::find(it->second.begin(), it->second.end(), ep);

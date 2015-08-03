@@ -34,16 +34,16 @@ class iwAIDebug : public IngameWindow
         iwAIDebug(GameWorldViewer* const gwv);
 
     private:
-        void Msg_ComboSelectItem(const unsigned int ctrl_id, const unsigned short select);
-        //void Msg_ButtonClick(const unsigned int ctrl_id);
-        //void Msg_ProgressChange(const unsigned int ctrl_id, const unsigned short position);
+        void Msg_ComboSelectItem(const uint32_t ctrl_id, const uint16_t select);
+        //void Msg_ButtonClick(const uint32_t ctrl_id);
+        //void Msg_ProgressChange(const uint32_t ctrl_id, const uint16_t position);
         void Msg_PaintBefore();
 
     private:
         std::vector<AIPlayerJH*> ais;
         ctrlList* jobs;
-        unsigned selection;
-        unsigned overlay;
+        uint32_t selection;
+        uint32_t overlay;
         ctrlText* text;
         GameWorldViewer* gwv;
 };

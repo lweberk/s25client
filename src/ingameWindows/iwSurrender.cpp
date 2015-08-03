@@ -57,7 +57,7 @@ iwSurrender::iwSurrender(void)
 }
 
 
-void iwSurrender::Msg_ButtonClick(const unsigned int ctrl_id)
+void iwSurrender::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

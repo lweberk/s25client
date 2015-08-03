@@ -28,24 +28,24 @@
 class ctrlTable : public Window
 {
     public:
-        ctrlTable(Window* parent, unsigned int id, unsigned short x, unsigned short y, unsigned short width,  unsigned short height, TextureColor tc, glArchivItem_Font* font, unsigned short column_count, va_list liste);
+        ctrlTable(Window* parent, uint32_t id, uint16_t x, uint16_t y, uint16_t width,  uint16_t height, TextureColor tc, glArchivItem_Font* font, uint16_t column_count, va_list liste);
         virtual ~ctrlTable(void);
 
         /// löscht alle Items.
         void DeleteAllItems(void);
         /// setzt die Auswahl.
-        void SetSelection(unsigned short selection, bool left = true);
+        void SetSelection(uint16_t selection, bool left = true);
         /// fügt eine Zeile hinzu.
-        void AddRow(unsigned int alwaysnull, ...);
+        void AddRow(uint32_t alwaysnull, ...);
         /// liefert den Wert eines Feldes.
-        const std::string& GetItemText(unsigned short row, unsigned short column) const;
+        const std::string& GetItemText(uint16_t row, uint16_t column) const;
         /// sortiert die Zeilen.
-        void SortRows(unsigned short column, bool* direction = NULL);
-        unsigned short GetSortColumn() { return sort_column; }
+        void SortRows(uint16_t column, bool* direction = NULL);
+        uint16_t GetSortColumn() { return sort_column; }
         bool GetSortDirection() { return sort_direction; }
-        unsigned short GetRowCount() { return static_cast<unsigned short>(rows.size()); }
-        unsigned short GetColumnCount() { return static_cast<unsigned short>(columns.size()); }
-        unsigned short GetSelection(bool left = true) { return (left ? row_l_selection : row_r_selection); }
+        uint16_t GetRowCount() { return static_cast<uint16_t>(rows.size()); }
+        uint16_t GetColumnCount() { return static_cast<uint16_t>(columns.size()); }
+        uint16_t GetSelection(bool left = true) { return (left ? row_l_selection : row_r_selection); }
 
         virtual bool Msg_LeftDown(const MouseCoords& mc);
         virtual bool Msg_RightDown(const MouseCoords& mc);
@@ -53,8 +53,8 @@ class ctrlTable : public Window
         virtual bool Msg_WheelUp(const MouseCoords& mc);
         virtual bool Msg_WheelDown(const MouseCoords& mc);
         virtual bool Msg_MouseMove(const MouseCoords& mc);
-        virtual void Msg_ButtonClick(const unsigned int ctrl_id);
-        virtual void Msg_ScrollShow(const unsigned int ctrl_id, const bool visible);
+        virtual void Msg_ButtonClick(const uint32_t ctrl_id);
+        virtual void Msg_ScrollShow(const uint32_t ctrl_id, const bool visible);
         virtual bool Msg_KeyDown(const KeyEvent& ke);
 
         enum SortType
@@ -71,7 +71,7 @@ class ctrlTable : public Window
         virtual bool Draw_(void);
 
         /// Größe ändern
-        void Resize_(unsigned short width, unsigned short height);
+        void Resize_(uint16_t width, uint16_t height);
         /// Setzt die Breite und Position der Buttons ohne Scrolleiste
         void ResetButtonWidths();
 
@@ -79,22 +79,22 @@ class ctrlTable : public Window
         TextureColor tc;
         glArchivItem_Font* font;
 
-        unsigned short header_height;
-        unsigned short line_count;
+        uint16_t header_height;
+        uint16_t line_count;
 
         struct COLUMN
         {
             /// Breite der Spalten in Promille von der Tabellenlänge
-            unsigned short width;
+            uint16_t width;
             std::string title;
             SortType sortType;
         };
         std::vector<COLUMN> columns;
 
-        unsigned short row_l_selection;
-        unsigned short row_r_selection;
+        uint16_t row_l_selection;
+        uint16_t row_r_selection;
 
-        unsigned short sort_column;
+        uint16_t sort_column;
         bool sort_direction;
 
         struct ROW
@@ -103,7 +103,7 @@ class ctrlTable : public Window
         };
         std::vector<ROW> rows;
 
-        int Compare(const std::string& a, const std::string& b, SortType sortType);
+        int32_t Compare(const std::string& a, const std::string& b, SortType sortType);
 };
 
 #endif // !CTRLTABLE_H_INCLUDED

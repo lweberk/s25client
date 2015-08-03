@@ -28,8 +28,8 @@ class noSign : public noDisappearingEnvObject
 {
     public:
         /// Konstruktor von @p noSign.
-        noSign(const MapPoint pt, const unsigned char type, const unsigned char quantity);
-        noSign(SerializedGameData* sgd, const unsigned obj_id);
+        noSign(const MapPoint pt, const uint8_t type, const uint8_t quantity);
+        noSign(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_noSign();
@@ -41,18 +41,18 @@ class noSign : public noDisappearingEnvObject
         GO_Type GetGOT() const { return GOT_SIGN; }
 
         /// An x,y zeichnen.
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
-        unsigned char GetSignType() const { return type; }
+        uint8_t GetSignType() const { return type; }
 
     private:
 
         /// Typ der Ressource (0 = Erz, 1 = Gold, 2 = Kohle, 3 = Granit, 4 = Wasser, 5 = nix)
-        const unsigned char type;
+        const uint8_t type;
         /// Häufigkeit der Ressource
-        const unsigned char quantity;
+        const uint8_t quantity;
 };
 
 #endif // !NOSIGN_H_INCLUDED

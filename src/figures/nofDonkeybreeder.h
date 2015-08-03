@@ -29,21 +29,21 @@ class nobUsualBuilding;
 class nofDonkeybreeder : public nofWorkman
 {
     public:
-        nofDonkeybreeder(const MapPoint pt, unsigned char player, nobUsual* workplace);
-        nofDonkeybreeder(SerializedGameData* sgd, unsigned int obj_id);
+        nofDonkeybreeder(const MapPoint pt, uint8_t player, nobUsual* workplace);
+        nofDonkeybreeder(SerializedGameData* sgd, uint32_t obj_id);
 
         GO_Type GetGOT() const { return GOT_NOF_DONKEYBREEDER; }
 
     private:
         /// Zeichnet ihn beim Arbeiten.
-        void DrawWorking(int x, int y);
+        void DrawWorking(int32_t x, int32_t y);
         /// Der Arbeiter erzeugt eine Ware.
         GoodType ProduceWare();
         /// Wird aufgerufen, wenn er fertig mit arbeiten ist
         void WorkFinished();
 
         /// Gibt die ID in JOBS.BOB zurück, wenn der Beruf Waren rausträgt (bzw rein)
-        unsigned short GetCarryID() const { return 0; }
+        uint16_t GetCarryID() const { return 0; }
 };
 
 #endif // !NOFDONKEYBREEDER_H_INCLUDED

@@ -26,19 +26,19 @@
 #include "gameTypes/MapTypes.h"
 
 /// Anzahl Animationsschritte bei dem jeweiligen Anstieg
-const unsigned short ASCENT_ANIMATION_STEPS[7] = {16, 16, 16, 16, 24, 32, 48};
+const uint16_t ASCENT_ANIMATION_STEPS[7] = {16, 16, 16, 16, 24, 32, 48};
 
 class noMovable : public noCoordBase
 {
     protected:
 
-        unsigned char dir; // Richtung, in die es gerade läcft
-        unsigned char ascent; // Anstieg beim Laufen (0-2 runter, 3 gerade, 4-6 hoch)
+        uint8_t dir; // Richtung, in die es gerade läcft
+        uint8_t ascent; // Anstieg beim Laufen (0-2 runter, 3 gerade, 4-6 hoch)
         EventManager::EventPointer current_ev;
         /// Falls er unterwegs angehalten ist: wie weit war er schon gelaufen (0 wenn nicht)
-        unsigned pause_walked_gf;
+        uint32_t pause_walked_gf;
         /// Wenn er angehalten hat, wie lange das Laufevent war
-        unsigned pause_event_length;
+        uint32_t pause_event_length;
         /// Läuft es gerade (zum Debuggen)
         bool moving;
 
@@ -50,7 +50,7 @@ class noMovable : public noCoordBase
     public:
 
         noMovable(const NodalObjectType nop, const MapPoint pt);
-        noMovable(SerializedGameData* sgd, const unsigned obj_id);
+        noMovable(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_noMovable() { Destroy_noCoordBase(); }
@@ -63,11 +63,11 @@ class noMovable : public noCoordBase
         /// In aktueller Richtung ein Stück zurücklegen
         void Walk();
         // Starten zu Laufen, Event anmelden
-        void StartMoving(const unsigned char dir, unsigned gf_length);
+        void StartMoving(const uint8_t dir, uint32_t gf_length);
         // Interpoliert die Positon zwischen zwei Knotenpunkten
-        void CalcRelative(int& x, int& y, int x1 = 0, int y1 = 0, int x2 = 0, int y2 = 0);
+        void CalcRelative(int32_t& x, int32_t& y, int32_t x1 = 0, int32_t y1 = 0, int32_t x2 = 0, int32_t y2 = 0);
         /// Interpoliert fürs Laufen zwischen zwei Kartenpunkten
-        void CalcWalkingRelative(int& x, int& y);
+        void CalcWalkingRelative(int32_t& x, int32_t& y);
         // Steht er in der zwischen 2 Wegpunkten?
         bool IsStandingBetweenNodes() const { return (pause_walked_gf > 0) ? true : false; }
         /// Gibt die Position zurück, wo wir uns hinbewegen (selbe Position, wenn Schiff steht)

@@ -46,7 +46,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author OLiver
  */
-noDisappearingMapEnvObject::noDisappearingMapEnvObject(const MapPoint pos, const unsigned short map_id)
+noDisappearingMapEnvObject::noDisappearingMapEnvObject(const MapPoint pos, const uint16_t map_id)
     : noDisappearingEnvObject(pos, 4000, 1000), map_id(map_id)
 {
 }
@@ -58,7 +58,7 @@ void noDisappearingMapEnvObject::Serialize_noDisappearingMapEnvObject(Serialized
     sgd->PushUnsignedShort(map_id);
 }
 
-noDisappearingMapEnvObject::noDisappearingMapEnvObject(SerializedGameData* sgd, const unsigned obj_id)
+noDisappearingMapEnvObject::noDisappearingMapEnvObject(SerializedGameData* sgd, const uint32_t obj_id)
     : noDisappearingEnvObject(sgd, obj_id), map_id(sgd->PopUnsignedShort())
 {
 }
@@ -69,7 +69,7 @@ noDisappearingMapEnvObject::noDisappearingMapEnvObject(SerializedGameData* sgd, 
  *
  *  @author OLiver
  */
-void noDisappearingMapEnvObject::Draw(int x, int y)
+void noDisappearingMapEnvObject::Draw(int32_t x, int32_t y)
 {
     // Bild
     LOADER.GetMapImageN(map_id)->Draw(x, y, 0, 0, 0, 0, 0, 0, GetDrawColor());
@@ -77,7 +77,7 @@ void noDisappearingMapEnvObject::Draw(int x, int y)
     LOADER.GetMapImageN(map_id + 100)->Draw(x, y, 0, 0, 0, 0, 0, 0, GetDrawShadowColor());
 }
 
-void noDisappearingMapEnvObject::HandleEvent(const unsigned int id)
+void noDisappearingMapEnvObject::HandleEvent(const uint32_t id)
 {
     HandleEvent_noDisappearingEnvObject(id);
 }

@@ -47,8 +47,8 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 noSign::noSign(const MapPoint pos,
-               const unsigned char type,
-               const unsigned char quantity)
+               const uint8_t type,
+               const uint8_t quantity)
     : noDisappearingEnvObject(pos, 8500, 500), type(type), quantity(quantity)
 {
 }
@@ -61,7 +61,7 @@ void noSign::Serialize_noSign(SerializedGameData* sgd) const
     sgd->PushUnsignedChar(quantity);
 }
 
-noSign::noSign(SerializedGameData* sgd, const unsigned obj_id) : noDisappearingEnvObject(sgd, obj_id),
+noSign::noSign(SerializedGameData* sgd, const uint32_t obj_id) : noDisappearingEnvObject(sgd, obj_id),
     type(sgd->PopUnsignedChar()),
     quantity(sgd->PopUnsignedChar())
 {
@@ -73,10 +73,10 @@ noSign::noSign(SerializedGameData* sgd, const unsigned obj_id) : noDisappearingE
  *
  *  @author OLiver
  */
-void noSign::Draw(int x, int y)
+void noSign::Draw(int32_t x, int32_t y)
 {
     // Wenns verschwindet, muss es immer transparenter werden
-    unsigned color = GetDrawColor();
+    uint32_t color = GetDrawColor();
 
     // Schild selbst
     if(type != 5)
@@ -89,7 +89,7 @@ void noSign::Draw(int x, int y)
     LOADER.GetMapImageN(700)->Draw(x, y, 0, 0, 0, 0, 0, 0, GetDrawShadowColor());
 }
 
-void noSign::HandleEvent(const unsigned int id)
+void noSign::HandleEvent(const uint32_t id)
 {
     HandleEvent_noDisappearingEnvObject(id);
 }

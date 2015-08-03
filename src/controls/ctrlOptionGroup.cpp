@@ -37,8 +37,8 @@ static char THIS_FILE[] = __FILE__;
  *  @author OLiver
  */
 ctrlOptionGroup::ctrlOptionGroup(Window* parent,
-                                 unsigned int id,
-                                 int select_type,
+                                 uint32_t id,
+                                 int32_t select_type,
                                  bool scale)
     : ctrlGroup(parent, id, scale),
       selection(0xFFFF), select_type(select_type)
@@ -64,7 +64,7 @@ bool ctrlOptionGroup::Draw_(void)
  *
  *  @author OLiver
  */
-void ctrlOptionGroup::SetSelection(unsigned short selection, bool notify)
+void ctrlOptionGroup::SetSelection(uint16_t selection, bool notify)
 {
     // Aktuellen ausgewählten Button wieder normal machen
     if(this->selection != 0xFFFF)
@@ -104,7 +104,7 @@ void ctrlOptionGroup::SetSelection(unsigned short selection, bool notify)
  *
  *  @author OLiver
  */
-void ctrlOptionGroup::Msg_ButtonClick(const unsigned int ctrl_id)
+void ctrlOptionGroup::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     SetSelection(ctrl_id, true);
 }

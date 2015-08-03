@@ -35,13 +35,13 @@ class ctrlIngameMinimap : public ctrlMinimap
     public:
 
         ctrlIngameMinimap( Window* parent,
-                           const unsigned int id,
-                           const unsigned short x,
-                           const unsigned short y,
-                           const unsigned short width,
-                           const unsigned short height,
-                           const unsigned short padding_x,
-                           const unsigned short padding_y,
+                           const uint32_t id,
+                           const uint16_t x,
+                           const uint16_t y,
+                           const uint16_t width,
+                           const uint16_t height,
+                           const uint16_t padding_x,
+                           const uint16_t padding_y,
                            IngameMinimap* minimap,
                            GameWorldViewer& gwv);
 
@@ -52,7 +52,7 @@ class ctrlIngameMinimap : public ctrlMinimap
         bool Msg_MouseMove(const MouseCoords& mc);
 
         /// Setzt Breite und Höhe des Controls
-        void SetDisplaySize(const unsigned short width, const unsigned short height);
+        void SetDisplaySize(const uint16_t width, const uint16_t height);
 
         /// Die einzelnen Dinge umschalten
         void ToggleTerritory();

@@ -26,27 +26,27 @@
 
 
 
-unsigned CalcRawDistance(const int x1, const int y1,
-                         const int x2, const int y2)
+uint32_t CalcRawDistance(const int32_t x1, const int32_t y1,
+                         const int32_t x2, const int32_t y2)
 {
-    int dx = std::abs((2 * int(x1) + (y1 & 1)) - (2 * int(x2) + (y2 & 1))), dy = std::abs(2 * int(y1) - 2 * int(y2));
+    int32_t dx = std::abs((2 * int(x1) + (y1 & 1)) - (2 * int(x2) + (y2 & 1))), dy = std::abs(2 * int(y1) - 2 * int(y2));
     return (dy + std::max(0, dx - dy / 2)) / 2;
 
     //int dx = std::abs(int(x1)-int(x2)), dy = std::abs(int(y1)-int(y2));
     //return dy + std::max(0,dx+((dy&1)-dy)/2);
 }
 
-Point<int> GetPointAround(Point<int> p, unsigned dir)
+Point<int32_t> GetPointAround(Point<int32_t> p, uint32_t dir)
 {
     switch(dir)
     {
-        case 0: return Point<int>(p.x - 1, p.y);
-        case 1: return Point<int>(p.x - !(p.y&1), p.y-1);
-        case 2: return Point<int>(p.x + (p.y&1), p.y-1); break;
-        case 3: return Point<int>(p.x + 1, p.y); break;
-        case 4: return Point<int>(p.x + (p.y&1), p.y+1); break;
-        case 5: return Point<int>(p.x - !(p.y&1), p.y+1); break;
-        default: assert(false); return Point<int>(0xffffff, 0xffffff);
+        case 0: return Point<int32_t>(p.x - 1, p.y);
+        case 1: return Point<int32_t>(p.x - !(p.y&1), p.y-1);
+        case 2: return Point<int32_t>(p.x + (p.y&1), p.y-1); break;
+        case 3: return Point<int32_t>(p.x + 1, p.y); break;
+        case 4: return Point<int32_t>(p.x + (p.y&1), p.y+1); break;
+        case 5: return Point<int32_t>(p.x - !(p.y&1), p.y+1); break;
+        default: assert(false); return Point<int32_t>(0xffffff, 0xffffff);
     }
 }
 

@@ -24,7 +24,7 @@
 #include "GameWorld.h"
 #include "GameCommands.h"
 
-AIPlayer::AIPlayer(const unsigned char playerid, const GameWorldBase* const gwb, const GameClientPlayer* const player,
+AIPlayer::AIPlayer(const uint8_t playerid, const GameWorldBase* const gwb, const GameClientPlayer* const player,
                    const GameClientPlayerList* const players, const GlobalGameSettings* const ggs,
                    const AI::Level level) : AIBase(playerid, gwb, player, players, ggs, level)
 {
@@ -32,6 +32,6 @@ AIPlayer::AIPlayer(const unsigned char playerid, const GameWorldBase* const gwb,
 
 
 /// Wird jeden GF aufgerufen und die KI kann hier entsprechende Handlungen vollziehen
-void AIPlayer::RunGF(const unsigned gf, bool gfisnwf)
+void AIPlayer::RunGF(const uint32_t gf, bool gfisnwf)
 {
 }

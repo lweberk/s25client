@@ -56,7 +56,7 @@ void noMovable::Serialize_noMovable(SerializedGameData* sgd) const
     sgd->PushBool(moving);
 }
 
-noMovable::noMovable(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noMovable::noMovable(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     dir(sgd->PopUnsignedChar()),
     ascent(sgd->PopUnsignedChar()),
     current_ev(sgd->PopObject<EventManager::Event>(GOT_EVENT)),
@@ -82,9 +82,9 @@ void noMovable::Walk()
 		pos = gwg->GetNeighbour(pos, dir);
 	}
 /*
-    int tx = x, ty = y;
+    int32_t tx = x, ty = y;
     
-            inline void GetPointA(MapPoint& pos, unsigned dir) const {x = GetXA(pos, dir); y = GetYA(pos, dir);}
+            inline void GetPointA(MapPoint& pos, uint32_t dir) const {x = GetXA(pos, dir); y = GetYA(pos, dir);}
     
     x = gwg->GetXA(t, dir);
     y = gwg->GetYA(t, dir);
@@ -99,7 +99,7 @@ void noMovable::Walk()
         gwg->AddFigure(this, pos);*/
 }
 
-void noMovable::StartMoving(const unsigned char dir, unsigned gf_length)
+void noMovable::StartMoving(const uint8_t dir, uint32_t gf_length)
 {
     assert(!moving);
 
@@ -139,7 +139,7 @@ void noMovable::StartMoving(const unsigned char dir, unsigned gf_length)
     }
 }
 
-void noMovable::CalcRelative(int& x, int& y, int x1, int y1, int x2, int y2)
+void noMovable::CalcRelative(int32_t& x, int32_t& y, int32_t x1, int32_t y1, int32_t x2, int32_t y2)
 {
     if(current_ev)
     {
@@ -154,9 +154,9 @@ void noMovable::CalcRelative(int& x, int& y, int x1, int y1, int x2, int y2)
     assert(current_ev || pause_walked_gf);
 
     // Wenn wir mittem aufm Weg stehen geblieben sind, die gemerkten Werte jeweils nehmen
-    unsigned gf_diff = current_ev ? (GAMECLIENT.GetGFNumber() - current_ev->gf) : pause_walked_gf;
-    unsigned gf_length = current_ev ? current_ev->gf_length : pause_event_length;
-    unsigned frame_time = current_ev ? GAMECLIENT.GetFrameTime() : 0;
+    uint32_t gf_diff = current_ev ? (GAMECLIENT.GetGFNumber() - current_ev->gf) : pause_walked_gf;
+    uint32_t gf_length = current_ev ? current_ev->gf_length : pause_event_length;
+    uint32_t frame_time = current_ev ? GAMECLIENT.GetFrameTime() : 0;
 
     if(dir != 1 && dir != 2)
     {
@@ -171,12 +171,12 @@ void noMovable::CalcRelative(int& x, int& y, int x1, int y1, int x2, int y2)
 }
 
 /// Interpoliert fürs Laufen zwischen zwei Kartenpunkten
-void noMovable::CalcWalkingRelative(int& x, int& y)
+void noMovable::CalcWalkingRelative(int32_t& x, int32_t& y)
 {
-    int x1 = static_cast<int>(gwg->GetTerrainX(this->pos));
-    int y1 = static_cast<int>(gwg->GetTerrainY(this->pos));
-    int x2 = static_cast<int>(gwg->GetTerrainX(gwg->GetNeighbour(this->pos, dir)));
-    int y2 = static_cast<int>(gwg->GetTerrainY(gwg->GetNeighbour(this->pos, dir)));
+    int32_t x1 = static_cast<int32_t>(gwg->GetTerrainX(this->pos));
+    int32_t y1 = static_cast<int32_t>(gwg->GetTerrainY(this->pos));
+    int32_t x2 = static_cast<int32_t>(gwg->GetTerrainX(gwg->GetNeighbour(this->pos, dir)));
+    int32_t y2 = static_cast<int32_t>(gwg->GetTerrainY(gwg->GetNeighbour(this->pos, dir)));
 
     // Gehen wir über einen Kartenrand (horizontale Richung?)
     if(std::abs(x1 - x2) >= gwg->GetWidth() * TR_W / 2)

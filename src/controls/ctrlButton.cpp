@@ -40,8 +40,8 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author OLiver
  */
-ctrlButton::ctrlButton(Window* parent, unsigned int id, unsigned short x, unsigned short y,
-                       unsigned short width, unsigned short height, TextureColor tc, const std::string& tooltip)
+ctrlButton::ctrlButton(Window* parent, uint32_t id, uint16_t x, uint16_t y,
+                       uint16_t width, uint16_t height, TextureColor tc, const std::string& tooltip)
     : Window(x, y, id, parent, width, height), tc(tc), state(BUTTON_UP), border(true),
       check(false), illuminated(false), enabled(true)
 {
@@ -171,7 +171,7 @@ bool ctrlButton::Draw_(void)
     if(tc != TC_INVISIBLE)
     {
         if(border)
-            Draw3D(buttonrect.left, buttonrect.top, width, height, tc, (unsigned short)((check) ? 2 : state), illuminated);
+            Draw3D(buttonrect.left, buttonrect.top, width, height, tc, (uint16_t)((check) ? 2 : state), illuminated);
         else
         {
             if(state == BUTTON_UP || state == BUTTON_PRESSED)
@@ -188,8 +188,8 @@ bool ctrlButton::Draw_(void)
 }
 
 
-ctrlTextButton::ctrlTextButton(Window* parent, unsigned int id, unsigned short x, unsigned short y,
-                               unsigned short width, unsigned short height, const TextureColor tc,
+ctrlTextButton::ctrlTextButton(Window* parent, uint32_t id, uint16_t x, uint16_t y,
+                               uint16_t width, uint16_t height, const TextureColor tc,
                                const std::string& text,  glArchivItem_Font* font, const std::string& tooltip)
     : ctrlButton(parent, id, x, y, width, height, tc, tooltip), ctrlBaseText(text, COLOR_YELLOW, font)
 {
@@ -199,7 +199,7 @@ ctrlTextButton::ctrlTextButton(Window* parent, unsigned int id, unsigned short x
 /// Abgeleitete Klassen müssen erweiterten Button-Inhalt zeichnen (Text in dem Fall)
 void ctrlTextButton::DrawContent() const
 {
-    unsigned color;
+    uint32_t color;
     if(this->color == COLOR_YELLOW)
         color = ( (state == BUTTON_PRESSED || check) ? 0xFFFFAA00 : COLOR_YELLOW );
     else
@@ -210,8 +210,8 @@ void ctrlTextButton::DrawContent() const
 }
 
 
-ctrlImageButton::ctrlImageButton(Window* parent, unsigned int id, unsigned short x, unsigned short y,
-                                 unsigned short width, unsigned short height, const TextureColor tc,
+ctrlImageButton::ctrlImageButton(Window* parent, uint32_t id, uint16_t x, uint16_t y,
+                                 uint16_t width, uint16_t height, const TextureColor tc,
                                  glArchivItem_Bitmap* const image, const std::string& tooltip)
     : ctrlButton(parent, id, x, y, width, height, tc, tooltip), image(image), modulation_color(0xFFFFFFFF)
 {
@@ -226,9 +226,9 @@ void ctrlImageButton::DrawContent() const
 
 
 /// Abgeleitete Klassen müssen erweiterten Button-Inhalt zeichnen (Text in dem Fall)
-ctrlColorButton::ctrlColorButton(Window* parent, unsigned int id, unsigned short x, unsigned short y,
-                                 unsigned short width, unsigned short height, const TextureColor tc,
-                                 unsigned int fillColor, const std::string& tooltip) :
+ctrlColorButton::ctrlColorButton(Window* parent, uint32_t id, uint16_t x, uint16_t y,
+                                 uint16_t width, uint16_t height, const TextureColor tc,
+                                 uint32_t fillColor, const std::string& tooltip) :
     ctrlButton(parent, id, x, y, width, height, tc, tooltip),
     fillColor(fillColor)
 {
@@ -242,7 +242,7 @@ void ctrlColorButton::DrawContent() const
 }
 
 
-void ctrlColorButton::SetColor(const unsigned int fill_color)
+void ctrlColorButton::SetColor(const uint32_t fill_color)
 {
     this->fillColor = fill_color;
 }

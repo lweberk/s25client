@@ -49,24 +49,24 @@ class noBuildingSite : public noBaseBuilding
         /// Bauarbeiter, der an dieser Baustelle arbeitet
         nofBuilder* builder;
         /// Bretter und Steine, die hier liegen
-        unsigned char boards, stones;
+        uint8_t boards, stones;
         /// Bretter und Steine, die schon verbaut wurden
-        unsigned char used_boards, used_stones;
+        uint8_t used_boards, used_stones;
         /// Gibt den Baufortschritt an, wie hoch das Gebäude schon gebaut ist, gemessen in 8 Stufen für jede verbaute Ware
-        unsigned char build_progress;
+        uint8_t build_progress;
         /// Bestellte Bretter und Steine, d.h. Steine/Bretter, die noch "bestellt" wurden, aber noch nicht da sind
         std::list<Ware*> ordered_boards, ordered_stones;
 
     public:
-        unsigned char getUsedBoards() const { return used_boards; }
-        unsigned char getUsedStones() const { return used_stones; }
-        unsigned char getBoards() const { return boards; }
-        unsigned char getStones() const { return stones; }
+        uint8_t getUsedBoards() const { return used_boards; }
+        uint8_t getUsedStones() const { return used_stones; }
+        uint8_t getBoards() const { return boards; }
+        uint8_t getStones() const { return stones; }
 
-        noBuildingSite(const BuildingType type, const MapPoint pt, const unsigned char player);
+        noBuildingSite(const BuildingType type, const MapPoint pt, const uint8_t player);
         /// Konstruktor für Hafenbaustellen vom Schiff aus
-        noBuildingSite(const MapPoint pt, const unsigned char player);
-        noBuildingSite(SerializedGameData* sgd, const unsigned obj_id);
+        noBuildingSite(const MapPoint pt, const uint8_t player);
+        noBuildingSite(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~noBuildingSite();
 
@@ -80,7 +80,7 @@ class noBuildingSite : public noBaseBuilding
 
         GO_Type GetGOT() const { return GOT_BUILDINGSITE; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         /// Erzeugt von ihnen selbst ein FOW Objekt als visuelle "Erinnerung" für den Fog of War
         FOWObject* CreateFOWObject() const;
@@ -95,9 +95,9 @@ class noBuildingSite : public noBaseBuilding
         /// Eine bestellte Ware konnte doch nicht kommen
         void WareLost(Ware* ware);
         /// Gibt den Bau-Fortschritt zurück
-        unsigned char GetBuildProgress(bool percent = true) const;
+        uint8_t GetBuildProgress(bool percent = true) const;
 
-        unsigned CalcDistributionPoints(noRoadNode* start, const GoodType type);
+        uint32_t CalcDistributionPoints(noRoadNode* start, const GoodType type);
 
         /// Wird aufgerufen, wenn eine neue Ware zum dem Gebäude geliefert wird (nicht wenn sie bestellt wurde vom Gebäude!)
         void TakeWare(Ware* ware);

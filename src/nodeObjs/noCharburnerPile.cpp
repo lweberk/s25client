@@ -40,18 +40,18 @@ static char THIS_FILE[] = __FILE__;
 
 
 /// Length of the smoldering
-const unsigned SMOLDERING_LENGTH = 3000;
+const uint32_t SMOLDERING_LENGTH = 3000;
 /// if nothing happens in this amount of GF the pile will catch fire and burn down (removes inactive piles)
 /// it takes about ~4000 gf to remove the cover & harvest the coal from a priority pile - so after this delay there are ~8k gf remaining for the charburner to start working on the started pile again
-/// -> this should only run out if there is either a very long time without resources or the building was destroyed/stopped
-const unsigned SELFDESTRUCT_DELAY = 12000;
+/// -> this should only run out if there is either a very int64_t time without resources or the building was destroyed/stopped
+const uint32_t SELFDESTRUCT_DELAY = 12000;
 
 /// Work steps for the construction of the wood pile and the cover
-const unsigned short CONSTRUCTION_WORKING_STEPS[2] = {6, 6};
+const uint16_t CONSTRUCTION_WORKING_STEPS[2] = {6, 6};
 /// Work steps for one graphical step during the remove of the cover
-const unsigned short REMOVECOVER_WORK_STEPS = 1;
+const uint16_t REMOVECOVER_WORK_STEPS = 1;
 /// Work steps for one graphical step during the "harvest"
-const unsigned short HARVEST_WORK_STEPS = 1;
+const uint16_t HARVEST_WORK_STEPS = 1;
 
 noCharburnerPile::noCharburnerPile(const MapPoint pos) : noCoordBase(NOP_CHARBURNERPILE, pos),
     state(STATE_WOOD), step(0), sub_step(1), event(NULL)
@@ -77,13 +77,13 @@ void noCharburnerPile::Serialize_noCharburnerPile(SerializedGameData* sgd) const
 {
     Serialize_noCoordBase(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(state));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(state));
     sgd->PushUnsignedShort(step);
     sgd->PushUnsignedShort(sub_step);
     sgd->PushObject(event, true);
 }
 
-noCharburnerPile::noCharburnerPile(SerializedGameData* sgd, const unsigned obj_id) : noCoordBase(sgd, obj_id),
+noCharburnerPile::noCharburnerPile(SerializedGameData* sgd, const uint32_t obj_id) : noCoordBase(sgd, obj_id),
     state(State(sgd->PopUnsignedChar())),
     step(sgd->PopUnsignedShort()),
     sub_step(sgd->PopUnsignedShort()),
@@ -91,7 +91,7 @@ noCharburnerPile::noCharburnerPile(SerializedGameData* sgd, const unsigned obj_i
 {
 }
 
-void noCharburnerPile::Draw( int x, int y)
+void noCharburnerPile::Draw( int32_t x, int32_t y)
 {
     switch(state)
     {
@@ -111,8 +111,8 @@ void noCharburnerPile::Draw( int x, int y)
                 LOADER.GetImageN("charburner_bobs", 26)->Draw(x, y);
             }
 
-            unsigned short progress = sub_step * image->getHeight() / CONSTRUCTION_WORKING_STEPS[step];
-            unsigned short height = image->getHeight() - progress;
+            uint16_t progress = sub_step * image->getHeight() / CONSTRUCTION_WORKING_STEPS[step];
+            uint16_t height = image->getHeight() - progress;
             if(progress != 0)
                 image->Draw(x, y + height, 0, 0, 0, height, 0, progress);
         } return;
@@ -144,7 +144,7 @@ void noCharburnerPile::Draw( int x, int y)
     }
 }
 
-void noCharburnerPile::HandleEvent(const unsigned int id)
+void noCharburnerPile::HandleEvent(const uint32_t id)
 {
     // Smoldering is over
     // Pile is ready for the remove of the cover

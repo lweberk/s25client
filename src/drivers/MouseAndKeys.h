@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 ///////////////////////////////////////////////////////////////////////////////
 /**
  *  Mausstatusstruct
@@ -29,19 +31,19 @@ class MouseCoords
 {
     public:
         MouseCoords() : x(0), y(0), ldown(false), rdown(false), dbl_click(false) {}
-        MouseCoords(int x, int y, bool ldown, bool rdown, const bool dbl_click)
+        MouseCoords(int32_t x, int32_t y, bool ldown, bool rdown, const bool dbl_click)
             : x(x), y(y), ldown(ldown), rdown(rdown), dbl_click(dbl_click) {}
 
     public:
-        int x;      /// xKoordinate
-        int y;      /// yKoordinate
+        int32_t x;      /// xKoordinate
+        int32_t y;      /// yKoordinate
         bool ldown; /// Linke Maustaste gedrückt
         bool rdown; /// Rechte Maustaste gedrückt
         bool dbl_click; /// Linke Maustaste - Doppelklick
 };
 
 /// Maximale Zeitdifferenz in ms für einen Doppeklick
-const unsigned DOUBLE_CLICK_INTERVAL = 500;
+const uint32_t DOUBLE_CLICK_INTERVAL = 500;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -73,17 +75,17 @@ enum KeyType
 struct KeyEvent
 {
     KeyType kt;
-    unsigned int c;
+    uint32_t c;
     bool ctrl, shift, alt;
 };
 
 /// ScreenResize-Event
 struct ScreenResizeEvent
 {
-    unsigned short oldWidth;
-    unsigned short oldHeight;
-    unsigned short newWidth;
-    unsigned short newHeight;
+    uint16_t oldWidth;
+    uint16_t oldHeight;
+    uint16_t newWidth;
+    uint16_t newHeight;
 };
 
 #endif //!MOUSEANDKEYS_H_INCLUDED

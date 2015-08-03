@@ -54,13 +54,13 @@ class Playlist
         void ReadMusicPlayer(const iwMusicPlayer* const window);
 
         /// Wählt den Start-Song aus
-        void SetStartSong(const unsigned id);
+        void SetStartSong(const uint32_t id);
 
     protected:
-        unsigned int repeats;               ///< Anzahl der Wiederholungen
+        uint32_t repeats;               ///< Anzahl der Wiederholungen
         bool random;                        ///< Zufallswiedergabe?
         std::vector<std::string> songs;     ///< Dateinamen der abzuspielenden Titel
-        std::vector<unsigned int> order;    ///< Reihenfolge der Titel
+        std::vector<uint32_t> order;    ///< Reihenfolge der Titel
 };
 
 /// Globaler Musikplayer bzw. eine abspielbare Playlist

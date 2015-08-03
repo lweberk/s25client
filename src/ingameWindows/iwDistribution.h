@@ -52,9 +52,9 @@ class iwDistribution : public IngameWindow
         /// Sendet veränderte Einstellungen (an den Client), falls sie verändert wurden
         void TransmitSettings();
 
-        void Msg_Group_ProgressChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short position);
-        void Msg_Timer(const unsigned int ctrl_id);
-        void Msg_ButtonClick(const unsigned ctrl_id);
+        void Msg_Group_ProgressChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t position);
+        void Msg_Timer(const uint32_t ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 
 };
 

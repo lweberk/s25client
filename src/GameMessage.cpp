@@ -38,7 +38,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author FloSoft
  */
-Message* GameMessage::create_game(unsigned short id)
+Message* GameMessage::create_game(uint16_t id)
 {
     Message* msg = NULL;
 

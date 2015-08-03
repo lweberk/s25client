@@ -10,24 +10,24 @@
 #include "GameClient.h"
 #include "Random.h"
 
-nofShipWright::nofShipWright(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofShipWright::nofShipWright(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_SHIPWRIGHT, pos, player, workplace), dest(MapPoint::Invalid())
 {}
 
-const unsigned SHIPWRIGHT_RADIUS = 8;
-const unsigned SHIPWRIGHT_WALKING_DISTANCE = 15;
+const uint32_t SHIPWRIGHT_RADIUS = 8;
+const uint32_t SHIPWRIGHT_WALKING_DISTANCE = 15;
 /// Arbeitszeit des Schiffsbauers beim Bauen von großen Schiffen
-const unsigned WORKING_TIME_SHIPS = 70;
+const uint32_t WORKING_TIME_SHIPS = 70;
 
 
 struct ShipPoint
 {
     MapPoint pos;
-    unsigned char first_dir;
-    ShipPoint(MapPoint pos, unsigned char firstDir): pos(pos), first_dir(firstDir){}
+    uint8_t first_dir;
+    ShipPoint(MapPoint pos, uint8_t firstDir): pos(pos), first_dir(firstDir){}
 };
 
-void nofShipWright::HandleDerivedEvent(const unsigned int id)
+void nofShipWright::HandleDerivedEvent(const uint32_t id)
 {
     switch(state)
     {
@@ -47,7 +47,7 @@ void nofShipWright::HandleDerivedEvent(const unsigned int id)
                 for(MapCoord tx = gwg->GetXA(pos, 0), r = 1; r <= SHIPWRIGHT_RADIUS; tx = gwg->GetXA(tx, pos.y, 0), ++r)
                 {
                     MapPoint t2(tx, pos.y);
-                    for(unsigned i = 2; i < 8; ++i)
+                    for(uint32_t i = 2; i < 8; ++i)
                     {
                         for(MapCoord r2 = 0; r2 < r; t2 = gwg->GetNeighbour(t2,  i % 6), ++r2)
                         {
@@ -61,7 +61,7 @@ void nofShipWright::HandleDerivedEvent(const unsigned int id)
                             if(obj->GetGOT() == GOT_SHIPBUILDINGSITE)
                             {
                                 // Platz noch nicht reserviert und gehört das Schiff auch mir?
-                                unsigned char first_dir = 0xFF;
+                                uint8_t first_dir = 0xFF;
                                 if(!gwg->GetNode(pos).reserved &&
                                         static_cast<noShipBuildingSite*>(obj)->GetPlayer() == player &&
                                         (first_dir = gwg->FindHumanPath(flagPos, t2, SHIPWRIGHT_WALKING_DISTANCE)) != 0xFF)
@@ -79,7 +79,7 @@ void nofShipWright::HandleDerivedEvent(const unsigned int id)
                     for(MapCoord tx = gwg->GetXA(pos, 0), r = 1; r <= SHIPWRIGHT_RADIUS; tx = gwg->GetXA(tx, pos.y, 0), ++r)
                     {
                         MapPoint t2(tx, pos.y);
-                        for(unsigned i = 2; i < 8; ++i)
+                        for(uint32_t i = 2; i < 8; ++i)
                         {
                             for(MapCoord r2 = 0; r2 < r; t2 = gwg->GetNeighbour(t2,  i % 6), ++r2)
                             {
@@ -87,7 +87,7 @@ void nofShipWright::HandleDerivedEvent(const unsigned int id)
                                 if(IsPointGood(t2))
                                 {
                                     // Weg dorthin finden
-                                    unsigned char first_dir = gwg->FindHumanPath(flagPos, t2, SHIPWRIGHT_WALKING_DISTANCE);
+                                    uint8_t first_dir = gwg->FindHumanPath(flagPos, t2, SHIPWRIGHT_WALKING_DISTANCE);
                                     if(first_dir != 0xFF)
                                     {
                                         available_points.push_back(ShipPoint(t2, first_dir));
@@ -150,7 +150,7 @@ void nofShipWright::HandleDerivedEvent(const unsigned int id)
     }
 }
 
-nofShipWright::nofShipWright(SerializedGameData* sgd, const unsigned obj_id)
+nofShipWright::nofShipWright(SerializedGameData* sgd, const uint32_t obj_id)
     : nofWorkman(sgd, obj_id),
       dest(sgd->PopMapPoint())
 {
@@ -165,7 +165,7 @@ void nofShipWright::Serialize(SerializedGameData* sgd) const
 
 
 /// Startet das Laufen zu der Arbeitsstelle, dem Schiff
-void nofShipWright::StartWalkingToShip(const unsigned char first_dir)
+void nofShipWright::StartWalkingToShip(const uint8_t first_dir)
 {
     state = STATE_WALKTOWORKPOINT;
     // Wir arbeiten jetzt
@@ -181,11 +181,11 @@ void nofShipWright::StartWalkingToShip(const unsigned char first_dir)
 }
 
 /// Ist ein bestimmter Punkt auf der Karte für den Schiffsbau geeignet
-/// poc: differene to original game: points at a sea which cant have a harbor are invalid (original as long as there is 1 harborpoint at any sea on the map any sea is valid)
+/// poc: differene to original game: points at a sea which cant have a harbor are invalid (original as int64_t as there is 1 harborpoint at any sea on the map any sea is valid)
 bool nofShipWright::IsPointGood(const MapPoint pt) const
 {
     // Auf Wegen nicht bauen
-    for(unsigned i = 0; i < 6; ++i)
+    for(uint32_t i = 0; i < 6; ++i)
     {
         if(gwg->GetPointRoad(pt, i))
             return false;
@@ -307,7 +307,7 @@ void nofShipWright::WalkedDerived()
     }
 }
 
-const unsigned ANIMATION[42] =
+const uint32_t ANIMATION[42] =
 {
     299, 300, 301, 302,
     299, 300, 301, 302,
@@ -319,7 +319,7 @@ const unsigned ANIMATION[42] =
     308, 309, 310, 311, 312, 313
 };
 
-void nofShipWright::DrawWorking(int x, int y)
+void nofShipWright::DrawWorking(int32_t x, int32_t y)
 {
     // Nicht mich zeichnen wenn ich im Haus arbeite
     if(this->pos == workplace->GetPos())
@@ -331,8 +331,8 @@ void nofShipWright::DrawWorking(int x, int y)
             break;
         case STATE_WORK:
         {
-            unsigned id = GAMECLIENT.Interpolate(42, current_ev);
-            unsigned graphics_id = ANIMATION[id];
+            uint32_t id = GAMECLIENT.Interpolate(42, current_ev);
+            uint32_t graphics_id = ANIMATION[id];
             LOADER.GetImageN("rom_bobs", graphics_id)->Draw(x, y, 0, 0, 0, 0, 0, 0, COLOR_WHITE, COLORS[gwg->GetPlayer(player)->color]);
 
             // Steh-Hammer-Sound
@@ -353,7 +353,7 @@ void nofShipWright::DrawWorking(int x, int y)
 
 
 /// Zeichnen der Figur in sonstigen Arbeitslagen
-void nofShipWright::DrawOtherStates(const int x, const int y)
+void nofShipWright::DrawOtherStates(const int32_t x, const int32_t y)
 {
     switch(state)
     {

@@ -40,21 +40,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofMetalworker::nofMetalworker(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofMetalworker::nofMetalworker(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_METALWORKER, pos, player, workplace)
 {
 }
 
-nofMetalworker::nofMetalworker(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id)
+nofMetalworker::nofMetalworker(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id)
 {
 }
 
 
-void nofMetalworker::DrawWorking(int x, int y)
+void nofMetalworker::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[NAT_COUNT][2] = { { -11, -13}, {31, 5}, {32, 6}, {30, 10}, {28, 5} };
+    int8_t offsets[NAT_COUNT][2] = { { -11, -13}, {31, 5}, {32, 6}, {30, 10}, {28, 5} };
 
-    unsigned now_id;
+    uint32_t now_id;
 
     LOADER.GetImageN("rom_bobs", 190 + (now_id = GAMECLIENT.Interpolate(230, current_ev)) % 23)
     ->Draw(x + offsets[workplace->GetNation()][0], y + offsets[workplace->GetNation()][1], 0, 0, 0, 0, 0, 0, COLOR_WHITE, COLORS[gwg->GetPlayer(workplace->GetPlayer())->color]);
@@ -83,12 +83,12 @@ void nofMetalworker::DrawWorking(int x, int y)
 
 
 // Zuordnungnen Richtige IDs - Trage-IDs in der JOBS.BOB
-const unsigned short CARRYTOOLS_IDS[14] =
+const uint16_t CARRYTOOLS_IDS[14] =
 {
     78, 79, 80, 91, 81, 82, 83, 84, 85, 86, 0, 87, 88, 88
 };
 
-unsigned short nofMetalworker::GetCarryID() const
+uint16_t nofMetalworker::GetCarryID() const
 {
     return CARRYTOOLS_IDS[ware - GD_TONGS];
 }
@@ -110,10 +110,10 @@ const GoodType TOOLS_SETTINGS_IDS[12] =
     GD_BOW          // Bogen
 };
 
-unsigned nofMetalworker::ToolsOrderedTotal() const
+uint32_t nofMetalworker::ToolsOrderedTotal() const
 {
-    unsigned sum = 0;
-    for (unsigned i = 0; i < TOOL_COUNT; ++i)
+    uint32_t sum = 0;
+    for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         sum += gwg->GetPlayer(player)->tools_ordered[i];
     return sum;
 }
@@ -122,10 +122,10 @@ GoodType nofMetalworker::ProduceWare()
 {
     // qx:tools
     {
-        int prio = -1;
-        int tool = -1;
+        int32_t prio = -1;
+        int32_t tool = -1;
         
-        for (unsigned i = 0; i < TOOL_COUNT; ++i)
+        for (uint32_t i = 0; i < TOOL_COUNT; ++i)
         {
             if (gwg->GetPlayer(player)->tools_ordered[i] > 0 && (gwg->GetPlayer(player)->tools_settings[i] > prio) )
             {
@@ -150,9 +150,9 @@ GoodType nofMetalworker::ProduceWare()
 
     // Je nach Werkzeugeinstellungen zufällig ein Werkzeug produzieren, je größer der Balken,
     // desto höher jeweils die Wahrscheinlichkeit
-    unsigned short all_size = 0;
+    uint16_t all_size = 0;
 
-    for(unsigned i = 0; i < 12; ++i)
+    for(uint32_t i = 0; i < 12; ++i)
         all_size += gwg->GetPlayer(player)->tools_settings[i];
 
     // Wenn alle auf 0 gesetzt sind, einfach eins zufällig auswählen
@@ -161,12 +161,12 @@ GoodType nofMetalworker::ProduceWare()
 
     // Ansonsten Array mit den Werkzeugtypen erstellen und davon dann eins zufällig zurückliefern, je höher Wahr-
     // scheinlichkeit (Balken), desto öfter im Array enthalten
-    unsigned char* random_array = new unsigned char[all_size];
-    unsigned pos = 0;
+    uint8_t* random_array = new uint8_t[all_size];
+    uint32_t pos = 0;
 
-    for(unsigned i = 0; i < 12; ++i)
+    for(uint32_t i = 0; i < 12; ++i)
     {
-        for(unsigned g = 0; g < gwg->GetPlayer(player)->tools_settings[i]; ++g)
+        for(uint32_t g = 0; g < gwg->GetPlayer(player)->tools_settings[i]; ++g)
             random_array[pos++] = i;
     }
 

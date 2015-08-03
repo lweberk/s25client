@@ -38,7 +38,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofScout_Free::nofScout_Free(const MapPoint pos, const unsigned char player, noRoadNode* goal)
+nofScout_Free::nofScout_Free(const MapPoint pos, const uint8_t player, noRoadNode* goal)
     : nofFlagWorker(JOB_SCOUT, pos, player, goal), nextPos(pos), rest_way(0)
 {
 }
@@ -50,12 +50,12 @@ void nofScout_Free::Serialize_nofScout_Free(SerializedGameData* sgd) const
     sgd->PushMapPoint(nextPos);
 }
 
-nofScout_Free::nofScout_Free(SerializedGameData* sgd, const unsigned obj_id) : nofFlagWorker(sgd, obj_id),
+nofScout_Free::nofScout_Free(SerializedGameData* sgd, const uint32_t obj_id) : nofFlagWorker(sgd, obj_id),
     nextPos(sgd->PopMapPoint())
 {
 }
 
-void nofScout_Free::Draw(int x, int y)
+void nofScout_Free::Draw(int32_t x, int32_t y)
 {
     //assert(this->GetObjId()!= 8215505);
     // normales Laufen zeichnen
@@ -90,7 +90,7 @@ void nofScout_Free::Walked()
     }
 }
 
-void nofScout_Free::HandleDerivedEvent(const unsigned int id)
+void nofScout_Free::HandleDerivedEvent(const uint32_t id)
 {
 }
 
@@ -149,7 +149,7 @@ void nofScout_Free::Scout()
     }
 }
 
-const unsigned SCOUT_RANGE = 16;
+const uint32_t SCOUT_RANGE = 16;
 
 void nofScout_Free::GoToNewNode()
 {
@@ -158,7 +158,7 @@ void nofScout_Free::GoToNewNode()
     for(MapCoord tx = gwg->GetXA(flag->GetPos(), 0), r = 1; r < SCOUT_RANGE; tx = gwg->GetXA(tx, flag->GetY(), 0), ++r)
     {
         MapPoint t2(tx, flag->GetY());
-        for(unsigned i = 2; i < 8; ++i)
+        for(uint32_t i = 2; i < 8; ++i)
         {
             for(MapCoord r2 = 0; r2 < r; t2 = gwg->GetNeighbour(t2,  i % 6), ++r2)
             {
@@ -207,7 +207,7 @@ void nofScout_Free::GoToNewNode()
 }
 
 /// Gibt den Sichtradius dieser Figur zurück (0, falls nicht-spähend)
-unsigned nofScout_Free::GetVisualRange() const
+uint32_t nofScout_Free::GetVisualRange() const
 {
     return VISUALRANGE_SCOUT;
 }

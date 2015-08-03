@@ -40,14 +40,14 @@ class glArchivItem_Font : public libsiedler2::ArchivItem_Font
         glArchivItem_Font(const glArchivItem_Font* item) : ArchivItem_Font(item), _font(NULL) {}
 
         /// Zeichnet einen Text.
-        void Draw(short x, short y, const std::wstring& wtext, unsigned int format, unsigned int color = COLOR_WHITE, unsigned short length = 0, unsigned short max = 0xFFFF, const std::wstring& wend = L"...", unsigned short end_length = 0);
-        void Draw(short x, short y, const std::string& text, unsigned int format, unsigned int color = COLOR_WHITE, unsigned short length = 0, unsigned short max = 0xFFFF, const std::string& end = "...", unsigned short end_length = 0);
+        void Draw(int16_t x, int16_t y, const std::wstring& wtext, uint32_t format, uint32_t color = COLOR_WHITE, uint16_t length = 0, uint16_t max = 0xFFFF, const std::wstring& wend = L"...", uint16_t end_length = 0);
+        void Draw(int16_t x, int16_t y, const std::string& text, uint32_t format, uint32_t color = COLOR_WHITE, uint16_t length = 0, uint16_t max = 0xFFFF, const std::string& end = "...", uint16_t end_length = 0);
 
         /// liefert die Länge einer Zeichenkette.
-        unsigned short getWidth(const std::wstring& text, unsigned length = 0, unsigned max_width = 0xffffffff, unsigned short* max = NULL) const;
-        unsigned short getWidth(const std::string& text, unsigned length = 0, unsigned max_width = 0xffffffff, unsigned short* max = NULL) const;
+        uint16_t getWidth(const std::wstring& text, uint32_t length = 0, uint32_t max_width = 0xffffffff, uint16_t* max = NULL) const;
+        uint16_t getWidth(const std::string& text, uint32_t length = 0, uint32_t max_width = 0xffffffff, uint16_t* max = NULL) const;
         /// liefert die Höhe des Textes ( entspricht @p getDy()+1 )
-        inline unsigned short getHeight() const { return dy + 1; }
+        inline uint16_t getHeight() const { return dy + 1; }
 
         /// Gibt Infos, über die Unterbrechungspunkte in einem Text
         class WrapInfo
@@ -58,12 +58,12 @@ class glArchivItem_Font : public libsiedler2::ArchivItem_Font
 
             public:
                 /// Array von Positionen, wo der Text umbrochen werden soll (jeweils der Anfang vom String)
-                std::vector<unsigned int> positions;
+                std::vector<uint32_t> positions;
         };
 
         /// Gibt Infos, über die Unterbrechungspunkte in einem Text, versucht Wörter nicht zu trennen, tut dies aber, falls
         /// es unumgänglich ist (Wort länger als die Zeile)
-        void GetWrapInfo(const std::string& text, const unsigned short primary_width, const unsigned short secondary_width, WrapInfo& wi);
+        void GetWrapInfo(const std::string& text, const uint16_t primary_width, const uint16_t secondary_width, WrapInfo& wi);
 
         enum
         {
@@ -87,22 +87,22 @@ class glArchivItem_Font : public libsiedler2::ArchivItem_Font
         struct char_info
         {
             char_info() : x(0), y(0), width(0), reserved(0xFFFF) {}
-            unsigned short x;
-            unsigned short y;
-            unsigned short width;
-            unsigned short reserved; // so we have 8 byte's
+            uint16_t x;
+            uint16_t y;
+            uint16_t width;
+            uint16_t reserved; // so we have 8 byte's
         };
 
         /// prüft ob ein Buchstabe existiert.
-        inline bool CharExist(unsigned int c) const { return (CharWidth(c) > 0); }
+        inline bool CharExist(uint32_t c) const { return (CharWidth(c) > 0); }
         inline bool CharExist(char_info ci) const { return (ci.width > 0); }
 
         /// liefert die Breite eines Zeichens
-        inline unsigned int CharWidth(unsigned int c) const { return CharInfo(c).width; }
-        inline unsigned int CharWidth(char_info ci) const { return ci.width; }
+        inline uint32_t CharWidth(uint32_t c) const { return CharInfo(c).width; }
+        inline uint32_t CharWidth(char_info ci) const { return ci.width; }
 
-        std::string Unicode_to_Utf8(unsigned int c) const;
-        unsigned int Utf8_to_Unicode(const std::string& text, unsigned int& i) const;
+        std::string Unicode_to_Utf8(uint32_t c) const;
+        uint32_t Utf8_to_Unicode(const std::string& text, uint32_t& i) const;
 
     private:
         void initFont();
@@ -113,14 +113,14 @@ class glArchivItem_Font : public libsiedler2::ArchivItem_Font
             GLfloat x, y, z;
         };
 
-        void DrawChar(const std::string& text, unsigned int& i, GL_T2F_V3F_Struct* tmp, short& cx, short& cy, float tw, float th, unsigned int& idx);
+        void DrawChar(const std::string& text, uint32_t& i, GL_T2F_V3F_Struct* tmp, int16_t& cx, int16_t& cy, float tw, float th, uint32_t& idx);
 
         /// liefert das Char-Info eines Zeichens
-        inline const char_info& CharInfo(unsigned int c) const
+        inline const char_info& CharInfo(uint32_t c) const
         {
             static char_info ci;
 
-            std::map<unsigned int, char_info>::const_iterator it = utf8_mapping.find(c);
+            std::map<uint32_t, char_info>::const_iterator it = utf8_mapping.find(c);
             if(it != utf8_mapping.end())
                 return it->second;
 
@@ -132,8 +132,8 @@ class glArchivItem_Font : public libsiedler2::ArchivItem_Font
         glArchivItem_Bitmap* _font_outline;
         glArchivItem_Bitmap* _font;
 
-        unsigned int chars_per_line;
-        std::map<unsigned int, char_info> utf8_mapping;
+        uint32_t chars_per_line;
+        std::map<uint32_t, char_info> utf8_mapping;
 };
 
 #endif // !GLARCHIVITEM_FONT_H_INCLUDED

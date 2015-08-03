@@ -38,7 +38,7 @@ class noNothing : public noBase
         GO_Type GetGOT() const { return GOT_UNKNOWN; }
 
         /// An x,y zeichnen.
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 };
 
 #endif // !NONOTHING_H_INCLUDED

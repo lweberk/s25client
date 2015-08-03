@@ -36,7 +36,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TerritoryRegion::TerritoryRegion(const int x1, const int y1, const int x2, const int y2, GameWorldBase* const gwb)
+TerritoryRegion::TerritoryRegion(const int32_t x1, const int32_t y1, const int32_t x2, const int32_t y2, GameWorldBase* const gwb)
     : x1(x1), y1(y1), x2(x2), y2(y2), width(x2 - x1), height(y2 - y1), gwb(gwb)
 {
     // Feld erzeugen
@@ -81,9 +81,9 @@ bool TerritoryRegion::IsPointValid(GameWorldBase* gwb, std::vector< MapPoint > &
            IsPointInPolygon(gwb, polygon, pt4));
 }
 
-void TerritoryRegion::TestNode(MapPoint pt, const unsigned char player, const unsigned char radius, const bool check_barriers)
+void TerritoryRegion::TestNode(MapPoint pt, const uint8_t player, const uint8_t radius, const bool check_barriers)
 {
-    int x = static_cast<int>(pt.x), y = static_cast<int>(pt.y);
+    int32_t x = static_cast<int32_t>(pt.x), y = static_cast<int32_t>(pt.y);
 
     // Gucken, ob der Punkt überhaupt mit in diese Region gehört
     if(x + gwb->GetWidth() >= int(x1) && x + gwb->GetWidth() < int(x2))
@@ -106,7 +106,7 @@ void TerritoryRegion::TestNode(MapPoint pt, const unsigned char player, const un
 
     /// Wenn das Militargebäude jetzt näher dran ist, dann geht dieser Punkt in den Besitz vom jeweiligen Spieler
     /// oder wenn es halt gar nicht besetzt ist
-    unsigned idx = (y - y1) * (x2 - x1) + (x - x1);
+    uint32_t idx = (y - y1) * (x2 - x1) + (x - x1);
 
     if(radius < nodes[idx].radius || !nodes[idx].owner)
     {
@@ -118,7 +118,7 @@ void TerritoryRegion::TestNode(MapPoint pt, const unsigned char player, const un
 void TerritoryRegion::CalcTerritoryOfBuilding(const noBaseBuilding* const building)
 {
     bool check_barriers = true;
-    unsigned short radius;
+    uint16_t radius;
 
     if(building->GetBuildingType() == BLD_HARBORBUILDING)
         radius = HARBOR_ALONE_RADIUS;
@@ -135,14 +135,14 @@ void TerritoryRegion::CalcTerritoryOfBuilding(const noBaseBuilding* const buildi
     MapPoint pt = building->GetPos();
     TestNode(pt, building->GetPlayer(), 0, false);    // no need to check barriers here. this point is on our territory.
 
-    for(unsigned r = 1; r <= radius; ++r)
+    for(uint32_t r = 1; r <= radius; ++r)
     {
         // Eins weiter nach links gehen
         pt = gwb->GetNeighbour(pt, 0);
 
-        for(unsigned dir = 0; dir < 6; ++dir)
+        for(uint32_t dir = 0; dir < 6; ++dir)
         {
-            for(unsigned short i = 0; i < r; ++i)
+            for(uint16_t i = 0; i < r; ++i)
             {
                 TestNode(pt, building->GetPlayer(), r, check_barriers);
                 // Nach rechts oben anfangen

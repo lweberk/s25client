@@ -62,19 +62,19 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         bool IsSavegame() const { return mapinfo.map_type == MAPTYPE_SAVEGAME; }
         std::string GetGameName() const { return clientconfig.gamename; }
 
-        inline unsigned char GetPlayerID() const { return playerid; }
-        inline unsigned GetPlayerCount() const { return players.getCount(); }
+        inline uint8_t GetPlayerID() const { return playerid; }
+        inline uint32_t GetPlayerCount() const { return players.getCount(); }
         /// Liefert einen Player zurück
-        inline GameClientPlayer* GetPlayer(const unsigned int id) { return players.getElement(id); }
+        inline GameClientPlayer* GetPlayer(const uint32_t id) { return players.getElement(id); }
         inline GameClientPlayer* GetLocalPlayer(void) { return GetPlayer(playerid); }
         /// Erzeugt einen KI-Player, der mit den Daten vom GameClient gefüttert werden muss (zusätzlich noch mit den GameServer)
-        AIBase* CreateAIPlayer(const unsigned playerid);
+        AIBase* CreateAIPlayer(const uint32_t playerid);
 
         /// Gibt GGS zurück
         const GlobalGameSettings& GetGGS() const { return ggs; }
         void LoadGGS();
 
-        bool Connect(const std::string& server, const std::string& password, unsigned char servertyp, unsigned short port, bool host, bool use_ipv6);
+        bool Connect(const std::string& server, const std::string& password, uint8_t servertyp, uint16_t port, bool host, bool use_ipv6);
         void Run();
         void Stop();
 
@@ -88,7 +88,7 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         const MapType GetMapType() const { return mapinfo.map_type; }
 
         // Initialisiert und startet das Spiel
-        void StartGame(const unsigned random_init);
+        void StartGame(const uint32_t random_init);
         /// Wird aufgerufen, wenn das GUI fertig mit Laden ist und es losgehen kann
         void RealStart();
 
@@ -96,19 +96,19 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         void ExitGame();
 
         ClientState GetState() const { return state; }
-        inline unsigned int GetGFNumber() const { return framesinfo.nr; }
-        inline unsigned int GetGFLength() const { return framesinfo.gf_length; }
-        inline unsigned int GetNWFLength() const { return framesinfo.nwf_length; }
-        inline unsigned int GetFrameTime() const { return framesinfo.frame_time; }
-        unsigned int GetGlobalAnimation(const unsigned short max, const unsigned char factor_numerator, const unsigned char factor_denumerator, const unsigned int offset);
-        unsigned int Interpolate(unsigned max_val, EventManager::EventPointer ev);
-        int Interpolate(int x1, int x2, EventManager::EventPointer ev);
+        inline uint32_t GetGFNumber() const { return framesinfo.nr; }
+        inline uint32_t GetGFLength() const { return framesinfo.gf_length; }
+        inline uint32_t GetNWFLength() const { return framesinfo.nwf_length; }
+        inline uint32_t GetFrameTime() const { return framesinfo.frame_time; }
+        uint32_t GetGlobalAnimation(const uint16_t max, const uint8_t factor_numerator, const uint8_t factor_denumerator, const uint32_t offset);
+        uint32_t Interpolate(uint32_t max_val, EventManager::EventPointer ev);
+        int32_t Interpolate(int32_t x1, int32_t x2, EventManager::EventPointer ev);
         /// Gibt Geschwindigkeits-Faktor zurück
 
         /// Fügt ein GameCommand für den Spieler hinzu und gibt bei Erfolg true zurück, ansonstn false (in der Pause oder wenn Spieler besiegt ist)
         bool AddGC(gc::GameCommand* gc);
 
-        void Command_SetFlag2(const MapPoint pt, unsigned char player);
+        void Command_SetFlag2(const MapPoint pt, uint8_t player);
         void Command_Chat(const std::string& text, const ChatDestination cd );
         void Command_ToggleNation();
         void Command_ToggleTeam(Team newteam);
@@ -118,7 +118,7 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         void IncreaseSpeed();
 
         /// Lädt ein Replay und startet dementsprechend das Spiel (0 = alles OK, alles andere entsprechende Fehler-ID!)
-        unsigned StartReplay(const std::string& path, GameWorldViewer*& gwv);
+        uint32_t StartReplay(const std::string& path, GameWorldViewer*& gwv);
         /// Replay-Geschwindigkeit erhöhen/verringern
         void IncreaseReplaySpeed();
         void DecreaseReplaySpeed();
@@ -129,9 +129,9 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         /// Prüft, ob FoW im Replaymodus ausgeschalten ist
         bool IsReplayFOWDisabled() const { return replayinfo.all_visible; }
         /// Gibt Replay-Ende (GF) zurück
-        unsigned GetLastReplayGF() const { return replayinfo.replay.last_gf; }
+        uint32_t GetLastReplayGF() const { return replayinfo.replay.last_gf; }
         /// Wandelt eine GF-Angabe in eine Zeitangabe um (HH:MM:SS oder MM:SS wenn Stunden = 0)
-        std::string FormatGFTime(const unsigned gf) const;
+        std::string FormatGFTime(const uint32_t gf) const;
 
         /// Gibt Replay-Dateiname zurück
         const std::string& GetReplayFileName() const { return replayinfo.filename; }
@@ -141,30 +141,30 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         const Replay GetReplay() const { return replayinfo.replay; }
 
         /// Is tournament mode activated (0 if not)? Returns the durations of the tournament mode in gf otherwise
-        unsigned GetTournamentModeDuration() const;
+        uint32_t GetTournamentModeDuration() const;
 
-        void SkipGF(unsigned int gf);
+        void SkipGF(uint32_t gf);
 
         /// Wechselt den aktuellen Spieler (nur zu Debugzwecken !!)
-        void ChangePlayer(const unsigned char old_id, const unsigned char new_id);
+        void ChangePlayer(const uint8_t old_id, const uint8_t new_id);
 
         /// Wechselt den aktuellen Spieler im Replaymodus
-        void ChangeReplayPlayer(const unsigned new_id);
+        void ChangeReplayPlayer(const uint32_t new_id);
         /// Laggt ein bestimmter Spieler gerade?
-        bool IsLagging(const unsigned int id) { return GetPlayer(id)->is_lagging; }
+        bool IsLagging(const uint32_t id) { return GetPlayer(id)->is_lagging; }
         /// Spiel pausiert?
         bool IsPaused() const { return framesinfo.pause; }
         /// Schreibt Header der Save-Datei
-        unsigned WriteSaveHeader(const std::string& filename);
+        uint32_t WriteSaveHeader(const std::string& filename);
         /// Visuelle Einstellungen aus den richtigen ableiten
         void GetVisualSettings();
 
         /// Schreibt ggf. Pathfinding-Results in das Replay, falls erforderlich
-        void AddPathfindingResult(const unsigned char dir, const unsigned* const length, const MapPoint* const next_harbor);
+        void AddPathfindingResult(const uint8_t dir, const uint32_t* const length, const MapPoint* const next_harbor);
         /// Gibt zurück, ob Pathfinding-Results zur Verfügung stehen
         bool ArePathfindingResultsAvailable() const;
         /// Gibt Pathfinding-Results zurück aus einem Replay
-        bool ReadPathfindingResult( unsigned char* dir, unsigned* length, MapPoint* next_harbor);
+        bool ReadPathfindingResult( uint8_t* dir, uint32_t* length, MapPoint* next_harbor);
 
         void SystemChat(std::string text);
         
@@ -176,9 +176,9 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         void ExecuteGameFrame_Game();
         /// Filtert aus einem Network-Command-Paket alle Commands aus und führt sie aus, falls ein Spielerwechsel-Command
         /// dabei ist, füllt er die übergebenen IDs entsprechend aus
-        void ExecuteAllGCs(const GameMessage_GameCommand& gcs,  unsigned char* player_switch_old_id, unsigned char* player_switch_new_id);
+        void ExecuteAllGCs(const GameMessage_GameCommand& gcs,  uint8_t* player_switch_old_id, uint8_t* player_switch_new_id);
         /// Sendet ein NC-Paket ohne Befehle
-        void SendNothingNC(int checksum = -1);
+        void SendNothingNC(int32_t checksum = -1);
         /// Findet heraus, ob ein Spieler laggt und setzt bei diesen Spieler den entsprechenden flag
         bool IsPlayerLagging();
 
@@ -189,7 +189,7 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         void StatisticStep();
 
         //  Netzwerknachrichten
-        virtual void OnNMSDeadMsg(unsigned int id);
+        virtual void OnNMSDeadMsg(uint32_t id);
 
         virtual void OnNMSPing(const GameMessage_Ping& msg);
 
@@ -233,7 +233,7 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         // Replaymethoden
 
         /// Schreibt den Header der Replaydatei
-        void WriteReplayHeader(const unsigned random_init);
+        void WriteReplayHeader(const uint32_t random_init);
 
 // Post-Sachen
     public:
@@ -242,7 +242,7 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         const std::list<PostMsg*>& GetPostMessages() { return postMessages; }
         void DeletePostMessage(PostMsg* msg);
 
-        void SendAIEvent(AIEvent::Base* ev, unsigned receiver);
+        void SendAIEvent(AIEvent::Base* ev, uint32_t receiver);
 
     private:
         std::list<PostMsg*> postMessages;
@@ -253,24 +253,24 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         struct VisualSettings
         {
             /// Verteilung
-            std::vector<unsigned char> distribution;
+            std::vector<uint8_t> distribution;
             /// Art der Reihenfolge (0 = nach Auftraggebung, ansonsten nach build_order)
-            unsigned char order_type;
+            uint8_t order_type;
             /// Baureihenfolge
-            std::vector<unsigned char> build_order;
+            std::vector<uint8_t> build_order;
             /// Transport-Reihenfolge
-            std::vector<unsigned char> transport_order;
+            std::vector<uint8_t> transport_order;
             /// Militäreinstellungen (die vom Militärmenü)
-            std::vector<unsigned char> military_settings;
+            std::vector<uint8_t> military_settings;
             /// Werkzeugeinstellungen (in der Reihenfolge wie im Fenster!)
-            std::vector<unsigned char> tools_settings;
+            std::vector<uint8_t> tools_settings;
 
             VisualSettings() : distribution(23), build_order(31), transport_order(14), military_settings(MILITARY_SETTINGS_COUNT), tools_settings(12)
             {}
 
         } visual_settings, default_settings;
 		/// skip ahead how many gf?
-		unsigned int skiptogf;
+		uint32_t skiptogf;
     private:
         /// Spielwelt
         GameWorld* gw;
@@ -279,15 +279,15 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
         /// Spieler
         GameClientPlayerList players;
         /// Spieler-ID dieses Clients
-        unsigned char playerid;
+        uint8_t playerid;
         /// Globale Spieleinstellungen
         GlobalGameSettings ggs;
 
         MessageQueue recv_queue, send_queue;
         Socket socket;
         // Was soll das sein? oO
-        unsigned int temp_ul;
-        unsigned int temp_ui;
+        uint32_t temp_ul;
+        uint32_t temp_ui;
 
         ClientState state;
 
@@ -302,8 +302,8 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
                 std::string password;
                 std::string mapfile;
                 std::string mapfilepath;
-                unsigned char servertyp;
-                unsigned short port;
+                uint8_t servertyp;
+                uint16_t port;
                 bool host;
         } clientconfig;
 
@@ -314,12 +314,12 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
                 void Clear();
 
                 MapType map_type;
-                unsigned partcount;
-                unsigned ziplength;
-                unsigned length;
-                unsigned checksum;
+                uint32_t partcount;
+                uint32_t ziplength;
+                uint32_t length;
+                uint32_t checksum;
                 std::string title;
-                unsigned char* zipdata;
+                uint8_t* zipdata;
                 Savegame savegame;
         } mapinfo;
 
@@ -330,23 +330,23 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
                 void Clear();
 
                 /// Aktueller GameFrame (der wievielte seit Beginn)
-                unsigned nr;
-                unsigned nr_srv;
+                uint32_t nr;
+                uint32_t nr_srv;
                 /// Länge der GameFrames in ms (= Geschwindigkeit des Spiels)
-                unsigned gf_length;
-                unsigned gf_length_new;
+                uint32_t gf_length;
+                uint32_t gf_length_new;
                 /// Länge der Network-Frames in gf(!)
-                unsigned nwf_length;
+                uint32_t nwf_length;
 
                 /// Zeit in ms seit dem letzten Frame
-                unsigned frame_time;
+                uint32_t frame_time;
 
-                unsigned lasttime;
-                unsigned lastmsgtime;
-                unsigned pausetime;
+                uint32_t lasttime;
+                uint32_t lastmsgtime;
+                uint32_t pausetime;
 
                 bool pause;
-				unsigned pause_gf;
+				uint32_t pause_gf;
         } framesinfo;
 
         class RandCheckInfo
@@ -355,7 +355,7 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
                 RandCheckInfo() { Clear(); }
                 void Clear();
 
-                int rand;
+                int32_t rand;
         } randcheckinfo;
 
 
@@ -375,10 +375,10 @@ class GameClient : public Singleton<GameClient>, public GameMessageInterface
                 /// Replaydatei
                 Replay replay;
                 /// Replay asynchron (Meldung nur einmal ausgeben!)
-                int async;
+                int32_t async;
                 bool end;
                 // Nächster Replay-Command-Zeitpunkt (in GF)
-                unsigned next_gf;
+                uint32_t next_gf;
                 /// Replay-Dateiname
                 std::string filename;
                 /// Alles sichtbar (FoW deaktiviert)

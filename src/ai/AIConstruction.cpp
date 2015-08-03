@@ -30,8 +30,8 @@
 #include "buildings/noBuildingSite.h"
 
 // from Pathfinding.cpp
-bool IsPointOK_RoadPath(const GameWorldBase& gwb, const MapPoint pt, const unsigned char dir, const void* param);
-bool IsPointOK_RoadPathEvenStep(const GameWorldBase& gwb, const MapPoint pt, const unsigned char dir, const void* param);
+bool IsPointOK_RoadPath(const GameWorldBase& gwb, const MapPoint pt, const uint8_t dir, const void* param);
+bool IsPointOK_RoadPathEvenStep(const GameWorldBase& gwb, const MapPoint pt, const uint8_t dir, const void* param);
 
 AIConstruction::AIConstruction(AIInterface* aii, AIPlayerJH* aijh)
     : aii(aii), aijh(aijh)
@@ -63,7 +63,7 @@ void AIConstruction::AddBuildJob(AIJH::BuildJob* job, bool front)
 	else //check if the buildjob is already in list and if so dont add it again
 	{
 		bool alreadyinlist=false;
-		for(unsigned i=0;i<buildJobs.size();i++)
+		for(uint32_t i=0;i<buildJobs.size();i++)
 		{
 			if(buildJobs[i]->GetType()==job->GetType() && buildJobs[i]->GetAround()==job->GetAround())
 			{
@@ -95,11 +95,11 @@ void AIConstruction::AddBuildJob(AIJH::BuildJob* job, bool front)
 
 }*/
 
-void AIConstruction::ExecuteJobs(unsigned limit)
+void AIConstruction::ExecuteJobs(uint32_t limit)
 {
-	unsigned i=0; //count up to limit
-	unsigned initconjobs = connectJobs.size()<5?connectJobs.size():5;
-	unsigned initbuildjobs = buildJobs.size()<5?buildJobs.size():5;
+	uint32_t i=0; //count up to limit
+	uint32_t initconjobs = connectJobs.size()<5?connectJobs.size():5;
+	uint32_t initbuildjobs = buildJobs.size()<5?buildJobs.size():5;
 	for(;i<limit && connectJobs.size() && i < initconjobs ;i++) //go through list, until limit is reached or list empty or when every entry has been checked
 	{
 		connectJobs.front()->ExecuteJob();
@@ -145,7 +145,7 @@ AIJH::Job* AIConstruction::GetBuildJob()
 void AIConstruction::AddConnectFlagJob(const noFlag* flag)
 {
 	//already in list?
-	for(unsigned i=0;i<connectJobs.size();i++)
+	for(uint32_t i=0;i<connectJobs.size();i++)
 	{		
 		if(connectJobs[i]->getFlag()==flag->GetPos())
 			return;
@@ -156,7 +156,7 @@ void AIConstruction::AddConnectFlagJob(const noFlag* flag)
 
 bool AIConstruction::CanStillConstructHere(const MapPoint pt)
 {
-	for(unsigned i=0;i<constructionlocations.size();i++)
+	for(uint32_t i=0;i<constructionlocations.size();i++)
 	{
 		if(aii->CalcDistance(pt,constructionlocations[i])<12)
 			return false;
@@ -164,8 +164,8 @@ bool AIConstruction::CanStillConstructHere(const MapPoint pt)
 	return true;
 }
 
-void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint pt, unsigned short radius,
-                               MapPoint real, unsigned short real_radius, bool clear)
+void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint pt, uint16_t radius,
+                               MapPoint real, uint16_t real_radius, bool clear)
 {
     if (clear)
         flags.clear();
@@ -173,7 +173,7 @@ void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint
     for(MapCoord tx = aii->GetXA(pt, 0), r = 1; r <= radius; tx = aii->GetXA(tx, pt.y, 0), ++r)
     {
         MapPoint t2(tx, pt.y);
-        for(unsigned i = 2; i < 8; ++i)
+        for(uint32_t i = 2; i < 8; ++i)
         {
             for(MapCoord r2 = 0; r2 < r; t2 = aii->GetNeighbour(t2, i % 6), ++r2)
             {
@@ -186,7 +186,7 @@ void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint
     }
 }
 
-void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint pt, unsigned short radius, bool clear)
+void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint pt, uint16_t radius, bool clear)
 {
     if (clear)
         flags.clear();
@@ -199,7 +199,7 @@ void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint
         gwb->LookForMilitaryBuildings(military, pt, 2);
         for(list<nobBaseMilitary*>::iterator it = military.begin();it != military.end();++it)
         {
-            unsigned distance = gwb->CalcDistance((*it)->GetPos(), pt);
+            uint32_t distance = gwb->CalcDistance((*it)->GetPos(), pt);
             if (distance < radius && (*it)->GetPlayer() == player->getPlayerID())
             {
                 FindFlags(flags, (*it)->GetPos(), 10, pt, radius, false);
@@ -211,7 +211,7 @@ void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint
     for(MapCoord tx = aii->GetXA(pt, 0), r = 1; r <= radius; tx = aii->GetXA(tx, pt.y, 0), ++r)
     {
         MapPoint t2(tx, pt.y);
-        for(unsigned i = 2; i < 8; ++i)
+        for(uint32_t i = 2; i < 8; ++i)
         {
             for(MapCoord r2 = 0; r2 < r; t2 = aii->GetNeighbour(t2, i % 6), ++r2)
             {
@@ -229,31 +229,31 @@ void AIConstruction::FindFlags(std::vector<const noFlag*>& flags, const MapPoint
     }
 }
 
-bool AIConstruction::MilitaryBuildingWantsRoad(nobMilitary* milbld, unsigned listpos)
+bool AIConstruction::MilitaryBuildingWantsRoad(nobMilitary* milbld, uint32_t listpos)
 {
 	if(milbld->GetFrontierDistance()>0) //close to front or harbor? connect!
 		return true;
 	if(aijh->UpgradeBldListNumber<0) //no upgrade bld on last update -> connect all that want to connect
 		return true;
-	if(static_cast<unsigned>(aijh->UpgradeBldListNumber)==listpos) // upgrade bld should have road already but just in case it doesnt -> get a road asap
+	if(static_cast<uint32_t>(aijh->UpgradeBldListNumber)==listpos) // upgrade bld should have road already but just in case it doesnt -> get a road asap
 		return true;
 	if(listpos>(aii->GetMilitaryBuildings().size()-aijh->PlannedConnectedInlandMilitary()))
 		return true;
 	return false;
 }
 
-bool AIConstruction::ConnectFlagToRoadSytem(const noFlag* flag, std::vector<unsigned char>& route, unsigned int maxSearchRadius)
+bool AIConstruction::ConnectFlagToRoadSytem(const noFlag* flag, std::vector<uint8_t>& route, uint32_t maxSearchRadius)
 {
     // TODO: die methode kann  ganz schön böse Laufzeiten bekommen... Optimieren?
 
     // Radius in dem nach würdigen Fahnen gesucht wird
-    //const unsigned short maxSearchRadius = 10;
+    //const uint16_t maxSearchRadius = 10;
 
 	//flag of a military building? -> check if we really want to connect this right now
 	if (aii->IsMilitaryBuildingOnNode(aii->GetNeighbour(flag->GetPos(),1)))
 	{
 		MapPoint m = aii->GetNeighbour(flag->GetPos(),1);
-		unsigned listpos=0;
+		uint32_t listpos=0;
 		for (std::list<nobMilitary*>::const_iterator it=aii->GetMilitaryBuildings().begin();it!=aii->GetMilitaryBuildings().end();it++)
 		{
 			if((*it)->GetPos() == m) 
@@ -283,16 +283,16 @@ bool AIConstruction::ConnectFlagToRoadSytem(const noFlag* flag, std::vector<unsi
     std::cout << "FindFlagsNum: " << flags.size() << std::endl;
 #endif
 
-    unsigned shortest = 0;
-    unsigned int shortestLength = 99999;
-    std::vector<unsigned char> tmpRoute;
+    uint32_t shortest = 0;
+    uint32_t shortestLength = 99999;
+    std::vector<uint8_t> tmpRoute;
     bool found = false;
 
     // Jede Flagge testen...
-    for(unsigned i = 0; i < flags.size(); ++i)
+    for(uint32_t i = 0; i < flags.size(); ++i)
     {
         tmpRoute.clear();
-        unsigned int length;
+        uint32_t length;
 		// the flag should not be at a military building!		
 		if (aii->IsMilitaryBuildingOnNode(aii->GetNeighbour(flags[i]->GetPos(),1)))
 			continue;
@@ -302,12 +302,12 @@ bool AIConstruction::ConnectFlagToRoadSytem(const noFlag* flag, std::vector<unsi
         // Wenn ja, dann gucken ob dieser Pfad möglichst kurz zum "höheren" Ziel (allgemeines Lager im Moment) ist
         if (pathFound)
         {
-            unsigned int distance = 0;
-            unsigned size = 0;
+            uint32_t distance = 0;
+            uint32_t size = 0;
             //check for non-flag points on planned route: more than 2 nonflaggable spaces on the route -> not really valid path
-            unsigned temp = 0;
+            uint32_t temp = 0;
             MapPoint t = flag->GetPos();
-            for(unsigned j = 0; j < tmpRoute.size(); ++j)
+            for(uint32_t j = 0; j < tmpRoute.size(); ++j)
             {
                 t = aii->GetNeighbour(t, tmpRoute[j]);
                 if(aii->GetBuildingQuality(t) < 1)
@@ -357,17 +357,17 @@ bool AIConstruction::ConnectFlagToRoadSytem(const noFlag* flag, std::vector<unsi
     return false;
 }
 
-bool AIConstruction::MinorRoadImprovements(const noRoadNode* start, const noRoadNode* target, std::vector<unsigned char>&route)
+bool AIConstruction::MinorRoadImprovements(const noRoadNode* start, const noRoadNode* target, std::vector<uint8_t>&route)
 {
 	 return BuildRoad(start, target, route);
     //bool done=false;
     MapPoint pStart = start->GetPos();
-    /*for(unsigned i=0;i<route.size();i++)
+    /*for(uint32_t i=0;i<route.size();i++)
     {
         LOG.lprintf(" %i",route[i]);
     }
     LOG.lprintf("\n");*/
-    for(unsigned i = 0; i < (route.size() - 1); i++)
+    for(uint32_t i = 0; i < (route.size() - 1); i++)
     {
         if(((route[i] + 1) % 6 == route[i + 1]) || ((route[i] + 5) % 6 == route[i + 1])) //switching current and next route element will result in the same position after building both
         {
@@ -400,7 +400,7 @@ bool AIConstruction::MinorRoadImprovements(const noRoadNode* start, const noRoad
     /*if(done)
     {
         LOG.lprintf("final road\n");
-        for(unsigned i=0;i<route.size();i++)
+        for(uint32_t i=0;i<route.size();i++)
         {
             LOG.lprintf(" %i",route[i]);
         }
@@ -409,7 +409,7 @@ bool AIConstruction::MinorRoadImprovements(const noRoadNode* start, const noRoad
     return BuildRoad(start, target, route);
 }
 
-bool AIConstruction::BuildRoad(const noRoadNode* start, const noRoadNode* target, std::vector<unsigned char> &route)
+bool AIConstruction::BuildRoad(const noRoadNode* start, const noRoadNode* target, std::vector<uint8_t> &route)
 {
     bool foundPath;
 
@@ -431,7 +431,7 @@ bool AIConstruction::BuildRoad(const noRoadNode* start, const noRoadNode* target
         aii->BuildRoad(start->GetPos(), route);
 		//set flags along the road just after contruction - todo: handle failed road construction by removing the useless flags!
 		/*MapCoord tx=x,ty=y;
-		for(unsigned i=0;i<route.size()-2;i++)
+		for(uint32_t i=0;i<route.size()-2;i++)
 		{
 			x=aii->GetXA(tx,ty,route[i]);
 			y=aii->GetXA(tx,ty,route[i]);
@@ -479,18 +479,18 @@ BuildingType AIConstruction::ChooseMilitaryBuilding(const MapPoint pt)
     nobBaseMilitarySet military = aii->GetMilitaryBuildings(pt, 3);
     for(nobBaseMilitarySet::iterator it = military.begin(); it != military.end(); ++it)
     {
-        unsigned distance = aii->GetDistance((*it)->GetPos(), pt);
+        uint32_t distance = aii->GetDistance((*it)->GetPos(), pt);
 
         // Prüfen ob Feind in der Nähe
         if ((*it)->GetPlayer() != playerID && distance < 35)
         {
-            int randmil = rand();
+            int32_t randmil = rand();
 
             // avoid to build catapults in the beginning (no expansion)
-            unsigned  militaryBuildingCount = GetBuildingCount(BLD_BARRACKS) + GetBuildingCount(BLD_GUARDHOUSE)
+            uint32_t  militaryBuildingCount = GetBuildingCount(BLD_BARRACKS) + GetBuildingCount(BLD_GUARDHOUSE)
                                               + GetBuildingCount(BLD_WATCHTOWER) + GetBuildingCount(BLD_FORTRESS);
             //another catapult within "min" radius? ->dont build here!
-            unsigned min = 16;
+            uint32_t min = 16;
             nobBaseWarehouse* wh = (*aii->GetStorehouses().begin());
             if (aii->CalcDistance(pt, wh->GetPos()) < min)
                 min = 0;
@@ -528,12 +528,12 @@ BuildingType AIConstruction::ChooseMilitaryBuilding(const MapPoint pt)
     return bld;
 }
 
-unsigned AIConstruction::GetBuildingCount(BuildingType type)
+uint32_t AIConstruction::GetBuildingCount(BuildingType type)
 {
     return buildingCounts.building_counts[type] + buildingCounts.building_site_counts[type];
 }
 
-unsigned AIConstruction::GetBuildingSitesCount(BuildingType type)
+uint32_t AIConstruction::GetBuildingSitesCount(BuildingType type)
 {
     return buildingCounts.building_site_counts[type];
 }
@@ -557,17 +557,17 @@ bool AIConstruction::Wanted(BuildingType type)
 
 bool AIConstruction::MilitaryBuildingSitesLimit()
 {
-	unsigned complete = buildingCounts.building_counts[BLD_WATCHTOWER] + buildingCounts.building_counts[BLD_FORTRESS] + buildingCounts.building_counts[BLD_GUARDHOUSE] + buildingCounts.building_counts[BLD_BARRACKS];
-	unsigned inconstruction = buildingCounts.building_site_counts[BLD_WATCHTOWER] + buildingCounts.building_site_counts[BLD_FORTRESS] + buildingCounts.building_site_counts[BLD_GUARDHOUSE] + buildingCounts.building_site_counts[BLD_BARRACKS];
+	uint32_t complete = buildingCounts.building_counts[BLD_WATCHTOWER] + buildingCounts.building_counts[BLD_FORTRESS] + buildingCounts.building_counts[BLD_GUARDHOUSE] + buildingCounts.building_counts[BLD_BARRACKS];
+	uint32_t inconstruction = buildingCounts.building_site_counts[BLD_WATCHTOWER] + buildingCounts.building_site_counts[BLD_FORTRESS] + buildingCounts.building_site_counts[BLD_GUARDHOUSE] + buildingCounts.building_site_counts[BLD_BARRACKS];
 	return complete+3 > inconstruction;
 }
 
 void AIConstruction::RefreshBuildingCount()
 {
-    unsigned resourcelimit = 0; //variables to make this more readable for humans
-    unsigned bonuswant = 0;
+    uint32_t resourcelimit = 0; //variables to make this more readable for humans
+    uint32_t bonuswant = 0;
 	//max processing
-    unsigned foodusers=GetBuildingCount(BLD_CHARBURNER)+GetBuildingCount(BLD_MILL)+GetBuildingCount(BLD_BREWERY)+GetBuildingCount(BLD_PIGFARM)+GetBuildingCount(BLD_DONKEYBREEDER);
+    uint32_t foodusers=GetBuildingCount(BLD_CHARBURNER)+GetBuildingCount(BLD_MILL)+GetBuildingCount(BLD_BREWERY)+GetBuildingCount(BLD_PIGFARM)+GetBuildingCount(BLD_DONKEYBREEDER);
 	
 
     aii->GetBuildingCount(buildingCounts);
@@ -594,7 +594,7 @@ void AIConstruction::RefreshBuildingCount()
         //foresters
         resourcelimit = aii->GetInventory()->people[JOB_FORESTER] + aii->GetInventory()->goods[GD_SHOVEL] + 1; //bonuswant for foresters depends on addon settings for mines,wells,charburner
         bonuswant = GetBuildingCount(BLD_CHARBURNER) + ((!aijh->ggs->isEnabled(ADDON_INEXHAUSTIBLE_MINES) && ((GetBuildingCount(BLD_IRONMINE) + GetBuildingCount(BLD_COALMINE) + GetBuildingCount(BLD_GOLDMINE)) > 6)) ? 1 : 0) + ((aijh->ggs->isEnabled(ADDON_EXHAUSTIBLE_WELLS) && GetBuildingCount(BLD_WELL) > 3) ? 1 : 0);
-        buildingsWanted[BLD_FORESTER] = max<int>((min<int>((aii->GetMilitaryBuildings().size() > 29 ? 5 : (aii->GetMilitaryBuildings().size() / 6) + 1) + bonuswant, resourcelimit)), 1);
+        buildingsWanted[BLD_FORESTER] = max<int32_t>((min<int32_t>((aii->GetMilitaryBuildings().size() > 29 ? 5 : (aii->GetMilitaryBuildings().size() / 6) + 1) + bonuswant, resourcelimit)), 1);
 		
 
 		//earlygame: limit board use so limited to militarybuildingcount
@@ -626,7 +626,7 @@ void AIConstruction::RefreshBuildingCount()
 		}
         //sawmills limited by woodcutters and carpenter+saws reduced by charburners minimum of 2
         resourcelimit = aii->GetInventory()->people[JOB_CARPENTER] + aii->GetInventory()->goods[GD_SAW];
-        buildingsWanted[BLD_SAWMILL] = max<int>(min<int>((GetBuildingCount(BLD_WOODCUTTER) - (GetBuildingCount(BLD_CHARBURNER) * 2)) / 2, resourcelimit), 3); //min 2
+        buildingsWanted[BLD_SAWMILL] = max<int32_t>(min<int32_t>((GetBuildingCount(BLD_WOODCUTTER) - (GetBuildingCount(BLD_CHARBURNER) * 2)) / 2, resourcelimit), 3); //min 2
 
         //ironsmelters limited by ironmines or crucibles
         buildingsWanted[BLD_IRONSMELTER] = (aii->GetInventory()->goods[GD_CRUCIBLE] + aii->GetInventory()->people[JOB_IRONFOUNDER] >= GetBuildingCount(BLD_IRONMINE)) ? GetBuildingCount(BLD_IRONMINE) : aii->GetInventory()->goods[GD_CRUCIBLE] + aii->GetInventory()->people[JOB_IRONFOUNDER];
@@ -650,7 +650,7 @@ void AIConstruction::RefreshBuildingCount()
             buildingsWanted[BLD_MILL] = buildingCounts.building_counts[BLD_MILL];
 
         resourcelimit = aii->GetInventory()->people[JOB_BAKER] + aii->GetInventory()->goods[GD_ROLLINGPIN] + 1;
-        buildingsWanted[BLD_BAKERY] = min<unsigned>(GetBuildingCount(BLD_MILL), resourcelimit);
+        buildingsWanted[BLD_BAKERY] = min<uint32_t>(GetBuildingCount(BLD_MILL), resourcelimit);
 
         buildingsWanted[BLD_PIGFARM] = (buildingCounts.building_counts[BLD_FARM] < 8) ? buildingCounts.building_counts[BLD_FARM] / 4 : (buildingCounts.building_counts[BLD_FARM] - 2) / 4;
         if (buildingsWanted[BLD_PIGFARM] > GetBuildingCount(BLD_SLAUGHTERHOUSE) + 1)
@@ -659,7 +659,7 @@ void AIConstruction::RefreshBuildingCount()
 
         buildingsWanted[BLD_WELL] = buildingsWanted[BLD_BAKERY] + buildingsWanted[BLD_PIGFARM] + buildingsWanted[BLD_DONKEYBREEDER] + buildingsWanted[BLD_BREWERY];
 
-        buildingsWanted[BLD_FARM] = min<unsigned>(aii->GetInventory()->goods[GD_SCYTHE] + aii->GetInventory()->people[JOB_FARMER],foodusers+3);
+        buildingsWanted[BLD_FARM] = min<uint32_t>(aii->GetInventory()->goods[GD_SCYTHE] + aii->GetInventory()->people[JOB_FARMER],foodusers+3);
 
         if(aii->GetInventory()->goods[GD_PICKAXE] + aii->GetInventory()->people[JOB_MINER] < 3)
         {
@@ -690,7 +690,7 @@ void AIConstruction::RefreshBuildingCount()
                 buildingsWanted[BLD_DONKEYBREEDER] = 1;
                 resourcelimit = aii->GetInventory()->people[JOB_CHARBURNER] + aii->GetInventory()->goods[GD_SHOVEL] + 1;
                 if(aijh->ggs->isEnabled(ADDON_CHARBURNER) && (buildingsWanted[BLD_COALMINE] > GetBuildingCount(BLD_COALMINE) + 4))
-                    buildingsWanted[BLD_CHARBURNER] = min<int>(min<int>(buildingsWanted[BLD_COALMINE] - (GetBuildingCount(BLD_COALMINE) + 1), 3), resourcelimit);
+                    buildingsWanted[BLD_CHARBURNER] = min<int32_t>(min<int32_t>(buildingsWanted[BLD_COALMINE] - (GetBuildingCount(BLD_COALMINE) + 1), 3), resourcelimit);
             }
             else
             {
@@ -699,7 +699,7 @@ void AIConstruction::RefreshBuildingCount()
                 buildingsWanted[BLD_GOLDMINE] = (aii->GetInventory()->people[JOB_MINER] > 2) ? 1 : 0;				
                 resourcelimit = aii->GetInventory()->people[JOB_CHARBURNER] + aii->GetInventory()->goods[GD_SHOVEL];
                 if(aijh->ggs->isEnabled(ADDON_CHARBURNER) && (GetBuildingCount(BLD_COALMINE) < 1 && (GetBuildingCount(BLD_IRONMINE) + GetBuildingCount(BLD_GOLDMINE) > 0)))
-                    buildingsWanted[BLD_CHARBURNER] = min<int>(1, resourcelimit);
+                    buildingsWanted[BLD_CHARBURNER] = min<int32_t>(1, resourcelimit);
             }
 			if(GetBuildingCount(BLD_QUARRY)+1 < buildingsWanted[BLD_QUARRY] && aijh->AmountInStorage(GD_STONES,0)<100) //no quarry and low stones -> try granitemines.
             {
@@ -735,33 +735,33 @@ void AIConstruction::InitBuildingsWanted()
     buildingsWanted[BLD_SHIPYARD] = aijh->GetCountofAIRelevantSeaIds() == 1 ? 1 : 99;
 }
 
-bool AIConstruction::BuildAlternativeRoad(const noFlag* flag, std::vector<unsigned char> &route)
+bool AIConstruction::BuildAlternativeRoad(const noFlag* flag, std::vector<uint8_t> &route)
 {
     //LOG.lprintf("ai build alt road player %i at %i %i\n", flag->GetPlayer(), flag->GetPos());
     // Radius in dem nach würdigen Fahnen gesucht wird
-    const unsigned short maxRoadLength = 10;
+    const uint16_t maxRoadLength = 10;
     // Faktor um den der Weg kürzer sein muss als ein vorhander Pfad, um gebaut zu werden
-    const unsigned short lengthFactor = 5;
+    const uint16_t lengthFactor = 5;
 
 
     // Flaggen in der Umgebung holen
     std::vector<const noFlag*> flags;
     FindFlags(flags, flag->GetPos(), maxRoadLength);
-    std::vector<unsigned char>mainroad = route;
+    std::vector<uint8_t>mainroad = route;
     //targetflag for mainroad
     MapPoint t = flag->GetPos();
-    for(unsigned i = 0; i < mainroad.size(); i++)
+    for(uint32_t i = 0; i < mainroad.size(); i++)
     {
         t = aii->GetNeighbour(t, mainroad[i]);
     }
     const noFlag* mainflag = aii->GetSpecObj<noFlag>(t);
 
     // Jede Flagge testen...
-    for(unsigned i = 0; i < flags.size(); ++i)
+    for(uint32_t i = 0; i < flags.size(); ++i)
     {
-        //std::vector<unsigned char> new_route;
+        //std::vector<uint8_t> new_route;
         route.clear();
-        unsigned int newLength;
+        uint32_t newLength;
 		// the flag should not be at a military building!		
 		if (aii->IsMilitaryBuildingOnNode(aii->GetNeighbour(flags[i]->GetPos(),1)))
 			continue;
@@ -771,7 +771,7 @@ bool AIConstruction::BuildAlternativeRoad(const noFlag* flag, std::vector<unsign
         // Wenn ja, dann gucken ob unser momentaner Weg zu dieser Flagge vielleicht voll weit ist und sich eine Straße lohnt
         if (pathFound)
         {
-            unsigned int oldLength = 0;
+            uint32_t oldLength = 0;
 
             // Aktuelle Strecke zu der Flagge
             bool pathAvailable = aii->FindPathOnRoads(flags[i], flag, &oldLength);
@@ -782,16 +782,16 @@ bool AIConstruction::BuildAlternativeRoad(const noFlag* flag, std::vector<unsign
                     oldLength += mainroad.size();
             }
             bool crossmainpath = false;
-            unsigned size = 0;
+            uint32_t size = 0;
             //more than 5 nonflaggable spaces on the route -> not really valid path
-            unsigned temp = 0;
+            uint32_t temp = 0;
             t = flag->GetPos();
-            for(unsigned j = 0; j < route.size(); ++j)
+            for(uint32_t j = 0; j < route.size(); ++j)
             {
                 t = aii->GetNeighbour(t, route[j]);
                 MapPoint t2 = flag->GetPos();
                 //check if we cross the planned main road
-                for(unsigned k = 0; k < mainroad.size(); ++k)
+                for(uint32_t k = 0; k < mainroad.size(); ++k)
                 {
                     t2 = aii->GetNeighbour(t2, mainroad[k]);
                     if(t2 == t)
@@ -823,7 +823,7 @@ bool AIConstruction::BuildAlternativeRoad(const noFlag* flag, std::vector<unsign
     return false;
 }
 
-bool AIConstruction::OtherUsualBuildingInRadius(MapPoint pt, unsigned radius, BuildingType bt)
+bool AIConstruction::OtherUsualBuildingInRadius(MapPoint pt, uint32_t radius, BuildingType bt)
 {
 	for (std::list<nobUsual*>::const_iterator it = aii->GetBuildings(bt).begin(); it != aii->GetBuildings(bt).end(); it++)
     {
@@ -841,7 +841,7 @@ bool AIConstruction::OtherUsualBuildingInRadius(MapPoint pt, unsigned radius, Bu
 	return false;
 }
 
-bool AIConstruction::OtherStoreInRadius(MapPoint pt, unsigned radius)
+bool AIConstruction::OtherStoreInRadius(MapPoint pt, uint32_t radius)
 {
     for (std::list<nobBaseWarehouse*>::const_iterator it = aii->GetStorehouses().begin(); it != aii->GetStorehouses().end(); it++)
     {
@@ -861,12 +861,12 @@ bool AIConstruction::OtherStoreInRadius(MapPoint pt, unsigned radius)
 
 noFlag* AIConstruction::FindTargetStoreHouseFlag(const MapPoint pt)
 {
-    unsigned minDistance = std::numeric_limits<unsigned>::max();
+    uint32_t minDistance = std::numeric_limits<uint32_t>::max();
     nobBaseWarehouse* minTarget = NULL;
     bool found = false;
     for (std::list<nobBaseWarehouse*>::const_iterator it = aii->GetStorehouses().begin(); it != aii->GetStorehouses().end(); it++)
     {
-        unsigned dist = aii->GetDistance(pt, (*it)->GetPos());
+        uint32_t dist = aii->GetDistance(pt, (*it)->GetPos());
         if (dist < minDistance)
         {
             minDistance = dist;

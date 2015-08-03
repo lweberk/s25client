@@ -32,57 +32,57 @@ class CustomBorderBuilder
     public:
         CustomBorderBuilder(const libsiedler2::ArchivItem_Palette* const palette);
         ~CustomBorderBuilder();
-        int loadEdges(const libsiedler2::ArchivInfo* archiveInfo);
-        int buildBorder(const unsigned int width, const unsigned int height, libsiedler2::ArchivInfo* borderInfo);
+        int32_t loadEdges(const libsiedler2::ArchivInfo* archiveInfo);
+        int32_t buildBorder(const uint32_t width, const uint32_t height, libsiedler2::ArchivInfo* borderInfo);
         const libsiedler2::ArchivItem_Palette* palette;
 
     private:
         class BdrBitmap
         {
             public:
-                BdrBitmap(const unsigned int width, const unsigned int height);
+                BdrBitmap(const uint32_t width, const uint32_t height);
                 ~BdrBitmap();
-                BdrBitmap* get(const unsigned int x, const unsigned int y, const unsigned int width, const unsigned int height) const;
-                inline unsigned char get(const unsigned int x, const unsigned int y) const;
-                void put(const unsigned int x, const unsigned int y, BdrBitmap* pic, bool picGetted = false); // mit true wird das übergebene BdrBitmap wieder zerstört. Das ist genau dann sinnvoll, wenn es mit BdrBitmap::get() erstellt wurde, da der Zeiger ja außeralb von BdrBitmap::put() nicht mehr verfügbar ist.
-                inline void put(const unsigned int x, const unsigned int y, const unsigned char c);
-                unsigned int w;
-                unsigned int h;
+                BdrBitmap* get(const uint32_t x, const uint32_t y, const uint32_t width, const uint32_t height) const;
+                inline uint8_t get(const uint32_t x, const uint32_t y) const;
+                void put(const uint32_t x, const uint32_t y, BdrBitmap* pic, bool picGetted = false); // mit true wird das übergebene BdrBitmap wieder zerstört. Das ist genau dann sinnvoll, wenn es mit BdrBitmap::get() erstellt wurde, da der Zeiger ja außeralb von BdrBitmap::put() nicht mehr verfügbar ist.
+                inline void put(const uint32_t x, const uint32_t y, const uint8_t c);
+                uint32_t w;
+                uint32_t h;
 
             private:
-                inline const unsigned int getpos(const unsigned int x, const unsigned int y) const;
-                unsigned char* value;
+                inline const uint32_t getpos(const uint32_t x, const uint32_t y) const;
+                uint8_t* value;
         };
 
         void BitmapRLE2BdrBitmap(const glArchivItem_Bitmap_RLE* bitmapRLE, BdrBitmap* bdrBitmap);
         void BdrBitmap2BitmapRLE2(BdrBitmap* bdrBitmap, glArchivItem_Bitmap_RLE* bitmapRLE);
 
-        void FindEdgeDistribution(unsigned int toFill, unsigned short lengths[3], unsigned char (counts)[3]);
-        void WriteEdgeDistribution(const unsigned int x,
-                                   const unsigned int y,
-                                   const unsigned int toFill,
+        void FindEdgeDistribution(uint32_t toFill, uint16_t lengths[3], uint8_t (counts)[3]);
+        void WriteEdgeDistribution(const uint32_t x,
+                                   const uint32_t y,
+                                   const uint32_t toFill,
                                    const bool direction, // false = waagerecht, true = senkrecht
-                                   const unsigned short edgeLengths[3],
-                                   unsigned char edgeCounts[3], // wird verändert, nicht weiterbenutzen
+                                   const uint16_t edgeLengths[3],
+                                   uint8_t edgeCounts[3], // wird verändert, nicht weiterbenutzen
                                    BdrBitmap* edges[],
-                                   const unsigned char numFillers,
+                                   const uint8_t numFillers,
                                    BdrBitmap* fillers[],
                                    BdrBitmap* outBorder);
 
         bool edgesLoaded;
-        static const unsigned char numCorners = 9;
+        static const uint8_t numCorners = 9;
         BdrBitmap* corners[numCorners];
         BdrBitmap* edgesTop[3]; // edges sind die "großen" Stücke, die jeweils zwischen zwei Auflösungen dazukommen.
         BdrBitmap* edgesBottom[3];
         BdrBitmap* edgesLeft[3];
         BdrBitmap* edgesRight[3];
-        static const unsigned char numFillersTop = 4; // fillers sind zusammengesuchte "kleine" Stücke, die aneinandergereiht werden können
+        static const uint8_t numFillersTop = 4; // fillers sind zusammengesuchte "kleine" Stücke, die aneinandergereiht werden können
         BdrBitmap* fillersTop[numFillersTop];
-        static const unsigned char numFillersBottom = 5;
+        static const uint8_t numFillersBottom = 5;
         BdrBitmap* fillersBottom[numFillersBottom];
-        static const unsigned char numFillersLeft = 5;
+        static const uint8_t numFillersLeft = 5;
         BdrBitmap* fillersLeft[numFillersLeft];
-        static const unsigned char numFillersRight = 6;
+        static const uint8_t numFillersRight = 6;
         BdrBitmap* fillersRight[numFillersRight];
 };
 

@@ -97,9 +97,9 @@ Loader::~Loader(void)
  */
 bool Loader::LoadFilesAtStart(void)
 {
-    const unsigned int files_count = 7 + 1 + 2 + 2 + 21;
+    const uint32_t files_count = 7 + 1 + 2 + 2 + 21;
 
-    const unsigned int files[] =
+    const uint32_t files[] =
     {
         5, 6, 7, 8, 9, 10, 17, // Paletten:     pal5.bbm, pal6.bbm, pal7.bbm, paletti0.bbm, paletti1.bbm, paletti8.bbm, colors.act
         FILE_SPLASH_ID,        // Splashscreen: splash.bmp
@@ -126,13 +126,13 @@ bool Loader::LoadFilesAtStart(void)
  *
  *  @author FloSoft
  */
-bool Loader::LoadFileOrDir(const std::string& file, const unsigned int file_id, bool load_always)
+bool Loader::LoadFileOrDir(const std::string& file, const uint32_t file_id, bool load_always)
 {
     // is the entry a directory?
     if(IsDir(file))
     {
         // yes, load all files in the directory
-        unsigned int ladezeit = VIDEODRIVER.GetTickCount();
+        uint32_t ladezeit = VIDEODRIVER.GetTickCount();
 
         LOG.lprintf("Lade LST,BOB,IDX,BMP,TXT,GER,ENG Dateien aus \"%s\"\n", GetFilePath(file).c_str());
 
@@ -178,10 +178,10 @@ bool Loader::LoadFileOrDir(const std::string& file, const unsigned int file_id, 
  *
  *  @author FloSoft
  */
-bool Loader::LoadFilesFromArray(const unsigned int files_count, const unsigned int* files, bool load_always)
+bool Loader::LoadFilesFromArray(const uint32_t files_count, const uint32_t* files, bool load_always)
 {
     // load the files or directorys
-    for(unsigned int i = 0; i < files_count; ++i)
+    for(uint32_t i = 0; i < files_count; ++i)
     {
         if(files[i] == 0xFFFFFFFF)
             continue;
@@ -201,22 +201,22 @@ bool Loader::LoadFilesFromArray(const unsigned int files_count, const unsigned i
  *
  *  @author FloSoft
  */
-bool Loader::LoadLsts(unsigned int dir)
+bool Loader::LoadLsts(uint32_t dir)
 {
     // systemweite lsts laden
-    unsigned int files_count = 0;
-    unsigned int* files = NULL;
+    uint32_t files_count = 0;
+    uint32_t* files = NULL;
 
     if(GetFilePath(FILE_PATHS[dir]) == GetFilePath(FILE_PATHS[dir + 3]))
     {
         files_count = 1;
-        files = new unsigned int[1];
+        files = new uint32_t[1];
         files[0] = dir;
     }
     else
     {
         files_count = 2;
-        files = new unsigned int[2];
+        files = new uint32_t[2];
         files[0] = dir;
         files[1] = dir + 3;
     }
@@ -288,7 +288,7 @@ bool Loader::LoadSounds(void)
     std::list<std::string> liste;
     ListDir(GetFilePath(FILE_PATHS[50]), false, NULL, NULL, &liste);
 
-    unsigned int i = 0;
+    uint32_t i = 0;
     sng_lst.alloc(unsigned(liste.size()));
     for(std::list<std::string>::iterator it = liste.begin(); it != liste.end(); ++it)
     {
@@ -320,7 +320,7 @@ bool Loader::LoadSounds(void)
  */
 bool Loader::SortFilesHelper(const std::string& lhs, const std::string& rhs)
 {
-    int a, b;
+    int32_t a, b;
 
     std::string lf = lhs.substr(lhs.find_last_of('/') + 1);
     std::string rf = rhs.substr(rhs.find_last_of('/') + 1);
@@ -356,13 +356,13 @@ bool Loader::SortFilesHelper(const std::string& lhs, const std::string& rhs)
  *
  *  @author FloSoft
  */
-std::vector<std::string> Loader::ExplodeString(std::string const& line, const char delim, const unsigned int max)
+std::vector<std::string> Loader::ExplodeString(std::string const& line, const char delim, const uint32_t max)
 {
     std::istringstream in(line);
     std::vector<std::string> result;
     std::string token;
 
-    unsigned int len = 0;
+    uint32_t len = 0;
     while(std::getline(in, token, delim) && result.size() < max - 1)
     {
         len += token.size() + 1;
@@ -386,9 +386,9 @@ std::vector<std::string> Loader::ExplodeString(std::string const& line, const ch
  */
 bool Loader::LoadSettings()
 {
-    const unsigned int files_count = 1;
+    const uint32_t files_count = 1;
 
-    const unsigned int files[files_count] =
+    const uint32_t files[files_count] =
     {
         0   // config.ini
     };
@@ -474,13 +474,13 @@ glSmartBitmap Loader::gateway_cache[5];
  *
  *  @author OLiver
  */
-bool Loader::LoadFilesAtGame(unsigned char gfxset, bool* nations)
+bool Loader::LoadFilesAtGame(uint8_t gfxset, bool* nations)
 {
     assert(gfxset <= 2);
 
-    const unsigned int files_count = NATIVE_NAT_COUNT + 5 + 6 + 4 + 1 + 1;
+    const uint32_t files_count = NATIVE_NAT_COUNT + 5 + 6 + 4 + 1 + 1;
 
-    unsigned int files[files_count] =
+    uint32_t files[files_count] =
     {
         0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, // ?afr_z.lst, ?jap_z.lst, ?rom_z.lst, ?vik_z.lst
         26, 44, 45, 86, 92,                             // rom_bobs.lst, carrier.bob, jobs.bob, boat.lst, boot_z.lst
@@ -490,7 +490,7 @@ bool Loader::LoadFilesAtGame(unsigned char gfxset, bool* nations)
         20u + gfxset                                     // tex?.lbm
     };
 
-    for(unsigned char i = 0; i < NATIVE_NAT_COUNT; ++i)
+    for(uint8_t i = 0; i < NATIVE_NAT_COUNT; ++i)
     {
         // ggf. Völker-Grafiken laden
         if(nations[i] || ((i == 2) && (nations[4])))
@@ -520,7 +520,7 @@ bool Loader::LoadFilesAtGame(unsigned char gfxset, bool* nations)
 
 
 
-    for (unsigned int nation = 0; nation < NAT_COUNT; ++nation)
+    for (uint32_t nation = 0; nation < NAT_COUNT; ++nation)
     {
         nation_gfx[nation] = &(this->files[NATION_GFXSET_Z[lastgfx][nation]]);
     }
@@ -541,11 +541,11 @@ void Loader::fillCaches()
     stp = new glSmartTexturePacker();
 
 // Animals
-    for (unsigned species = 0; species < SPEC_COUNT; ++species)
+    for (uint32_t species = 0; species < SPEC_COUNT; ++species)
     {
-        for (unsigned dir = 0; dir < 6; ++dir)
+        for (uint32_t dir = 0; dir < 6; ++dir)
         {
-            for (unsigned ani_step = 0; ani_step < ANIMALCONSTS[species].animation_steps; ++ani_step)
+            for (uint32_t ani_step = 0; ani_step < ANIMALCONSTS[species].animation_steps; ++ani_step)
             {
                 glSmartBitmap& bmp = animal_cache[species][dir][ani_step];
 
@@ -586,10 +586,10 @@ void Loader::fillCaches()
 
     glArchivItem_Bob* bob_jobs = GetBobN("jobs");
 
-    for (unsigned nation = 0; nation < NAT_COUNT; ++nation)
+    for (uint32_t nation = 0; nation < NAT_COUNT; ++nation)
     {
 // BUILDINGS
-        for (unsigned type = 0; type < BUILDING_TYPES_COUNT; ++type)
+        for (uint32_t type = 0; type < BUILDING_TYPES_COUNT; ++type)
         {
             glSmartBitmap& bmp = building_cache[nation][type][0];
             glSmartBitmap& skel = building_cache[nation][type][1];
@@ -599,7 +599,7 @@ void Loader::fillCaches()
 
             if (type == BLD_CHARBURNER)
             {
-                unsigned id = nation * 8;
+                uint32_t id = nation * 8;
 
                 bmp.add(GetImageN("charburner", id + ((lastgfx == LT_WINTERWORLD) ? 6 : 1)));
                 bmp.addShadow(GetImageN("charburner", id + 2));
@@ -620,12 +620,12 @@ void Loader::fillCaches()
         }
 
 // FLAGS
-        for (unsigned type = 0; type < 3; ++type)
+        for (uint32_t type = 0; type < 3; ++type)
         {
-            for (unsigned ani_step = 0; ani_step < 8; ++ani_step)
+            for (uint32_t ani_step = 0; ani_step < 8; ++ani_step)
             {
                 // Flaggentyp berücksichtigen
-                int nr = ani_step + 100 + 20 * type;
+                int32_t nr = ani_step + 100 + 20 * type;
 
                 glSmartBitmap& bmp = flag_cache[nation][type][ani_step];
 
@@ -639,15 +639,15 @@ void Loader::fillCaches()
         }
 
 // Bobs from jobs.bob. Job = JOB_TYPES_COUNT is used for fat carriers. See below.
-        for (unsigned job = 0; job < JOB_TYPES_COUNT + 1; ++job)
+        for (uint32_t job = 0; job < JOB_TYPES_COUNT + 1; ++job)
         {
-            for (unsigned dir = 0; dir < 6; ++dir)
+            for (uint32_t dir = 0; dir < 6; ++dir)
             {
-                for (unsigned ani_step = 0; ani_step < 8; ++ani_step)
+                for (uint32_t ani_step = 0; ani_step < 8; ++ani_step)
                 {
                     bool fat;
-                    unsigned id;
-                    unsigned short overlayOffset = 96;
+                    uint32_t id;
+                    uint16_t overlayOffset = 96;
 
                     glSmartBitmap& bmp = bob_jobs_cache[nation][job][dir][ani_step];
 
@@ -684,8 +684,8 @@ void Loader::fillCaches()
                         }
                     }
 
-                    unsigned int good = id * 96 + ani_step * 12 + ( (dir + 3) % 6 ) + fat * 6;
-                    unsigned int body = fat * 48 + ( (dir + 3) % 6 ) * 8 + ani_step;
+                    uint32_t good = id * 96 + ani_step * 12 + ( (dir + 3) % 6 ) + fat * 6;
+                    uint32_t body = fat * 48 + ( (dir + 3) % 6 ) * 8 + ani_step;
 
                     if (bob_jobs->getLink(good) == 92)
                     {
@@ -714,7 +714,7 @@ void Loader::fillCaches()
 
 // BUILDING FLAG ANIMATION (for military buildings)
     /*
-        for (unsigned ani_step = 0; ani_step < 8; ++ani_step)
+        for (uint32_t ani_step = 0; ani_step < 8; ++ani_step)
         {
             glSmartBitmap &bmp = building_flag_cache[ani_step];
 
@@ -722,7 +722,7 @@ void Loader::fillCaches()
 
             bmp.add(static_cast<glArchivItem_Bitmap_Player *>(GetMapImageN(3162+ani_step)));
 
-            int a, b, c, d;
+            int32_t a, b, c, d;
             static_cast<glArchivItem_Bitmap_Player *>(GetMapImageN(3162+ani_step))->getVisibleArea(a, b, c, d);
             fprintf(stderr, "%i,%i (%ix%i)\n", a, b, c, d);
 
@@ -731,9 +731,9 @@ void Loader::fillCaches()
         }
     */
 // Trees
-    for (unsigned type = 0; type < 9; ++type)
+    for (uint32_t type = 0; type < 9; ++type)
     {
-        for (unsigned ani_step = 0; ani_step < 15; ++ani_step)
+        for (uint32_t ani_step = 0; ani_step < 15; ++ani_step)
         {
             glSmartBitmap& bmp = tree_cache[type][ani_step];
 
@@ -747,9 +747,9 @@ void Loader::fillCaches()
     }
 
 // Granite
-    for (unsigned type = 0; type < 2; ++type)
+    for (uint32_t type = 0; type < 2; ++type)
     {
-        for (unsigned size = 0; size < 6; ++size)
+        for (uint32_t size = 0; size < 6; ++size)
         {
             glSmartBitmap& bmp = granite_cache[type][size];
 
@@ -763,9 +763,9 @@ void Loader::fillCaches()
     }
 
 // Grainfields
-    for (unsigned type = 0; type < 2; ++type)
+    for (uint32_t type = 0; type < 2; ++type)
     {
-        for (unsigned size = 0; size < 4; ++size)
+        for (uint32_t size = 0; size < 4; ++size)
         {
             glSmartBitmap& bmp = grainfield_cache[type][size];
 
@@ -779,9 +779,9 @@ void Loader::fillCaches()
     }
 
 // Donkeys
-    for (unsigned dir = 0; dir < 6; ++dir)
+    for (uint32_t dir = 0; dir < 6; ++dir)
     {
-        for (unsigned ani_step = 0; ani_step < 8; ++ani_step)
+        for (uint32_t ani_step = 0; ani_step < 8; ++ani_step)
         {
             glSmartBitmap& bmp = donkey_cache[dir][ani_step];
 
@@ -795,9 +795,9 @@ void Loader::fillCaches()
     }
 
 // Boats
-    for (unsigned dir = 0; dir < 6; ++dir)
+    for (uint32_t dir = 0; dir < 6; ++dir)
     {
-        for (unsigned ani_step = 0; ani_step < 8; ++ani_step)
+        for (uint32_t ani_step = 0; ani_step < 8; ++ani_step)
         {
             glSmartBitmap& bmp = boat_cache[dir][ani_step];
 
@@ -813,15 +813,15 @@ void Loader::fillCaches()
 // carrier_cache[ware][direction][animation_step][fat]
     glArchivItem_Bob* bob_carrier = GetBobN("carrier");
 
-    for (unsigned ware = 0; ware < WARE_TYPES_COUNT; ++ware)
+    for (uint32_t ware = 0; ware < WARE_TYPES_COUNT; ++ware)
     {
-        for (unsigned dir = 0; dir < 6; ++dir)
+        for (uint32_t dir = 0; dir < 6; ++dir)
         {
-            for (unsigned ani_step = 0; ani_step < 8; ++ani_step)
+            for (uint32_t ani_step = 0; ani_step < 8; ++ani_step)
             {
-                for (unsigned fat = 0; fat < 2; ++fat)
+                for (uint32_t fat = 0; fat < 2; ++fat)
                 {
-                    unsigned id;
+                    uint32_t id;
                     glSmartBitmap& bmp = carrier_cache[ware][dir][ani_step][fat];
 
                     bmp.reset();
@@ -835,8 +835,8 @@ void Loader::fillCaches()
                         id = ware;
                     }
 
-                    unsigned int good = id * 96 + ani_step * 12 + ( (dir + 3) % 6 ) + fat * 6;
-                    unsigned int body = fat * 48 + ( (dir + 3) % 6 ) * 8 + ani_step;
+                    uint32_t good = id * 96 + ani_step * 12 + ( (dir + 3) % 6 ) + fat * 6;
+                    uint32_t body = fat * 48 + ( (dir + 3) % 6 ) * 8 + ani_step;
 
                     /*if(bob_jobs->getLink(good) == 92)
                     {
@@ -856,8 +856,8 @@ void Loader::fillCaches()
 
 // gateway animation :)
     {
-        const unsigned char start_index = 248;
-        const unsigned char color_count = 4;
+        const uint8_t start_index = 248;
+        const uint8_t color_count = 4;
 
         libsiedler2::ArchivItem_Palette* palette = GetPaletteN("pal5");
         glArchivItem_Bitmap* image = GetMapImageN(561);
@@ -865,24 +865,24 @@ void Loader::fillCaches()
 
         if ((image) && (shadow) && (palette))
         {
-            unsigned short width = image->getWidth();
-            unsigned short height = image->getHeight();
+            uint16_t width = image->getWidth();
+            uint16_t height = image->getHeight();
 
-            unsigned char* buffer = new unsigned char[width * height];
+            uint8_t* buffer = new uint8_t[width * height];
 
             memset(buffer, 254, width * height);
 
             image->print(buffer, width, height, libsiedler2::FORMAT_PALETTED, palette, 0, 0, 0, 0, width, height);
 
-            for(unsigned char i = 0; i < color_count; ++i)
+            for(uint8_t i = 0; i < color_count; ++i)
             {
                 glSmartBitmap& bmp = gateway_cache[i + 1];
 
                 bmp.reset();
 
-                for(unsigned int x = 0; x < width; ++x)
+                for(uint32_t x = 0; x < width; ++x)
                 {
-                    for(unsigned int y = 0; y < height; ++y)
+                    for(uint32_t y = 0; y < height; ++y)
                     {
                         if(buffer[y * width + x] >= start_index && buffer[y * width + x] < start_index + color_count)
                         {
@@ -907,7 +907,7 @@ void Loader::fillCaches()
         }
         else
         {
-            for(unsigned char i = 0; i < color_count; ++i)
+            for(uint8_t i = 0; i < color_count; ++i)
             {
                 glSmartBitmap& bmp = gateway_cache[i + 1];
 
@@ -1004,7 +1004,7 @@ bool Loader::CreateTerrainTextures(void)
 
     textures.clear();
     // (unanimiertes) Terrain
-    for(unsigned char i = 0; i < 14; ++i)
+    for(uint8_t i = 0; i < 14; ++i)
         ExtractTexture(&textures, rects[i]);
 
     // Wasser und Lava
@@ -1016,13 +1016,13 @@ bool Loader::CreateTerrainTextures(void)
 
     // die 5 Ränder
     borders.clear();
-    for(unsigned char i = 0; i < 5; ++i)
+    for(uint8_t i = 0; i < 5; ++i)
         ExtractTexture(&borders, rec_raender[i]);
 
     // Wege
     roads.clear();
     roads_points.clear();
-    for(unsigned char i = 0; i < 4; ++i)
+    for(uint8_t i = 0; i < 4; ++i)
     {
         ExtractTexture(&roads, rec_roads[i]);
         ExtractTexture(&roads_points, rec_roads[4 + i]);
@@ -1043,14 +1043,14 @@ void Loader::ExtractTexture(libsiedler2::ArchivInfo* destination, Rect& rect)
     libsiedler2::ArchivItem_Palette* palette = GetTexPaletteN(1);
     glArchivItem_Bitmap* image = GetTexImageN(0);
 
-    unsigned short width = rect.right - rect.left;
-    unsigned short height = rect.bottom - rect.top;
+    uint16_t width = rect.right - rect.left;
+    uint16_t height = rect.bottom - rect.top;
 
-    unsigned char* buffer = new unsigned char[width * height];
+    uint8_t* buffer = new uint8_t[width * height];
 
     memset(buffer, libsiedler2::TRANSPARENT_INDEX, width * height);
     image->print(buffer, width, height, libsiedler2::FORMAT_PALETTED, palette, 0, 0, rect.left, rect.top, width, height);
-    for(unsigned int x = 0; x < (unsigned int)(width * height); ++x)
+    for(uint32_t x = 0; x < (uint32_t)(width * height); ++x)
     {
         if(buffer[x] == 0)
             buffer[x] = libsiedler2::TRANSPARENT_INDEX;
@@ -1071,7 +1071,7 @@ void Loader::ExtractTexture(libsiedler2::ArchivInfo* destination, Rect& rect)
  *
  *  @author OLiver
  */
-void Loader::ExtractAnimatedTexture(libsiedler2::ArchivInfo* destination, Rect& rect, unsigned char color_count, unsigned char start_index)
+void Loader::ExtractAnimatedTexture(libsiedler2::ArchivInfo* destination, Rect& rect, uint8_t color_count, uint8_t start_index)
 {
     glArchivItem_Bitmap_Raw bitmap;
     libsiedler2::ArchivItem_Palette* palette = GetTexPaletteN(1);
@@ -1080,21 +1080,21 @@ void Loader::ExtractAnimatedTexture(libsiedler2::ArchivInfo* destination, Rect& 
     bitmap.setPalette(palette);
     bitmap.setFormat(libsiedler2::FORMAT_PALETTED);
 
-    unsigned short width = rect.right - rect.left;
-    unsigned short height = rect.bottom - rect.top;
+    uint16_t width = rect.right - rect.left;
+    uint16_t height = rect.bottom - rect.top;
 
-    unsigned char* buffer = new unsigned char[width * height];
+    uint8_t* buffer = new uint8_t[width * height];
 
     // Mit Startindex (also irgendeiner Farbe) füllen, um transparente Pixel und damit schwarze Punke am Rand zu verhindern
     memset(buffer, start_index, width * height);
 
     image->print(buffer, width, height, libsiedler2::FORMAT_PALETTED, palette, 0, 0, rect.left, rect.top, width, height);
 
-    for(unsigned char i = 0; i < color_count; ++i)
+    for(uint8_t i = 0; i < color_count; ++i)
     {
-        for(unsigned int x = 0; x < width; ++x)
+        for(uint32_t x = 0; x < width; ++x)
         {
-            for(unsigned int y = 0; y < height; ++y)
+            for(uint32_t y = 0; y < height; ++y)
             {
                 if(buffer[y * width + x] >= start_index && buffer[y * width + x] < start_index + color_count)
                 {
@@ -1126,7 +1126,7 @@ void Loader::ExtractAnimatedTexture(libsiedler2::ArchivInfo* destination, Rect& 
  */
 bool Loader::LoadArchiv(const std::string& pfad, const libsiedler2::ArchivItem_Palette* palette, libsiedler2::ArchivInfo* archiv)
 {
-    unsigned int ladezeit = VIDEODRIVER.GetTickCount();
+    uint32_t ladezeit = VIDEODRIVER.GetTickCount();
 
     std::string file = GetFilePath(pfad);
 
@@ -1186,13 +1186,13 @@ bool Loader::LoadFile(const std::string& pfad, const libsiedler2::ArchivItem_Pal
 
     lst.sort(SortFilesHelper);
 
-    unsigned char* buffer = new unsigned char[1000 * 1000 * 4];
+    uint8_t* buffer = new uint8_t[1000 * 1000 * 4];
     for(std::list<std::string>::iterator i = lst.begin(); i != lst.end(); ++i)
     {
         // read file number, to set the index correctly
         std::string filename = i->substr(i->find_last_of('/') + 1);
         std::stringstream nrs;
-        int nr = -1;
+        int32_t nr = -1;
         nrs << filename;
         if(! (nrs >> nr) )
             nr = -1;
@@ -1200,11 +1200,11 @@ bool Loader::LoadFile(const std::string& pfad, const libsiedler2::ArchivItem_Pal
         // Dateiname zerlegen
         std::vector<std::string> wf = ExplodeString(*i, '.');
 
-        unsigned int bobtype = libsiedler2::BOBTYPE_BITMAP_RAW;
-        short nx = 0;
-        short ny = 0;
-        unsigned char dx = 0;
-        unsigned char dy = 0;
+        uint32_t bobtype = libsiedler2::BOBTYPE_BITMAP_RAW;
+        int16_t nx = 0;
+        int16_t ny = 0;
+        uint8_t dx = 0;
+        uint8_t dy = 0;
         libsiedler2::ArchivItem* item = NULL;
 
         // Common
@@ -1304,7 +1304,7 @@ bool Loader::LoadFile(const std::string& pfad, const libsiedler2::ArchivItem_Pal
             // had the filename a number? then set it to the corresponding item.
             if(nr >= 0)
             {
-                if(nr >= (int)to->getCount())
+                if(nr >= (int32_t)to->getCount())
                     to->alloc_inc(nr - to->getCount() + 1);
                 to->setC(nr, item);
             }
@@ -1379,7 +1379,7 @@ bool Loader::LoadFile(const std::string& pfad, const libsiedler2::ArchivItem_Pal
         if(archiv.getCount() > to->getCount())
             to->alloc_inc(archiv.getCount() - to->getCount());
 
-        for(unsigned int i = 0; i < archiv.getCount(); ++i)
+        for(uint32_t i = 0; i < archiv.getCount(); ++i)
         {
             if(archiv.get(i))
             {

@@ -29,10 +29,10 @@
 
 
 /// Berechnet die dunklere Spielerfarbe zum Zeichnen
-unsigned CalcPlayerFOWDrawColor(const unsigned color)
+uint32_t CalcPlayerFOWDrawColor(const uint32_t color)
 {
     // Farbkomponenten extrahieren
-    unsigned red = GetRed(color), green = GetGreen(color), blue = GetBlue(color);
+    uint32_t red = GetRed(color), green = GetGreen(color), blue = GetBlue(color);
 
     // "Skalieren"
     red = red * FOW_DRAW_COLOR_BRIGHTNESS / 0xFF;
@@ -57,7 +57,7 @@ fowNothing::fowNothing(SerializedGameData* sgd)
 {}
 void fowNothing::Serialize(SerializedGameData* sgd) const
 {}
-void fowNothing::Draw(int x, int y) const
+void fowNothing::Draw(int32_t x, int32_t y) const
 {}
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -74,11 +74,11 @@ fowBuilding::fowBuilding(SerializedGameData* sgd) :
 
 void fowBuilding::Serialize(SerializedGameData* sgd) const
 {
-    sgd->PushUnsignedChar(static_cast<unsigned char>(type));
-    sgd->PushUnsignedChar(static_cast<unsigned char>(nation));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(type));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(nation));
 }
 
-void fowBuilding::Draw(int x, int y) const
+void fowBuilding::Draw(int32_t x, int32_t y) const
 {
     if (type == BLD_CHARBURNER)
     {
@@ -97,7 +97,7 @@ void fowBuilding::Draw(int x, int y) const
 // fowBuildingSite
 
 
-fowBuildingSite::fowBuildingSite(const bool planing, const BuildingType type, const Nation nation, const unsigned char build_progress)
+fowBuildingSite::fowBuildingSite(const bool planing, const BuildingType type, const Nation nation, const uint8_t build_progress)
     : planing(planing), type(type), nation(nation), build_progress(build_progress)
 {}
 
@@ -111,12 +111,12 @@ fowBuildingSite::fowBuildingSite(SerializedGameData* sgd) :
 void fowBuildingSite::Serialize(SerializedGameData* sgd) const
 {
     sgd->PushBool(planing);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(type));
-    sgd->PushUnsignedChar(static_cast<unsigned char>(nation));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(type));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(nation));
     sgd->PushUnsignedChar(build_progress);
 }
 
-void fowBuildingSite::Draw(int x, int y) const
+void fowBuildingSite::Draw(int32_t x, int32_t y) const
 {
     if(planing)
     {
@@ -136,23 +136,23 @@ void fowBuildingSite::Draw(int x, int y) const
         // Rohbau
 
         // ausrechnen, wie weit er ist
-        unsigned int p1 = 0, p2 = 0;
+        uint32_t p1 = 0, p2 = 0;
 
         if(BUILDING_COSTS[nation][type].stones)
         {
             // Haus besteht aus Steinen und Brettern
-            p1 = min<unsigned int>(build_progress, BUILDING_COSTS[nation][type].boards * 8);
+            p1 = min<uint32_t>(build_progress, BUILDING_COSTS[nation][type].boards * 8);
             p2 = BUILDING_COSTS[nation][type].boards * 8;
         }
         else
         {
             // Haus besteht nur aus Brettern, dann 50:50
-            p1 = min<unsigned int>(build_progress, BUILDING_COSTS[nation][type].boards * 4);
+            p1 = min<uint32_t>(build_progress, BUILDING_COSTS[nation][type].boards * 4);
             p2 = BUILDING_COSTS[nation][type].boards * 4;
         }
 
         glArchivItem_Bitmap* image;
-        unsigned short progress, build_height;
+        uint16_t progress, build_height;
 
         // Normal
         image = LOADER.GetNationImageN(nation, 250 + 5 * type + 2);
@@ -215,7 +215,7 @@ void fowBuildingSite::Draw(int x, int y) const
 // fowFlag
 
 
-fowFlag::fowFlag(const unsigned char player, const FlagType flag_type) : player(player), flag_type(flag_type)
+fowFlag::fowFlag(const uint8_t player, const FlagType flag_type) : player(player), flag_type(flag_type)
 {}
 
 fowFlag::fowFlag(SerializedGameData* sgd) :
@@ -226,10 +226,10 @@ fowFlag::fowFlag(SerializedGameData* sgd) :
 void fowFlag::Serialize(SerializedGameData* sgd) const
 {
     sgd->PushUnsignedChar(player);
-    sgd->PushUnsignedChar(static_cast<unsigned char>(flag_type));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(flag_type));
 }
 
-void fowFlag::Draw(int x, int y) const
+void fowFlag::Draw(int32_t x, int32_t y) const
 {
     // Flagge
     LOADER.GetNationImageN(GAMECLIENT.GetPlayer(player)->nation, 100 + flag_type * 20)->Draw(x, y, 0, 0, 0, 0, 0, 0, FOW_DRAW_COLOR, CalcPlayerFOWDrawColor(COLORS[GAMECLIENT.GetPlayer(player)->color]));
@@ -240,7 +240,7 @@ void fowFlag::Draw(int x, int y) const
 ////////////////////////////////////////////////////////////////////////////////////
 // fowTree
 
-fowTree::fowTree(const unsigned char type, const unsigned char size) : type(type), size(size)
+fowTree::fowTree(const uint8_t type, const uint8_t size) : type(type), size(size)
 {}
 
 fowTree::fowTree(SerializedGameData* sgd) :
@@ -254,7 +254,7 @@ void fowTree::Serialize(SerializedGameData* sgd) const
     sgd->PushUnsignedChar(size);
 }
 
-void fowTree::Draw(int x, int y) const
+void fowTree::Draw(int32_t x, int32_t y) const
 {
     if(size == 3)
     {
@@ -272,7 +272,7 @@ void fowTree::Draw(int x, int y) const
 ////////////////////////////////////////////////////////////////////////////////////
 // fowGranite
 
-fowGranite::fowGranite(const GraniteType type, const unsigned char state) : type(type), state(state)
+fowGranite::fowGranite(const GraniteType type, const uint8_t state) : type(type), state(state)
 {}
 
 fowGranite::fowGranite(SerializedGameData* sgd) :
@@ -282,11 +282,11 @@ fowGranite::fowGranite(SerializedGameData* sgd) :
 
 void fowGranite::Serialize(SerializedGameData* sgd) const
 {
-    sgd->PushUnsignedChar(static_cast<unsigned char>(type));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(type));
     sgd->PushUnsignedChar(state);
 }
 
-void fowGranite::Draw(int x, int y) const
+void fowGranite::Draw(int32_t x, int32_t y) const
 {
     LOADER.GetMapImageN(516 + type * 6 + state)->Draw(x, y, 0, 0, 0, 0, 0, 0, FOW_DRAW_COLOR);
     LOADER.GetMapImageN(616 + type * 6 + state)->Draw(x, y, 0, 0, 0, 0, 0, 0, COLOR_SHADOW);

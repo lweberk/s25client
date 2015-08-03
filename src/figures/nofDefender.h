@@ -47,10 +47,10 @@ class nofDefender : public nofActiveSoldier
 
     public:
 
-        nofDefender(const MapPoint pt, const unsigned char player, nobBaseMilitary* const building,
-                    const unsigned char rank, nofAttacker* const attacker);
+        nofDefender(const MapPoint pt, const uint8_t player, nobBaseMilitary* const building,
+                    const uint8_t rank, nofAttacker* const attacker);
         nofDefender(nofPassiveSoldier* other, nofAttacker* const attacker);
-        nofDefender(SerializedGameData* sgd, const unsigned obj_id);
+        nofDefender(SerializedGameData* sgd, const uint32_t obj_id);
 
         /// Aufräummethoden
     protected:  void Destroy_nofDefender() { Destroy_nofActiveSoldier(); }

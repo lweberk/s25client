@@ -35,9 +35,9 @@ class nofCharburner : public nofFarmhand
     private:
 
         /// Malt den Arbeiter beim Arbeiten
-        void DrawWorking(int x, int y);
+        void DrawWorking(int32_t x, int32_t y);
         /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-        unsigned short GetCarryID() const;
+        uint16_t GetCarryID() const;
 
         /// Abgeleitete Klasse informieren, wenn sie anfängt zu arbeiten (Vorbereitungen)
         void WorkStarted();
@@ -51,15 +51,15 @@ class nofCharburner : public nofFarmhand
         void WalkingStarted();
 
         /// Draws the figure while returning home / entering the building (often carrying wares)
-        void DrawReturnStates(const int x, const int y);
+        void DrawReturnStates(const int32_t x, const int32_t y);
         /// Draws the charburner while walking
         /// (overriding standard method of nofFarmhand)
-        void DrawOtherStates(const int x, const int y);
+        void DrawOtherStates(const int32_t x, const int32_t y);
 
     public:
 
-        nofCharburner(const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofCharburner(SerializedGameData* sgd, const unsigned obj_id);
+        nofCharburner(const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofCharburner(SerializedGameData* sgd, const uint32_t obj_id);
 
         void Serialize(SerializedGameData* sgd) const;
 

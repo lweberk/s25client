@@ -56,8 +56,8 @@ class noFigure;
 /// Informationen über Gebäude-Anzahlen
 struct BuildingCount
 {
-    unsigned building_counts[40];
-    unsigned building_site_counts[40];
+    uint32_t building_counts[40];
+    uint32_t building_site_counts[40];
 };
 
 
@@ -84,8 +84,8 @@ class GameClientPlayer : public GamePlayerInfo
 
         struct BuildingWhichWantWare
         {
-            unsigned char count;
-            unsigned char building;
+            uint8_t count;
+            uint8_t building;
         };
 
         /// Liste von Baustellen/Gebäuden, die bestimmten Beruf wollen
@@ -119,7 +119,7 @@ class GameClientPlayer : public GamePlayerInfo
 
         /// Liste, welchen nächsten 10 Angreifern Verteidiger entgegenlaufen sollen
         bool defenders[5];
-        unsigned short defenders_pos;
+        uint16_t defenders_pos;
 
         /// Inventur
         Goods global_inventory;
@@ -130,9 +130,9 @@ class GameClientPlayer : public GamePlayerInfo
             /// Bündnis schon akzeptiert oder nur vorgeschlagen?
             bool accepted;
             /// Dauer (in GF), 0 = kein Bündnise, 0xFFFFFFFF = Bündnis auf Ewigkeit
-            unsigned duration;
+            uint32_t duration;
             /// Startzeitpunkt (in GF)
-            unsigned start;
+            uint32_t start;
             /// Will dieser Spieler (also der this-Pointer) diesen Vertrag auflösen?
             bool want_cancel;
 
@@ -156,25 +156,25 @@ class GameClientPlayer : public GamePlayerInfo
         // Informationen über die Verteilung
         struct
         {
-            unsigned char percent_buildings[BUILDING_TYPES_COUNT];
+            uint8_t percent_buildings[BUILDING_TYPES_COUNT];
             std::list<BuildingType> client_buildings; // alle Gebäude, die diese Ware bekommen, zusammengefasst
-            std::vector<unsigned char> goals;
-            unsigned selected_goal;
+            std::vector<uint8_t> goals;
+            uint32_t selected_goal;
         } distribution[WARE_TYPES_COUNT];
 
         /// Art der Reihenfolge (0 = nach Auftraggebung, ansonsten nach build_order)
-        unsigned char order_type;
+        uint8_t order_type;
         /// Baureihenfolge
-        std::vector <unsigned char> build_order;
+        std::vector <uint8_t> build_order;
         /// Prioritäten der Waren im Transport
-        unsigned char transport[WARE_TYPES_COUNT];
+        uint8_t transport[WARE_TYPES_COUNT];
         /// Militäreinstellungen (die vom Militärmenü)
-        std::vector <unsigned char> military_settings;
+        std::vector <uint8_t> military_settings;
         /// Werkzeugeinstellungen (in der Reihenfolge wie im Fenster!)
-        std::vector <unsigned char> tools_settings;
+        std::vector <uint8_t> tools_settings;
         // qx:tools
-        unsigned char tools_ordered[TOOL_COUNT];
-        signed char tools_ordered_delta[TOOL_COUNT];
+        uint8_t tools_ordered[TOOL_COUNT];
+        int8_t tools_ordered_delta[TOOL_COUNT];
 
         void EnableBuilding(BuildingType type) {building_enabled[type] = true;}
         void DisableBuilding(BuildingType type) {building_enabled[type] = false;}
@@ -188,11 +188,11 @@ class GameClientPlayer : public GamePlayerInfo
         /// Prüft, ob der Spieler besiegt wurde
         void TestDefeat();
         /// Bündnis (real, d.h. spielentscheidend) abschließen
-        void MakePact(const PactType pt, const unsigned char other_player, const unsigned duration);
+        void MakePact(const PactType pt, const uint8_t other_player, const uint32_t duration);
 
     public:
         /// Konstruktor von @p GameClientPlayer.
-        GameClientPlayer(const unsigned playerid);
+        GameClientPlayer(const uint32_t playerid);
 
         /// Serialisieren
         void Serialize(SerializedGameData* sgd);
@@ -206,13 +206,13 @@ class GameClientPlayer : public GamePlayerInfo
         void SetGameWorldPointer(GameWorldGame* const gwg) { this->gwg = gwg; }
 
         /*/// liefert das aktuelle (komplette) inventar.
-        void GetInventory(unsigned int *wares, unsigned int *figures);*/
+        void GetInventory(uint32_t *wares, uint32_t *figures);*/
 
         /// Sucht ein nächstgelegenes Warenhaus für den Punkt 'start', das die Bedingung der Übergebenen Funktion
         /// IsWarehouseGood erfüllt, als letzen Parameter erhält jene Funktion param
         /// - forbidden ist ein optionales Straßenstück, das nicht betreten werden darf,
         /// - to_wh muss auf true gesetzt werden, wenn es zum Lagerhaus geht, ansonsten auf false, in length wird die Wegeslänge zurückgegeben
-        nobBaseWarehouse* FindWarehouse(const noRoadNode* const start, bool (*IsWarehouseGood)(nobBaseWarehouse*, const void*), const RoadSegment* const forbidden, const bool to_wh, const void* param, const bool use_boat_roads, unsigned* const length = 0);
+        nobBaseWarehouse* FindWarehouse(const noRoadNode* const start, bool (*IsWarehouseGood)(nobBaseWarehouse*, const void*), const RoadSegment* const forbidden, const bool to_wh, const void* param, const bool use_boat_roads, uint32_t* const length = 0);
         /// Gibt dem Spieler bekannt, das eine neue Straße gebaut wurde
         void NewRoad(RoadSegment* const rs);
         /// Neue Straße hinzufügen
@@ -283,22 +283,22 @@ class GameClientPlayer : public GamePlayerInfo
         void GetBuildingCount(BuildingCount& bc) const;
         /// Berechnet die durschnittlichen Produktivität eines jeden Gebäudetyps
         /// (erwartet als Argument ein 40-er Array!)
-        void CalcProductivities(std::vector<unsigned short>& productivities);
+        void CalcProductivities(std::vector<uint16_t>& productivities);
 
         /// Berechnet die durschnittlichen Produktivität aller Gebäude
-        unsigned short CalcAverageProductivitiy();
+        uint16_t CalcAverageProductivitiy();
 
 
         /// Gibt Priorität der Baustelle zurück (entscheidet selbständig, welche Reihenfolge usw)
         /// je kleiner die Rückgabe, destro größer die Priorität!
-        unsigned GetBuidingSitePriority(const noBuildingSite* building_site);
+        uint32_t GetBuidingSitePriority(const noBuildingSite* building_site);
 
         /// Berechnet die Verteilung der Waren auf die einzelnen Gebäude neu
         void RecalcDistribution();
         /// Berechnet die Verteilung einer (bestimmten) Ware
         void RecalcDistributionOfWare(const GoodType ware);
         /// Konvertiert die Daten vom wp_transport in "unser" Prioritäten-Format und setzt es
-        void ConvertTransportData(const std::vector<unsigned char>& transport_data);
+        void ConvertTransportData(const std::vector<uint8_t>& transport_data);
 
         /// Ware zur globalen Warenliste hinzufügen und entfernen
         void RegisterWare(Ware* ware) { ware_list.push_back(ware); }
@@ -307,38 +307,38 @@ class GameClientPlayer : public GamePlayerInfo
         bool IsWareDependent(Ware* ware);
 
         /// Fügt Waren zur Inventur hinzu
-        void IncreaseInventoryWare(const GoodType ware, const unsigned count) { global_inventory.goods[ConvertShields(ware)] += count; }
-        void DecreaseInventoryWare(const GoodType ware, const unsigned count) { assert(global_inventory.goods[ConvertShields(ware)] >= count); global_inventory.goods[ConvertShields(ware)] -= count; }
-        void IncreaseInventoryJob(const Job job, const unsigned count) { global_inventory.people[job] += count; }
-        void DecreaseInventoryJob(const Job job, const unsigned count) { assert(global_inventory.people[job] >= count); global_inventory.people[job] -= count; }
+        void IncreaseInventoryWare(const GoodType ware, const uint32_t count) { global_inventory.goods[ConvertShields(ware)] += count; }
+        void DecreaseInventoryWare(const GoodType ware, const uint32_t count) { assert(global_inventory.goods[ConvertShields(ware)] >= count); global_inventory.goods[ConvertShields(ware)] -= count; }
+        void IncreaseInventoryJob(const Job job, const uint32_t count) { global_inventory.people[job] += count; }
+        void DecreaseInventoryJob(const Job job, const uint32_t count) { assert(global_inventory.people[job] >= count); global_inventory.people[job] -= count; }
 
         /// Gibt Inventory-Settings zurück
         const Goods* GetInventory() const { return &global_inventory; }
 
         /// Setzt neue Militäreinstellungen
-        void ChangeMilitarySettings(const std::vector<unsigned char>& military_settings);
+        void ChangeMilitarySettings(const std::vector<uint8_t>& military_settings);
         /// Setzt neue Werkzeugeinstellungen
-        void ChangeToolsSettings(const std::vector<unsigned char>& tools_settings);
+        void ChangeToolsSettings(const std::vector<uint8_t>& tools_settings);
         /// Setzt neue Verteilungseinstellungen
-        void ChangeDistribution(const std::vector<unsigned char>& distribution_settings);
+        void ChangeDistribution(const std::vector<uint8_t>& distribution_settings);
         /// Setzt neue Baureihenfolge-Einstellungen
-        void ChangeBuildOrder(const unsigned char order_type, const std::vector<unsigned char>& oder_data);
+        void ChangeBuildOrder(const uint8_t order_type, const std::vector<uint8_t>& oder_data);
 
         /// Darf der andere Spieler von mir angegriffen werden?
-        bool IsPlayerAttackable(const unsigned char player) const;
+        bool IsPlayerAttackable(const uint8_t player) const;
 		/// Am I allowed to construct this building?
 		bool IsBuildingEnabled(BuildingType type) const {return(building_enabled[type]);}
         /// Ist ein anderer Spieler ein richtiger Verbündeter von uns, d.h. Teamsicht, Unterstützung durch aggressive Verteidiger usw.?
-        bool IsAlly(const unsigned char player) const;
+        bool IsAlly(const uint8_t player) const;
         /// Truppen bestellen
-        void OrderTroops(nobMilitary* goal, unsigned count, bool ignoresettingsendweakfirst=false);
+        void OrderTroops(nobMilitary* goal, uint32_t count, bool ignoresettingsendweakfirst=false);
         /// Prüft die Besatzung von allen Militärgebäuden und reguliert entsprechend (bei Veränderung der Militäreinstellungen)
         void RegulateAllTroops();
         /// Prüft von allen Militärgebäuden die Fahnen neu
         void RecalcMilitaryFlags();
         /// Sucht für EINEN Soldaten ein neues Militärgebäude, als Argument wird Referenz auf die
         /// entsprechende Soldatenanzahl im Lagerhaus verlangt
-        void NewSoldierAvailable(const unsigned& soldier_count);
+        void NewSoldierAvailable(const uint32_t& soldier_count);
         /// Aktualisiert die Verteidiger-Liste
         void RefreshDefenderList();
         /// Prüft, ob für einen angreifenden Soldaten ein Verteidger geschickt werden soll
@@ -365,20 +365,20 @@ class GameClientPlayer : public GamePlayerInfo
         /// Schiff für Hafen bestellen. Wenn ein Schiff kommt, true.
         bool OrderShip(nobHarborBuilding* hb);
         /// Gibt die ID eines Schiffes zurück
-        unsigned GetShipID(const noShip* const ship) const;
+        uint32_t GetShipID(const noShip* const ship) const;
         /// Gibt ein Schiff anhand der ID zurück bzw. NULL, wenn keines mit der ID existiert
-        noShip* GetShipByID(const unsigned ship_id) const;
+        noShip* GetShipByID(const uint32_t ship_id) const;
         /// Gibt die Gesamtanzahl von Schiffen zurück
-        unsigned GetShipCount() const { return ships.size(); }
+        uint32_t GetShipCount() const { return ships.size(); }
         /// Gibt eine Liste mit allen Häfen dieses Spieler zurück, die an ein bestimmtes Meer angrenzen
-        void GetHarborBuildings(std::vector<nobHarborBuilding*>& harbor_buildings, const unsigned short sea_id) const;
+        void GetHarborBuildings(std::vector<nobHarborBuilding*>& harbor_buildings, const uint16_t sea_id) const;
         /// Gibt die Anzahl der Schiffe, die einen bestimmten Hafen ansteuern, zurück
-        unsigned GetShipsToHarbor(nobHarborBuilding* hb) const;
+        uint32_t GetShipsToHarbor(nobHarborBuilding* hb) const;
         /// Gibt der Wirtschaft Bescheid, dass ein Hafen zerstört wurde
         void HarborDestroyed(nobHarborBuilding* hb);
         /// Sucht einen Hafen in der Nähe, wo dieses Schiff seine Waren abladen kann
         /// gibt true zurück, falls erfolgreich
-        bool FindHarborForUnloading(noShip* ship, const MapPoint start, unsigned* goal_harbor_id, std::vector<unsigned char> * route,
+        bool FindHarborForUnloading(noShip* ship, const MapPoint start, uint32_t* goal_harbor_id, std::vector<uint8_t> * route,
                                     nobHarborBuilding* exception);
         /// A ship has discovered new hostile territory --> determines if this is new
         /// i.e. there is a sufficient distance to older locations
@@ -395,15 +395,15 @@ class GameClientPlayer : public GamePlayerInfo
         void Surrender();
 
 		///all allied players get a letter with the location
-		void NotifyAlliesOfLocation(const MapPoint pt, unsigned char allyplayerid);
+		void NotifyAlliesOfLocation(const MapPoint pt, uint8_t allyplayerid);
 
         /// Macht Bündnisvorschlag an diesen Spieler
-        void SuggestPact(const unsigned char other_player, const PactType pt, const unsigned duration);
+        void SuggestPact(const uint8_t other_player, const PactType pt, const uint32_t duration);
         /// Akzeptiert ein bestimmtes Bündnis, welches an diesen Spieler gemacht wurde
-        void AcceptPact(const unsigned id, const PactType pt, const unsigned char other_player);
+        void AcceptPact(const uint32_t id, const PactType pt, const uint8_t other_player);
         /// Gibt Einverständnis, dass dieser Spieler den Pakt auflösen will
         /// Falls dieser Spieler einen Bündnisvorschlag gemacht hat, wird dieser dagegen zurückgenommen
-        void CancelPact(const PactType pt, const unsigned char other_player);
+        void CancelPact(const PactType pt, const uint8_t other_player);
         /// Zeigt an, ob ein Pakt besteht
         enum PactState
         {
@@ -411,9 +411,9 @@ class GameClientPlayer : public GamePlayerInfo
             IN_PROGRESS, /// Pakt angeboten, aber noch nicht akzeptiert
             ACCEPTED /// Bündnis in Kraft
         };
-        PactState GetPactState(const PactType pt, const unsigned char other_player) const;
+        PactState GetPactState(const PactType pt, const uint8_t other_player) const;
         /// Gibt die verbleibende Dauer zurück, die ein Bündnis noch laufen wird (0xFFFFFFFF = für immer)
-        unsigned GetRemainingPactTime(const PactType pt, const unsigned char other_player) const;
+        uint32_t GetRemainingPactTime(const PactType pt, const uint8_t other_player) const;
         /// Setzt die initialen Bündnisse ahand der Teams
         void MakeStartPacts();
         /// returns fixed team number for randomteam players
@@ -422,14 +422,14 @@ class GameClientPlayer : public GamePlayerInfo
         void TestPacts();
 
         /// Get available wares/figures which can THIS player (usually ally of wh->player) send to warehouse wh
-        unsigned GetAvailableWaresForTrading(nobBaseWarehouse* wh, const GoodType gt, const Job job) const;
+        uint32_t GetAvailableWaresForTrading(nobBaseWarehouse* wh, const GoodType gt, const Job job) const;
         /// Send wares to warehouse wh
-        void Trade(nobBaseWarehouse* wh, const GoodType gt, const Job job, unsigned count) const;
+        void Trade(nobBaseWarehouse* wh, const GoodType gt, const Job job, uint32_t count) const;
 
         // Statistik-Sachen
 
-        void SetStatisticValue(StatisticType type, unsigned int value);
-        void ChangeStatisticValue(StatisticType type, int change);
+        void SetStatisticValue(StatisticType type, uint32_t value);
+        void ChangeStatisticValue(StatisticType type, int32_t change);
 
         void IncreaseMerchandiseStatistic(GoodType type);
 
@@ -442,17 +442,17 @@ class GameClientPlayer : public GamePlayerInfo
         struct Statistic
         {
             // 30 Datensätze pro Typ
-            unsigned int data[STAT_TYPE_COUNT][STAT_STEP_COUNT];
+            uint32_t data[STAT_TYPE_COUNT][STAT_STEP_COUNT];
             // und das gleiche für die Warenstatistik
-            unsigned short merchandiseData[STAT_MERCHANDISE_TYPE_COUNT][STAT_STEP_COUNT];
+            uint16_t merchandiseData[STAT_MERCHANDISE_TYPE_COUNT][STAT_STEP_COUNT];
             // Index, der gerade 'vorne' (rechts im Statistikfenster) ist
-            unsigned short currentIndex;
+            uint16_t currentIndex;
             // Counter, bei jedem vierten Update jeweils Daten zu den längerfristigen Statistiken kopieren
-            unsigned short counter;
+            uint16_t counter;
         };
 
         const Statistic& GetStatistic(StatisticTime time) { return statistic[time]; };
-        const unsigned int GetStatisticCurrentValue(unsigned int idx)  { assert(idx < STAT_TYPE_COUNT); return(statisticCurrentData[idx]);}
+        const uint32_t GetStatisticCurrentValue(uint32_t idx)  { assert(idx < STAT_TYPE_COUNT); return(statisticCurrentData[idx]);}
 
         // Testet ob Notfallprogramm aktiviert werden muss und tut dies dann
         void TestForEmergencyProgramm();
@@ -462,12 +462,12 @@ class GameClientPlayer : public GamePlayerInfo
         Statistic statistic[STAT_TIME_COUNT];
 
         // Die Statistikwerte die 'aktuell' gemessen werden
-        unsigned int statisticCurrentData[STAT_TYPE_COUNT];
-        unsigned short statisticCurrentMerchandiseData[STAT_MERCHANDISE_TYPE_COUNT];
+        uint32_t statisticCurrentData[STAT_TYPE_COUNT];
+        uint16_t statisticCurrentMerchandiseData[STAT_MERCHANDISE_TYPE_COUNT];
 
-        unsigned short incrStatIndex(unsigned short i) { return (i == STAT_STEP_COUNT - 1) ? 0 : ++i; }
-        unsigned short decrStatIndex(unsigned short i) { return (i == 0) ? STAT_STEP_COUNT - 1 : --i; }
-        unsigned short decrStatIndex(unsigned short i, unsigned short amount) { return (i < amount) ? STAT_STEP_COUNT - (amount - i) - 1 : i - amount; }
+        uint16_t incrStatIndex(uint16_t i) { return (i == STAT_STEP_COUNT - 1) ? 0 : ++i; }
+        uint16_t decrStatIndex(uint16_t i) { return (i == 0) ? STAT_STEP_COUNT - 1 : --i; }
+        uint16_t decrStatIndex(uint16_t i, uint16_t amount) { return (i < amount) ? STAT_STEP_COUNT - (amount - i) - 1 : i - amount; }
 
         // Notfall-Programm aktiviert ja/nein (Es gehen nur noch Res an Holzfäller- und Sägewerk-Baustellen raus)
         bool emergency;

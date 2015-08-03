@@ -55,10 +55,10 @@ class nofAggressiveDefender : public nofActiveSoldier
 
     public:
 
-        nofAggressiveDefender(const MapPoint pt, const unsigned char player,
-                              nobBaseMilitary* const home, const unsigned char rank, nofAttacker* const attacker);
+        nofAggressiveDefender(const MapPoint pt, const uint8_t player,
+                              nobBaseMilitary* const home, const uint8_t rank, nofAttacker* const attacker);
         nofAggressiveDefender(nofPassiveSoldier* other, nofAttacker* const attacker);
-        nofAggressiveDefender(SerializedGameData* sgd, const unsigned obj_id);
+        nofAggressiveDefender(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~nofAggressiveDefender();
 

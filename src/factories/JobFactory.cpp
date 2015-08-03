@@ -62,7 +62,7 @@
 #include <stdexcept>
 #include "helpers/converters.h"
 
-noFigure* JobFactory::CreateJob(const Job job_id, const MapPoint pt, const unsigned char player, noRoadNode* const goal){
+noFigure* JobFactory::CreateJob(const Job job_id, const MapPoint pt, const uint8_t player, noRoadNode* const goal){
     switch(job_id)
     {
     case JOB_BUILDER:

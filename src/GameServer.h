@@ -60,24 +60,24 @@ class GameServer : public Singleton<GameServer>, public GameMessageInterface
         bool TogglePause();
 		bool IsPaused(){return framesinfo.pause;}
 
-        void TogglePlayerNation(unsigned char client);
-        void TogglePlayerTeam(unsigned char client);
-        void TogglePlayerColor(unsigned char client);
-        void TogglePlayerState(unsigned char client);
+        void TogglePlayerNation(uint8_t client);
+        void TogglePlayerTeam(uint8_t client);
+        void TogglePlayerColor(uint8_t client);
+        void TogglePlayerState(uint8_t client);
         void ChangeGlobalGameSettings(const GlobalGameSettings& ggs);
 
         /// Lässt einen Spieler wechseln (nur zu Debugzwecken)
-        void ChangePlayer(const unsigned char old_id, const unsigned char new_id);
+        void ChangePlayer(const uint8_t old_id, const uint8_t new_id);
 
         /// Tauscht Spieler(positionen) bei Savegames in dskHostGame
-        void SwapPlayer(const unsigned char player1, const unsigned char player2);
+        void SwapPlayer(const uint8_t player1, const uint8_t player2);
 
         void AIChat(const GameMessage& msg) { SendToAll(msg); }
 
     protected:
 
         void SendToAll(const GameMessage& msg);
-        void KickPlayer(unsigned char playerid, unsigned char cause, unsigned short param);
+        void KickPlayer(uint8_t playerid, uint8_t cause, uint16_t param);
         void KickPlayer(NS_PlayerKicked npk);
 
         void ClientWatchDog(void);
@@ -85,10 +85,10 @@ class GameServer : public Singleton<GameServer>, public GameMessageInterface
         void FillPlayerQueues(void);
 
         /// Sendet ein NC-Paket ohne Befehle
-        void SendNothingNC(const unsigned int& id);
+        void SendNothingNC(const uint32_t& id);
 
         /// Generiert einen KI-Namen
-        void SetAIName(const unsigned player_id);
+        void SetAIName(const uint32_t player_id);
 
     private:
         void OnNMSPong(const GameMessage_Pong& msg);
@@ -122,18 +122,18 @@ class GameServer : public Singleton<GameServer>, public GameMessageInterface
                 void Clear();
 
                 /// Aktueller nwf
-                unsigned int nr;
+                uint32_t nr;
                 /// Länge der Network-Frames in ms (gf-Länge * nwf_length des Clients)
-                unsigned int nwf_length;
+                uint32_t nwf_length;
                 /// Aktueller GF
-                unsigned gf_nr;
+                uint32_t gf_nr;
                 /// GF-Länge in ms
-                unsigned gf_length;
-                unsigned gf_length_new;
+                uint32_t gf_length;
+                uint32_t gf_length_new;
 
-                unsigned int lasttime;
-                unsigned int lastmsgtime;
-                unsigned int pausetime;
+                uint32_t lasttime;
+                uint32_t lastmsgtime;
+                uint32_t pausetime;
                 bool pause;
         } framesinfo;
 
@@ -144,12 +144,12 @@ class GameServer : public Singleton<GameServer>, public GameMessageInterface
                 ServerConfig();
                 void Clear();
 
-                unsigned char servertype;
-                unsigned char playercount;
+                uint8_t servertype;
+                uint8_t playercount;
                 std::string gamename;
                 std::string password;
                 std::string mapname;
-                unsigned short port;
+                uint16_t port;
                 bool ipv6;
                 bool use_upnp;
         } serverconfig;
@@ -161,12 +161,12 @@ class GameServer : public Singleton<GameServer>, public GameMessageInterface
                 MapInfo();
                 void Clear();
 
-                unsigned int partcount;
-                unsigned int ziplength;
-                unsigned int length;
-                unsigned int checksum;
+                uint32_t partcount;
+                uint32_t ziplength;
+                uint32_t length;
+                uint32_t checksum;
                 std::string name;
-                unsigned char* zipdata;
+                uint8_t* zipdata;
                 MapType map_type;
                 std::string script;
         } mapinfo;
@@ -180,25 +180,25 @@ class GameServer : public Singleton<GameServer>, public GameMessageInterface
         {
             public:
                 CountDown();
-                void Clear(int time = 2);
+                void Clear(int32_t time = 2);
 
                 bool do_countdown;
-                int countdown;
-                unsigned int lasttime;
+                int32_t countdown;
+                uint32_t lasttime;
         } countdown;
 
         /// Alle KI-Spieler und ihre Daten (NULL, falls ein solcher Spieler nicht existiert)
         std::vector<AIBase*> ai_players;
 
         /// AsyncLogs of two async players
-        int async_player1, async_player2;
+        int32_t async_player1, async_player2;
         bool async_player1_done, async_player2_done;
         std::list<RandomEntry> async_player1_log, async_player2_log;
 
     public:
-        AIBase* GetAIPlayer(unsigned playerID) { return ai_players[playerID]; }
-        void SendAIEvent(AIEvent::Base* ev, unsigned receiver);
-		unsigned int skiptogf;
+        AIBase* GetAIPlayer(uint32_t playerID) { return ai_players[playerID]; }
+        void SendAIEvent(AIEvent::Base* ev, uint32_t receiver);
+		uint32_t skiptogf;
 
 };
 

@@ -20,8 +20,10 @@
 #ifndef GAMECONSTS_H_
 #define GAMECONSTS_H_
 
+#include <cstdint>
+
 /// Maximale Anzahl an Spielern
-const unsigned MAX_PLAYERS = 8;
+const uint32_t MAX_PLAYERS = 8;
 
 #define NATIVE_NAT_COUNT 4
 
@@ -47,7 +49,7 @@ enum Team
 };
 
 /// Anzahl der Team-Optionen
-const unsigned TEAM_COUNT = 6; //teamrandom2,3,4 dont count
+const uint32_t TEAM_COUNT = 6; //teamrandom2,3,4 dont count
 
 const BuildingQuality TERRAIN_BQ[] =
 {
@@ -72,7 +74,7 @@ const BuildingQuality TERRAIN_BQ[] =
 struct RoadWindowInfo
 {
     bool flag;
-    int mx, my;
+    int32_t mx, my;
 };
 
 /// Tierarten
@@ -89,23 +91,23 @@ enum Species
     SPEC_NOTHING
 };
 
-const unsigned SPEC_COUNT = SPEC_NOTHING;
+const uint32_t SPEC_COUNT = SPEC_NOTHING;
 
 /// Informationen über die  einzelnen Tierarten
 struct AnimalConst
 {
     /// IDs in der map_lst, wo die Lauf-IDs von der jeweiligen Tierart beginnen
-    unsigned short walking_id;
+    uint16_t walking_id;
     /// IDs in der map_lst, wo die Schatten-IDs von der jeweiligen Tierart beginnen
-    unsigned short shadow_id;
+    uint16_t shadow_id;
     /// IDs in der map_lst, wo die Totes-ID der jeweiligen Tierart liegt
-    unsigned short dead_id;
+    uint16_t dead_id;
     /// IDs in der map_lst, wo die Schatten-Totes-ID der jeweiligen Tierart liegt
-    unsigned short shadow_dead_id;
+    uint16_t shadow_dead_id;
     /// Anzahl Animationsschritte der einzelnen Tierarten
-    unsigned short animation_steps;
+    uint16_t animation_steps;
     /// Schnelligkeit (Laufzeit in GF)
-    unsigned short speed;
+    uint16_t speed;
 };
 
 // 0 bedeutet --> kein Bild!
@@ -122,7 +124,7 @@ const AnimalConst ANIMALCONSTS[8] =
     {2060, 0, 2072, 2073, 2, 16} // Schaf
 };
 
-const unsigned ANIMAL_MAX_ANIMATION_STEPS = 8;
+const uint32_t ANIMAL_MAX_ANIMATION_STEPS = 8;
 
 /// Verfügbare Statistikarten
 enum StatisticType
@@ -139,10 +141,10 @@ enum StatisticType
 };
 
 /// Anzahl Statistikarten
-const unsigned STAT_TYPE_COUNT = 9;
+const uint32_t STAT_TYPE_COUNT = 9;
 
 /// Anzahl Warenstatistikarten
-const unsigned STAT_MERCHANDISE_TYPE_COUNT = 14;
+const uint32_t STAT_MERCHANDISE_TYPE_COUNT = 14;
 
 /// Statistikzeiträume
 enum StatisticTime
@@ -154,13 +156,13 @@ enum StatisticTime
 };
 
 /// Anzahl Statistikzeiträume
-const unsigned STAT_TIME_COUNT = 4;
+const uint32_t STAT_TIME_COUNT = 4;
 
 /// Anzahl der Statistikschritte, die gespeichert werden
-const unsigned STAT_STEP_COUNT = 30;
+const uint32_t STAT_STEP_COUNT = 30;
 
 /// Konvertierungstabelle von RttR-Nation-Indizes in Original-S2-Nation-Indizes
-const unsigned char NATION_RTTR_TO_S2[4] =
+const uint8_t NATION_RTTR_TO_S2[4] =
 {
     3,
     2,
@@ -168,10 +170,10 @@ const unsigned char NATION_RTTR_TO_S2[4] =
     1
 };
 /// Konvertierungstabelle von Rohstoff-Indizes von den Bergwerken --> Map
-const unsigned char RESOURCES_MINE_TO_MAP[5] = {3, 0, 1, 2, 4};
+const uint8_t RESOURCES_MINE_TO_MAP[5] = {3, 0, 1, 2, 4};
 
 /// Geschwindigkeitsabstufungen - Längen der GFs in ms
-const unsigned SPEED_GF_LENGTHS[6] = {80, 60, 50, 40, 30, 1};
+const uint32_t SPEED_GF_LENGTHS[6] = {80, 60, 50, 40, 30, 1};
 
 /// Macht ggf. aus den verschiedenen Schilden der Nationen jeweils immer das römische normale Schild für
 /// die Warensysteme usw
@@ -193,7 +195,7 @@ const GoodType SHIELD_TYPES[NAT_COUNT] =
 };
 
 /// Reichweite der Bergarbeiter
-const unsigned MINER_RADIUS = 2;
+const uint32_t MINER_RADIUS = 2;
 
 /// Vertragsypen
 enum PactType
@@ -203,7 +205,7 @@ enum PactType
 };
 
 /// Anzahl der unterschiedlichen Bündnisse
-const unsigned PACTS_COUNT = 2;
+const uint32_t PACTS_COUNT = 2;
 
 /// Namen der Verträge
 const std::string PACT_NAMES[32] =
@@ -235,19 +237,19 @@ enum PostMessageType
 };
 
 /// Maximale Nachrichtenanzahl im Briefkasten
-const unsigned MAX_POST_MESSAGES = 20;
+const uint32_t MAX_POST_MESSAGES = 20;
 
 /// Konstante für die Pfadrichtung bei einer Schiffsverbindung
-const unsigned char SHIP_DIR = 100;
+const uint8_t SHIP_DIR = 100;
 
 /// Anzahl der Späher bei einer Erkundungs-Expedition
-const unsigned SCOUTS_EXPLORATION_EXPEDITION = 3;
+const uint32_t SCOUTS_EXPLORATION_EXPEDITION = 3;
 
 /// Number of "classical" objectives in a friendly match
-const unsigned OBJECTIVES_COUNT = 3;
+const uint32_t OBJECTIVES_COUNT = 3;
 /// tournament modes
-const unsigned TOURNAMENT_MODES_COUNT = 5;
-const unsigned TOURNAMENT_MODES_DURATION[TOURNAMENT_MODES_COUNT] =
+const uint32_t TOURNAMENT_MODES_COUNT = 5;
+const uint32_t TOURNAMENT_MODES_DURATION[TOURNAMENT_MODES_COUNT] =
 {
     30, 60, 90, 120, 240
 };

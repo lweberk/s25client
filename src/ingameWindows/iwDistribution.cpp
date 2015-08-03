@@ -39,13 +39,13 @@ static char THIS_FILE[] = __FILE__;
 
 /// Anzahl der einzelnen Einstellungen in den Gruppen
 // Nahrungsgruppe
-const unsigned GROUP_SIZES[7] =
+const uint32_t GROUP_SIZES[7] =
 {
     4, 5, 2, 3, 2, 3, 4
 };
 
 /// Dertermines width of the progress bars: distance to the window borders
-const unsigned PROGRESS_BORDER_DISTANCE = 20;
+const uint32_t PROGRESS_BORDER_DISTANCE = 20;
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
@@ -192,12 +192,12 @@ void iwDistribution::TransmitSettings()
     {
         // Werte aus den Progress-Controls auslesen
 
-        for(unsigned char i = 1, j = 0; i <= 7; ++i)
+        for(uint8_t i = 1, j = 0; i <= 7; ++i)
         {
             // Werte der Gruppen auslesen
-            for(unsigned char k = 0; k < GROUP_SIZES[i - 1]; ++k)
+            for(uint8_t k = 0; k < GROUP_SIZES[i - 1]; ++k)
                 GAMECLIENT.visual_settings.distribution[j + k]
-                = (unsigned char)GetCtrl<ctrlTab>(0)->GetGroup(i)->GetCtrl<ctrlProgress>(k * 2 + 1)->
+                = (uint8_t)GetCtrl<ctrlTab>(0)->GetGroup(i)->GetCtrl<ctrlProgress>(k * 2 + 1)->
                   GetPosition();
             j += GROUP_SIZES[i - 1];
         }
@@ -209,12 +209,12 @@ void iwDistribution::TransmitSettings()
     }
 }
 
-void iwDistribution::Msg_Group_ProgressChange(const unsigned int group_id, const unsigned int ctrl_id, const unsigned short position)
+void iwDistribution::Msg_Group_ProgressChange(const uint32_t group_id, const uint32_t ctrl_id, const uint16_t position)
 {
     settings_changed = true;
 }
 
-void iwDistribution::Msg_Timer(const unsigned int ctrl_id)
+void iwDistribution::Msg_Timer(const uint32_t ctrl_id)
 {
     if(GAMECLIENT.IsReplayModeOn())
         // Im Replay aktualisieren wir die Werte
@@ -227,18 +227,18 @@ void iwDistribution::Msg_Timer(const unsigned int ctrl_id)
 void iwDistribution::UpdateSettings()
 {
     // Globale Id für alle Gruppen für die visual_settings
-    unsigned vsi = 0;
+    uint32_t vsi = 0;
     // Alle Gruppen durchgehen und Einstellungen festlegen
-    for(unsigned g = 0; g < 7; ++g)
+    for(uint32_t g = 0; g < 7; ++g)
     {
         ctrlGroup* group = GetCtrl<ctrlTab>(0)->GetGroup(TAB_FOOD + g);
-        for(unsigned i = 0; i < GROUP_SIZES[g]; ++i, ++vsi)
+        for(uint32_t i = 0; i < GROUP_SIZES[g]; ++i, ++vsi)
             group->GetCtrl<ctrlProgress>(i * 2 + 1)->SetPosition(GAMECLIENT.visual_settings.distribution[vsi]);
     }
 }
 
 
-void iwDistribution::Msg_ButtonClick(const unsigned ctrl_id)
+void iwDistribution::Msg_ButtonClick(const uint32_t ctrl_id)
 {
     switch(ctrl_id)
     {

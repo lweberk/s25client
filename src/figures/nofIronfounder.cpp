@@ -36,20 +36,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofIronfounder::nofIronfounder(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofIronfounder::nofIronfounder(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_IRONFOUNDER, pos, player, workplace)
 {
 }
 
-nofIronfounder::nofIronfounder(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id)
+nofIronfounder::nofIronfounder(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id)
 {
 }
 
-void nofIronfounder::DrawWorking(int x, int y)
+void nofIronfounder::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[5][2] = { { -22, 12}, { -23, 3}, { -19, 8}, { -18, 4}, { -33, 7} };
+    int8_t offsets[5][2] = { { -22, 12}, { -23, 3}, { -19, 8}, { -18, 4}, { -33, 7} };
 
-    unsigned now_id = GAMECLIENT.Interpolate(272, current_ev);
+    uint32_t now_id = GAMECLIENT.Interpolate(272, current_ev);
 
 
     if(now_id < 182)

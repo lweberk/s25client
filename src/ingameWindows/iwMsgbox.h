@@ -31,24 +31,24 @@ class iwMsgbox : public IngameWindow
         /// Buttons, die auf der Box erscheinen sollen
         MsgboxButton button;
         /// ID für die Msgbox, um unterschiedliche
-        unsigned int msgboxid;
+        uint32_t msgboxid;
 
         /// (Haupt)Text, der angezeigt werden soll
         const std::string& text;
         /// Einzelne Stringzeilen, die durch die Umbrechung ggf. zu Stande kommen
         std::string* strings;
         /// Anzahl der Stringzeilen
-        unsigned lines_count;
+        uint32_t lines_count;
 
     public:
-        iwMsgbox(const std::string& title, const std::string& text, Window* parent, MsgboxButton button, unsigned short icon, unsigned int msgboxid = 0);
+        iwMsgbox(const std::string& title, const std::string& text, Window* parent, MsgboxButton button, uint16_t icon, uint32_t msgboxid = 0);
         ~iwMsgbox();
 
     private:
 
-        void AddButton(unsigned short id, int x, const std::string& text, const TextureColor tc);
+        void AddButton(uint16_t id, int32_t x, const std::string& text, const TextureColor tc);
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
         void Msg_PaintAfter();
 };
 

@@ -39,15 +39,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-const unsigned int Settings::SETTINGS_VERSION = 12;
-const unsigned int Settings::SETTINGS_SECTIONS = 11;
+const uint32_t Settings::SETTINGS_VERSION = 12;
+const uint32_t Settings::SETTINGS_SECTIONS = 11;
 const std::string Settings::SETTINGS_SECTION_NAMES[] =
 {
     "global", "video", "language", "driver", "sound", "lobby", "server", "proxy", "interface", "ingame", "addons"
 };
 
-const unsigned char Settings::SCREEN_REFRESH_RATES_COUNT = 14;
-const unsigned short Settings::SCREEN_REFRESH_RATES[] =
+const uint8_t Settings::SCREEN_REFRESH_RATES_COUNT = 14;
+const uint16_t Settings::SCREEN_REFRESH_RATES[] =
 {
     0, 1, 25, 30, 50, 60, 75, 80, 100, 120, 150, 180, 200, 240
 };
@@ -179,7 +179,7 @@ bool Settings::Load(void)
     // ist eine der Kategorien nicht vorhanden?
     if(!global || !video || !language || !driver || !sound || !lobby || !server || !proxy || !interface || !ingame || !addons ||
             // stimmt die Settingsversion?
-            ((unsigned int)global->getValueI("version") != SETTINGS_VERSION)
+            ((uint32_t)global->getValueI("version") != SETTINGS_VERSION)
       )
     {
         // nein, dann Standardeinstellungen laden
@@ -298,7 +298,7 @@ bool Settings::Load(void)
 
     // addons
     // {
-    for(unsigned int addon = 0; addon < addons->getCount(); ++addon)
+    for(uint32_t addon = 0; addon < addons->getCount(); ++addon)
     {
         const libsiedler2::ArchivItem_Text* item = dynamic_cast<const libsiedler2::ArchivItem_Text*>(addons->get(addon));
 
@@ -318,7 +318,7 @@ void Settings::Save(void)
     {
         libsiedler2::ArchivItem_Ini item;
         LOADER.GetInfoN(CONFIG_NAME)->alloc(SETTINGS_SECTIONS);
-        for(unsigned int i = 0; i < SETTINGS_SECTIONS; ++i)
+        for(uint32_t i = 0; i < SETTINGS_SECTIONS; ++i)
         {
             item.setName(SETTINGS_SECTION_NAMES[i].c_str());
             LOADER.GetInfoN(CONFIG_NAME)->setC(i, &item);
@@ -427,7 +427,7 @@ void Settings::Save(void)
     // addons
     // {
     addons->clear();
-    for(std::map<unsigned int, unsigned int>::const_iterator it = this->addons.configuration.begin(); it != this->addons.configuration.end(); ++it)
+    for(std::map<uint32_t, uint32_t>::const_iterator it = this->addons.configuration.begin(); it != this->addons.configuration.end(); ++it)
     {
         std::stringstream name, value;
         name << it->first;

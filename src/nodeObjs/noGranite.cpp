@@ -37,7 +37,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-noGranite::noGranite(const GraniteType type, const unsigned char state) : noBase(NOP_GRANITE), type(type), state(state)
+noGranite::noGranite(const GraniteType type, const uint8_t state) : noBase(NOP_GRANITE), type(type), state(state)
 {
 }
 
@@ -45,17 +45,17 @@ void noGranite::Serialize_noGranite(SerializedGameData* sgd) const
 {
     Serialize_noBase(sgd);
 
-    sgd->PushUnsignedChar(static_cast<unsigned char>(type));
+    sgd->PushUnsignedChar(static_cast<uint8_t>(type));
     sgd->PushUnsignedChar(state);
 }
 
-noGranite::noGranite(SerializedGameData* sgd, const unsigned obj_id) : noBase(sgd, obj_id),
+noGranite::noGranite(SerializedGameData* sgd, const uint32_t obj_id) : noBase(sgd, obj_id),
     type(GraniteType(sgd->PopUnsignedChar())),
     state(sgd->PopUnsignedChar())
 {
 }
 
-void noGranite::Draw(int x, int y)
+void noGranite::Draw(int32_t x, int32_t y)
 {
     Loader::granite_cache[type][state].draw(x, y);
 }

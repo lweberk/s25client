@@ -42,7 +42,7 @@ class nofAttacker : public nofActiveSoldier
         /// wegen den Militäreinstellungen nicht gejagt werden
         bool should_haunted;
         /// In welchem Radius steht der Soldat, wenn er um eine Fahne herum wartet?
-        unsigned short radius;
+        uint16_t radius;
         /// Nach einer bestimmten Zeit, in der der Angreifer an der Flagge des Gebäudes steht, blockt er den Weg
         /// nur benutzt bei STATE_ATTACKING_WAITINGFORDEFENDER
         EventManager::EventPointer blocking_event;
@@ -52,7 +52,7 @@ class nofAttacker : public nofActiveSoldier
         /// Für Seeangreifer: Landepunkt, wo sich das Schiff befindet, mit dem der Angreifer
         /// ggf. wieder nach Hause fahren kann
         MapPoint shipPos;
-        unsigned ship_obj_id;
+        uint32_t ship_obj_id;
 
     private:
 
@@ -92,7 +92,7 @@ class nofAttacker : public nofActiveSoldier
         /// Konstruktor für Schiffs-Angreifer, die zuerst einmal zu einem Hafen laufen müssen
         nofAttacker(nofPassiveSoldier* other, nobBaseMilitary* const attacked_goal,
                     const nobHarborBuilding* const harbor);
-        nofAttacker(SerializedGameData* sgd, const unsigned obj_id);
+        nofAttacker(SerializedGameData* sgd, const uint32_t obj_id);
         ~nofAttacker();
 
         /// Aufräummethoden
@@ -105,7 +105,7 @@ class nofAttacker : public nofActiveSoldier
 
         GO_Type GetGOT() const { return GOT_NOF_ATTACKER; }
 
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
         /// Blockt der Angreifer noch?
         bool IsBlockingRoads() const;
 
@@ -137,10 +137,10 @@ class nofAttacker : public nofActiveSoldier
         /// voll besetzt ist
         void CapturedBuildingFull();
         /// Gibt den Radius von einem um-eine-Fahne-herum-wartenden angreifenden Soldaten zurück
-        unsigned GetRadius() const { return radius; }
+        uint32_t GetRadius() const { return radius; }
         /// Ein um-die-Flagge-Swartender Angreifer soll auf einen frei gewordenen Platz nachrücken, damit keine
         /// Lücken entstehen
-        void StartSucceeding(const MapPoint pt, const unsigned short new_radius, const unsigned char dir);
+        void StartSucceeding(const MapPoint pt, const uint16_t new_radius, const uint8_t dir);
         /// Siehe oben, wird nach jeder Wegeinheit aufgerufen
         void SucceedingWalk();
         /// Try to start capturing although he is still far away from the destination
@@ -157,7 +157,7 @@ class nofAttacker : public nofActiveSoldier
         nobBaseMilitary* GetAttackedGoal() const { return attacked_goal; }
 
         /// Startet den Angriff am Landungspunkt vom Schiff
-        void StartAttackOnOtherIsland(const MapPoint shipPos, const unsigned ship_id);
+        void StartAttackOnOtherIsland(const MapPoint shipPos, const uint32_t ship_id);
         /// Sagt Schiffsangreifern, dass sie mit dem Schiff zurück fahren
         void StartReturnViaShip();
         /// Sea attacker enters harbor and finds no shipping route or no longer has a valid target: return home soon on a road

@@ -52,7 +52,7 @@ static char THIS_FILE[] = __FILE__;
 /// Nach einer bestimmten Zeit, in der der Angreifer an der Flagge des Gebäudes steht, blockt er den Weg
 /// nur benutzt bei STATE_ATTACKING_WAITINGFORDEFENDER
 /// Dieses Konstante gibt an, wie lange, nachdem er anfängt da zu stehen, er blockt
-const unsigned BLOCK_OFFSET = 10;
+const uint32_t BLOCK_OFFSET = 10;
 
 
 nofAttacker::nofAttacker(nofPassiveSoldier* other, nobBaseMilitary* const attacked_goal)
@@ -87,7 +87,7 @@ nofAttacker::nofAttacker(nofPassiveSoldier* other, nobBaseMilitary* const attack
 nofAttacker::~nofAttacker()
 {
 
-    //unsigned char oplayer = (player == 0) ? 1 : 0;
+    //uint8_t oplayer = (player == 0) ? 1 : 0;
     //assert(!GAMECLIENT.GetPlayer(oplayer)->GetFirstWH()->Test(this));
 }
 
@@ -95,7 +95,7 @@ void nofAttacker::Destroy_nofAttacker()
 {
     Destroy_nofActiveSoldier();
 
-    /*unsigned char oplayer = (player == 0) ? 1 : 0;
+    /*uint8_t oplayer = (player == 0) ? 1 : 0;
     assert(!GAMECLIENT.GetPlayer(oplayer)->GetFirstWH()->Test(this));*/
 }
 
@@ -119,7 +119,7 @@ void nofAttacker::Serialize_nofAttacker(SerializedGameData* sgd) const
     }
 }
 
-nofAttacker::nofAttacker(SerializedGameData* sgd, const unsigned obj_id) : nofActiveSoldier(sgd, obj_id)
+nofAttacker::nofAttacker(SerializedGameData* sgd, const uint32_t obj_id) : nofActiveSoldier(sgd, obj_id)
 {
     if(state != STATE_WALKINGHOME && state != STATE_FIGUREWORK)
     {
@@ -338,7 +338,7 @@ void nofAttacker::Walked()
             else
             {
                 // Weg zum Hafen suchen
-                unsigned char dir = gwg->FindHumanPath(pos, harborFlagPos, MAX_ATTACKING_RUN_DISTANCE, false, NULL);
+                uint8_t dir = gwg->FindHumanPath(pos, harborFlagPos, MAX_ATTACKING_RUN_DISTANCE, false, NULL);
                 if(dir == 0xff)
                 {
                     // Kein Weg gefunden? Dann auch abbrechen!
@@ -758,12 +758,12 @@ void nofAttacker::AttackedGoalDestroyed()
 bool nofAttacker::AttackFlag(nofDefender* defender)
 {
     // Zur Flagge laufen, findet er einen Weg?
-    unsigned char tmp_dir = gwg->FindHumanPath(pos, attacked_goal->GetFlag()->GetPos(), 3, true);
+    uint8_t tmp_dir = gwg->FindHumanPath(pos, attacked_goal->GetFlag()->GetPos(), 3, true);
 
     if(tmp_dir != 0xFF)
     {
         // alte Richtung für Nachrücker merken
-        unsigned char old_dir = dir;
+        uint8_t old_dir = dir;
 
         // Hat er drumrum gewartet?
         bool waiting_around_building = (state == STATE_ATTACKING_WAITINGAROUNDBUILDING);
@@ -923,13 +923,13 @@ void nofAttacker::CapturedBuildingFull()
     }
 }
 
-void nofAttacker::StartSucceeding(const MapPoint pt, const unsigned short new_radius, const unsigned char dir)
+void nofAttacker::StartSucceeding(const MapPoint pt, const uint16_t new_radius, const uint8_t dir)
 {
     // Wir sollen auf diesen Punkt nachrücken
     state = STATE_ATTACKING_WALKINGTOGOAL;
 
     // Unsere alte Richtung merken für evtl. weitere Nachrücker
-    unsigned char old_dir = this->dir;
+    uint8_t old_dir = this->dir;
 
     // unser alter Platz ist ja nun auch leer, da gibts vielleicht auch einen Nachrücker?
     attacked_goal->SendSuccessor(this->pos, radius, old_dir);
@@ -973,7 +973,7 @@ void nofAttacker::SwitchStateAttackingWaitingForDefender()
     blocking_event = em->AddEvent(this, BLOCK_OFFSET, 5);
 }
 
-void nofAttacker::HandleDerivedEvent(const unsigned int id)
+void nofAttacker::HandleDerivedEvent(const uint32_t id)
 {
     // abfragen, nich dass er evtl schon losgelaufen ist wieder, weil das Gebäude abgebrannt wurde etc.
     if(state == STATE_ATTACKING_WAITINGFORDEFENDER)
@@ -1012,7 +1012,7 @@ void nofAttacker::InformTargetsAboutCancelling()
 
 
 /// Startet den Angriff am Landungspunkt vom Schiff
-void nofAttacker::StartAttackOnOtherIsland(const MapPoint shipPos, const unsigned ship_id)
+void nofAttacker::StartAttackOnOtherIsland(const MapPoint shipPos, const uint32_t ship_id)
 {
     pos = this->shipPos = shipPos;
     this->ship_obj_id = ship_id;

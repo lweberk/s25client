@@ -38,20 +38,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-nofWellguy::nofWellguy(const MapPoint pos, const unsigned char player, nobUsual* workplace)
+nofWellguy::nofWellguy(const MapPoint pos, const uint8_t player, nobUsual* workplace)
     : nofWorkman(JOB_HELPER, pos, player, workplace)
 {
 }
 
-nofWellguy::nofWellguy(SerializedGameData* sgd, const unsigned obj_id) : nofWorkman(sgd, obj_id)
+nofWellguy::nofWellguy(SerializedGameData* sgd, const uint32_t obj_id) : nofWorkman(sgd, obj_id)
 {
 }
 
-void nofWellguy::DrawWorking(int x, int y)
+void nofWellguy::DrawWorking(int32_t x, int32_t y)
 {
-    signed char offsets[NAT_COUNT][2] = { { -20, 17}, { -18, 17}, { -20, 13}, { -20, 15}, { -18, 17} };
+    int8_t offsets[NAT_COUNT][2] = { { -20, 17}, { -18, 17}, { -20, 13}, { -20, 15}, { -18, 17} };
 
-    signed char walkoffsets[NAT_COUNT][8][2] =   //nation, schrit, x-y
+    int8_t walkoffsets[NAT_COUNT][8][2] =   //nation, schrit, x-y
     {
         { {7, 7}, {9, 9}, {5, 12}, {2, 14}, { -1, 17}, { -4, 17}, { -7, 17}, { -10, 17} },
         { {4, 4}, {8, 8}, {5, 12}, {2, 14}, { -1, 17}, { -3, 19}, { -6, 19}, { -8, 19} },
@@ -59,7 +59,7 @@ void nofWellguy::DrawWorking(int x, int y)
         { {5, 5}, {8, 8}, {5, 10}, {2, 13}, { -1, 15}, { -4, 15}, { -7, 15}, { -10, 15} },
         { {4, 4}, {8, 8}, {5, 12}, {2, 14}, { -1, 17}, { -3, 19}, { -6, 19}, { -8, 19} }
     };
-    signed char walkdirection[NAT_COUNT][6] =
+    int8_t walkdirection[NAT_COUNT][6] =
     {
         {4, 5, 0, 3, 2, 1},
         {4, 5, 0, 3, 2, 1},
@@ -68,17 +68,17 @@ void nofWellguy::DrawWorking(int x, int y)
         {4, 5, 0, 3, 2, 1}
     };
 
-    unsigned int max_id = 112;
-    unsigned now_id = GAMECLIENT.Interpolate(max_id, current_ev);
-    unsigned char wpNation = workplace->GetNation();
-    unsigned int plColor = gwg->GetPlayer(player)->color;
+    uint32_t max_id = 112;
+    uint32_t now_id = GAMECLIENT.Interpolate(max_id, current_ev);
+    uint8_t wpNation = workplace->GetNation();
+    uint32_t plColor = gwg->GetPlayer(player)->color;
 
     //position zum rauslaufen berechnen
-    int walkx = x + walkoffsets[wpNation][now_id % 8][0];
-    int walky = y + walkoffsets[wpNation][now_id % 8][1];
+    int32_t walkx = x + walkoffsets[wpNation][now_id % 8][0];
+    int32_t walky = y + walkoffsets[wpNation][now_id % 8][1];
     //position zum reinlaufen berechnen
-    int walkx_r = x + walkoffsets[wpNation][7 - (now_id % 8)][0];
-    int walky_r = y + walkoffsets[wpNation][7 - (now_id % 8)][1];
+    int32_t walkx_r = x + walkoffsets[wpNation][7 - (now_id % 8)][0];
+    int32_t walky_r = y + walkoffsets[wpNation][7 - (now_id % 8)][1];
 
     if(now_id < 2) //laufen 1
     {

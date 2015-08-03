@@ -59,14 +59,14 @@ class nofWarehouseWorker : public noFigure
         /// wenn man beim Arbeitsplatz "kündigen" soll, man das Laufen zum Ziel unterbrechen muss (warum auch immer)
         void AbrogateWorkplace();
 
-        void HandleDerivedEvent(const unsigned int id);
+        void HandleDerivedEvent(const uint32_t id);
 
 
 
     public:
 
-        nofWarehouseWorker(const MapPoint pt, const unsigned char player, Ware* ware, const bool task);
-        nofWarehouseWorker(SerializedGameData* sgd, const unsigned obj_id);
+        nofWarehouseWorker(const MapPoint pt, const uint8_t player, Ware* ware, const bool task);
+        nofWarehouseWorker(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~nofWarehouseWorker();
 
@@ -80,7 +80,7 @@ class nofWarehouseWorker : public noFigure
 
         GO_Type GetGOT() const { return GOT_NOF_WAREHOUSEWORKER; }
 
-        void Draw(int x, int y);
+        void Draw(int32_t x, int32_t y);
 
         // Ware nach draußen bringen (von Lagerhaus aus aufgerufen)
         void CarryWare(Ware* ware);

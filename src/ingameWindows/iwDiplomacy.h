@@ -33,21 +33,21 @@ class iwDiplomacy : public IngameWindow
 
         void Msg_PaintBefore();
         void Msg_PaintAfter();
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 /// Kleines Fenster, über das einem Spieler ein neues Bündnis angeboten werden kann
 class iwSuggestPact : public IngameWindow
 {
         const PactType pt;
-        const unsigned char player;
+        const uint8_t player;
     public:
 
-        iwSuggestPact(const PactType pt, const unsigned char player);
+        iwSuggestPact(const PactType pt, const uint8_t player);
 
     public:
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 
 };
 

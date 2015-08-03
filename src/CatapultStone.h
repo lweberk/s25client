@@ -38,9 +38,9 @@ class CatapultStone : public GameObject
         /// Aufschlagspunkt des Steines (Map-Koordinaten!)
         const MapPoint dest_map;
         /// Koordinaten der Startposition des Steins
-        const int start_x, start_y;
+        const int32_t start_x, start_y;
         /// Koordinaten der Zielposition des Steins
-        const int dest_x, dest_y;
+        const int32_t dest_x, dest_y;
         /// Explodiert der Stein schon? (false = fliegt)
         bool explode;
         /// Flieg-/Explodier-Event
@@ -49,9 +49,9 @@ class CatapultStone : public GameObject
     public:
 
         CatapultStone(const MapPoint dest_building, const MapPoint dest_map,
-                      const int start_x, const int start_y, const int dest_x, const int dest_y, const unsigned fly_duration);
+                      const int32_t start_x, const int32_t start_y, const int32_t dest_x, const int32_t dest_y, const uint32_t fly_duration);
 
-        CatapultStone(SerializedGameData* sgd, const unsigned obj_id);
+        CatapultStone(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~CatapultStone() {}
 
@@ -63,10 +63,10 @@ class CatapultStone : public GameObject
     public:     void Serialize(SerializedGameData* sgd) const { Serialize_CatapultStone(sgd); }
 
         // Zeichnet den fliegenden Stein
-        void Draw(const GameWorldView& gwv, const int xoffset, const int yoffset);
+        void Draw(const GameWorldView& gwv, const int32_t xoffset, const int32_t yoffset);
 
         /// Event-Handler
-        void HandleEvent(const unsigned int id);
+        void HandleEvent(const uint32_t id);
 
         GO_Type GetGOT() const { return GOT_CATAPULTSTONE; }
 };

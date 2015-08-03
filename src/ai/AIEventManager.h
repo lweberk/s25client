@@ -77,12 +77,12 @@ namespace AIEvent
     class Direction : public Location
     {
         public:
-            Direction(AIEventType type, const MapPoint pt, unsigned char direction) : Location(type, pt), direction(direction) { }
+            Direction(AIEventType type, const MapPoint pt, uint8_t direction) : Location(type, pt), direction(direction) { }
             ~Direction() { }
-            unsigned char GetDirection() const { return direction; }
+            uint8_t GetDirection() const { return direction; }
 
         protected:
-            unsigned char direction;
+            uint8_t direction;
     };
 
     class Building : public Location
@@ -107,7 +107,7 @@ class AIEventManager
         void AddAIEvent(AIEvent::Base* ev) { events.push(ev); }
         AIEvent::Base* GetEvent();
         bool EventAvailable() const { return events.size() > 0; }
-        unsigned GetEventNum() const { return events.size(); }
+        uint32_t GetEventNum() const { return events.size(); }
 
     protected:
         std::queue<AIEvent::Base*> events;

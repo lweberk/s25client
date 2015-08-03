@@ -33,8 +33,8 @@ class iwSkipGFs : public IngameWindow
         /// Teilt dem GameClient den Wert mit
         void SkipGFs();
 
-        void Msg_ButtonClick(const unsigned int ctrl_id);
-        void Msg_EditEnter(const unsigned int ctrl_id);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
+        void Msg_EditEnter(const uint32_t ctrl_id);
 
 };
 

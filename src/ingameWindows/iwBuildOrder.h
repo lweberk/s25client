@@ -39,9 +39,9 @@ class iwBuildOrder : public IngameWindow
         /// Sendet veränderte Einstellungen (an den Client), falls sie verändert wurden
         void TransmitSettings();
 
-        void Msg_Timer(const unsigned int ctrl_id);
-        void Msg_ListSelectItem(const unsigned int ctrl_id, const unsigned short selection);
-        void Msg_ButtonClick(const unsigned int ctrl_id);
+        void Msg_Timer(const uint32_t ctrl_id);
+        void Msg_ListSelectItem(const uint32_t ctrl_id, const uint16_t selection);
+        void Msg_ButtonClick(const uint32_t ctrl_id);
 };
 
 #endif // !iwBUILDORDER_H_INCLUDED

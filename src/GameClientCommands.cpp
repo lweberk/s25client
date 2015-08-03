@@ -53,7 +53,7 @@ static char THIS_FILE[] = __FILE__;
  *
  *  @author OLiver
  */
-void GameClient::Command_SetFlag2(const MapPoint pt, unsigned char player)
+void GameClient::Command_SetFlag2(const MapPoint pt, uint8_t player)
 {
     gw->SetFlag(pt, player);
 }
@@ -131,7 +131,7 @@ void GameClient::Command_ToggleColor()
  *  @author OLiver
  *  @author FloSoft
  */
-void GameClient::ChangePlayer(const unsigned char old_id, const unsigned char new_id)
+void GameClient::ChangePlayer(const uint8_t old_id, const uint8_t new_id)
 {
 	LOG.lprintf("GameClient::ChangePlayer %i - %i \n",old_id, new_id); 
     // ID auch innerhalb der Spielerzahl?
@@ -155,9 +155,9 @@ void GameClient::ChangePlayer(const unsigned char old_id, const unsigned char ne
         playerid = new_id;
 
         // BQ überall neu berechnen
-        for(unsigned y = 0; y < gw->GetHeight(); ++y)
+        for(uint32_t y = 0; y < gw->GetHeight(); ++y)
         {
-            for(unsigned x = 0; x < gw->GetWidth(); ++x)
+            for(uint32_t x = 0; x < gw->GetWidth(); ++x)
                 gw->SetBQ(MapPoint(x, y), new_id);
         }
 
@@ -178,9 +178,9 @@ void GameClient::ChangePlayer(const unsigned char old_id, const unsigned char ne
         ci->CI_PlayersSwapped(old_id, new_id);
 }
 
-void GameClient::ChangeReplayPlayer(const unsigned new_id)
+void GameClient::ChangeReplayPlayer(const uint32_t new_id)
 {
-    unsigned old_id = playerid;
+    uint32_t old_id = playerid;
 
     if(old_id == new_id)
         // Unsinn auf den selben Spieler zu wechseln
@@ -197,9 +197,9 @@ void GameClient::ChangeReplayPlayer(const unsigned new_id)
     playerid = new_id;
 
     // BQ überall neu berechnen
-    for(unsigned y = 0; y < gw->GetHeight(); ++y)
+    for(uint32_t y = 0; y < gw->GetHeight(); ++y)
     {
-        for(unsigned x = 0; x < gw->GetWidth(); ++x)
+        for(uint32_t x = 0; x < gw->GetWidth(); ++x)
             gw->SetBQ(MapPoint(x, y), new_id);
     }
 

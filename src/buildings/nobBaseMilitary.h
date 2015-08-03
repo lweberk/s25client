@@ -47,7 +47,7 @@ class nobBaseMilitary : public noBuilding
         bool go_out;
         /// Gibt "Alter" des Gebäudes an, je größer, desto älter ist es! (als Vergleich was zuerst gebaut wurde bei
         /// Militärgebäuden + HQs und Häfen
-        unsigned age;
+        uint32_t age;
         /// Truppen, die zwar gerade nicht im Haus sind, aber eigentlich dazu gehören und grade auf Mission sind, wo sie evtl
         /// wieder zurückkkehren könnten (Angriff, Verteidigung etc.)
         std::list<nofActiveSoldier*> troops_on_mission;
@@ -66,8 +66,8 @@ class nobBaseMilitary : public noBuilding
 
     public:
 
-        nobBaseMilitary(const BuildingType type, const MapPoint pt, const unsigned char player, const Nation nation);
-        nobBaseMilitary(SerializedGameData* sgd, const unsigned obj_id);
+        nobBaseMilitary(const BuildingType type, const MapPoint pt, const uint8_t player, const Nation nation);
+        nobBaseMilitary(SerializedGameData* sgd, const uint32_t obj_id);
         virtual ~nobBaseMilitary();
 
         /// Aufräummethoden
@@ -120,9 +120,9 @@ class nobBaseMilitary : public noBuilding
         nofAttacker* FindAggressor(nofAggressiveDefender* defender);
         /// Sucht für einen Angreifer den nächsten (bzw. genau den) Platz zur Fahne, damit die sich darum postieren und
         /// warten
-        MapPoint FindAnAttackerPlace(unsigned short& ret_radius, nofAttacker* soldier);
+        MapPoint FindAnAttackerPlace(uint16_t& ret_radius, nofAttacker* soldier);
         /// Sucht einen Nachrücker, der weiter hinten steht, auf diesen Posten und schickt diesen auch los
-        bool SendSuccessor(const MapPoint pt, const unsigned short radius, const unsigned char dir);
+        bool SendSuccessor(const MapPoint pt, const uint16_t radius, const uint8_t dir);
 
         /// Gibt zurück, ob es noch einenen Verteidiger in dieser Hütte gibt, wenn ja wird dieser losgeschickt,
         /// aggressor ist der Angreifer an der Fahne, mit dem er kämpfen soll

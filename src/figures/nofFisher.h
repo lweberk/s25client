@@ -25,15 +25,15 @@
 class nofFisher : public nofFarmhand
 {
         /// Richtung, in die er fischt
-        unsigned char fishing_dir;
+        uint8_t fishing_dir;
         /// Fängt er einen Fisch?
         bool successful;
     private:
 
         /// Malt den Arbeiter beim Arbeiten
-        void DrawWorking(int x, int y);
+        void DrawWorking(int32_t x, int32_t y);
         /// Fragt die abgeleitete Klasse um die ID in JOBS.BOB, wenn der Beruf Waren rausträgt (bzw rein)
-        unsigned short GetCarryID() const;
+        uint16_t GetCarryID() const;
 
         /// Abgeleitete Klasse informieren, wenn sie anfängt zu arbeiten (Vorbereitungen)
         void WorkStarted();
@@ -45,8 +45,8 @@ class nofFisher : public nofFarmhand
 
     public:
 
-        nofFisher(const MapPoint pt, const unsigned char player, nobUsual* workplace);
-        nofFisher(SerializedGameData* sgd, const unsigned obj_id);
+        nofFisher(const MapPoint pt, const uint8_t player, nobUsual* workplace);
+        nofFisher(SerializedGameData* sgd, const uint32_t obj_id);
 
         ~nofFisher() {}
 
